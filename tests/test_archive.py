@@ -18,6 +18,24 @@ class ArchiveTests(unittest.TestCase):
         self.assertTrue(all(x["source"].startswith("https://") for x in events))
         self.assertTrue(all(x["continuity"].strip() for x in events))
 
+    def test_h020_toroidal_layers(self):
+        model = json.loads((ROOT / "models/h020-cern-toroid-24-2-4-3-1-1.json").read_text())
+        counts = [layer["count"] for layer in model["radial_layers"]]
+        self.assertEqual(counts, [24, 2, 4, 3, 1, 1])
+        self.assertEqual(sum(counts), 35)
+        from math import prod
+        self.assertEqual(prod(counts), 576)
+        self.assertEqual(model["counts"]["cartesian_address_combinations"], 576)
+        self.assertEqual(model["counts"]["independent_physical_toroid_coils_at_atlas"], 24)
+        for layer in model["radial_layers"]:
+            self.assertEqual(layer["count"], len(layer["labels"]))
+        self.assertEqual(model["radial_layers"][0]["labels"][:8],
+                         [f"R{i}" for i in range(8)])
+        self.assertEqual(model["radial_layers"][0]["labels"][-8:],
+                         [f"G{i}" for i in range(8)])
+        self.assertEqual(model["radial_layers"][2]["labels"],
+                         ["ATLAS", "ALICE", "CMS", "LHCb"])
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
