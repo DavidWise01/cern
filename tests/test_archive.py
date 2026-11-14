@@ -36,6 +36,48 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(model["radial_layers"][2]["labels"],
                          ["ATLAS", "ALICE", "CMS", "LHCb"])
 
+    def test_h021_temporal_coordinate_invariant(self):
+        spec = importlib.util.spec_from_file_location(
+            "mesh_h021", ROOT / "tools/temporal_mesh.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        for address in range(576):
+            item = module.decode(address)
+            self.assertEqual(
+                module.encode(item["slot"], item["direction"],
+                              item["detector"], item["tier"]),
+                address)
+        self.assertEqual(len(module.SLOTS), 24)
+        self.assertEqual(module.decode(0)["slot"], "R0")
+        self.assertEqual(module.decode(575)["tier"], "strong")
+        self.assertEqual(module.summarize(module.demo()), [])
+        self.assertEqual(module.timestamp("2026-11-14T20:00:00Z"),
+                         "2026-11-14T20:00:00Z")
+
+    def test_h021_witness_gate_and_shared_ancestry(self):
+        spec = importlib.util.spec_from_file_location(
+            "mesh_h021", ROOT / "tools/temporal_mesh.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        base = {
+            "kind": "measurement", "synthetic": False,
+            "address": 0, "observed_at": "2026-11-14T20:00:00Z",
+            "ingested_at": "2026-11-14T20:01:00Z",
+            "variable": "example", "value": 3, "unit": "arbitrary",
+            "source_url": "https://example.org/independent-record",
+            "record_id": "sample",
+        }
+        rows = [dict(base, root="same"), dict(base, root="same")]
+        self.assertEqual(module.summarize(rows)[0]["decision"],
+                         "INSUFFICIENT_ROOTS")
+        rows += [dict(base, root="second"), dict(base, root="third")]
+        result = module.summarize(rows)[0]
+        self.assertEqual(result["decision"], "AGREEMENT_3_ROOTS_CLAIMED")
+        self.assertFalse(result["trusted"])  # independent ancestry unverified
+        rows.append(dict(base, root="fourth", value=4))
+        self.assertEqual(module.summarize(rows)[0]["decision"],
+                         "DISAGREEMENT")
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
