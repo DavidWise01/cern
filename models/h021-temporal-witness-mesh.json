@@ -1,0 +1,118 @@
+{
+  "schema": "cern.h021.time-witness-mesh.v1",
+  "title": "Temporal 576-address toroidal observation mesh",
+  "status": "conceptual research index; no live CERN instrument data",
+  "layer_counts": [
+    24,
+    2,
+    4,
+    3,
+    1,
+    1
+  ],
+  "address_space": 576,
+  "address_fields": [
+    {
+      "name": "slot",
+      "values": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "B0",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "G0",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "G7"
+      ]
+    },
+    {
+      "name": "direction",
+      "values": [
+        "CW",
+        "CCW"
+      ]
+    },
+    {
+      "name": "detector",
+      "values": [
+        "ATLAS",
+        "ALICE",
+        "CMS",
+        "LHCb"
+      ]
+    },
+    {
+      "name": "tier",
+      "values": [
+        "weak",
+        "medium",
+        "strong"
+      ]
+    },
+    {
+      "name": "accelerator",
+      "values": [
+        "LHC"
+      ]
+    },
+    {
+      "name": "institution",
+      "values": [
+        "CERN"
+      ]
+    }
+  ],
+  "encoding": "((((slot_index*2)+direction_index)*4+detector_index)*3)+tier_index",
+  "decode": "tier=address%3; detector=floor(address/3)%4; direction=floor(address/12)%2; slot=floor(address/24)",
+  "time_structure": {
+    "observed_at": "ISO 8601 UTC",
+    "ingested_at": "ISO 8601 UTC",
+    "date_form": "YYYY.MM.DD",
+    "clock_form": "HH.MM.SS",
+    "angle_form": "degrees.arcminutes.arcseconds",
+    "angle_note": "orientation of conceptual view only, not location or observed physics",
+    "time_rule": "observe and preserve original time; never infer a measurement time from ingest time"
+  },
+  "witness_rule": {
+    "minimum_independent_roots": 3,
+    "require_same": [
+      "address",
+      "observed_at",
+      "variable",
+      "unit",
+      "value"
+    ],
+    "provenance": "One GitHub mirror and one 0root.ai mirror of the same owned corpus count as ONE root. Repeated documents citing a common original also count as ONE root.",
+    "state": "TRUSTED only when 3 distinct verified roots agree exactly on observation fields and all are independently grounded; otherwise UNVERIFIED or DISAGREEMENT",
+    "examples": "Synthetic fixtures explicitly labelled as synthetic never assert CERN measured those values"
+  },
+  "sources": [
+    "https://github.com/DavidWise01/cern/blob/main/models/h020-cern-toroid-24-2-4-3-1-1.json",
+    "https://www.atlas.cern/Discover/Detector/Magnet-System",
+    "https://home.cern/science/experiments/"
+  ],
+  "invariants": [
+    "sum layers = 35",
+    "product layers = 576",
+    "0 <= address < 576",
+    "all address pairs roundtrip",
+    "witness provenance must not be double-counted",
+    "never conflate conceptual weakness tiers with physical magnet strength"
+  ]
+}
