@@ -33,3 +33,9 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 
 ## Starting references
 [Computer History Museum: 1947 transistor](https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/) · [CERN Mercury history](https://drupal-timeline.web.cern.ch/cern-installs-its-first-electronic-computer-ferranti-mercury) · [CERN computing timeline](https://drupal-timeline.web.cern.ch/timeline-header/109) · [Open Data](https://opendata.cern.ch/) · [ROOT](https://github.com/root-project/root).
+
+## H020 — CERN toroidal coordinate mesh
+- [Interactive six-ring Canvas2D model](docs/cern-24-2-4-3-1-1.html)
+- [Machine-readable six-layer specification](models/h020-cern-toroid-24-2-4-3-1-1.json)
+- Coordinate layers: **24 / 2 / 4 / 3 / 1 / 1**; 35 rendered nodes; 576 abstract combinations.
+- 24 physical toroid-coil referents exist **only at ATLAS**. The other layers are an analytical mapping across the LHC and CERN, not magnets replicated at all four detectors.
