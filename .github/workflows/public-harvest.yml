@@ -1,0 +1,39 @@
+name: CERN public catalogue refresh
+on:
+  workflow_dispatch:
+    inputs:
+      query:
+        description: "Optional query"
+        required: false
+        default: ""
+      pages:
+        description: "Pages per source (1..10)"
+        required: false
+        default: "2"
+permissions:
+  contents: write
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify repository inventory
+        run: python3 -m unittest discover -s tests -v
+      - name: Harvest bounded CERN public metadata
+        run: python3 tools/harvest.py --pages "$PAGES" --size 10 --max-records 40 --query "$QUERY"
+        env:
+          PAGES: ${{ inputs.pages }}
+          QUERY: ${{ inputs.query }}
+      - name: Commit metadata outputs only
+        run: |
+          git config user.name 'cern-archive[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add harvest/manifest.json harvest/records.jsonl harvest/errors.json harvest/sha256.json
+          if ! git diff --cached --quiet; then
+            git commit -m "archive: snapshot bounded public CERN metadata"
+            git push
+          fi
