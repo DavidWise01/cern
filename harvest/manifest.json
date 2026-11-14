@@ -1,0 +1,15 @@
+{
+  "schema": "convergence.h015.public-metadata.v1",
+  "retrieved_utc": "2026-11-14T22:13:54.297799+00:00",
+  "records": 40,
+  "errors": 0,
+  "downloaded_files": 0,
+  "public_only": true,
+  "sources": {
+    "open_data": "https://opendata.cern.ch/api/records/",
+    "repository": "https://repository.cern/api/records"
+  },
+  "query": "",
+  "metadata_only": true,
+  "limitations": "Bounded sample of public search results; not a complete CERN archive."
+}
