@@ -39,3 +39,11 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Machine-readable six-layer specification](models/h020-cern-toroid-24-2-4-3-1-1.json)
 - Coordinate layers: **24 / 2 / 4 / 3 / 1 / 1**; 35 rendered nodes; 576 abstract combinations.
 - 24 physical toroid-coil referents exist **only at ATLAS**. The other layers are an analytical mapping across the LHC and CERN, not magnets replicated at all four detectors.
+
+## H021 — Time-indexed toroidal observation mesh
+- [Interactive temporal 576-address viewer](docs/cern-h021-temporal-mesh.html)
+- [Six-layer temporal/witness specification](models/h021-temporal-witness-mesh.json)
+- [Deterministic address encoder and evidence evaluator](tools/temporal_mesh.py)
+- 24×2×4×3×1×1 = **576 logical addresses**, indexed by UTC observation timestamps.
+- Three separately rooted reports must agree exactly before a shared checkpoint may be *considered*; ancestry labels are not automatically verified, so the evaluator conservatively withholds a final trust claim.
+- The viewer displays **NO MEASUREMENT ATTACHED** until real measurements with provenance are added; the sample ledger is synthetic.
