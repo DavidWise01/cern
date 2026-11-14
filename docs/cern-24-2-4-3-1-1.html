@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H020 · CERN Toroidal Coordinate Mesh</title>
+<style>
+:root{color-scheme:dark;--bg:#060c19;--panel:#102336;--edge:#315369;--txt:#e5f5ff;--muted:#9db7c9}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 45% 20%,#12253b,var(--bg) 70%);color:var(--txt);font:16px/1.5 system-ui,Arial}
+header,main,footer{max-width:1280px;margin:auto;padding:16px 22px}small,.muted{color:var(--muted)}h1{font-size:clamp(1.55rem,3vw,2.8rem);margin:.2rem 0}h2{font-size:1.1rem;margin:0 0 .6rem}
+main{display:grid;grid-template-columns:minmax(360px,1.4fr) minmax(285px,.8fr);gap:18px;align-items:start}
+.card{padding:16px;border-radius:16px;background:#0b1c2d;border:1px solid var(--edge)}
+canvas{display:block;width:100%;aspect-ratio:1;border-radius:14px;background:radial-gradient(circle at center,#12304a 0%,#091426 68%,#070e1c 100%);cursor:crosshair}
+button,select,input{font:inherit}button,select{border:1px solid #52728b;background:#163148;color:var(--txt);border-radius:9px;padding:8px 11px;cursor:pointer}
+button:hover{border-color:#80d6e7}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.stat{font-size:1.65rem;font-weight:750;color:#ffc17e}.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}
+.statgrid>div{border:1px solid #304a60;border-radius:10px;padding:10px}label{display:block;margin:8px 0;color:var(--muted)}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:5px}.legend button{text-align:left;font-size:.89rem}
+pre{white-space:pre-wrap;word-break:break-word;font-size:.82rem;min-height:84px;background:#061321;padding:12px;border-radius:10px;color:#aee0e5}
+a{color:#88dfe9}footer{font-size:.85rem;color:var(--muted)}.note{border-left:3px solid #ffbd79;padding-left:10px}
+@media(max-width:780px){main{grid-template-columns:1fr}header,main,footer{padding:12px}}
+</style></head><body>
+<header><small>DAVIDWISE01 / CERN / H020 · VISUAL ANALYTICAL MODEL</small><h1>24 / 2 / 4 / 3 / 1 / 1</h1><p>Six nested toroidal coordinate rings: 24 logical ATLAS coil positions, two directions, four detectors, three abstract strength tiers, one LHC, one CERN.</p></header>
+<main><section class="card"><canvas id="mesh" width="960" height="960" role="img" aria-label="Interactive six-ring CERN toroidal coordinate system"></canvas>
+<div class="actions"><button id="spin">Pause rotation</button><button id="next">Next position</button><button id="reset">Reset</button><button id="copy">Copy selected address</button></div><label>Rotation rate <input id="speed" type="range" min="0" max="100" value="36"></label>
+<p class="muted">Click a node to select a coordinate. Nodes rotate as an animation only; this does not depict operating magnet motion or actual beam control.</p></section>
+<section class="card"><h2>Six concentric layers</h2><div class="statgrid"><div><div class="stat">35</div><small>drawn nodes</small></div><div><div class="stat">576</div><small>possible tuples</small></div><div><div class="stat">24</div><small>ATLAS coil referents</small></div></div>
+<div class="legend" id="legend"></div><hr style="border:0;border-top:1px solid #385064;margin:16px 0">
+<h2>Active coordinate</h2><pre id="address"></pre>
+<p class="note">This is a <strong>logical projection</strong> across CERN's four major LHC detectors. The 24 real toroid coils are all in ATLAS; they are <strong>not</strong> repeated in CMS, ALICE or LHCb. Weak / medium / strong are user-assigned categories, not measured field magnitudes.</p>
+<p><a href="../models/h020-cern-toroid-24-2-4-3-1-1.json">Machine-readable specification</a> · <a href="../magnets/atlas-toroids.json">ATLAS physical count</a></p>
+</section></main>
+<footer>Physical references: <a href="https://www.atlas.cern/Discover/Detector/Magnet-System">ATLAS Magnet System</a> and <a href="https://home.cern/science/experiments/">CERN experiments</a>. Visualization uses Canvas2D; no external libraries, network access or simulation of actual CERN infrastructure.</footer>
+<script>
+(() => {
+const el=document.querySelector('#mesh'),ctx=el.getContext('2d'),view=document.querySelector('#address');
+const layers=[
+ {title:'24 · ATLAS coil slots',labels:Array.from({length:24},(_,i)=>['R','B','G'][Math.floor(i/8)]+(i%8)),r:385,c:'#ff9445'},
+ {title:'2 · Directions',labels:['CW','CCW'],r:316,c:'#73d5d5'},
+ {title:'4 · Detectors',labels:['ATLAS','ALICE','CMS','LHCb'],r:248,c:'#a0caf5'},
+ {title:'3 · Tiers',labels:['weak','medium','strong'],r:179,c:'#d4b0fd'},
+ {title:'1 · LHC',labels:['LHC'],r:113,c:'#f5d58b'},
+ {title:'1 · CERN',labels:['CERN'],r:46,c:'#ffffff'}
+];
+const chosen=[0,0,0,0,0,0];let spinning=true,theta=0,last=performance.now(),points=[];
+const cx=480,cy=480;
+function colorOf(i,j){return i===0 ? ['#ff715f','#7bb5fb','#65d9a3'][Math.floor(j/8)] : layers[i].c}
+function compute(){
+ const hits=[];for(let i=0;i<layers.length;i++){const layer=layers[i];const n=layer.labels.length;
+ for(let j=0;j<n;j++){const phase=(i%2?-.3:.2)*theta;
+ const angle=-Math.PI/2+2*Math.PI*j/n+phase+(i===0?0:i===1?Math.PI/2:0);
+ hits.push({i,j,x:cx+layer.r*Math.cos(angle),y:cy+layer.r*Math.sin(angle),label:layer.labels[j]});}}
+ return hits;
+}
+function draw(t){const dt=Math.min(.07,(t-last)/1000);last=t;if(spinning)theta+=dt*(Number(document.querySelector('#speed').value)/100)*.35;
+ctx.clearRect(0,0,960,960);ctx.lineCap='round';
+const g=ctx.createRadialGradient(cx,cy,60,cx,cy,465);g.addColorStop(0,'#21476644');g.addColorStop(1,'#00000000');ctx.fillStyle=g;ctx.fillRect(0,0,960,960);
+for(let i=0;i<layers.length;i++){const l=layers[i];ctx.beginPath();ctx.arc(cx,cy,l.r,0,Math.PI*2);ctx.lineWidth=i===0?5:2;ctx.strokeStyle=l.c+'70';ctx.stroke();}
+ctx.save();ctx.setLineDash([6,10]);ctx.strokeStyle='#5992a544';ctx.beginPath();ctx.moveTo(cx-460,cy);ctx.lineTo(cx+460,cy);ctx.moveTo(cx,cy-460);ctx.lineTo(cx,cy+460);ctx.stroke();ctx.restore();
+points=compute();
+for(const p of points){const isActive=chosen[p.i]===p.j,col=colorOf(p.i,p.j);
+ ctx.beginPath();ctx.arc(p.x,p.y,p.i===0?14:17,0,Math.PI*2);ctx.fillStyle=isActive?col:'#17354b';ctx.strokeStyle=col;ctx.lineWidth=isActive?4:2;ctx.shadowColor=col;ctx.shadowBlur=isActive?16:0;ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+ if(p.i===0){ctx.font='bold 13px monospace';ctx.textAlign='center';ctx.fillStyle=isActive?'#091522':'#d5eef7';ctx.fillText(p.label,p.x,p.y+4);}
+ else {ctx.font=p.i===2?'12px system-ui':'bold 13px system-ui';ctx.textAlign='center';ctx.fillStyle=isActive?'#081322':'#e6f6ff';ctx.fillText(p.label,p.x,p.y+4);}
+}
+ctx.font='bold 15px system-ui';ctx.textAlign='center';ctx.fillStyle='#bfe5ef';ctx.fillText('Z',cx,cy+6);
+requestAnimationFrame(draw);}
+function update(){
+const names=layers.map((l,i)=>l.labels[chosen[i]]);
+const bitIdx=chosen[0];const fields=['slot','direction','detector','tier','accelerator','institution'];
+const obj=Object.fromEntries(fields.map((f,i)=>[f,names[i]]));obj.bit_index=bitIdx;
+obj.logical_address_index=(((bitIdx*2+chosen[1])*4+chosen[2])*3+chosen[3]);obj.address_space_size=576;
+view.textContent=JSON.stringify(obj,null,2);
+document.querySelectorAll('#legend button').forEach((x,i)=>{x.textContent=layers[i].title+' · '+names[i];x.style.borderColor=layers[i].c});
+}
+document.querySelector('#legend').replaceChildren(...layers.map((layer,i)=>{const b=document.createElement('button');b.type='button';b.title='Advance this layer';b.onclick=()=>{chosen[i]=(chosen[i]+1)%layer.labels.length;update()};return b;}));
+el.addEventListener('click',e=>{const rect=el.getBoundingClientRect(),x=(e.clientX-rect.left)*960/rect.width,y=(e.clientY-rect.top)*960/rect.height;let best=null,d=27;for(const p of points){const dd=Math.hypot(x-p.x,y-p.y);if(dd<d){best=p;d=dd}}if(best){chosen[best.i]=best.j;update()}});
+document.querySelector('#spin').onclick=()=>{spinning=!spinning;document.querySelector('#spin').textContent=spinning?'Pause rotation':'Resume rotation'};
+document.querySelector('#next').onclick=()=>{chosen[0]=(chosen[0]+1)%24;update()};
+document.querySelector('#reset').onclick=()=>{chosen.fill(0);theta=0;update()};
+document.querySelector('#copy').onclick=()=>{const text=view.textContent;if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).catch(()=>{});else{const t=document.createElement('textarea');t.value=text;document.body.append(t);t.select();document.execCommand('copy');t.remove()}};
+update();requestAnimationFrame(draw);
+})();
+</script></body></html>
