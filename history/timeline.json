@@ -1,0 +1,171 @@
+{
+  "schema": "cern-seed-tree-timeline-v1",
+  "updated": "2026-11-14",
+  "events": [
+    {
+      "year": 1947,
+      "date": "1947-12-16",
+      "node": "Point-contact transistor",
+      "category": "substrate",
+      "material": "Germanium",
+      "organization": "Bell Telephone Laboratories",
+      "claim": "Bardeen and Brattain demonstrated transistor amplification on Dec 16; shown to lab officials Dec 23.",
+      "source": "https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/",
+      "continuity": "historical predecessor, not direct CERN equipment"
+    },
+    {
+      "year": 1948,
+      "date": "1948-06-30",
+      "node": "Public transistor announcement",
+      "category": "industry",
+      "material": "Germanium",
+      "organization": "Bell Labs",
+      "claim": "Bell Labs publicly announced the transistor.",
+      "source": "https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/",
+      "continuity": "global development"
+    },
+    {
+      "year": 1953,
+      "date": "1953-08-08",
+      "node": "Ferrite core memory at Whirlwind",
+      "category": "substrate",
+      "material": "Ferrite",
+      "organization": "MIT",
+      "claim": "Magnetic-core memory demonstrated in early digital computing.",
+      "source": "https://www.computerhistory.org/storageengine/whirlwind-computer-debuts-core-memory/",
+      "continuity": "technology class, not transfer of the Whirlwind memory planes"
+    },
+    {
+      "year": 1954,
+      "date": "1954-09-29",
+      "node": "CERN convention entered into force",
+      "category": "institution",
+      "material": "",
+      "organization": "CERN",
+      "claim": "Formal establishment of CERN as an organization.",
+      "source": "https://home.cern/about/who-we-are/our-history",
+      "continuity": "institutional chronology"
+    },
+    {
+      "year": 1958,
+      "date": "1958-06-30",
+      "node": "Ferranti Mercury installed",
+      "category": "computer",
+      "material": "Vacuum tubes + ferrite core + magnetic drum",
+      "organization": "CERN",
+      "claim": "First CERN computer, 1024 40-bit core words, magnetic drums, Autocode; Ampex tape units added in 1962.",
+      "source": "https://drupal-timeline.web.cern.ch/cern-installs-its-first-electronic-computer-ferranti-mercury",
+      "continuity": "CERN physical installation"
+    },
+    {
+      "year": 1961,
+      "date": "1961-03-06",
+      "node": "IBM 709 inaugurated",
+      "category": "computer",
+      "material": "Vacuum tubes + magnetic storage",
+      "organization": "CERN",
+      "claim": "IBM 709 complemented Mercury with FORTRAN and magnetic tape.",
+      "source": "https://drupal-timeline.web.cern.ch/timeline-header/109",
+      "continuity": "overlapping computer generations"
+    },
+    {
+      "year": 1962,
+      "date": "1962",
+      "node": "Ampex tape on Mercury",
+      "category": "storage",
+      "material": "Magnetic tape",
+      "organization": "CERN",
+      "claim": "Two Ampex magnetic tape units added to Mercury.",
+      "source": "https://drupal-timeline.web.cern.ch/cern-installs-its-first-electronic-computer-ferranti-mercury",
+      "continuity": "media hardware, original reels not verified"
+    },
+    {
+      "year": 1963,
+      "date": "1963-09-15",
+      "node": "IBM 7090 replaces IBM 709",
+      "category": "computer",
+      "material": "Transistors + core memory",
+      "organization": "CERN",
+      "claim": "Transistorized IBM 7090 replaced the 709; compatible program execution.",
+      "source": "https://drupal-timeline.web.cern.ch/timeline-header/109",
+      "continuity": "software compatibility strongest, not physical hardware"
+    },
+    {
+      "year": 1963,
+      "date": "1963",
+      "node": "REAP / THRESH / GRIND / COOK",
+      "category": "software",
+      "material": "Paper tape -> magnetic tape",
+      "organization": "CERN",
+      "claim": "Documented bubble-chamber processing chain; source/binary continuity unresolved.",
+      "source": "https://cds.cern.ch/record/223864/files/p1.pdf?version=1",
+      "continuity": "function and data pipeline; source revisions still sought"
+    },
+    {
+      "year": 1965,
+      "date": "1965-01-14",
+      "node": "CDC 6600 arrives",
+      "category": "computer",
+      "material": "Transistors",
+      "organization": "CERN",
+      "claim": "CERN's first supercomputer, CDC 6600.",
+      "source": "https://cern70.cern/cutting-edge-computing/",
+      "continuity": "institutional hardware upgrade"
+    },
+    {
+      "year": 1966,
+      "date": "1966",
+      "node": "Mercury transferred to Kraków",
+      "category": "retirement",
+      "material": "Original physical computer",
+      "organization": "CERN / Kraków",
+      "claim": "Ferranti Mercury transferred to Academy of Mining and Metallurgy in Poland.",
+      "source": "https://drupal-timeline.web.cern.ch/cern-installs-its-first-electronic-computer-ferranti-mercury",
+      "continuity": "machine retired; original tape status unknown"
+    },
+    {
+      "year": 1972,
+      "date": "1972",
+      "node": "CDC 7600",
+      "category": "computer",
+      "material": "Transistor-era supercomputer",
+      "organization": "CERN",
+      "claim": "CERN installed CDC 7600.",
+      "source": "https://cern70.cern/cutting-edge-computing/",
+      "continuity": "supercomputing succession"
+    },
+    {
+      "year": 1989,
+      "date": "1989",
+      "node": "World Wide Web proposal",
+      "category": "network",
+      "material": "Networked digital computing",
+      "organization": "CERN",
+      "claim": "Tim Berners-Lee proposed the World Wide Web at CERN.",
+      "source": "https://home.cern/science/computing/birth-web",
+      "continuity": "internet application layer; not direct software descendant of REAP"
+    },
+    {
+      "year": 1994,
+      "date": "1994",
+      "node": "ROOT development begins",
+      "category": "software",
+      "material": "Digital software",
+      "organization": "CERN",
+      "claim": "ROOT particle physics analysis framework emerged in 1990s.",
+      "source": "https://root.cern/about/",
+      "continuity": "modern analysis stack; REAP ancestry unproven"
+    },
+    {
+      "year": 2026,
+      "date": "2026",
+      "node": "Open scientific computing",
+      "category": "data",
+      "material": "Distributed computing, disk and magnetic tape",
+      "organization": "CERN / global collaborations",
+      "claim": "Open Data portal, ROOT, CMSSW, WLCG and experiment-specific tools provide public code and selected data.",
+      "source": "https://opendata.cern.ch/",
+      "continuity": "modern public research surface"
+    }
+  ]
+}
