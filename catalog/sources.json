@@ -1,0 +1,174 @@
+{
+  "schema": "cern-public-source-registry-v1",
+  "updated": "2026-11-14",
+  "sources": [
+    {
+      "key": "transistor1947",
+      "group": "historical",
+      "title": "CHM: 1947 transistor",
+      "url": "https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/",
+      "access": "public landing",
+      "rights": "external site"
+    },
+    {
+      "key": "core1953",
+      "group": "historical",
+      "title": "Whirlwind magnetic core",
+      "url": "https://www.computerhistory.org/storageengine/whirlwind-computer-debuts-core-memory/",
+      "access": "public landing",
+      "rights": "external site"
+    },
+    {
+      "key": "cern1958",
+      "group": "historical",
+      "title": "CERN Mercury specification",
+      "url": "https://drupal-timeline.web.cern.ch/cern-installs-its-first-electronic-computer-ferranti-mercury",
+      "access": "public landing",
+      "rights": "CERN page"
+    },
+    {
+      "key": "cern-timeline",
+      "group": "historical",
+      "title": "CERN Computing timeline",
+      "url": "https://drupal-timeline.web.cern.ch/timeline-header/109",
+      "access": "public landing",
+      "rights": "CERN page"
+    },
+    {
+      "key": "cern-computing",
+      "group": "historical",
+      "title": "CERN Courier mainframe era",
+      "url": "https://cern-courier.web.cern.ch/a/computing-at-cern-the-mainframe-era/",
+      "access": "public landing",
+      "rights": "CERN page"
+    },
+    {
+      "key": "reap1963",
+      "group": "historical",
+      "title": "REAP THRESH GRIND COOK primary report",
+      "url": "https://cds.cern.ch/record/223864/files/p1.pdf?version=1",
+      "access": "public document link",
+      "rights": "check item rights"
+    },
+    {
+      "key": "program-library",
+      "group": "historical",
+      "title": "CERN 63-11 program library",
+      "url": "https://cds.cern.ch/record/297896/files/CERN-TC-PHYSICS-63-11.pdf",
+      "access": "public document link",
+      "rights": "check item rights"
+    },
+    {
+      "key": "ferranti-archive",
+      "group": "historical",
+      "title": "Ferranti July 1961 (Internet Archive)",
+      "url": "https://archive.org/details/bitsavers_ferrantiFeatureJul61_763465",
+      "access": "public catalog",
+      "rights": "check item rights"
+    },
+    {
+      "key": "cern-archives",
+      "group": "historical",
+      "title": "CERN Archives",
+      "url": "https://archives.cern/",
+      "access": "public catalog; some on-request holdings",
+      "rights": "mixed"
+    },
+    {
+      "key": "opendata",
+      "group": "data",
+      "title": "CERN Open Data",
+      "url": "https://opendata.cern.ch/",
+      "access": "public",
+      "rights": "metadata CC0; file rights per record"
+    },
+    {
+      "key": "opendata-api",
+      "group": "api",
+      "title": "CERN Open Data API",
+      "url": "https://opendata.cern.ch/api/records/",
+      "access": "public metadata endpoint",
+      "rights": "metadata CC0"
+    },
+    {
+      "key": "repository-api",
+      "group": "api",
+      "title": "CERN Repository records API",
+      "url": "https://repository.cern/api/records",
+      "access": "public subset",
+      "rights": "per-record"
+    },
+    {
+      "key": "root",
+      "group": "software",
+      "title": "ROOT",
+      "url": "https://github.com/root-project/root",
+      "access": "public source",
+      "rights": "repository license"
+    },
+    {
+      "key": "cmssw",
+      "group": "software",
+      "title": "CMS software",
+      "url": "https://github.com/cms-sw/cmssw",
+      "access": "public source",
+      "rights": "repository license"
+    },
+    {
+      "key": "acts",
+      "group": "software",
+      "title": "ACTS tracking",
+      "url": "https://github.com/acts-project/acts",
+      "access": "public source",
+      "rights": "repository license"
+    },
+    {
+      "key": "cern-awesome",
+      "group": "software",
+      "title": "CERN open-source projects index",
+      "url": "https://github.com/CERN/awesome-cern",
+      "access": "public index",
+      "rights": "per project"
+    },
+    {
+      "key": "cern-gitlab",
+      "group": "software",
+      "title": "CERN public GitLab",
+      "url": "https://gitlab.cern.ch/explore/projects",
+      "access": "public subset",
+      "rights": "per project"
+    },
+    {
+      "key": "wlcg",
+      "group": "network",
+      "title": "Worldwide LHC Computing Grid",
+      "url": "https://wlcg-public.web.cern.ch/",
+      "access": "public architecture docs",
+      "rights": "site terms"
+    },
+    {
+      "key": "key4hep",
+      "group": "software",
+      "title": "Key4hep",
+      "url": "https://key4hep.github.io/key4hep-doc/",
+      "access": "public docs",
+      "rights": "per project"
+    },
+    {
+      "key": "geant4",
+      "group": "software",
+      "title": "Geant4",
+      "url": "https://geant4.web.cern.ch/",
+      "access": "public docs",
+      "rights": "per project"
+    },
+    {
+      "key": "cern70",
+      "group": "historical",
+      "title": "70 years CERN computing",
+      "url": "https://cern70.cern/cutting-edge-computing/",
+      "access": "public",
+      "rights": "CERN"
+    }
+  ]
+}
