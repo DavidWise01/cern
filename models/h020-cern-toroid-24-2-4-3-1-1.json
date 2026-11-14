@@ -1,0 +1,129 @@
+{
+  "id": "H020",
+  "name": "CERN six-layer toroidal coordinate model",
+  "date": "2026-11-14",
+  "status": "user-defined conceptual topology, not CERN magnet or beam-control layout",
+  "radial_layers": [
+    {
+      "index": 0,
+      "count": 24,
+      "label": "ATLAS logical toroid positions",
+      "meaning": "8R + 8B + 8G as 24 separately indexed conceptual sites",
+      "labels": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "B0",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "G0",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "G7"
+      ]
+    },
+    {
+      "index": 1,
+      "count": 2,
+      "label": "counter-rotating directions",
+      "meaning": "clockwise / counterclockwise as an analytical pair; neither a map of actual bunches nor independent ATLAS coils",
+      "labels": [
+        "CW",
+        "CCW"
+      ]
+    },
+    {
+      "index": 2,
+      "count": 4,
+      "label": "principal LHC detectors",
+      "meaning": "ATLAS, ALICE, CMS, LHCb at LHC Points 1, 2, 5, 8",
+      "labels": [
+        "ATLAS",
+        "ALICE",
+        "CMS",
+        "LHCb"
+      ]
+    },
+    {
+      "index": 3,
+      "count": 3,
+      "label": "strength tiers",
+      "meaning": "weak, medium, strong: abstract classifier, not calibrated physical fields or forces",
+      "labels": [
+        "weak",
+        "medium",
+        "strong"
+      ]
+    },
+    {
+      "index": 4,
+      "count": 1,
+      "label": "shared accelerator",
+      "meaning": "one LHC ring; CERN also hosts other accelerators",
+      "labels": [
+        "LHC"
+      ]
+    },
+    {
+      "index": 5,
+      "count": 1,
+      "label": "institutional enclosure",
+      "meaning": "CERN as organizational umbrella; not one physical toroid",
+      "labels": [
+        "CERN"
+      ]
+    }
+  ],
+  "counts": {
+    "layer_counts": [
+      24,
+      2,
+      4,
+      3,
+      1,
+      1
+    ],
+    "sum_nodes": 35,
+    "cartesian_address_combinations": 576,
+    "independent_physical_toroid_coils_at_atlas": 24,
+    "physical_toroid_assemblies_at_atlas": 3
+  },
+  "projection": "Each of 576 possible coordinate tuples (coil_slot,direction,experiment,tier,LHC,CERN) is a *logical address* only. Slot R0 at ALICE is not an ALICE coil; experimentally coupled mappings require separately sourced observations.",
+  "encoding": {
+    "position_channel": "R=barrel, B=endcap_A, G=endcap_C",
+    "logical_24_bit_range": [
+      0,
+      16777215
+    ],
+    "order": "R0...R7,B0...B7,G0...G7",
+    "physical_disclaimer": "Binary state labels do not represent real currents or magnetic memory bits."
+  },
+  "verification": {
+    "invariants": [
+      "sum(layer counts)==35",
+      "product(layer counts)==576",
+      "24=8+8+8",
+      "ATLAS toroid assembly count=3",
+      "only ATLAS toroids are physical referents to 24 positions"
+    ],
+    "sources": [
+      "https://www.atlas.cern/Discover/Detector/Magnet-System",
+      "https://home.cern/science/experiments/",
+      "https://github.com/DavidWise01/cern/blob/main/magnets/atlas-toroids.json"
+    ]
+  }
+}
