@@ -1,0 +1,94 @@
+{
+  "schema": "cern.h018.toroid-map.v1",
+  "recorded": "2026-11-14",
+  "basis": "ATLAS magnet official published design parameters",
+  "geography": {
+    "ring": "Large Hadron Collider",
+    "circumference_m": 26659,
+    "points": [
+      {
+        "point": 1,
+        "experiment": "ATLAS",
+        "magnets": [
+          "barrel_toroid",
+          "endcap_A",
+          "endcap_C",
+          "central_solenoid"
+        ]
+      },
+      {
+        "point": 2,
+        "experiment": "ALICE",
+        "magnets": [
+          "resistive_solenoid",
+          "resistive_dipole"
+        ]
+      },
+      {
+        "point": 5,
+        "experiment": "CMS",
+        "magnets": [
+          "superconducting_solenoid"
+        ]
+      },
+      {
+        "point": 8,
+        "experiment": "LHCb",
+        "magnets": [
+          "resistive_dipole"
+        ]
+      }
+    ]
+  },
+  "atlas": {
+    "toroid_assemblies": 3,
+    "toroid_coils_total": 24,
+    "barrel": {
+      "count": 1,
+      "coils_per_assembly": 8,
+      "axial_length_m": 25.3,
+      "outer_diameter_m": 20.1,
+      "stored_energy_GJ": 1.08,
+      "nominal_current_kA": 20.5
+    },
+    "endcaps": {
+      "count": 2,
+      "coils_per_assembly": 8,
+      "axial_length_m": 5,
+      "outer_diameter_m": 10.7,
+      "stored_energy_each_GJ": 0.25,
+      "nominal_current_kA": 20.5
+    },
+    "central_solenoid": {
+      "count": 1,
+      "coils": 1,
+      "field_T": 2,
+      "stored_energy_GJ": 0.038
+    },
+    "toroid_stored_energy_GJ": 1.58,
+    "whole_detector_magnet_coil_assemblies_counting_solenoid": 25,
+    "rotational_symmetry": {
+      "coils_per_toroid": 8,
+      "angular_step_degrees": 45,
+      "endcap_barrel_offset_degrees": 22.5
+    }
+  },
+  "wider_LHC": {
+    "main_dipole_magnets": 1232,
+    "main_quadrupole_magnets": 392,
+    "all_lhc_magnets": 9593,
+    "distinction": "LHC beam transport magnets are not ATLAS detector toroids"
+  },
+  "limitations": [
+    "Count is nominal construction inventory, not currently powered status.",
+    "The '4 around 1' detector layout is one collider and four collision points, not four toroidal magnets.",
+    "A superconductor's actual winding can have many turns; coil count != turns, magnets, or loops.",
+    "ATLAS central solenoid is not a toroid."
+  ],
+  "sources": [
+    "https://www.atlas.cern/Discover/Detector/Magnet-System",
+    "https://cds.cern.ch/record/1507630/files/CERN-2014-005.pdf",
+    "https://home.cern/science/accelerators/large-hadron-collider/",
+    "https://indico.cern.ch/event/1541843/contributions/6525645/attachments/3084080/5459684/DT%2011062025.pdf"
+  ]
+}
