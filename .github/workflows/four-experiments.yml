@@ -1,0 +1,50 @@
+name: H017 Four LHC experiments public results
+on:
+  workflow_dispatch:
+    inputs:
+      experiment:
+        description: "Experiment to search"
+        required: true
+        default: "ALL"
+        type: choice
+        options: [ALL, ATLAS, CMS, ALICE, LHCb]
+      pages:
+        description: "Pages per experiment, 1..50"
+        required: true
+        default: "10"
+      max_per_experiment:
+        description: "Maximum metadata records per experiment, 1..2500"
+        required: true
+        default: "250"
+permissions:
+  contents: write
+concurrency:
+  group: h017-four-experiments
+  cancel-in-progress: false
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Collect experiment metadata
+        env:
+          EXPERIMENT: ${{ inputs.experiment }}
+          PAGES: ${{ inputs.pages }}
+          MAX_PER_EXPERIMENT: ${{ inputs.max_per_experiment }}
+        run: |
+          python3 tools/harvest_experiments.py --experiment "$EXPERIMENT" --pages "$PAGES" --size 25 --max-per-experiment "$MAX_PER_EXPERIMENT"
+      - name: Commit search results
+        run: |
+          git config user.name 'cern-archive[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add experiments/
+          if ! git diff --cached --quiet; then
+            git commit -m "H017: index public results for four LHC experiments"
+            git push
+          fi
