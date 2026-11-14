@@ -26,6 +26,23 @@ class ArchiveTests(unittest.TestCase):
         self.assertTrue(all(x["url"].startswith("https://") for x in data["sources"]))
         self.assertTrue(all(x.get("rights") for x in data["sources"]))
 
+    def test_four_experiment_harvest(self):
+        spec = importlib.util.spec_from_file_location(
+            "four_harvest", ROOT / "tools/harvest_experiments.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(set(module.EXPERIMENTS), {"ATLAS", "CMS", "ALICE", "LHCb"})
+        self.assertIn("q=LHCb", module.search_url("LHCb", 1, 25))
+        self.assertEqual(module.hits_from({"hits": {"hits": [{"id": "a"}]}}),
+                         [{"id": "a"}])
+        sample = module.flatten(
+            {"id": "42", "metadata": {"title": "Example analysis"}},
+            "ATLAS", module.search_url("ATLAS", 1, 25),
+            "2026-11-14T00:00:00+00:00")
+        self.assertFalse("attribution_verified" in sample)
+        self.assertEqual(sample["search_label_not_verified_attribution"], "ATLAS")
+        self.assertEqual(sample["record_url"], "https://opendata.cern.ch/record/42")
+
     def test_harvester_policy(self):
         spec = importlib.util.spec_from_file_location("cern_harvest", ROOT / "tools/harvest.py")
         module = importlib.util.module_from_spec(spec)
