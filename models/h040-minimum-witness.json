@@ -1,0 +1,33 @@
+{
+  "schema": "cern.h040.minimum-witness-geometry.v1",
+  "date": "2026-11-15",
+  "status": "PASS",
+  "parent": "models/h039-orbit-stabilizer.json",
+  "group": "24 proper orientation-preserving cube rotations",
+  "results": {
+    "single_corner": {
+      "cases": 8,
+      "orbit": 8,
+      "stabilizer": 3
+    },
+    "distinct_ordered_corners": {
+      "total": 56,
+      "opposite": 8,
+      "opposite_stabilizer": 3,
+      "nonopposite": 48,
+      "nonopposite_stabilizer": 1
+    },
+    "distinct_ordered_triples": {
+      "total": 336,
+      "stabilizer": 1
+    },
+    "corner_plus_primary_axis": {
+      "cases": 24,
+      "stabilizer": 1
+    }
+  },
+  "invariant": "Two non-antipodal corners suffice to uniquely determine a proper cube rotation if their correspondences and common coordinate frame are known. Two antipodal corners do not; a corner plus one consistently tracked RGB axis also suffices.",
+  "critical_distinction": "Geometric distinguishability is not evidence-source independence. Three copied observations with one source root remain one lineage.",
+  "scope": "Discrete cube symmetry, symbolic RGB labels across visible/UV/IR copies; no measured particle physics.",
+  "next": "H041 occlusion, witness failure, independent ancestry and minimal sufficient recovery"
+}
