@@ -1,0 +1,160 @@
+{
+  "schema": "cern.h029.multirate-orbit.v1",
+  "model": "simultaneous three projections of one 120-permutation payload",
+  "ticks_per_position_shift": {
+    "R": 1,
+    "B": 2,
+    "G": 3
+  },
+  "individual_minimal_periods": {
+    "R": 120,
+    "B": 240,
+    "G": 360
+  },
+  "joint_minimal_period_ticks": 720,
+  "ring_positions_per_band": 120,
+  "white_cube_ids_fixed": [
+    0,
+    31,
+    62,
+    93,
+    124
+  ],
+  "h026_six_axes_separate": true,
+  "unique_joint_returns_in_positive_interval": [
+    720
+  ],
+  "ticks_exhaustively_checked": 721,
+  "per_tick_active_mapping_collisions": 0,
+  "reversibility_check": "all 120 ranks, all 3 bands, all 721 ticks",
+  "synthetic": true,
+  "claim_boundary": "Rates, units and phases are mathematical choices. 720 is not a CERN field, machine, beam or Higgs recurrence.",
+  "milestones": [
+    {
+      "tick": 0,
+      "positions": {
+        "R": 0,
+        "B": 0,
+        "G": 0
+      },
+      "joint_return": true
+    },
+    {
+      "tick": 1,
+      "positions": {
+        "R": 1,
+        "B": 0,
+        "G": 0
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 2,
+      "positions": {
+        "R": 2,
+        "B": 1,
+        "G": 0
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 3,
+      "positions": {
+        "R": 3,
+        "B": 1,
+        "G": 1
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 5,
+      "positions": {
+        "R": 5,
+        "B": 2,
+        "G": 1
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 6,
+      "positions": {
+        "R": 6,
+        "B": 3,
+        "G": 2
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 60,
+      "positions": {
+        "R": 60,
+        "B": 30,
+        "G": 20
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 120,
+      "positions": {
+        "R": 0,
+        "B": 60,
+        "G": 40
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 240,
+      "positions": {
+        "R": 0,
+        "B": 0,
+        "G": 80
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 360,
+      "positions": {
+        "R": 0,
+        "B": 60,
+        "G": 0
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 480,
+      "positions": {
+        "R": 0,
+        "B": 0,
+        "G": 40
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 600,
+      "positions": {
+        "R": 0,
+        "B": 60,
+        "G": 80
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 719,
+      "positions": {
+        "R": 119,
+        "B": 119,
+        "G": 119
+      },
+      "joint_return": false
+    },
+    {
+      "tick": 720,
+      "positions": {
+        "R": 0,
+        "B": 0,
+        "G": 0
+      },
+      "joint_return": true
+    }
+  ]
+}
