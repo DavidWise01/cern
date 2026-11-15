@@ -145,6 +145,25 @@ class ArchiveTests(unittest.TestCase):
                             for x in report["event_rows"]))
         self.assertEqual(report["four_vector_checks"]["mismatches"], [])
 
+    def test_h024_particle_atlas(self):
+        data = json.loads((ROOT / "physics/h024-particles-experiments-1969-2026.json").read_text())
+        history = data["timeline"]
+        self.assertEqual(history[0]["year"], 1969)
+        self.assertEqual(history[-1]["year"], 2026)
+        self.assertEqual([x["year"] for x in history], sorted(x["year"] for x in history))
+        self.assertTrue(any(x["year"] == 2012 and "Higgs" in x["experiment"] for x in history))
+        self.assertTrue(all(x["source"].startswith("https://") for x in history))
+        particles = data["particles"]
+        self.assertEqual(len(particles), 23)
+        self.assertEqual(len([p for p in particles if p["nature"] == "pointlike"]), 17)
+        self.assertTrue(all(p["characteristic_radius_m"] is None for p in particles
+                            if p["nature"] == "pointlike"))
+        higgs = next(x for x in particles if x["name"] == "Higgs boson")
+        self.assertIsNone(higgs["characteristic_radius_m"])
+        proton = next(x for x in particles if x["name"] == "proton")
+        self.assertAlmostEqual(proton["characteristic_radius_m"], 0.84e-15)
+        self.assertTrue(proton["physical_radius_measured"])
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
