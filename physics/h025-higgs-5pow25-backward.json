@@ -1,0 +1,227 @@
+{
+  "schema": "cern.h025.higgs-backward-five-by-five.v1",
+  "date": "2026-11-14",
+  "status": "numerical scale exploration; not established physics relationship",
+  "input": {
+    "particle": "Higgs boson",
+    "mass_GeV_c2": 125.1,
+    "hbarc_GeV_fm": 0.1973269804,
+    "reduced_compton_m": 1.5773539600319745e-18,
+    "meaning": "quantum mass-associated length; not physical Higgs radius"
+  },
+  "operator": {
+    "user_notation": "{{5}}^{{5x5}}",
+    "interpretation": "25 successive divisions by 5, grouped into 5 generations of 5 steps",
+    "divisor_integer_exact": "298023223876953125",
+    "expression": "lambda_H/(5**25)"
+  },
+  "steps": [
+    {
+      "step": 0,
+      "generation": 0,
+      "divisor_power": 0,
+      "meters": 1.5773539600319745e-18
+    },
+    {
+      "step": 1,
+      "generation": 0,
+      "divisor_power": 1,
+      "meters": 3.154707920063949e-19
+    },
+    {
+      "step": 2,
+      "generation": 0,
+      "divisor_power": 2,
+      "meters": 6.309415840127898e-20
+    },
+    {
+      "step": 3,
+      "generation": 0,
+      "divisor_power": 3,
+      "meters": 1.2618831680255796e-20
+    },
+    {
+      "step": 4,
+      "generation": 0,
+      "divisor_power": 4,
+      "meters": 2.523766336051159e-21
+    },
+    {
+      "step": 5,
+      "generation": 1,
+      "divisor_power": 5,
+      "meters": 5.047532672102318e-22
+    },
+    {
+      "step": 6,
+      "generation": 1,
+      "divisor_power": 6,
+      "meters": 1.0095065344204636e-22
+    },
+    {
+      "step": 7,
+      "generation": 1,
+      "divisor_power": 7,
+      "meters": 2.0190130688409273e-23
+    },
+    {
+      "step": 8,
+      "generation": 1,
+      "divisor_power": 8,
+      "meters": 4.0380261376818544e-24
+    },
+    {
+      "step": 9,
+      "generation": 1,
+      "divisor_power": 9,
+      "meters": 8.0760522753637095e-25
+    },
+    {
+      "step": 10,
+      "generation": 2,
+      "divisor_power": 10,
+      "meters": 1.615210455072742e-25
+    },
+    {
+      "step": 11,
+      "generation": 2,
+      "divisor_power": 11,
+      "meters": 3.2304209101454837e-26
+    },
+    {
+      "step": 12,
+      "generation": 2,
+      "divisor_power": 12,
+      "meters": 6.460841820290968e-27
+    },
+    {
+      "step": 13,
+      "generation": 2,
+      "divisor_power": 13,
+      "meters": 1.2921683640581935e-27
+    },
+    {
+      "step": 14,
+      "generation": 2,
+      "divisor_power": 14,
+      "meters": 2.584336728116387e-28
+    },
+    {
+      "step": 15,
+      "generation": 3,
+      "divisor_power": 15,
+      "meters": 5.168673456232774e-29
+    },
+    {
+      "step": 16,
+      "generation": 3,
+      "divisor_power": 16,
+      "meters": 1.0337346912465548e-29
+    },
+    {
+      "step": 17,
+      "generation": 3,
+      "divisor_power": 17,
+      "meters": 2.0674693824931097e-30
+    },
+    {
+      "step": 18,
+      "generation": 3,
+      "divisor_power": 18,
+      "meters": 4.134938764986219e-31
+    },
+    {
+      "step": 19,
+      "generation": 3,
+      "divisor_power": 19,
+      "meters": 8.269877529972438e-32
+    },
+    {
+      "step": 20,
+      "generation": 4,
+      "divisor_power": 20,
+      "meters": 1.6539755059944877e-32
+    },
+    {
+      "step": 21,
+      "generation": 4,
+      "divisor_power": 21,
+      "meters": 3.3079510119889755e-33
+    },
+    {
+      "step": 22,
+      "generation": 4,
+      "divisor_power": 22,
+      "meters": 6.61590202397795e-34
+    },
+    {
+      "step": 23,
+      "generation": 4,
+      "divisor_power": 23,
+      "meters": 1.3231804047955901e-34
+    },
+    {
+      "step": 24,
+      "generation": 4,
+      "divisor_power": 24,
+      "meters": 2.64636080959118e-35
+    },
+    {
+      "step": 25,
+      "generation": 5,
+      "divisor_power": 25,
+      "meters": 5.29272161918236e-36
+    }
+  ],
+  "checkpoints": [
+    {
+      "step": 0,
+      "generation": 0,
+      "meters": 1.5773539600319745e-18
+    },
+    {
+      "step": 5,
+      "generation": 1,
+      "meters": 5.047532672102318e-22
+    },
+    {
+      "step": 10,
+      "generation": 2,
+      "meters": 1.615210455072742e-25
+    },
+    {
+      "step": 15,
+      "generation": 3,
+      "meters": 5.168673456232774e-29
+    },
+    {
+      "step": 20,
+      "generation": 4,
+      "meters": 1.6539755059944877e-32
+    },
+    {
+      "step": 25,
+      "generation": 5,
+      "meters": 5.29272161918236e-36
+    }
+  ],
+  "comparison": {
+    "Planck_length_m": 1.616255e-35,
+    "Planck_length_divided_by_3_m": 5.387516666666667e-36,
+    "final_m": 5.29272161918236e-36,
+    "final_over_Planck": 0.32746822866332104,
+    "final_over_Planck_third": 0.9824046859899631,
+    "relative_difference_from_Planck_third_percent": -1.7595314010036889
+  },
+  "boundaries": [
+    "Numerical proximity to one-third Planck length (~1.76%) is not evidence of Higgs substructure or spatial divisions.",
+    "Planck length is a scale constructed from constants; one-third of it is not an accepted physical cutoff.",
+    "Each division is a user-selected mathematical operator, not an experimentally measured nested particle length.",
+    "The 125.1 GeV mass and Planck length have measurement uncertainties, but their proximity here is not an independently predicted relationship."
+  ],
+  "sources": [
+    "https://pdg.lbl.gov/",
+    "https://physics.nist.gov/cuu/Constants/",
+    "https://home.cern/science/physics/higgs-boson/"
+  ]
+}
