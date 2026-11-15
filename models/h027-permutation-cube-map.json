@@ -1,0 +1,1285 @@
+{
+  "schema": "cern.h027.permutation-cube.v1",
+  "date": "2026-11-15",
+  "five_cube": {
+    "dimensions": [
+      5,
+      5,
+      5
+    ],
+    "total_addresses": 125,
+    "linearization": "x + 5*y + 25*z; coordinates 0..4"
+  },
+  "active_count": 120,
+  "reserved_count": 5,
+  "reserved_cells": [
+    {
+      "id": 0,
+      "xyz": [
+        0,
+        0,
+        0
+      ],
+      "tag": "WHITE_AXIS_RESERVED",
+      "physical_particle": false
+    },
+    {
+      "id": 31,
+      "xyz": [
+        1,
+        1,
+        1
+      ],
+      "tag": "WHITE_AXIS_RESERVED",
+      "physical_particle": false
+    },
+    {
+      "id": 62,
+      "xyz": [
+        2,
+        2,
+        2
+      ],
+      "tag": "WHITE_AXIS_RESERVED",
+      "physical_particle": false
+    },
+    {
+      "id": 93,
+      "xyz": [
+        3,
+        3,
+        3
+      ],
+      "tag": "WHITE_AXIS_RESERVED",
+      "physical_particle": false
+    },
+    {
+      "id": 124,
+      "xyz": [
+        4,
+        4,
+        4
+      ],
+      "tag": "WHITE_AXIS_RESERVED",
+      "physical_particle": false
+    }
+  ],
+  "active_cells": [
+    {
+      "rank": 0,
+      "id": 1,
+      "xyz": [
+        1,
+        0,
+        0
+      ],
+      "permutation": "ABCDE"
+    },
+    {
+      "rank": 1,
+      "id": 2,
+      "xyz": [
+        2,
+        0,
+        0
+      ],
+      "permutation": "ABCED"
+    },
+    {
+      "rank": 2,
+      "id": 3,
+      "xyz": [
+        3,
+        0,
+        0
+      ],
+      "permutation": "ABDCE"
+    },
+    {
+      "rank": 3,
+      "id": 4,
+      "xyz": [
+        4,
+        0,
+        0
+      ],
+      "permutation": "ABDEC"
+    },
+    {
+      "rank": 4,
+      "id": 5,
+      "xyz": [
+        0,
+        1,
+        0
+      ],
+      "permutation": "ABECD"
+    },
+    {
+      "rank": 5,
+      "id": 6,
+      "xyz": [
+        1,
+        1,
+        0
+      ],
+      "permutation": "ABEDC"
+    },
+    {
+      "rank": 6,
+      "id": 7,
+      "xyz": [
+        2,
+        1,
+        0
+      ],
+      "permutation": "ACBDE"
+    },
+    {
+      "rank": 7,
+      "id": 8,
+      "xyz": [
+        3,
+        1,
+        0
+      ],
+      "permutation": "ACBED"
+    },
+    {
+      "rank": 8,
+      "id": 9,
+      "xyz": [
+        4,
+        1,
+        0
+      ],
+      "permutation": "ACDBE"
+    },
+    {
+      "rank": 9,
+      "id": 10,
+      "xyz": [
+        0,
+        2,
+        0
+      ],
+      "permutation": "ACDEB"
+    },
+    {
+      "rank": 10,
+      "id": 11,
+      "xyz": [
+        1,
+        2,
+        0
+      ],
+      "permutation": "ACEBD"
+    },
+    {
+      "rank": 11,
+      "id": 12,
+      "xyz": [
+        2,
+        2,
+        0
+      ],
+      "permutation": "ACEDB"
+    },
+    {
+      "rank": 12,
+      "id": 13,
+      "xyz": [
+        3,
+        2,
+        0
+      ],
+      "permutation": "ADBCE"
+    },
+    {
+      "rank": 13,
+      "id": 14,
+      "xyz": [
+        4,
+        2,
+        0
+      ],
+      "permutation": "ADBEC"
+    },
+    {
+      "rank": 14,
+      "id": 15,
+      "xyz": [
+        0,
+        3,
+        0
+      ],
+      "permutation": "ADCBE"
+    },
+    {
+      "rank": 15,
+      "id": 16,
+      "xyz": [
+        1,
+        3,
+        0
+      ],
+      "permutation": "ADCEB"
+    },
+    {
+      "rank": 16,
+      "id": 17,
+      "xyz": [
+        2,
+        3,
+        0
+      ],
+      "permutation": "ADEBC"
+    },
+    {
+      "rank": 17,
+      "id": 18,
+      "xyz": [
+        3,
+        3,
+        0
+      ],
+      "permutation": "ADECB"
+    },
+    {
+      "rank": 18,
+      "id": 19,
+      "xyz": [
+        4,
+        3,
+        0
+      ],
+      "permutation": "AEBCD"
+    },
+    {
+      "rank": 19,
+      "id": 20,
+      "xyz": [
+        0,
+        4,
+        0
+      ],
+      "permutation": "AEBDC"
+    },
+    {
+      "rank": 20,
+      "id": 21,
+      "xyz": [
+        1,
+        4,
+        0
+      ],
+      "permutation": "AECBD"
+    },
+    {
+      "rank": 21,
+      "id": 22,
+      "xyz": [
+        2,
+        4,
+        0
+      ],
+      "permutation": "AECDB"
+    },
+    {
+      "rank": 22,
+      "id": 23,
+      "xyz": [
+        3,
+        4,
+        0
+      ],
+      "permutation": "AEDBC"
+    },
+    {
+      "rank": 23,
+      "id": 24,
+      "xyz": [
+        4,
+        4,
+        0
+      ],
+      "permutation": "AEDCB"
+    },
+    {
+      "rank": 24,
+      "id": 25,
+      "xyz": [
+        0,
+        0,
+        1
+      ],
+      "permutation": "BACDE"
+    },
+    {
+      "rank": 25,
+      "id": 26,
+      "xyz": [
+        1,
+        0,
+        1
+      ],
+      "permutation": "BACED"
+    },
+    {
+      "rank": 26,
+      "id": 27,
+      "xyz": [
+        2,
+        0,
+        1
+      ],
+      "permutation": "BADCE"
+    },
+    {
+      "rank": 27,
+      "id": 28,
+      "xyz": [
+        3,
+        0,
+        1
+      ],
+      "permutation": "BADEC"
+    },
+    {
+      "rank": 28,
+      "id": 29,
+      "xyz": [
+        4,
+        0,
+        1
+      ],
+      "permutation": "BAECD"
+    },
+    {
+      "rank": 29,
+      "id": 30,
+      "xyz": [
+        0,
+        1,
+        1
+      ],
+      "permutation": "BAEDC"
+    },
+    {
+      "rank": 30,
+      "id": 32,
+      "xyz": [
+        2,
+        1,
+        1
+      ],
+      "permutation": "BCADE"
+    },
+    {
+      "rank": 31,
+      "id": 33,
+      "xyz": [
+        3,
+        1,
+        1
+      ],
+      "permutation": "BCAED"
+    },
+    {
+      "rank": 32,
+      "id": 34,
+      "xyz": [
+        4,
+        1,
+        1
+      ],
+      "permutation": "BCDAE"
+    },
+    {
+      "rank": 33,
+      "id": 35,
+      "xyz": [
+        0,
+        2,
+        1
+      ],
+      "permutation": "BCDEA"
+    },
+    {
+      "rank": 34,
+      "id": 36,
+      "xyz": [
+        1,
+        2,
+        1
+      ],
+      "permutation": "BCEAD"
+    },
+    {
+      "rank": 35,
+      "id": 37,
+      "xyz": [
+        2,
+        2,
+        1
+      ],
+      "permutation": "BCEDA"
+    },
+    {
+      "rank": 36,
+      "id": 38,
+      "xyz": [
+        3,
+        2,
+        1
+      ],
+      "permutation": "BDACE"
+    },
+    {
+      "rank": 37,
+      "id": 39,
+      "xyz": [
+        4,
+        2,
+        1
+      ],
+      "permutation": "BDAEC"
+    },
+    {
+      "rank": 38,
+      "id": 40,
+      "xyz": [
+        0,
+        3,
+        1
+      ],
+      "permutation": "BDCAE"
+    },
+    {
+      "rank": 39,
+      "id": 41,
+      "xyz": [
+        1,
+        3,
+        1
+      ],
+      "permutation": "BDCEA"
+    },
+    {
+      "rank": 40,
+      "id": 42,
+      "xyz": [
+        2,
+        3,
+        1
+      ],
+      "permutation": "BDEAC"
+    },
+    {
+      "rank": 41,
+      "id": 43,
+      "xyz": [
+        3,
+        3,
+        1
+      ],
+      "permutation": "BDECA"
+    },
+    {
+      "rank": 42,
+      "id": 44,
+      "xyz": [
+        4,
+        3,
+        1
+      ],
+      "permutation": "BEACD"
+    },
+    {
+      "rank": 43,
+      "id": 45,
+      "xyz": [
+        0,
+        4,
+        1
+      ],
+      "permutation": "BEADC"
+    },
+    {
+      "rank": 44,
+      "id": 46,
+      "xyz": [
+        1,
+        4,
+        1
+      ],
+      "permutation": "BECAD"
+    },
+    {
+      "rank": 45,
+      "id": 47,
+      "xyz": [
+        2,
+        4,
+        1
+      ],
+      "permutation": "BECDA"
+    },
+    {
+      "rank": 46,
+      "id": 48,
+      "xyz": [
+        3,
+        4,
+        1
+      ],
+      "permutation": "BEDAC"
+    },
+    {
+      "rank": 47,
+      "id": 49,
+      "xyz": [
+        4,
+        4,
+        1
+      ],
+      "permutation": "BEDCA"
+    },
+    {
+      "rank": 48,
+      "id": 50,
+      "xyz": [
+        0,
+        0,
+        2
+      ],
+      "permutation": "CABDE"
+    },
+    {
+      "rank": 49,
+      "id": 51,
+      "xyz": [
+        1,
+        0,
+        2
+      ],
+      "permutation": "CABED"
+    },
+    {
+      "rank": 50,
+      "id": 52,
+      "xyz": [
+        2,
+        0,
+        2
+      ],
+      "permutation": "CADBE"
+    },
+    {
+      "rank": 51,
+      "id": 53,
+      "xyz": [
+        3,
+        0,
+        2
+      ],
+      "permutation": "CADEB"
+    },
+    {
+      "rank": 52,
+      "id": 54,
+      "xyz": [
+        4,
+        0,
+        2
+      ],
+      "permutation": "CAEBD"
+    },
+    {
+      "rank": 53,
+      "id": 55,
+      "xyz": [
+        0,
+        1,
+        2
+      ],
+      "permutation": "CAEDB"
+    },
+    {
+      "rank": 54,
+      "id": 56,
+      "xyz": [
+        1,
+        1,
+        2
+      ],
+      "permutation": "CBADE"
+    },
+    {
+      "rank": 55,
+      "id": 57,
+      "xyz": [
+        2,
+        1,
+        2
+      ],
+      "permutation": "CBAED"
+    },
+    {
+      "rank": 56,
+      "id": 58,
+      "xyz": [
+        3,
+        1,
+        2
+      ],
+      "permutation": "CBDAE"
+    },
+    {
+      "rank": 57,
+      "id": 59,
+      "xyz": [
+        4,
+        1,
+        2
+      ],
+      "permutation": "CBDEA"
+    },
+    {
+      "rank": 58,
+      "id": 60,
+      "xyz": [
+        0,
+        2,
+        2
+      ],
+      "permutation": "CBEAD"
+    },
+    {
+      "rank": 59,
+      "id": 61,
+      "xyz": [
+        1,
+        2,
+        2
+      ],
+      "permutation": "CBEDA"
+    },
+    {
+      "rank": 60,
+      "id": 63,
+      "xyz": [
+        3,
+        2,
+        2
+      ],
+      "permutation": "CDABE"
+    },
+    {
+      "rank": 61,
+      "id": 64,
+      "xyz": [
+        4,
+        2,
+        2
+      ],
+      "permutation": "CDAEB"
+    },
+    {
+      "rank": 62,
+      "id": 65,
+      "xyz": [
+        0,
+        3,
+        2
+      ],
+      "permutation": "CDBAE"
+    },
+    {
+      "rank": 63,
+      "id": 66,
+      "xyz": [
+        1,
+        3,
+        2
+      ],
+      "permutation": "CDBEA"
+    },
+    {
+      "rank": 64,
+      "id": 67,
+      "xyz": [
+        2,
+        3,
+        2
+      ],
+      "permutation": "CDEAB"
+    },
+    {
+      "rank": 65,
+      "id": 68,
+      "xyz": [
+        3,
+        3,
+        2
+      ],
+      "permutation": "CDEBA"
+    },
+    {
+      "rank": 66,
+      "id": 69,
+      "xyz": [
+        4,
+        3,
+        2
+      ],
+      "permutation": "CEABD"
+    },
+    {
+      "rank": 67,
+      "id": 70,
+      "xyz": [
+        0,
+        4,
+        2
+      ],
+      "permutation": "CEADB"
+    },
+    {
+      "rank": 68,
+      "id": 71,
+      "xyz": [
+        1,
+        4,
+        2
+      ],
+      "permutation": "CEBAD"
+    },
+    {
+      "rank": 69,
+      "id": 72,
+      "xyz": [
+        2,
+        4,
+        2
+      ],
+      "permutation": "CEBDA"
+    },
+    {
+      "rank": 70,
+      "id": 73,
+      "xyz": [
+        3,
+        4,
+        2
+      ],
+      "permutation": "CEDAB"
+    },
+    {
+      "rank": 71,
+      "id": 74,
+      "xyz": [
+        4,
+        4,
+        2
+      ],
+      "permutation": "CEDBA"
+    },
+    {
+      "rank": 72,
+      "id": 75,
+      "xyz": [
+        0,
+        0,
+        3
+      ],
+      "permutation": "DABCE"
+    },
+    {
+      "rank": 73,
+      "id": 76,
+      "xyz": [
+        1,
+        0,
+        3
+      ],
+      "permutation": "DABEC"
+    },
+    {
+      "rank": 74,
+      "id": 77,
+      "xyz": [
+        2,
+        0,
+        3
+      ],
+      "permutation": "DACBE"
+    },
+    {
+      "rank": 75,
+      "id": 78,
+      "xyz": [
+        3,
+        0,
+        3
+      ],
+      "permutation": "DACEB"
+    },
+    {
+      "rank": 76,
+      "id": 79,
+      "xyz": [
+        4,
+        0,
+        3
+      ],
+      "permutation": "DAEBC"
+    },
+    {
+      "rank": 77,
+      "id": 80,
+      "xyz": [
+        0,
+        1,
+        3
+      ],
+      "permutation": "DAECB"
+    },
+    {
+      "rank": 78,
+      "id": 81,
+      "xyz": [
+        1,
+        1,
+        3
+      ],
+      "permutation": "DBACE"
+    },
+    {
+      "rank": 79,
+      "id": 82,
+      "xyz": [
+        2,
+        1,
+        3
+      ],
+      "permutation": "DBAEC"
+    },
+    {
+      "rank": 80,
+      "id": 83,
+      "xyz": [
+        3,
+        1,
+        3
+      ],
+      "permutation": "DBCAE"
+    },
+    {
+      "rank": 81,
+      "id": 84,
+      "xyz": [
+        4,
+        1,
+        3
+      ],
+      "permutation": "DBCEA"
+    },
+    {
+      "rank": 82,
+      "id": 85,
+      "xyz": [
+        0,
+        2,
+        3
+      ],
+      "permutation": "DBEAC"
+    },
+    {
+      "rank": 83,
+      "id": 86,
+      "xyz": [
+        1,
+        2,
+        3
+      ],
+      "permutation": "DBECA"
+    },
+    {
+      "rank": 84,
+      "id": 87,
+      "xyz": [
+        2,
+        2,
+        3
+      ],
+      "permutation": "DCABE"
+    },
+    {
+      "rank": 85,
+      "id": 88,
+      "xyz": [
+        3,
+        2,
+        3
+      ],
+      "permutation": "DCAEB"
+    },
+    {
+      "rank": 86,
+      "id": 89,
+      "xyz": [
+        4,
+        2,
+        3
+      ],
+      "permutation": "DCBAE"
+    },
+    {
+      "rank": 87,
+      "id": 90,
+      "xyz": [
+        0,
+        3,
+        3
+      ],
+      "permutation": "DCBEA"
+    },
+    {
+      "rank": 88,
+      "id": 91,
+      "xyz": [
+        1,
+        3,
+        3
+      ],
+      "permutation": "DCEAB"
+    },
+    {
+      "rank": 89,
+      "id": 92,
+      "xyz": [
+        2,
+        3,
+        3
+      ],
+      "permutation": "DCEBA"
+    },
+    {
+      "rank": 90,
+      "id": 94,
+      "xyz": [
+        4,
+        3,
+        3
+      ],
+      "permutation": "DEABC"
+    },
+    {
+      "rank": 91,
+      "id": 95,
+      "xyz": [
+        0,
+        4,
+        3
+      ],
+      "permutation": "DEACB"
+    },
+    {
+      "rank": 92,
+      "id": 96,
+      "xyz": [
+        1,
+        4,
+        3
+      ],
+      "permutation": "DEBAC"
+    },
+    {
+      "rank": 93,
+      "id": 97,
+      "xyz": [
+        2,
+        4,
+        3
+      ],
+      "permutation": "DEBCA"
+    },
+    {
+      "rank": 94,
+      "id": 98,
+      "xyz": [
+        3,
+        4,
+        3
+      ],
+      "permutation": "DECAB"
+    },
+    {
+      "rank": 95,
+      "id": 99,
+      "xyz": [
+        4,
+        4,
+        3
+      ],
+      "permutation": "DECBA"
+    },
+    {
+      "rank": 96,
+      "id": 100,
+      "xyz": [
+        0,
+        0,
+        4
+      ],
+      "permutation": "EABCD"
+    },
+    {
+      "rank": 97,
+      "id": 101,
+      "xyz": [
+        1,
+        0,
+        4
+      ],
+      "permutation": "EABDC"
+    },
+    {
+      "rank": 98,
+      "id": 102,
+      "xyz": [
+        2,
+        0,
+        4
+      ],
+      "permutation": "EACBD"
+    },
+    {
+      "rank": 99,
+      "id": 103,
+      "xyz": [
+        3,
+        0,
+        4
+      ],
+      "permutation": "EACDB"
+    },
+    {
+      "rank": 100,
+      "id": 104,
+      "xyz": [
+        4,
+        0,
+        4
+      ],
+      "permutation": "EADBC"
+    },
+    {
+      "rank": 101,
+      "id": 105,
+      "xyz": [
+        0,
+        1,
+        4
+      ],
+      "permutation": "EADCB"
+    },
+    {
+      "rank": 102,
+      "id": 106,
+      "xyz": [
+        1,
+        1,
+        4
+      ],
+      "permutation": "EBACD"
+    },
+    {
+      "rank": 103,
+      "id": 107,
+      "xyz": [
+        2,
+        1,
+        4
+      ],
+      "permutation": "EBADC"
+    },
+    {
+      "rank": 104,
+      "id": 108,
+      "xyz": [
+        3,
+        1,
+        4
+      ],
+      "permutation": "EBCAD"
+    },
+    {
+      "rank": 105,
+      "id": 109,
+      "xyz": [
+        4,
+        1,
+        4
+      ],
+      "permutation": "EBCDA"
+    },
+    {
+      "rank": 106,
+      "id": 110,
+      "xyz": [
+        0,
+        2,
+        4
+      ],
+      "permutation": "EBDAC"
+    },
+    {
+      "rank": 107,
+      "id": 111,
+      "xyz": [
+        1,
+        2,
+        4
+      ],
+      "permutation": "EBDCA"
+    },
+    {
+      "rank": 108,
+      "id": 112,
+      "xyz": [
+        2,
+        2,
+        4
+      ],
+      "permutation": "ECABD"
+    },
+    {
+      "rank": 109,
+      "id": 113,
+      "xyz": [
+        3,
+        2,
+        4
+      ],
+      "permutation": "ECADB"
+    },
+    {
+      "rank": 110,
+      "id": 114,
+      "xyz": [
+        4,
+        2,
+        4
+      ],
+      "permutation": "ECBAD"
+    },
+    {
+      "rank": 111,
+      "id": 115,
+      "xyz": [
+        0,
+        3,
+        4
+      ],
+      "permutation": "ECBDA"
+    },
+    {
+      "rank": 112,
+      "id": 116,
+      "xyz": [
+        1,
+        3,
+        4
+      ],
+      "permutation": "ECDAB"
+    },
+    {
+      "rank": 113,
+      "id": 117,
+      "xyz": [
+        2,
+        3,
+        4
+      ],
+      "permutation": "ECDBA"
+    },
+    {
+      "rank": 114,
+      "id": 118,
+      "xyz": [
+        3,
+        3,
+        4
+      ],
+      "permutation": "EDABC"
+    },
+    {
+      "rank": 115,
+      "id": 119,
+      "xyz": [
+        4,
+        3,
+        4
+      ],
+      "permutation": "EDACB"
+    },
+    {
+      "rank": 116,
+      "id": 120,
+      "xyz": [
+        0,
+        4,
+        4
+      ],
+      "permutation": "EDBAC"
+    },
+    {
+      "rank": 117,
+      "id": 121,
+      "xyz": [
+        1,
+        4,
+        4
+      ],
+      "permutation": "EDBCA"
+    },
+    {
+      "rank": 118,
+      "id": 122,
+      "xyz": [
+        2,
+        4,
+        4
+      ],
+      "permutation": "EDCAB"
+    },
+    {
+      "rank": 119,
+      "id": 123,
+      "xyz": [
+        3,
+        4,
+        4
+      ],
+      "permutation": "EDCBA"
+    }
+  ],
+  "symbolic_interpretation": {
+    "16": "12 fermion types plus 4 gauge boson types in a common counting convention",
+    "17": "Higgs as seventeenth TYPE, discovered last in 2012",
+    "white": "user-defined synthesis/completeness marker, not a Higgs color or optical emission",
+    "reserved_cells": "five illustrative white-axis marks, not five physical Higgs states"
+  },
+  "separation": [
+    "Mapping is reversible by construction, not inferred from CERN data.",
+    "5! = 120 distinct orderings; 5^3 = 125 three-index addresses.",
+    "Five cells intentionally reserved along x=y=z; no natural physical derivation.",
+    "Higgs is the final discovered Standard Model particle type, not physically emitted white light."
+  ],
+  "references": [
+    "https://home.cern/science/physics/higgs-boson/",
+    "https://openstax.org/books/physics/pages/23-2-quarks"
+  ]
+}
