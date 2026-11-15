@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H042 Four-corner provenance</title><style>body{margin:0;background:#060c1e;color:#d4f4ff;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#74eaff}pre{font:16px/1.4 ui-monospace,Consolas,monospace;white-space:pre;overflow:auto;border:1px solid #4962a2;border-radius:12px;padding:20px;background:#0b1b35;color:#87ffd8}p{line-height:1.6}</style><main><h1>H042 — Four-Corner Error Correction + Source Ancestry</h1><p>ASCII visual chapter; append-only distinction between geometric recovery and independent evidence.</p><pre>H042 :: FOUR-CORNER RECOVERY / ROOT ANCESTRY
+=========================================================
+
+           (+) W1                 W2 (+)
+                *---------------*
+               /       |         \\
+              /        |          \\
+             /       {{0}}         \\
+            /          |            \\
+           *-----------+-------------*
+          W3 (+)                     W4 (X)
+
+        OBSERVED:  W1  W2  W3  W4
+        VALUE:     OK  OK  OK  BAD
+        ROOT:       A   B   C   D
+                           |
+              +------------+------------+
+              |                         |
+         GEOMETRY GATE              ANCESTRY GATE
+              |                         |
+        decode 1 error          remove suspect W4
+        distance >= 3             keep roots A,B,C
+              |                         |
+         ROTATION FOUND           3 distinct roots?
+              |                         |
+              +-----------+-------------+
+                          |
+                  TRUST CHECKPOINT
+                (synthetic test only)
+
+     MIRRORED COPIES:  A, A, A  -> REJECT
+     UNKNOWN ROOT:    A, B, ?  -> REJECT
+     DISTINCT ROOTS:  A, B, C  -> ACCEPT
+
+        CORRECT GEOMETRY != INDEPENDENT EVIDENCE
+
+  Test: 16 eligible four-corner sets; 10,752 substitutions.
+  Next: H043 forge / replay / collusion / freshness.
+=========================================================
+</pre><p>Run <code>node tests/h042-four-corner-provenance.cjs</code> for the exact synthetic verification. The result is not an empirical scientific measurement and is not cryptographic proof of root identity.</p></main></html>
