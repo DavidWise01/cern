@@ -47,3 +47,10 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - 24×2×4×3×1×1 = **576 logical addresses**, indexed by UTC observation timestamps.
 - Three separately rooted reports must agree exactly before a shared checkpoint may be *considered*; ancestry labels are not automatically verified, so the evaluator conservatively withholds a final trust claim.
 - The viewer displays **NO MEASUREMENT ATTACHED** until real measurements with provenance are added; the sample ledger is synthetic.
+
+## H022 — Real CERN public records and 576-address mesh bridge
+- [Evidence dashboard](docs/h022-public-evidence.html) — 40 harvested records; 5 attributable by Open Data DOI (2 ALICE, 2 CMS, 1 LHCb); 35 intentionally unmapped.
+- [Four sourced experiment datasets/services](evidence/h022-public-detector-seeds.json) — one ATLAS, CMS, ALICE and LHCb example with original DOI/URL and publication/time-granularity.
+- [First-harvest bridge](evidence/h022-harvest-bridge.json) and [reproducible generator](tools/h022_bridge.py).
+- **0 fully mapped 576-address measurements:** the sources identify detectors and dataset properties but do not establish physical ATLAS coil slot + a direction + abstract tier + observation UTC.
+- Published event counts are **dataset metadata**, not measured values for the 576 toroidal coordinates. No collision event binary files have been downloaded by H022.
