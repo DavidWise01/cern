@@ -106,3 +106,10 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Exact Python orbit verifier](tools/h030_coupled_orbit.py) and [exhaustive independent state-sweep results](models/h030-carry-coupled-results.json).
 - Rule: R increments every tick, B on R wrap, G on B wrap. Encoding: `t = R + 120×B + 14400×G` modulo `120³`. **1,728,000 unique states**, first return at tick 1,728,000, no premature repeats.
 - Five reserved H027 cube cells stay fixed; 120 active cells remain mapped bijectively per projection. Exact recurrence is constructed mathematical behavior, not a measured physical CERN/Higgs property.
+
+## H031 — Single-band fault persistence / controlled recovery
+- [Interactive R/B/G disturbance and repair explorer](docs/h031-fault-recovery.html)
+- [Python simulator and verification](tools/h031_disturbance.py); [frozen trial results](models/h031-disturbance-results.json).
+- At tick 14399, independently inject one position into R, B or G without carrying. Signed global address offsets are −119, −14280 and +14400 respectively. Under the same translation update `F(x)=x+1 mod 120³`, errors remain constant and **no spontaneous resynchronization** occurs.
+- Five H027 white-axis reserved addresses remain fixed. Applying a correction from an **externally verified** reference can recover exact synchronization; the demo and code cannot verify the independence of witnesses by themselves.
+- These are synthetic fault experiments in a chosen base-120 finite-state machine, not actual CERN operating-system events, magnetic failures or Higgs phenomena.
