@@ -120,3 +120,11 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Four-scenario independently checked summary](models/h032-witness-gated-summary.json): (1) three matching, explicitly assumed independent roots permit simulated correction; (2) three mirrors with one ancestry are insufficient; (3) contradiction blocks repair; (4) an unverified root blocks repair.
 - Original FAULT and WITNESS entries persist. Assessment is appended, then either a CORRECTION referencing it or a REPAIR_WITHHELD event. Tampering invalidates the hash chain.
 - **Important:** The `independence_verified` flags are synthetic simulation inputs. They do not prove real source independence or authorize unattended repairs to physical CERN systems; no CERN live data or Higgs processes are used.
+
+## H033 — Temporal witness ordering and immutable checkpoints
+- [Interactive six-scenario arrival-order viewer](docs/h033-temporal-witness.html).
+- [Deterministic synthetic checkpoint processor](tools/h033_temporal_checkpoints.py) and [expected scenario summary](models/h033-temporal-results.json).
+- [Offline GitHub Actions audit](.github/workflows/h033-temporal-ci.yml) generates full SHA-256 chained results and executes regression checks. [Actions page](https://github.com/DavidWise01/cern/actions/workflows/h033-temporal-ci.yml).
+- Scenario outcomes: late matching evidence appends a confirmation; late contradiction appends a disputed revision proposal; out-of-order receipt is permitted without conflating event time and arrival order; copies with shared ancestry, pre-freeze contradictions, and unverified roots prevent checkpoint freeze.
+- A frozen RGB checkpoint and its original hash remain unchanged, and the white-axis reservations `0,31,62,93,124` stay fixed. No automatic physical-system repair or empirical root authentication is claimed.
+- Run locally: `python3 tools/h033_temporal_checkpoints.py`, then `python3 -m unittest discover -s tests -p 'test_archive.py' -v`.
