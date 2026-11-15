@@ -1,0 +1,125 @@
+{
+  "schema": "cern.h030.carry-coupled-orbit.v1",
+  "status": "exact, synthetic, reversible finite-state mapping",
+  "base": 120,
+  "bands": [
+    "R",
+    "B",
+    "G"
+  ],
+  "rule": "R increments every tick; B on R wrap; G on simultaneous R+B wrap",
+  "encoding": "t mod 120^3 = R + 120*B + 14400*G",
+  "joint_minimal_period": 1728000,
+  "three_band_active_positions_per_state": 360,
+  "distinct_permutations_per_cube_projection": 120,
+  "physical_particle_count_claim": null,
+  "fixed_white_cube_addresses": [
+    0,
+    31,
+    62,
+    93,
+    124
+  ],
+  "distinct_states_exhaustively_checked": 1728000,
+  "duplicate_states_before_closure": 0,
+  "invertible": true,
+  "all_active_mappings_bijective": true,
+  "full_joint_return_exactly_at": 1728000,
+  "source_geometry": "models/h027-permutation-cube-map.json",
+  "relation_to_H029": "H029 independent shift periods yield 720 ticks; H030 nested carry yields 1,728,000 ticks",
+  "checkpoints": [
+    {
+      "tick": 0,
+      "RGB": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tick": 1,
+      "RGB": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "tick": 119,
+      "RGB": [
+        119,
+        0,
+        0
+      ]
+    },
+    {
+      "tick": 120,
+      "RGB": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "tick": 121,
+      "RGB": [
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "tick": 720,
+      "RGB": [
+        0,
+        6,
+        0
+      ]
+    },
+    {
+      "tick": 14399,
+      "RGB": [
+        119,
+        119,
+        0
+      ]
+    },
+    {
+      "tick": 14400,
+      "RGB": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "tick": 14401,
+      "RGB": [
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "tick": 1727999,
+      "RGB": [
+        119,
+        119,
+        119
+      ]
+    },
+    {
+      "tick": 1728000,
+      "RGB": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "limits": [
+    "This is a base-120 odometer defined by us, not an empirical property of CERN magnets.",
+    "White cells remain fixed in the H027 cube and are symbolic, not Higgs emissions.",
+    "The ring transport is a cyclic rank translation and does not model particle forces or QCD."
+  ]
+}
