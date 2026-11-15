@@ -319,6 +319,45 @@ class ArchiveTests(unittest.TestCase):
                          [-119,-14280,14400])
         self.assertFalse(frozen["cern_measurement"])
 
+    def test_h032_three_root_witness_gate(self):
+        spec = importlib.util.spec_from_file_location(
+            "h032", ROOT / "tools/h032_witness_repair.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        doc = mod.run()
+        self.assertEqual(len(doc["cases"]), 4)
+        self.assertEqual([x["decision"] for x in doc["cases"]],
+                         ["CONSENSUS_IN_SIMULATOR", "INSUFFICIENT",
+                          "CONTRADICTION", "UNVERIFIED_ROOTS"])
+        self.assertEqual([x["repaired"] for x in doc["cases"]],
+                         [True,False,False,False])
+        for case in doc["cases"]:
+            self.assertTrue(mod.verify_chain(case["events"]))
+            self.assertEqual(case["white_reserved"], [0,31,62,93,124])
+            self.assertEqual(case["events"][0]["kind"],"FAULT")
+            self.assertEqual(case["events"][-1]["kind"],
+                             "CORRECTION" if case["repaired"] else "REPAIR_WITHHELD")
+        self.assertEqual(doc["cases"][0]["final_state"], [119,119,0])
+
+    def test_h032_provenance_double_count_and_chain_tampering(self):
+        spec = importlib.util.spec_from_file_location(
+            "h032", ROOT / "tools/h032_witness_repair.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        ref=[119,119,0]
+        witnesses=[mod.observation(14399,ref,"A",str(i),"shared",True)
+                   for i in range(3)]
+        result=mod.evaluate(witnesses)
+        self.assertEqual(result["independent_roots"],1)
+        self.assertEqual(result["decision"],"INSUFFICIENT")
+        good=mod.trial("agreement")
+        records=json.loads(json.dumps(good["events"]))
+        self.assertTrue(mod.verify_chain(records))
+        records[0]["payload"]["fault_band"]="G"
+        self.assertFalse(mod.verify_chain(records))
+        untrusted=mod.trial("unverified")
+        self.assertFalse(untrusted["repaired"])
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
