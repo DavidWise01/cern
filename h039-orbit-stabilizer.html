@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H039 — Orbit Stabilizer ASCII Story</title><style>body{background:#050d1e;color:#c9ebfa;font:16px system-ui;margin:0}main{max-width:1080px;margin:auto;padding:28px}h1{color:#58edff}pre{background:#0b1830;border:1px solid #327c9a;border-radius:12px;padding:24px;overflow:auto;color:#9cffe9;font:17px/1.4 ui-monospace,Consolas,monospace}a{color:#80dfff}</style><main><h1>H039 · Orbit–Stabilizer Conservation</h1><p>An ASCII-only visual chapter. No JPEG dependency.</p><pre>H039 -- ORBIT / STABILIZER -- ASCII GEOMETRY
+                     +Z
+                       |
+              7--------8
+             /|       /|
+            5--------6 |
+            | 3------|-4
+            |/       |/
+            1--------2
+                       |
+                     {{0}}  SINGLET
+
+  UNLABELED CORNER: 8 orbit * 3 stabilizer = 24
+  R0 -\\
+  R1 --- > SAME CORNER (orientation ambiguous)
+  R2 -//
+
+  LABELED CORNER: 24 orbit * 1 stabilizer = 24
+  R0 ---> [corner, R, RG]
+  R1 ---> [corner, G, GB]
+  R2 ---> [corner, B, BR]
+
+  POSITION != IDENTITY
+  ALL 3 SYMBOLIC LAYERS: VISIBLE / UV / IR
+  EXACT CHECKS: 192 OCTANT; 10,368 LABELED
+  NEXT: H040 MINIMAL WITNESS / OBSERVABILITY
+</pre><p>The same observed octant can be consistent with three different cube rotations. Include RGB labels and only identity stabilizes the complete labeled state.</p><p><a href="tests/h039-orbit-stabilizer.cjs">Run/check the exact JS test source</a></p><p>This is symbolic geometry, not measured physics.</p></main></html>
