@@ -87,3 +87,9 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Reversible Python permutation mapper](tools/h027_permutation_cube.py) and [frozen complete mapping](models/h027-permutation-cube-map.json).
 - 6 quark + 6 lepton + 4 gauge-boson particle types = 16; Higgs is the 17th common Standard Model type and was the last to be discovered in 2012. **White is a symbolic completion marker, not a measured particle color or literal light emitted by the Higgs.**
 - Formula: `5! = 120`, `5³ = 125`, five reserved addresses `0,31,62,93,124`. These counts are a constructed exact bijection, not an experimentally discovered correspondence.
+
+## H028 — Closed-loop permutation cube across R/B/G toroidal stages
+- [Interactive 360-step RGB orbit](docs/h028-closed-rgb-orbit.html)
+- [Source-grounded 120-permutation rotation algorithm](tools/h028_closed_orbit.py), using the H027 125-cell cube and five fixed reserved white-axis positions.
+- [Exhaustive orbit audit (361 checkpoints)](models/h028-closed-orbit-results.json): 120 distinct active occupants, 5 fixed reservations, 0 collisions, reversibility; **payload period 120**, **RGB labeled protocol period 360**.
+- The three stages reuse the same 120 active cube positions. This is a deliberately designed permutation schedule, **not** a measurable Higgs/optical emission or a physical 360-coil assembly.
