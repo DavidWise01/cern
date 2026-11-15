@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H029 — Three-speed toroidal return</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 35% 12%,#142b40,#06121e 68%);color:#ebf7fb;font:15px/1.5 system-ui}
+header,main,footer{max-width:1150px;margin:auto;padding:18px}h1{margin:.2rem 0;font-size:clamp(1.7rem,3vw,2.4rem)}
+.grid{display:grid;grid-template-columns:minmax(360px,1.4fr) minmax(280px,1fr);gap:16px}.panel{background:#102336;border:1px solid #3d6173;padding:16px;border-radius:16px}
+canvas{display:block;width:100%;aspect-ratio:1.05;border-radius:12px;background:#071827}button{cursor:pointer;font:inherit;background:#1d465d;border:1px solid #6598aa;border-radius:9px;color:#f3fcff;padding:8px 11px}
+input[type=range]{width:100%}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric{background:#081d2e;border:1px solid #355368;border-radius:9px;padding:10px;text-align:center}
+.num{font-weight:800;font-size:1.8rem}pre{padding:12px;border-radius:9px;background:#081723;white-space:pre-wrap;font:13px/1.45 ui-monospace,monospace}small,.muted{color:#aac2d0}a{color:#87dbe6}.alert{border-left:3px solid #e7b977;padding-left:12px}@media(max-width:810px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<header><small>DAVIDWISE01 / CERN / H029 · EXACT FINITE-STATE MODEL</small><h1>Three toroids, three speeds, one return</h1><p>120 shared permutations, projected concurrently onto Red, Blue and Green rings. Independent speeds create a true 720-tick joint recurrence.</p></header>
+<main><div class="grid"><section class="panel"><canvas id="mesh" width="850" height="800" aria-label="Three independently advancing 120-position toroidal rings and five white reserved cube axis nodes"></canvas>
+<label>Time: <output id="tickNumber">0</output> / 720<input type="range" id="tick" min="0" max="720" value="0" step="1"></label>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button id="prev">Previous</button><button id="next">Next tick</button><button id="play">Play</button><button id="reset">Reset</button></div>
+<p class="muted">Tracers indicate the position of the same selected permutation (rank 0, ABCDE) in each band's cyclic projection. The five white reservations are stationary.</p></section>
+<section class="panel"><h2>Current positions</h2><div class="three">
+<div class="metric"><small style="color:#ffa387">RED</small><div class="num" id="r">0</div><small>period 120</small></div>
+<div class="metric"><small style="color:#85b9ff">BLUE</small><div class="num" id="b">0</div><small>period 240</small></div>
+<div class="metric"><small style="color:#82dbb0">GREEN</small><div class="num" id="g">0</div><small>period 360</small></div>
+</div><h2 style="margin-top:18px">Return conditions</h2><p>First simultaneous return: <strong>720 ticks</strong></p><p>Address collisions: <strong>0</strong></p><p>Active rank mappings: <strong>3 × 120</strong> per tick</p><p>Reserved white IDs: <strong>0, 31, 62, 93, 124</strong></p>
+<pre id="status"></pre>
+<p class="alert">Three rings are projections of a shared 120-permutation set, not 360 distinct particles or actual CERN coil measurements. Their rates are a chosen mathematical schedule, not calibrated magnetic frequencies.</p>
+<p><a href="../models/h029-multirate-results.json">721-checkpoint results</a> · <a href="../tools/h029_multirate_orbit.py">Reproducible verifier</a> · <a href="h028-closed-rgb-orbit.html">H028 baseline</a></p></section></div></main>
+<footer><small>Three simultaneous colored ring projections; five H027 cube white-axis cells fixed. H026's six Cartesian anchors are a separate geometric convention.</small></footer>
+<script>
+(()=>{const canvas=document.querySelector("#mesh"),c=canvas.getContext("2d"),time=document.querySelector("#tick");let playing=false;
+const colors=["#fa967d","#79b1ff","#79d5ad"],radii=[315,230,145],speeds=[1,2,3],fields=["r","b","g"];
+function marker(theta,radius){return [425+radius*Math.cos(theta),395+radius*.72*Math.sin(theta)]}
+function draw(){const tick=Number(time.value);document.querySelector("#tickNumber").textContent=tick;
+const phases=speeds.map(s=>Math.floor(tick/s)%120);fields.forEach((id,i)=>document.getElementById(id).textContent=phases[i]);c.clearRect(0,0,850,800);
+c.font="15px system-ui";c.fillStyle="#bed8e4";c.textAlign="center";c.fillText("5! = 120 permutations   ·   5³ = 125 cube addresses",425,40);
+for(let k=0;k<3;k++){let r=radii[k];c.beginPath();c.ellipse(425,395,r,r*.72,0,0,Math.PI*2);c.strokeStyle=colors[k]+"88";c.lineWidth=3;c.stroke();
+for(let j=0;j<120;j++){let a=2*Math.PI*j/120-Math.PI/2;let [x,y]=marker(a,r);c.beginPath();c.arc(x,y,j%5===0?3.8:1.7,0,Math.PI*2);c.fillStyle=colors[k];c.globalAlpha=j%5===0?.8:.3;c.fill();c.globalAlpha=1}
+let theta=2*Math.PI*phases[k]/120-Math.PI/2,[x,y]=marker(theta,r);c.beginPath();c.arc(x,y,12,0,2*Math.PI);c.fillStyle=colors[k];c.shadowColor=colors[k];c.shadowBlur=24;c.fill();c.shadowBlur=0;
+c.fillStyle="#edf8fc";c.font="13px monospace";c.fillText("RBG"[k]+":"+phases[k],x,y-18)}
+const white=[[425,395],[455,379],[485,363],[515,347],[545,331]];white.forEach(([x,y],i)=>{c.beginPath();c.arc(x,y,5,0,2*Math.PI);c.fillStyle="#fff";c.shadowColor="#fff";c.shadowBlur=15;c.fill();c.shadowBlur=0;});c.fillStyle="#e7f1ff";c.fillText("five white reserved cube cells (schematic)",425,740);
+const returned=phases.every(v=>v===0);document.querySelector("#status").textContent=JSON.stringify({tick,phase_indices:{R:phases[0],B:phases[1],G:phases[2]},joint_return:returned,payload_rank:"ABCDE",white_reservations_fixed:5,source_is_physics_measurement:false},null,2)}
+time.oninput=draw;document.querySelector("#prev").onclick=()=>{time.value=Math.max(0,+time.value-1);draw()};document.querySelector("#next").onclick=()=>{time.value=(+time.value+1)%721;draw()};document.querySelector("#reset").onclick=()=>{time.value=0;draw()};document.querySelector("#play").onclick=()=>{playing=!playing;document.querySelector("#play").textContent=playing?"Pause":"Play"};setInterval(()=>{if(playing){time.value=(+time.value+1)%721;draw()}},60);draw()})();
+</script></body></html>
