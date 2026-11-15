@@ -1,0 +1,24 @@
+{
+  "schema": "cern.h043.adversarial-witness-integrity.v1",
+  "date": "2026-11-15",
+  "parent": "models/h042-four-corner-provenance.json",
+  "status": "PASS in synthetic test",
+  "gates": [
+    "authentic signature under registry key",
+    "freshness of bound epoch",
+    "per-root nonce replay rejection",
+    "exact checkpoint agreement",
+    "at least 3 distinct valid source roots",
+    "at least 3 independently established source ancestry roots"
+  ],
+  "test_vectors": 13,
+  "limitations": [
+    "Test harness uses synthetic HMAC secrets. Real keys require secure distribution and rotation.",
+    "A signature authenticates a key holder, not truth of a measurement.",
+    "Declared ancestor is signed but not independently verified by this harness; real deployment must use trusted lineage attestations.",
+    "Covert collusion by distinct valid keys is undetectable from these fields alone.",
+    "Replay rejection here is scoped to a single check invocation; production needs durable append-only replay state."
+  ],
+  "test": "tests/h043-adversarial-witness.cjs",
+  "next": "H044 durable replay ledger and conflicting checkpoint fork detection"
+}
