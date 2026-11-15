@@ -1,0 +1,24 @@
+{
+  "schema": "cern.h039.orbit-stabilizer.v1",
+  "date": "2026-11-15",
+  "status": "PASS",
+  "parent": "models/h038-cycle-periodicity.json",
+  "group_order": 24,
+  "octant_orbit": 8,
+  "octant_stabilizer": 3,
+  "full_label_orbit": 24,
+  "full_label_stabilizer": 1,
+  "octants": 8,
+  "source_labeled_states": 432,
+  "octant_checks": 192,
+  "labeled_checks": 10368,
+  "rank_independence": "rotation does not act on permutation rank",
+  "spectra": [
+    "visible",
+    "ultraviolet",
+    "infrared"
+  ],
+  "invariant": "orbit(x)*stabilizer(x)=24; geometry alone can conceal nonidentity rotations; full RGB-directed labels distinguish them",
+  "scope": "symbolic cube rotation group, not empirical particle physics",
+  "next": "H040 minimal witness information needed to infer rotation"
+}
