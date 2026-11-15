@@ -1,0 +1,56 @@
+{
+  "schema": "cern.h048.root-resilience.v1",
+  "date": "2026-11-15",
+  "parent": "models/h047-source-cut.json",
+  "status": "symbolic combinatorial proof confirmed; test script committed",
+  "minimum_root_cut_rule": "For n >= 3 independently sourced single-root witnesses with threshold 3, minCut=n-2.",
+  "rows": [
+    {
+      "n": 3,
+      "minimum_cut": 1,
+      "minimal_cut_sets": 3
+    },
+    {
+      "n": 4,
+      "minimum_cut": 2,
+      "minimal_cut_sets": 6
+    },
+    {
+      "n": 5,
+      "minimum_cut": 3,
+      "minimal_cut_sets": 10
+    },
+    {
+      "n": 6,
+      "minimum_cut": 4,
+      "minimal_cut_sets": 15
+    },
+    {
+      "n": 7,
+      "minimum_cut": 5,
+      "minimal_cut_sets": 21
+    }
+  ],
+  "mirrors": {
+    "four_roots_with_two_mirrors_minimum_cut": 2,
+    "mirrors_are_not_new_roots": true
+  },
+  "merged": {
+    "four_base_roots_plus_merged_witness_minimum_cut": 2,
+    "shared_ancestry_blocks_double_counting": true
+  },
+  "repairs": {
+    "new_generation_is_not_independent_if_descended_from_compromised_source": true,
+    "earlier_compromise_remains_in_immutable_journal": true,
+    "provisional_not_graduated": true,
+    "hash_chain_detects_in_memory_tamper": true
+  },
+  "limitations": [
+    "Declared roots are assumed; source authenticity not established",
+    "No transactional durable storage or externally anchored journal",
+    "Exact cut law applies only to genuinely independent single-root witnesses, not arbitrary hypergraphs",
+    "Root repair of the same source does not establish new independent ancestry"
+  ],
+  "test": "tests/h048-root-resilience.cjs",
+  "next": "H049 minimum-root-cut for arbitrary merged-source hypergraphs"
+}
