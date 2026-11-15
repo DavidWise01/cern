@@ -1,0 +1,436 @@
+{
+  "schema": "cern.h031.single-ring-disturbance.v1",
+  "model": "translation-invariant base-120 carry counter",
+  "fault_tick": 14399,
+  "reference_state": [
+    119,
+    119,
+    0
+  ],
+  "horizon": 240,
+  "perturbation": "add one to one ring's digit without propagating a carry (single-event register fault)",
+  "white_reservations_fixed": [
+    0,
+    31,
+    62,
+    93,
+    124
+  ],
+  "cases": [
+    {
+      "band": "R",
+      "injected_at_tick": 14399,
+      "original": [
+        119,
+        119,
+        0
+      ],
+      "disturbed_at_injection": [
+        0,
+        119,
+        0
+      ],
+      "injected_delta": 1,
+      "integer_address_offset_modulo": 1727881,
+      "integer_address_offset_signed": -119,
+      "spontaneous_recovery": false,
+      "phase_divergence_persists_forever_without_feedback": true,
+      "unverified_repair_blocked": true,
+      "verified_reference_repair_possible": true,
+      "repair_address_shift_modulo": 119,
+      "checkpoint_independence": "not demonstrated; verified=True is an explicit authorization supplied by caller",
+      "observations": [
+        {
+          "elapsed": 0,
+          "reference": [
+            119,
+            119,
+            0
+          ],
+          "disturbed": [
+            0,
+            119,
+            0
+          ],
+          "residual_address_modulo": 1727881
+        },
+        {
+          "elapsed": 1,
+          "reference": [
+            0,
+            0,
+            1
+          ],
+          "disturbed": [
+            1,
+            119,
+            0
+          ],
+          "residual_address_modulo": 1727881
+        },
+        {
+          "elapsed": 2,
+          "reference": [
+            1,
+            0,
+            1
+          ],
+          "disturbed": [
+            2,
+            119,
+            0
+          ],
+          "residual_address_modulo": 1727881
+        },
+        {
+          "elapsed": 119,
+          "reference": [
+            118,
+            0,
+            1
+          ],
+          "disturbed": [
+            119,
+            119,
+            0
+          ],
+          "residual_address_modulo": 1727881
+        },
+        {
+          "elapsed": 120,
+          "reference": [
+            119,
+            0,
+            1
+          ],
+          "disturbed": [
+            0,
+            0,
+            1
+          ],
+          "residual_address_modulo": 1727881
+        },
+        {
+          "elapsed": 121,
+          "reference": [
+            0,
+            1,
+            1
+          ],
+          "disturbed": [
+            1,
+            0,
+            1
+          ],
+          "residual_address_modulo": 1727881
+        },
+        {
+          "elapsed": 239,
+          "reference": [
+            118,
+            1,
+            1
+          ],
+          "disturbed": [
+            119,
+            0,
+            1
+          ],
+          "residual_address_modulo": 1727881
+        },
+        {
+          "elapsed": 240,
+          "reference": [
+            119,
+            1,
+            1
+          ],
+          "disturbed": [
+            0,
+            1,
+            1
+          ],
+          "residual_address_modulo": 1727881
+        }
+      ]
+    },
+    {
+      "band": "B",
+      "injected_at_tick": 14399,
+      "original": [
+        119,
+        119,
+        0
+      ],
+      "disturbed_at_injection": [
+        119,
+        0,
+        0
+      ],
+      "injected_delta": 1,
+      "integer_address_offset_modulo": 1713720,
+      "integer_address_offset_signed": -14280,
+      "spontaneous_recovery": false,
+      "phase_divergence_persists_forever_without_feedback": true,
+      "unverified_repair_blocked": true,
+      "verified_reference_repair_possible": true,
+      "repair_address_shift_modulo": 14280,
+      "checkpoint_independence": "not demonstrated; verified=True is an explicit authorization supplied by caller",
+      "observations": [
+        {
+          "elapsed": 0,
+          "reference": [
+            119,
+            119,
+            0
+          ],
+          "disturbed": [
+            119,
+            0,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        },
+        {
+          "elapsed": 1,
+          "reference": [
+            0,
+            0,
+            1
+          ],
+          "disturbed": [
+            0,
+            1,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        },
+        {
+          "elapsed": 2,
+          "reference": [
+            1,
+            0,
+            1
+          ],
+          "disturbed": [
+            1,
+            1,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        },
+        {
+          "elapsed": 119,
+          "reference": [
+            118,
+            0,
+            1
+          ],
+          "disturbed": [
+            118,
+            1,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        },
+        {
+          "elapsed": 120,
+          "reference": [
+            119,
+            0,
+            1
+          ],
+          "disturbed": [
+            119,
+            1,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        },
+        {
+          "elapsed": 121,
+          "reference": [
+            0,
+            1,
+            1
+          ],
+          "disturbed": [
+            0,
+            2,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        },
+        {
+          "elapsed": 239,
+          "reference": [
+            118,
+            1,
+            1
+          ],
+          "disturbed": [
+            118,
+            2,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        },
+        {
+          "elapsed": 240,
+          "reference": [
+            119,
+            1,
+            1
+          ],
+          "disturbed": [
+            119,
+            2,
+            0
+          ],
+          "residual_address_modulo": 1713720
+        }
+      ]
+    },
+    {
+      "band": "G",
+      "injected_at_tick": 14399,
+      "original": [
+        119,
+        119,
+        0
+      ],
+      "disturbed_at_injection": [
+        119,
+        119,
+        1
+      ],
+      "injected_delta": 1,
+      "integer_address_offset_modulo": 14400,
+      "integer_address_offset_signed": 14400,
+      "spontaneous_recovery": false,
+      "phase_divergence_persists_forever_without_feedback": true,
+      "unverified_repair_blocked": true,
+      "verified_reference_repair_possible": true,
+      "repair_address_shift_modulo": 1713600,
+      "checkpoint_independence": "not demonstrated; verified=True is an explicit authorization supplied by caller",
+      "observations": [
+        {
+          "elapsed": 0,
+          "reference": [
+            119,
+            119,
+            0
+          ],
+          "disturbed": [
+            119,
+            119,
+            1
+          ],
+          "residual_address_modulo": 14400
+        },
+        {
+          "elapsed": 1,
+          "reference": [
+            0,
+            0,
+            1
+          ],
+          "disturbed": [
+            0,
+            0,
+            2
+          ],
+          "residual_address_modulo": 14400
+        },
+        {
+          "elapsed": 2,
+          "reference": [
+            1,
+            0,
+            1
+          ],
+          "disturbed": [
+            1,
+            0,
+            2
+          ],
+          "residual_address_modulo": 14400
+        },
+        {
+          "elapsed": 119,
+          "reference": [
+            118,
+            0,
+            1
+          ],
+          "disturbed": [
+            118,
+            0,
+            2
+          ],
+          "residual_address_modulo": 14400
+        },
+        {
+          "elapsed": 120,
+          "reference": [
+            119,
+            0,
+            1
+          ],
+          "disturbed": [
+            119,
+            0,
+            2
+          ],
+          "residual_address_modulo": 14400
+        },
+        {
+          "elapsed": 121,
+          "reference": [
+            0,
+            1,
+            1
+          ],
+          "disturbed": [
+            0,
+            1,
+            2
+          ],
+          "residual_address_modulo": 14400
+        },
+        {
+          "elapsed": 239,
+          "reference": [
+            118,
+            1,
+            1
+          ],
+          "disturbed": [
+            118,
+            1,
+            2
+          ],
+          "residual_address_modulo": 14400
+        },
+        {
+          "elapsed": 240,
+          "reference": [
+            119,
+            1,
+            1
+          ],
+          "disturbed": [
+            119,
+            1,
+            2
+          ],
+          "residual_address_modulo": 14400
+        }
+      ]
+    }
+  ],
+  "theorem": "F(x)=x+1 mod 120^3 => F^t(x+δ)-F^t(x)=δ mod 120^3",
+  "interpretation": "No intrinsic self-correction. Explicit reference-based repair needed; repair is not evidence of independent witnesses.",
+  "synthetic": true,
+  "cern_measurement": false
+}
