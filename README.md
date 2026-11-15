@@ -113,3 +113,10 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - At tick 14399, independently inject one position into R, B or G without carrying. Signed global address offsets are −119, −14280 and +14400 respectively. Under the same translation update `F(x)=x+1 mod 120³`, errors remain constant and **no spontaneous resynchronization** occurs.
 - Five H027 white-axis reserved addresses remain fixed. Applying a correction from an **externally verified** reference can recover exact synchronization; the demo and code cannot verify the independence of witnesses by themselves.
 - These are synthetic fault experiments in a chosen base-120 finite-state machine, not actual CERN operating-system events, magnetic failures or Higgs phenomena.
+
+## H032 — Three-witness gated repair with append-only evidence
+- [Interactive evidence/repair dashboard](docs/h032-witness-feedback.html)
+- [Python witness evaluator and SHA-256 hash-linked event ledger](tools/h032_witness_repair.py)
+- [Four-scenario independently checked summary](models/h032-witness-gated-summary.json): (1) three matching, explicitly assumed independent roots permit simulated correction; (2) three mirrors with one ancestry are insufficient; (3) contradiction blocks repair; (4) an unverified root blocks repair.
+- Original FAULT and WITNESS entries persist. Assessment is appended, then either a CORRECTION referencing it or a REPAIR_WITHHELD event. Tampering invalidates the hash chain.
+- **Important:** The `independence_verified` flags are synthetic simulation inputs. They do not prove real source independence or authorize unattended repairs to physical CERN systems; no CERN live data or Higgs processes are used.
