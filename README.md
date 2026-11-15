@@ -128,3 +128,11 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - Scenario outcomes: late matching evidence appends a confirmation; late contradiction appends a disputed revision proposal; out-of-order receipt is permitted without conflating event time and arrival order; copies with shared ancestry, pre-freeze contradictions, and unverified roots prevent checkpoint freeze.
 - A frozen RGB checkpoint and its original hash remain unchanged, and the white-axis reservations `0,31,62,93,124` stay fixed. No automatic physical-system repair or empirical root authentication is claimed.
 - Run locally: `python3 tools/h033_temporal_checkpoints.py`, then `python3 -m unittest discover -s tests -p 'test_archive.py' -v`.
+
+## Visual chronicle convention — every iteration
+Every new H0xx research iteration should produce **one new story JPG** showing the current geometry, what was tested, the observed mathematical result, and the next target, plus **one standalone HTML with the JPEG embedded byte-for-byte** (base64 data URI), so it remains viewable offline without a missing image dependency. The JPG is a conceptual diagram unless independently verified imagery or measurements are supplied; never label artistic particle geometry as measured CERN data.
+
+- [Offline JPG-in-HTML generator](tools/embed_jpg_chronicle.py):
+  `python3 tools/embed_jpg_chronicle.py docs/images/h034-story.jpg docs/h034-story.html --title "H034 — Next Natural Invariant"`
+- Commit both the JPEG source and generated HTML where binary uploads are supported; preserve source, generated outputs, and SHA-256 provenance. A GitHub HTML link alone is **not** proof the image was embedded unless it contains `data:image/jpeg;base64,`.
+- The first H033 retrospective visual was created as a standalone JPG and self-contained HTML artifact in the conversation; the binary image itself was not uploaded to this GitHub repository by the text-only connector.
