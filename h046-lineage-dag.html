@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H046 Source Lineage DAG</title><style>body{margin:0;background:#061020;color:#dceefa;font:16px system-ui}main{max-width:1080px;margin:auto;padding:24px}h1{color:#83edff}pre{white-space:pre;overflow:auto;color:#a0ffe1;background:#0b1a35;border:1px solid #3b83a5;border-radius:14px;padding:22px;font:16px/1.4 Consolas,monospace}</style><main><h1>H046 — Recursive Source Lineage</h1><p>ASCII-only geometry of ancestry: shared grandparent, merged roots, cycle and unknown-source rejection.</p><pre>H046 — SOURCE LINEAGE DAG
+============================================
+
+               [SOURCE X]
+                /      \
+               /        \
+           [GITHUB]   [WEB MIRROR]
+              |           |
+          [BRANCH A]  [BRANCH B]
+              |           |
+             W1          W2
+               \         /
+                \       /
+                SHARED X
+                    |
+              COUNT ONCE
+
+   [SOURCE Y]       [SOURCE Z]
+       |                |
+      WY               W3
+
+        W1 + WY + W3
+        ROOTS: X, Y, Z
+        PAIRWISE DISJOINT -> PASS
+
+        W1 + W2 + W3
+        ROOTS: X, X, Z
+        SHARED X -> FAIL
+
+   MERGE XY -> {{ X, Y }} ROOT SET
+   A witness with multiple ancestors cannot
+   become independent simply by renaming itself.
+
+         THREE NAMES != THREE SOURCES
+
+   CYCLE: c1 -> c2 -> c1    REJECT
+   UNKNOWN ANCESTOR         REJECT
+   REWRITE EXISTING NODE    REJECT
+
+   NEXT H047: ROOT-CUT / BLAST RADIUS
+============================================</pre><p>Run <code>node tests/h046-lineage-dag.cjs</code>. Distinct declarations are not proof of externally authenticated independent sources.</p></main></html>
