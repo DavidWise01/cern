@@ -78,6 +78,36 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(module.summarize(rows)[0]["decision"],
                          "DISAGREEMENT")
 
+    def test_h022_partial_source_bridge(self):
+        spec = importlib.util.spec_from_file_location(
+            "bridge_h022", ROOT / "tools/h022_bridge.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        raw = {"record_id": "1120", "source": "open_data",
+               "public_record_url": "https://opendata.cern.ch/record/1120",
+               "doi": "10.7483/OPENDATA.ALICE.Y62S.E7UR",
+               "title": "Pb Pb sample", "retrieved_utc": "2026-11-14T22:00:00Z"}
+        result = module.bridge(raw)
+        self.assertEqual(result["mapped_detector"], "ALICE")
+        self.assertEqual(result["mapping_evidence"], "doi_prefix")
+        self.assertIsNone(result["mesh_address"])
+        self.assertIsNone(result["observed_at_utc"])
+        self.assertIsNone(result["measurement_value"])
+        unproven = module.bridge(dict(raw, doi=None, title="ATLAS test"))
+        self.assertIsNone(unproven["mapped_detector"])
+        self.assertEqual(unproven["status"], "UNMAPPED_REFERENCE")
+
+    def test_h022_referenced_fixtures(self):
+        doc = json.loads((ROOT / "evidence/h022-public-detector-seeds.json").read_text())
+        self.assertEqual(set(x["experiment"] for x in doc["records"]),
+                         {"ATLAS", "CMS", "ALICE", "LHCb"})
+        self.assertTrue(all(x["mesh_mapping"]["address"] is None
+                            for x in doc["records"]))
+        actual = json.loads((ROOT / "evidence/h022-harvest-bridge.json").read_text())
+        self.assertEqual(actual["count"], 40)
+        self.assertEqual(actual["verified_full_address_count"], 0)
+        self.assertEqual(sum(actual["detector_counts"].values()), 40)
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
