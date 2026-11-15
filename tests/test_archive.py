@@ -208,6 +208,33 @@ class ArchiveTests(unittest.TestCase):
                          {x["id"] for x in doc["reserved_cells"]},
                          set(range(125)))
 
+    def test_h028_closed_orbit_full_cycle(self):
+        spec = importlib.util.spec_from_file_location(
+            "orbit_h028", ROOT / "tools/h028_closed_orbit.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        cube = json.loads((ROOT / "models/h027-permutation-cube-map.json").read_text())
+        result = module.check(cube)
+        self.assertEqual(result["collisions"], 0)
+        self.assertEqual(result["payload_minimal_return_period"], 120)
+        self.assertEqual(result["full_band_labeled_protocol_period"], 360)
+        self.assertEqual(result["reversible_steps_checked"], 361)
+        self.assertEqual(result["reserved_fixed"], [0,31,62,93,124])
+        for step in range(361):
+            self.assertEqual(len({module.transport(rank,step)
+                                  for rank in range(120)}),120)
+            self.assertEqual(module.transport(0,step),step%120)
+        for step in (0,120,240,360):
+            self.assertTrue(all(module.transport(i,step)==i for i in range(120)))
+        for step in (1,119,121,359):
+            self.assertFalse(any(module.transport(i,step)==i for i in range(120)))
+        self.assertEqual(module.phase(120)["band"],"B")
+        self.assertEqual(module.phase(240)["band"],"G")
+        self.assertEqual(module.phase(360)["band"],"R")
+        frozen = json.loads((ROOT / "models/h028-closed-orbit-results.json").read_text())
+        self.assertEqual(frozen["payload_minimal_return_period"],120)
+        self.assertEqual(frozen["collisions"],0)
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
