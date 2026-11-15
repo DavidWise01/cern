@@ -1,0 +1,22 @@
+{
+  "schema": "cern.h035.rotational-identity.v1",
+  "date": "2026-11-15",
+  "status": "PASS: symbolic combinatorial test, not experimental physics",
+  "parent": "models/h034-rgb-factorial-spectrum.json",
+  "rotations": 24,
+  "axis_preserving_rotations": 4,
+  "layers": 3,
+  "primary_channels": 3,
+  "secondary_directions": 6,
+  "octants": 8,
+  "singlet": [
+    0,
+    0,
+    0
+  ],
+  "explicit_representative_cases": 10368,
+  "all_rank_cases_by_rank_independence": 418037760,
+  "pass_rule": "For every proper signed-permutation rotation, preserve immutable layer and permutation-rank payload; map channel and ordered secondary labels covariantly; invert transform to recover source octant and source labels.",
+  "failure_rule": "Reject lost provenance, overwritten rank, untracked channel relabeling, collapsed directional pair, nonbijection, or shifted center.",
+  "scope": "Symbolic labeled address copies, not measured CERN/Higgs physics."
+}
