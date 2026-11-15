@@ -1,0 +1,51 @@
+{
+  "schema": "cern.h034.rgb-factorial-spectral-lattice.v1",
+  "date": "2026-11-15",
+  "status": "symbolic finite-address model; no CERN measured spectral structure",
+  "primary_banks": {
+    "R": {
+      "permutations": 40320,
+      "symbols": 8
+    },
+    "G": {
+      "permutations": 40320,
+      "symbols": 8
+    },
+    "B": {
+      "permutations": 40320,
+      "symbols": 8
+    }
+  },
+  "primary_total": 120960,
+  "secondary_factor": 6,
+  "tetrary_factor": 8,
+  "singlets_per_spectrum": 1,
+  "spectra": [
+    "visible",
+    "ultraviolet",
+    "infrared"
+  ],
+  "per_spectrum_active_addresses": 5806080,
+  "per_spectrum_total": 5806081,
+  "grand_total": 17418243,
+  "address_schema": {
+    "active": "(spectrum,primary_color,permutation_rank[0..40319],secondary_index[0..5],tetrary_index[0..7])",
+    "singlet": "(spectrum,SINGLET)",
+    "rank_formula": "((((spectral_index*3 + primary_index)*40320 + perm_rank)*6 + secondary_index)*8 + tetrary_index); active index 0..17,418,239; separate singlet global id = 17,418,240 + spectral_index"
+  },
+  "interpretation": {
+    "visible": "RGB is used as a mathematical set of three named primary channels",
+    "ultraviolet": "A second copy of the visible RGB indexing template; UV is not visible RGB light",
+    "infrared": "A third copy of the same indexing template; IR is not visible RGB light",
+    "six": "six distinct secondary address labels, user can later name them",
+    "eight": "eight distinct tetrary address labels, user can later name them",
+    "one": "one singlet per spectrum, not one global physical center"
+  },
+  "checks": {
+    "factorial_8": 40320,
+    "active_per_spectrum": 5806080,
+    "total_per_spectrum": 5806081,
+    "three_spectra": 17418243
+  },
+  "separation": "Not H027's five reserved white cells; no measured Higgs particle physics relation."
+}
