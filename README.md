@@ -136,3 +136,11 @@ Every new H0xx research iteration should produce **one new story JPG** showing t
   `python3 tools/embed_jpg_chronicle.py docs/images/h034-story.jpg docs/h034-story.html --title "H034 — Next Natural Invariant"`
 - Commit both the JPEG source and generated HTML where binary uploads are supported; preserve source, generated outputs, and SHA-256 provenance. A GitHub HTML link alone is **not** proof the image was embedded unless it contains `data:image/jpeg;base64,`.
 - The first H033 retrospective visual was created as a standalone JPG and self-contained HTML artifact in the conversation; the binary image itself was not uploaded to this GitHub repository by the text-only connector.
+
+## H034 — RGB 8! × secondary 6 × tetrary 8 + spectral singlet
+- [Interactive H034 visible/UV/IR toroidal color explorer](docs/h034-rgb-factorial-lattice.html)
+- [Exact-count address specification](models/h034-rgb-factorial-spectrum.json)
+- [Lazy 8! permutation rank/unrank plus reversible spectral index encoder](tools/h034_rgb_factorial.py)
+- For **each** of three model spectra (visible, UV, IR): `3 × 8! × 6 × 8 + 1 = 5,806,081` symbolic addresses; across all three: `17,418,243`. One singlet **per spectrum**. This is a **nested multiplication**, not addition of separate secondary/tetrary populations.
+- The RGB labels in UV and IR are **copying a combinatorial template**. They are not measured UV/IR primaries, Higgs substructure, CERN coils or independently observed elementary particles.
+- This iteration also generated a standalone **JPG** and **HTML with the JPG embedded as a base64 data URI** in the conversation artifacts. The current GitHub connector supports only UTF-8 file writes, so the JPG itself and its self-contained 639 KB chronicle HTML are **not yet committed to GitHub**. The repository includes the interactive Canvas2D HTML and the canonical offline JPG embed generator `tools/embed_jpg_chronicle.py`.
