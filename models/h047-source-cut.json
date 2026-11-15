@@ -1,0 +1,28 @@
+{
+  "schema": "cern.h047.minimum-source-cut.v1",
+  "date": "2026-11-15",
+  "parent": "models/h046-lineage-dag.json",
+  "status": "PASS (Node.js locally executed)",
+  "test": "tests/h047-source-cut.cjs",
+  "three_root_cut": 1,
+  "four_root_cut": 2,
+  "four_root_minimal_cuts": 6,
+  "root_X_affected": [
+    "wX1",
+    "wX2",
+    "wXY"
+  ],
+  "root_Y_affected": [
+    "wY",
+    "wXY"
+  ],
+  "mirror_witnesses_independent": false,
+  "source_cut_definition": "Smallest set of failed ultimate roots that leaves fewer than three pairwise root-disjoint eligible witnesses.",
+  "preservation": "Append root compromise and frozen-promotion events rather than deleting prior observations.",
+  "limitations": [
+    "Declared ancestry is not proof of authenticated source identity",
+    "Hash chain checked in-memory, not transactional durable storage",
+    "Four-root cut result depends on modeled graph and threshold"
+  ],
+  "next": "H048 resilience through additional independent roots and repair"
+}
