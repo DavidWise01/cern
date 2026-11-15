@@ -1,0 +1,144 @@
+{
+  "schema": "cern.h022.public-detector-evidence.v1",
+  "snapshot_date": "2026-11-14",
+  "evidence_type": "curated public-source dataset/service metadata; not per-event or coil measurements",
+  "source_ancestry": "one original collaboration record per entry; public mirrors of each source must not be counted independently",
+  "record_count": 4,
+  "records": [
+    {
+      "experiment": "ATLAS",
+      "label": "ATLAS Data Quality Exploration with 13 TeV proton-proton Collision Open Data",
+      "source_url": "https://opendata.cern.ch/record/atlas-160012",
+      "doi": "10.7483/OPENDATA.ATLAS.Z681.0OX1",
+      "recorded_years": [
+        2015,
+        2016
+      ],
+      "released_year": 2026,
+      "collision_system": "pp",
+      "nominal_energy_TeV": 13,
+      "events": 5720625,
+      "files": 65,
+      "total_published_size": "1.6 GiB",
+      "dataset_kind": "reprocessed collision data, selected for data-quality study",
+      "source_claim": "The record describes 2015/2016 data reprocessed for data quality; no per-event timestamps extracted.",
+      "source_root": "cern-opendata-atlas",
+      "observed_at_utc": null,
+      "observed_time_granularity": "year",
+      "ingested_at_utc": "2026-11-14T00:00:00Z",
+      "ingested_at_note": "snapshot date placeholder, not asserted exact wall-clock retrieval",
+      "mesh_mapping": {
+        "detector": "ATLAS",
+        "detector_index": 0,
+        "slot": null,
+        "direction": null,
+        "tier": null,
+        "address": null,
+        "reason": "Only detector association is supported by this source. 576-coordinate address requires observed slot/direction/tier."
+      },
+      "raw_event_data_downloaded": false,
+      "public_record_only": true
+    },
+    {
+      "experiment": "CMS",
+      "label": "MinimumBias primary dataset sample in RAW format from RunB of 2012",
+      "source_url": "https://opendata.cern.ch/record/62",
+      "doi": "10.7483/OPENDATA.CMS.0LRL.BXG5",
+      "recorded_years": [
+        2012
+      ],
+      "released_year": 2019,
+      "collision_system": "pp",
+      "nominal_energy_TeV": 8,
+      "events": 2745751,
+      "files": 130,
+      "total_published_size": "286.1 GiB",
+      "dataset_kind": "collision RAW sample",
+      "source_claim": "Run numbers 193834–194050; no per-event timestamps extracted.",
+      "source_root": "cern-opendata-cms",
+      "observed_at_utc": null,
+      "observed_time_granularity": "year",
+      "ingested_at_utc": "2026-11-14T00:00:00Z",
+      "ingested_at_note": "snapshot date placeholder, not asserted exact wall-clock retrieval",
+      "mesh_mapping": {
+        "detector": "CMS",
+        "detector_index": 2,
+        "slot": null,
+        "direction": null,
+        "tier": null,
+        "address": null,
+        "reason": "Only detector association is supported by this source. 576-coordinate address requires observed slot/direction/tier."
+      },
+      "raw_event_data_downloaded": false,
+      "public_record_only": true
+    },
+    {
+      "experiment": "ALICE",
+      "label": "Pb-Pb data sample, LHC15o run 246804",
+      "source_url": "https://opendata.cern.ch/record/alice-11450",
+      "doi": "10.7483/OPENDATA.ALICE.7ZNK.J23S",
+      "recorded_years": [
+        2015
+      ],
+      "released_year": 2025,
+      "collision_system": "Pb-Pb",
+      "nominal_energy_TeV_per_nucleon_pair": 5.02,
+      "events": 1783106,
+      "files": 627,
+      "total_published_size": "238.4 GiB",
+      "dataset_kind": "collision data sample",
+      "source_claim": "Run number 246804; no per-event timestamps extracted.",
+      "source_root": "cern-opendata-alice",
+      "observed_at_utc": null,
+      "observed_time_granularity": "year",
+      "ingested_at_utc": "2026-11-14T00:00:00Z",
+      "ingested_at_note": "snapshot date placeholder, not asserted exact wall-clock retrieval",
+      "mesh_mapping": {
+        "detector": "ALICE",
+        "detector_index": 1,
+        "slot": null,
+        "direction": null,
+        "tier": null,
+        "address": null,
+        "reason": "Only detector association is supported by this source. 576-coordinate address requires observed slot/direction/tier."
+      },
+      "raw_event_data_downloaded": false,
+      "public_record_only": true
+    },
+    {
+      "experiment": "LHCb",
+      "label": "LHCb Run II public Ntupling Service",
+      "source_url": "https://opendata.cern.ch/docs/lhcb-releases-service-to-access-run2-data",
+      "doi": null,
+      "recorded_years": [
+        2015,
+        2016,
+        2017,
+        2018
+      ],
+      "released_year": 2026,
+      "collision_system": "pp",
+      "events": null,
+      "files": null,
+      "total_published_size": "Over 4 PB available to explore across Run I/II",
+      "dataset_kind": "public on-demand data-generation service, not a static record",
+      "source_claim": "Public service offers Run I and Run II data; no dataset-specific event count extracted.",
+      "source_root": "cern-opendata-lhcb",
+      "observed_at_utc": null,
+      "observed_time_granularity": "year",
+      "ingested_at_utc": "2026-11-14T00:00:00Z",
+      "ingested_at_note": "snapshot date placeholder, not asserted exact wall-clock retrieval",
+      "mesh_mapping": {
+        "detector": "LHCb",
+        "detector_index": 3,
+        "slot": null,
+        "direction": null,
+        "tier": null,
+        "address": null,
+        "reason": "Only detector association is supported by this source. 576-coordinate address requires observed slot/direction/tier."
+      },
+      "raw_event_data_downloaded": false,
+      "public_record_only": true
+    }
+  ]
+}
