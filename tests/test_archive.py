@@ -164,6 +164,26 @@ class ArchiveTests(unittest.TestCase):
         self.assertAlmostEqual(proton["characteristic_radius_m"], 0.84e-15)
         self.assertTrue(proton["physical_radius_measured"])
 
+    def test_h026_366_toroid_mapping(self):
+        import math
+        model=json.loads((ROOT / "models/h026-toroid-120x3-plus6.json").read_text())
+        self.assertEqual(model["counts"]["ring_positions"], 360)
+        self.assertEqual(model["counts"]["total"], 366)
+        self.assertEqual(len(model["anchors"]), 6)
+        self.assertEqual(len({tuple(a["unit_vector"]) for a in model["anchors"]}), 6)
+        self.assertEqual(120*3+6, 366)
+        self.assertEqual(set(range(360)) | set(range(360,366)), set(range(366)))
+        R,r=model["geometric_equations"]["R"],model["geometric_equations"]["r"]
+        self.assertGreater(R,r)
+        for k in range(3):
+            for j in range(120):
+                phi=2*math.pi*k/3
+                theta=2*math.pi*j/120
+                x=(R+r*math.cos(phi))*math.cos(theta)
+                y=(R+r*math.cos(phi))*math.sin(theta)
+                z=r*math.sin(phi)
+                self.assertAlmostEqual((math.hypot(x,y)-R)**2+z*z,r*r)
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
