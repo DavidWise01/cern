@@ -1,0 +1,105 @@
+{
+  "schema": "cern.h028.closed-orbit-test.v1",
+  "source": "models/h027-permutation-cube-map.json",
+  "model": "3 labeled consecutive 120-translation stages",
+  "steps": 360,
+  "active_permutations": 120,
+  "reserved_fixed": [
+    0,
+    31,
+    62,
+    93,
+    124
+  ],
+  "distinct_active_ids": 120,
+  "collisions": 0,
+  "lost_permutations": 0,
+  "reversible_steps_checked": 361,
+  "payload_minimal_return_period": 120,
+  "full_band_labeled_protocol_period": 360,
+  "roundtrip_at_120": true,
+  "roundtrip_at_240": true,
+  "roundtrip_at_360": true,
+  "meaning": "360 is a chosen three-band protocol length. The payload itself returns each 120 steps.",
+  "synthetic_geometry_only": true,
+  "milestones": [
+    {
+      "step": 0,
+      "phase": "R",
+      "returned_positions": 120,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 1,
+      "phase": "R",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 5,
+      "phase": "R",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 24,
+      "phase": "R",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 60,
+      "phase": "R",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 119,
+      "phase": "R",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 120,
+      "phase": "B",
+      "returned_positions": 120,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 121,
+      "phase": "B",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 239,
+      "phase": "B",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 240,
+      "phase": "G",
+      "returned_positions": 120,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 241,
+      "phase": "G",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 359,
+      "phase": "G",
+      "returned_positions": 0,
+      "white_positions_fixed": 5
+    },
+    {
+      "step": 360,
+      "phase": "R",
+      "returned_positions": 120,
+      "white_positions_fixed": 5
+    }
+  ]
+}
