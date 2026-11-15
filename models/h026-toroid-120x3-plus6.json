@@ -1,0 +1,112 @@
+{
+  "schema": "cern.h026.toroidal-366.v1",
+  "date": "2026-11-14",
+  "notation": "120 × 3 + 6 {{x,y,z}}^2",
+  "status": "User-defined mathematical/visual encoding; NOT a measured CERN beam/detector geometry",
+  "counts": {
+    "per_band": 120,
+    "bands": 3,
+    "ring_positions": 360,
+    "axis_anchors": 6,
+    "total": 366
+  },
+  "band_semantics": [
+    {
+      "label": "R",
+      "name": "red",
+      "count": 120
+    },
+    {
+      "label": "B",
+      "name": "blue",
+      "count": 120
+    },
+    {
+      "label": "G",
+      "name": "green",
+      "count": 120
+    }
+  ],
+  "band_generations": {
+    "steps_per_cycle": 120,
+    "optional_factorization": "120 = 24 × 5: 24 inherited logical positions times 5 generational samples. This factorization is an analytical option, not CERN hardware."
+  },
+  "anchors": [
+    {
+      "label": "+X",
+      "unit_vector": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "label": "-X",
+      "unit_vector": [
+        -1,
+        0,
+        0
+      ]
+    },
+    {
+      "label": "+Y",
+      "unit_vector": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "label": "-Y",
+      "unit_vector": [
+        0,
+        -1,
+        0
+      ]
+    },
+    {
+      "label": "+Z",
+      "unit_vector": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "label": "-Z",
+      "unit_vector": [
+        0,
+        0,
+        -1
+      ]
+    }
+  ],
+  "geometric_equations": {
+    "squared_radial": "x²+y²+z² (squared Euclidean norm, not itself a torus)",
+    "torus_implicit": "(sqrt(x²+y²) - R)² + z² = r²",
+    "torus_parameterization": "x=(R+r cos φ)cos θ; y=(R+r cos φ)sin θ; z=r sin φ",
+    "theta": "2π(j/120)",
+    "phi": "2π(k/3), k=0,1,2, plus optional temporal phase offset",
+    "R": 2.2,
+    "r": 0.8,
+    "coordinate_notes": "120 samples per each of 3 poloidal phases; these 360 sample points plus six axis markers are a visualization, not 366 independent physics degrees of freedom"
+  },
+  "bijection": {
+    "ring_id": "id = band_index*120 + sample_index, id 0..359",
+    "anchor_id": "id = 360 + anchor_index, id 360..365",
+    "state_cardinality": 366
+  },
+  "invariants": [
+    "120*3+6=366",
+    "360 unique ring addresses",
+    "6 unique signed Cartesian basis anchors",
+    "all ids 0..365 appear once",
+    "R>r>0 for a standard non-self-intersecting ring torus"
+  ],
+  "limitations": [
+    "Six ±x/±y/±z basis directions are extrinsic coordinate directions, not proven physical poles on CERN equipment.",
+    "Squared x,y,z terms are geometric constraints; no justified inference that they create six extra physical dimensions.",
+    "Higgs reduced Compton length and this 366-state model have no established physics relation.",
+    "24 ATLAS toroid coils are physical; here 120×3 are hypothetical coordinate samples."
+  ]
+}
