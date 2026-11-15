@@ -81,3 +81,9 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Interactive 366-state toroidal visualization](docs/h026-toroid-366.html)
 - [Machine-readable 360 samples + 6 signed-axis anchors](models/h026-toroid-120x3-plus6.json)
 - Three color bands of 120 samples each, plus ±X, ±Y, ±Z. Optional generational factorization 120 = 24×5. Squared Cartesian coordinates are used in the standard torus equation; they are not extra physical dimensions or measured CERN magnet values.
+
+## H027 — 5³ cube × 5! permutation test / white-Higgs symbol
+- [Interactive 125-address cube](docs/h027-white-permutation-cube.html): 120 colored permutation cells plus five white main-diagonal reserved cells.
+- [Reversible Python permutation mapper](tools/h027_permutation_cube.py) and [frozen complete mapping](models/h027-permutation-cube-map.json).
+- 6 quark + 6 lepton + 4 gauge-boson particle types = 16; Higgs is the 17th common Standard Model type and was the last to be discovered in 2012. **White is a symbolic completion marker, not a measured particle color or literal light emitted by the Higgs.**
+- Formula: `5! = 120`, `5³ = 125`, five reserved addresses `0,31,62,93,124`. These counts are a constructed exact bijection, not an experimentally discovered correspondence.
