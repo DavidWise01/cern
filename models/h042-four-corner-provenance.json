@@ -1,0 +1,29 @@
+{
+  "schema": "cern.h042.four-corner-provenance-gate.v1",
+  "date": "2026-11-15",
+  "parent": "models/h041-witness-failure.json",
+  "status": "PASS (deterministic symbolic test)",
+  "geometry": {
+    "rotations": 24,
+    "eligible_four_corner_sets": 16,
+    "condition": "No two selected cube corners are antipodal",
+    "code_min_distance": 3,
+    "correctable_substitutions": 1,
+    "checked_substitutions": 10752
+  },
+  "ancestry": {
+    "post_correction_required_unique_known_roots": 3,
+    "shared_ancestry": "Reject; copies are not independent witnesses",
+    "missing_ancestry": "Reject for trusted-checkpoint graduation",
+    "excluded_corrupted_slot": "May not count toward the three retained roots",
+    "verified_cases": {
+      "all_independent_accept": 10752,
+      "all_shared_reject": 10752,
+      "duplicate_root_reject": true,
+      "unknown_root_reject": true
+    }
+  },
+  "gate": "Unique nearest proper rotation with distance<=1 AND at least 3 surviving observations having pairwise distinct known roots.",
+  "scope": "Synthetic geometry and synthetic ancestry metadata; demonstrates logic, not real-world source authentication or physics.",
+  "next": "H043 adversarial provenance: forged, colluding, and stale witness roots"
+}
