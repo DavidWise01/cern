@@ -1,0 +1,26 @@
+{
+  "schema": "cern.h044.durable-replay-fork-ledger.v1",
+  "date": "2026-11-15",
+  "parent": "models/h043-adversarial-witness.json",
+  "status": "test implementation; runtime independently verify",
+  "test": "tests/h044-replay-fork-ledger.cjs",
+  "invariant": "Never let an already-recorded event ID reenter after restart. If distinct successor states share the same authenticated parent and epoch, preserve both as a fork and freeze promotion pending independent evidence review.",
+  "model_assumptions": [
+    "H043 packet authentication and ancestry validation occur before append",
+    "Serialized snapshot is assumed intact; this model does not implement secure persistent storage or atomic writes",
+    "Hash identity is content-derived, but not authenticated against remote tampering",
+    "Fork detection compares sibling states under same parent+epoch"
+  ],
+  "cases": [
+    "accept genesis",
+    "append A",
+    "reject replay",
+    "reload then reject replay",
+    "store conflicting B as fork",
+    "continue both branches without overwriting",
+    "reject missing parent",
+    "reject skipped epoch",
+    "reload and recover fork"
+  ],
+  "next": "H045 reconcile forks with witness votes without falsely counting mirrored ancestry"
+}
