@@ -13,7 +13,7 @@ const key=v=>v.join(',');
 const assertOne=(layer,channel,rank,pair,oct,r)=>{
  const origin={layer,channel,rank,pair,oct:key(oct)};
  const out=apply(oct,r),pair2=mapPair(pair,r),channel2=axes[mapAxis(axes.indexOf(channel),r)];
- assert.equal(out.reduce((a,x)=>a*x*x,0),3);
+ assert.equal(out.reduce((a,x)=>a+x*x,0),3);
  assert(octants.some(o=>key(o)===key(out)));
  assert(pairs.includes(pair2));
  const inverseOct=r.p.map((_,j)=>out[r.p.indexOf(j)]*r.s[r.p.indexOf(j)]);
