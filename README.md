@@ -63,3 +63,11 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Canonical CERN record (100,000 derived dimuon events)](https://opendata.cern.ch/record/303) — DOI `10.7483/OPENDATA.CMS.4M97.3SQ9`. The repo presently contains **four authentic example rows**, not the full 100,000-event file.
 - Reproducible local calculation: `python3 tools/h023_cms_events.py` outputs `data/h023-cms-derived-summary.json` with hashes, event IDs, mass checks, charge-pair counts and bins.
 - Original measured-data timestamps remain unknown (year 2010 only). These CMS events have no verified assignment to the ATLAS-specific 24 toroid coil slots, rotational directions, or conceptual tiers. Do **not** interpret the H023 animation as physical collision geometry or a time series.
+
+## H024 — CERN experiments 1969–2026 and particle scale atlas
+- [Interactive CERN particle/experiment atlas](docs/h024-particle-atlas.html): historical milestones plus logarithmic spatial-scale diagram.
+- [Research JSON with 16 milestones and 23 particle/scale entries](physics/h024-particles-experiments-1969-2026.json): all **17 Standard Model particle types** (counting W± as one type) plus six composite/atomic scale references.
+- 1971 ISR, 1973 neutral currents, 1983 W/Z, 1989 LEP's three light active neutrino families, 2012 ATLAS/CMS Higgs, and 2026 LHCb rare-decay *evidence*.
+- **Crucial geometry:** no geometric radius is measured for electron/quarks, neutrinos, photon/gluon, W/Z or Higgs. CERN's representative `<10^-19 m` electron/quark spatial-resolution statement is an experimental bound/context, not a literal measured sphere; the `~1.6×10^-18 m` 125-GeV Higgs reduced Compton wavelength is **not** a Higgs radius.
+- Composite examples: proton charge rms radius ≈`0.84×10^-15 m`; pions/kaons `~10^-15 m`; atom `~10^-10 m`.
+- CERN did not discover every Standard Model particle; the atlas notes non-CERN discovery origins for relevant particles.
