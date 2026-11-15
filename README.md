@@ -76,3 +76,8 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Interactive logarithmic 25-step viewer](docs/h025-higgs-fivefold-descent.html)
 - [26 calculated step values and comparison to Planck/3](physics/h025-higgs-5pow25-backward.json)
 - Higgs reduced Compton length ~1.57735×10⁻¹⁸ m divided by 5²⁵ gives ~5.29272×10⁻³⁶ m, about 1.76% smaller than one-third of the Planck length. This is **mathematical proximity, not a demonstrated particle or spacetime structure**.
+
+## H026 — 366-state toroid, 120×3 + 6
+- [Interactive 366-state toroidal visualization](docs/h026-toroid-366.html)
+- [Machine-readable 360 samples + 6 signed-axis anchors](models/h026-toroid-120x3-plus6.json)
+- Three color bands of 120 samples each, plus ±X, ±Y, ±Z. Optional generational factorization 120 = 24×5. Squared Cartesian coordinates are used in the standard torus equation; they are not extra physical dimensions or measured CERN magnet values.
