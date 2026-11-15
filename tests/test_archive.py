@@ -184,6 +184,30 @@ class ArchiveTests(unittest.TestCase):
                 z=r*math.sin(phi)
                 self.assertAlmostEqual((math.hypot(x,y)-R)**2+z*z,r*r)
 
+    def test_h027_permutation_cube_bijection(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "permutation_h027", ROOT / "tools/h027_permutation_cube.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(len(module.PERMUTATIONS), 120)
+        self.assertEqual(len(module.ACTIVE), 120)
+        self.assertEqual(len(module.RESERVED), 5)
+        self.assertEqual({module.address(c) for c in module.RESERVED},
+                         {0, 31, 62, 93, 124})
+        for i, perm in enumerate(module.PERMUTATIONS):
+            cell = module.encode_permutation(perm)
+            self.assertEqual(module.decode_cell(cell), perm)
+            self.assertNotIn(cell, module.RESERVED)
+        for cell in module.RESERVED:
+            self.assertIsNone(module.decode_cell(cell))
+        doc = json.loads((ROOT / "models/h027-permutation-cube-map.json").read_text())
+        self.assertEqual(doc["active_count"], 120)
+        self.assertEqual(doc["reserved_count"], 5)
+        self.assertEqual({x["id"] for x in doc["active_cells"]} |
+                         {x["id"] for x in doc["reserved_cells"]},
+                         set(range(125)))
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
