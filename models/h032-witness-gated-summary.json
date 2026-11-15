@@ -1,0 +1,143 @@
+{
+  "schema": "cern.h032.witness-gated-test-summary.v1",
+  "source_script": "tools/h032_witness_repair.py",
+  "date": "2026-11-15",
+  "status": "four scenarios independently recomputed using JavaScript model; Python append-only ledger script committed but not executed in this session",
+  "model": "base-120 synthetic carry counter",
+  "cases": [
+    {
+      "scenario": "agreement",
+      "independent_roots": 3,
+      "decision": "CONSENSUS_IN_SIMULATOR",
+      "repaired": true,
+      "initial_fault": [
+        0,
+        119,
+        0
+      ],
+      "reference": [
+        119,
+        119,
+        0
+      ],
+      "final_state": [
+        119,
+        119,
+        0
+      ],
+      "correction_modulo": 119,
+      "white_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ],
+      "hash_ledger_created_by_generator": true,
+      "external_independence_proven": false
+    },
+    {
+      "scenario": "mirrors",
+      "independent_roots": 1,
+      "decision": "INSUFFICIENT",
+      "repaired": false,
+      "initial_fault": [
+        0,
+        119,
+        0
+      ],
+      "reference": [
+        119,
+        119,
+        0
+      ],
+      "final_state": [
+        0,
+        119,
+        0
+      ],
+      "correction_modulo": null,
+      "white_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ],
+      "hash_ledger_created_by_generator": true,
+      "external_independence_proven": false
+    },
+    {
+      "scenario": "contradiction",
+      "independent_roots": 3,
+      "decision": "CONTRADICTION",
+      "repaired": false,
+      "initial_fault": [
+        0,
+        119,
+        0
+      ],
+      "reference": [
+        119,
+        119,
+        0
+      ],
+      "final_state": [
+        0,
+        119,
+        0
+      ],
+      "correction_modulo": null,
+      "white_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ],
+      "hash_ledger_created_by_generator": true,
+      "external_independence_proven": false
+    },
+    {
+      "scenario": "unverified",
+      "independent_roots": 3,
+      "decision": "UNVERIFIED_ROOTS",
+      "repaired": false,
+      "initial_fault": [
+        0,
+        119,
+        0
+      ],
+      "reference": [
+        119,
+        119,
+        0
+      ],
+      "final_state": [
+        0,
+        119,
+        0
+      ],
+      "correction_modulo": null,
+      "white_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ],
+      "hash_ledger_created_by_generator": true,
+      "external_independence_proven": false
+    }
+  ],
+  "validation": {
+    "case_count": 4,
+    "repair_only_when_consensus": true,
+    "shared_ancestry_collapsed": true,
+    "contradiction_veto": true,
+    "unverified_veto": true,
+    "all_five_reserved_cells_fixed": true,
+    "original_event_preservation": "Python code uses SHA-256 hash-linked append-only event list; execution pending"
+  },
+  "scientific_boundary": "Explicit test fixture flags do not authenticate real independent CERN witnesses or provide evidence of Higgs dynamics."
+}
