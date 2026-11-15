@@ -47,5 +47,62 @@
     "total_per_spectrum": 5806081,
     "three_spectra": 17418243
   },
-  "separation": "Not H027's five reserved white cells; no measured Higgs particle physics relation."
+  "separation": "Not H027's five reserved white cells; no measured Higgs particle physics relation.",
+  "secondary_labels": [
+    "RG",
+    "GR",
+    "RB",
+    "BR",
+    "GB",
+    "BG"
+  ],
+  "secondary_semantics": "six ordered two-primary color pairings; RG and GR remain different directed addresses",
+  "tetrary_octants": [
+    [
+      -1,
+      -1,
+      -1
+    ],
+    [
+      -1,
+      -1,
+      1
+    ],
+    [
+      -1,
+      1,
+      -1
+    ],
+    [
+      -1,
+      1,
+      1
+    ],
+    [
+      1,
+      -1,
+      -1
+    ],
+    [
+      1,
+      -1,
+      1
+    ],
+    [
+      1,
+      1,
+      -1
+    ],
+    [
+      1,
+      1,
+      1
+    ]
+  ],
+  "singlet_coordinates": [
+    0,
+    0,
+    0
+  ],
+  "tetrary_semantics": "eight ±x±y±z octants around a central zero singlet; labels are conceptual coordinates"
 }
