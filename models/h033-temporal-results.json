@@ -1,0 +1,169 @@
+{
+  "schema": "cern.h033.temporal-checkpoint-summary.v1",
+  "date": "2026-11-15",
+  "source": "tools/h033_temporal_checkpoints.py",
+  "status": "expected deterministic scenario outcomes independently checked in JavaScript; Python script and regression suite not executed here",
+  "scenarios": [
+    {
+      "scenario": "late_agreement",
+      "frozen_ticks": [
+        14399
+      ],
+      "event_types": [
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "CHECKPOINT_FROZEN",
+        "WITNESS_RECEIVED",
+        "LATE_CONFIRMATION"
+      ],
+      "late_revision_count": 0,
+      "late_confirmation_count": 1,
+      "freeze_withheld_count": 0,
+      "event_count": 6,
+      "white_axis_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ]
+    },
+    {
+      "scenario": "late_contradiction",
+      "frozen_ticks": [
+        14399
+      ],
+      "event_types": [
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "CHECKPOINT_FROZEN",
+        "WITNESS_RECEIVED",
+        "REVISION_PROPOSED"
+      ],
+      "late_revision_count": 1,
+      "late_confirmation_count": 0,
+      "freeze_withheld_count": 0,
+      "event_count": 6,
+      "white_axis_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ]
+    },
+    {
+      "scenario": "arrival_out_of_order",
+      "frozen_ticks": [
+        14399,
+        14400
+      ],
+      "event_types": [
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "CHECKPOINT_FROZEN",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "CHECKPOINT_FROZEN"
+      ],
+      "late_revision_count": 0,
+      "late_confirmation_count": 0,
+      "freeze_withheld_count": 0,
+      "event_count": 8,
+      "white_axis_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ]
+    },
+    {
+      "scenario": "shared_ancestry",
+      "frozen_ticks": [],
+      "event_types": [
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "FREEZE_WITHHELD"
+      ],
+      "late_revision_count": 0,
+      "late_confirmation_count": 0,
+      "freeze_withheld_count": 1,
+      "event_count": 4,
+      "white_axis_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ]
+    },
+    {
+      "scenario": "pre_freeze_contradiction",
+      "frozen_ticks": [],
+      "event_types": [
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "FREEZE_WITHHELD"
+      ],
+      "late_revision_count": 0,
+      "late_confirmation_count": 0,
+      "freeze_withheld_count": 1,
+      "event_count": 4,
+      "white_axis_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ]
+    },
+    {
+      "scenario": "unverified",
+      "frozen_ticks": [],
+      "event_types": [
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "WITNESS_RECEIVED",
+        "FREEZE_WITHHELD"
+      ],
+      "late_revision_count": 0,
+      "late_confirmation_count": 0,
+      "freeze_withheld_count": 1,
+      "event_count": 4,
+      "white_axis_reserved": [
+        0,
+        31,
+        62,
+        93,
+        124
+      ]
+    }
+  ],
+  "assertions": {
+    "late_matching_does_not_rewrite_frozen": true,
+    "late_conflict_creates_revision_event": true,
+    "out_of_order_received_timestamps_supported": true,
+    "mirrored_evidence_collapses_by_ancestry": true,
+    "prefreeze_conflict_blocks_freeze": true,
+    "unverified_ancestry_blocks_freeze": true,
+    "frozen_white_axis_reserved": [
+      0,
+      31,
+      62,
+      93,
+      124
+    ]
+  },
+  "limits": [
+    "External source independence is asserted by fixtures, never cryptographically established.",
+    "Hash chain integrity has been implemented in Python; actual output hashes require executing the Python script.",
+    "No CERN control systems or physics measurements are connected."
+  ]
+}
