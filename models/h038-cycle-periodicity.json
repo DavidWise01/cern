@@ -1,0 +1,38 @@
+{
+  "schema": "cern.h038.rotation-periodicity.v1",
+  "date": "2026-11-15",
+  "parent": "models/h037-generational-memory.json",
+  "status": "PASS",
+  "rotation_count": 24,
+  "rotation_order_distribution": {
+    "1": 1,
+    "2": 9,
+    "3": 8,
+    "4": 6
+  },
+  "octant_point_period_distribution": {
+    "1": 24,
+    "2": 72,
+    "3": 48,
+    "4": 48
+  },
+  "address_cases": 41472,
+  "stepwise_state_updates": 115776,
+  "layers": [
+    "visible",
+    "ultraviolet",
+    "infrared"
+  ],
+  "tested_ranks": [
+    0,
+    1,
+    20160,
+    40319
+  ],
+  "rank_independence": "Rotation acts on geometric octants and labels, never on permutation_rank. All ranks inherit the same proof.",
+  "invariant": "p(R)=min positive n such that R^n=identity; octant orbit period may be a proper divisor of p(R). Preserve rotation ancestry independently of observed state.",
+  "test": "tests/h038-cycle-periodicity.cjs",
+  "illustration": "h038-cycle-periodicity.html",
+  "scientific_scope": "Symbolic discrete cube symmetries, not a measured ultraviolet/infrared or particle physics conservation law.",
+  "next": "H039 orbit stabilizers and distinguishability of state/history"
+}
