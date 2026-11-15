@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H044 Durable Replay / Fork Ledger</title><style>body{background:#060e20;color:#e5f4ff;margin:0;font:16px system-ui}main{max-width:1080px;margin:auto;padding:25px}h1{color:#75eaff}pre{background:#0d1b36;padding:22px;border:1px solid #4895b6;border-radius:14px;color:#a8ffd3;overflow:auto;font:16px/1.4 ui-monospace,Consolas,monospace}</style><main><h1>H044 — Replay Memory and Fork Detection</h1><p>Append-only event identity. Replay survives restart. Competing successor histories remain preserved.</p><pre>H044 — DURABLE REPLAY + CHECKPOINT FORKS
+============================================
+
+       PAST (immutable genesis)
+             [ G0 ]
+               |
+          +----+----+
+          |         |
+        [A1]       [B1]
+        RGB-A      RGB-B
+          |         |
+        [A2]       [B2]
+          |         |
+       HISTORY A  HISTORY B
+          \         /
+           \       /
+            [FORK!]
+               |
+         PRESERVE BOTH
+               |
+     freeze checkpoint promotion
+               |
+           {{ 0 }}
+
+REPLAY CHECK:
+    event A1 seen?  YES => REJECT
+    serialize / reload ledger
+    event A1 seen?  YES => REJECT
+
+FORK CHECK:
+    same parent G0 + same epoch 1
+    different states A1 / B1 => FORK
+    no silent overwrite
+
+ROOT CHECK: authenticated provenance from H043
+    needed BEFORE accepting ledger events
+
+LIMIT: simulated persistent reload, not atomic disk durability.
+NEXT H045: fork reconciliation by independent roots.
+============================================</pre><p>Run <code>node tests/h044-replay-fork-ledger.cjs</code>. This finite demonstration does not implement tamper-proof or transactional persistence.</p></main></html>
