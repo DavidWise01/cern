@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H043 — Adversarial Witness Integrity</title><style>body{margin:0;background:#070d21;color:#dceeff;font:16px system-ui}main{max-width:1120px;margin:auto;padding:28px}h1{color:#82f0ff}pre{background:#09192f;color:#adffe0;white-space:pre;overflow:auto;padding:20px;border:1px solid #507aa1;border-radius:14px;font:16px/1.35 Consolas,monospace}p{line-height:1.5}</style><main><h1>H043 — Adversarial Witness Integrity</h1><p>ASCII-only source lineage and signed packet test.</p><pre>H043 :: ADVERSARIAL WITNESS INTEGRITY
+===================================================
+        W1 [A]         W2 [B]         W3 [C]
+          |              |              |
+        SIGN           SIGN           SIGN
+          \              |             /
+           +-------------+------------+
+                         |
+               [AUTHENTICATE PACKETS]
+                         |
+          +--------------+--------------+
+          |              |              |
+       FORGERY         REPLAY          STALE
+       bad MAC       seen nonce       old epoch
+          |              |              |
+        REJECT         REJECT         REJECT
+                         |
+              [TRACE ROOT ANCESTRY]
+                         |
+                A ----- B ----- C
+                 \      |      /
+                   SOURCE ROOTS
+                         |
+                 distinct >= 3?
+                         |
+                +--------+--------+
+                |                 |
+              YES                 NO
+                |                 |
+         TRUST CANDIDATE        REJECT
+                |
+            {{0}} SINGLET
+
+TEST CASE: A,B,C different keys but covertly colluding
+  All signatures pass. No test can prove honest independence.
+  => Keep limitation explicit; key diversity != honest witnesses.
+
+TEST CASE: A,B both descended from ancestor M
+  Different signers, shared origin => REJECT ancestry gate.
+
+H043 passes SYNTHETIC integrity logic, not real-world identity.
+NEXT: H044 -- durable replay ledger and conflicting forks
+===================================================</pre><p>Test with <code>node tests/h043-adversarial-witness.cjs</code>. Signatures provide packet integrity, not proof that witness observations are truthful or independent. This is a deterministic symbolic demonstration.</p></main></html>
