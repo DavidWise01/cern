@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H045 Fork Reconciliation</title><style>body{margin:0;background:#061023;color:#e4f9ff;font:16px system-ui}main{max-width:1090px;margin:auto;padding:26px}h1{color:#80edff}pre{background:#091832;border:1px solid #3a8fae;padding:22px;border-radius:14px;color:#a0ffe1;white-space:pre;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H045 — Independent Witness Fork Reconciliation</h1><p>ASCII-only illustrated chapter. Twelve deterministic test scenarios.</p><pre>H045 — INDEPENDENT WITNESS FORK RECONCILIATION
+===================================================
+                      [G0]
+                       |
+               +-------+-------+
+               |               |
+              [A1]            [B1]
+               |               |
+             A B C           D E F
+               |               |
+           3 ROOTS         3 ROOTS
+               |               |
+            SUPPORT          SUPPORT
+               |               |
+               +-------+-------+
+                       |
+                    CONTESTED
+                       |
+             +---------+---------+
+             |                   |
+          KEEP A               KEEP B
+             |                   |
+             +---------+---------+
+                       |
+                  FREEZE MERGE
+                       |
+                     {{0}}
+
+      SUPPORTED_NOT_MERGED -> one branch qualified
+      CONTESTED            -> both qualified
+      UNRESOLVED           -> neither qualified
+
+      THREE ROOTS != TRUTH
+      AGREEMENT != INDEPENDENT AUTHENTICATION
+      SUPPORTED != GRADUATED
+
+NEXT: H046 lineage DAG and shared source ancestry
+===================================================</pre><p>Reproduce using <code>node tests/h045-fork-reconciliation.cjs</code>. Authentication and ancestry are synthetic test inputs, not proven identities.</p></main></html>
