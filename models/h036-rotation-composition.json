@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h036.rotation-composition.v1",
+  "date": "2026-11-15",
+  "parent": "models/h035-rotational-conservation.json",
+  "statement": "Proper cube rotations form a group of order 24; for any R1,R2, their composition and inverse recover the source octant and covariantly relabeled ordered RGB secondary and primary identities.",
+  "rotation_order": 24,
+  "ordered_rotation_pairs": 576,
+  "layers": [
+    "visible",
+    "ultraviolet",
+    "infrared"
+  ],
+  "directed_secondaries": [
+    "RG",
+    "GR",
+    "RB",
+    "BR",
+    "GB",
+    "BG"
+  ],
+  "octants": 8,
+  "center": [
+    0,
+    0,
+    0
+  ],
+  "permutation_ranks": 40320,
+  "explicit_checks": 248832,
+  "logical_rank_covered": 10032906240,
+  "expected": "PASS",
+  "test": "tests/h036-rotation-composition.cjs",
+  "scope": "Discrete signed-permutation matrices with determinant +1. UV and IR copy symbolic address labels, not real RGB frequencies; no CERN experiment implied.",
+  "conservation": "Preserves origin identity by invertible transformations; spatial position and channel name can change under covariant relabeling.",
+  "caveat": "Not valid for arbitrary SO(3) rotations that send octant coordinate vertices off the eight-corner set."
+}
