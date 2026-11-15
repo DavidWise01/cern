@@ -71,3 +71,8 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - **Crucial geometry:** no geometric radius is measured for electron/quarks, neutrinos, photon/gluon, W/Z or Higgs. CERN's representative `<10^-19 m` electron/quark spatial-resolution statement is an experimental bound/context, not a literal measured sphere; the `~1.6×10^-18 m` 125-GeV Higgs reduced Compton wavelength is **not** a Higgs radius.
 - Composite examples: proton charge rms radius ≈`0.84×10^-15 m`; pions/kaons `~10^-15 m`; atom `~10^-10 m`.
 - CERN did not discover every Standard Model particle; the atlas notes non-CERN discovery origins for relevant particles.
+
+## H025 — Higgs five-by-five reverse scale
+- [Interactive logarithmic 25-step viewer](docs/h025-higgs-fivefold-descent.html)
+- [26 calculated step values and comparison to Planck/3](physics/h025-higgs-5pow25-backward.json)
+- Higgs reduced Compton length ~1.57735×10⁻¹⁸ m divided by 5²⁵ gives ~5.29272×10⁻³⁶ m, about 1.76% smaller than one-third of the Planck length. This is **mathematical proximity, not a demonstrated particle or spacetime structure**.
