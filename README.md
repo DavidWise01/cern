@@ -54,3 +54,12 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [First-harvest bridge](evidence/h022-harvest-bridge.json) and [reproducible generator](tools/h022_bridge.py).
 - **0 fully mapped 576-address measurements:** the sources identify detectors and dataset properties but do not establish physical ATLAS coil slot + a direction + abstract tier + observation UTC.
 - Published event counts are **dataset metadata**, not measured values for the 576 toroidal coordinates. No collision event binary files have been downloaded by H022.
+
+## H023 — First real public CMS event rows
+- [Interactive Canvas2D view of genuine dimuon measurements](docs/h023-cms-real-events.html)
+- [Four verbatim public CSV example rows](data/h023-cms-dimuon-excerpt.csv)
+- [CERN/DOI, CC0 and observation-time provenance](data/h023-cms-dimuon-provenance.json)
+- [Python CSV parser, validation and four-vector mass check](tools/h023_cms_events.py)
+- [Canonical CERN record (100,000 derived dimuon events)](https://opendata.cern.ch/record/303) — DOI `10.7483/OPENDATA.CMS.4M97.3SQ9`. The repo presently contains **four authentic example rows**, not the full 100,000-event file.
+- Reproducible local calculation: `python3 tools/h023_cms_events.py` outputs `data/h023-cms-derived-summary.json` with hashes, event IDs, mass checks, charge-pair counts and bins.
+- Original measured-data timestamps remain unknown (year 2010 only). These CMS events have no verified assignment to the ATLAS-specific 24 toroid coil slots, rotational directions, or conceptual tiers. Do **not** interpret the H023 animation as physical collision geometry or a time series.
