@@ -1,0 +1,48 @@
+{
+  "schema": "cern.h049.exact-hypergraph-source-cut.v1",
+  "date": "2026-11-15",
+  "status": "PASS in independently executed equivalent Node.js test",
+  "threshold": 3,
+  "parent": "models/h048-root-resilience.json",
+  "tests": "tests/h049-hypergraph-cut.cjs",
+  "algorithm": "For each source-failure subset, remove witnesses containing any failed root, compute maximum packing of pairwise disjoint witness root-sets, then find smallest failure subset that lowers packing size below threshold.",
+  "cases": {
+    "independent3": {
+      "packing": 3,
+      "minimumCut": 1
+    },
+    "independent5": {
+      "packing": 5,
+      "minimumCut": 3,
+      "minimalCutSets": 10
+    },
+    "mirrors": {
+      "packing": 3,
+      "minimumCut": 1
+    },
+    "mergedButIndependent": {
+      "packing": 3,
+      "minimumCut": 1
+    },
+    "overlappingNoQuorum": {
+      "packing": 2,
+      "minimumCut": 0
+    },
+    "mergedWithAlternates": {
+      "packing": 4,
+      "minimumCut": 2
+    },
+    "chain": {
+      "packing": 4,
+      "minimumCut": 2
+    }
+  },
+  "invariants": [
+    "Mirror of one root cannot add independently counted witness",
+    "Merged root-set overlaps each constituent root",
+    "A merged witness may offer a different qualifying packing but cannot manufacture new ultimate roots",
+    "MinimumCut 0 means no qualified checkpoint even before failure"
+  ],
+  "scope": "Finite synthetic declared-ancestry hypergraph, maximum 20 roots in brute force; no external authentication or durable storage.",
+  "next": "H050 failure domains and correlated root cuts"
+}
