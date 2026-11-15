@@ -235,6 +235,33 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(frozen["payload_minimal_return_period"],120)
         self.assertEqual(frozen["collisions"],0)
 
+    def test_h029_independent_multirate_first_joint_return(self):
+        spec = importlib.util.spec_from_file_location(
+            "multirate_h029", ROOT / "tools/h029_multirate_orbit.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(module.PERIODS, {"R":120, "B":240, "G":360})
+        self.assertEqual(module.JOINT_PERIOD, 720)
+        cube = json.loads((ROOT / "models/h027-permutation-cube-map.json").read_text())
+        result = module.evaluate(cube)
+        self.assertEqual(result["joint_minimal_period_ticks"], 720)
+        self.assertEqual(result["ticks_exhaustively_checked"], 721)
+        self.assertEqual(result["per_tick_active_mapping_collisions"], 0)
+        self.assertEqual(result["unique_joint_returns_in_positive_interval"], [720])
+        self.assertEqual(module.states(719), {"R":119,"B":119,"G":119})
+        self.assertEqual(module.states(720), {"R":0,"B":0,"G":0})
+        self.assertEqual(module.states(360), {"R":0,"B":60,"G":0})
+        for tick in range(721):
+            for band in ("R","B","G"):
+                mapping = [module.move(rank, tick, band)
+                           for rank in range(120)]
+                self.assertEqual(set(mapping), set(range(120)))
+                self.assertTrue(all(module.inverse(mapping[rank],tick,band)==rank
+                                    for rank in range(120)))
+        frozen=json.loads((ROOT / "models/h029-multirate-results.json").read_text())
+        self.assertEqual(frozen["joint_minimal_period_ticks"],720)
+        self.assertEqual(frozen["per_tick_active_mapping_collisions"],0)
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
