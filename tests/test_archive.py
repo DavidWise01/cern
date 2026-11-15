@@ -390,6 +390,34 @@ class ArchiveTests(unittest.TestCase):
         self.assertFalse(journal.verify())
         self.assertEqual(mod.WHITE, (0,31,62,93,124))
 
+    def test_h034_rgb_factorial_spectral_lattice(self):
+        spec=importlib.util.spec_from_file_location(
+            "h034", ROOT / "tools/h034_rgb_factorial.py")
+        mod=importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        self.assertEqual(mod.PERM,40320)
+        self.assertEqual(mod.ACTIVE_PER,5806080)
+        self.assertEqual(mod.TOTAL,17418243)
+        self.assertEqual(mod.rank_to_perm(0),(0,1,2,3,4,5,6,7))
+        self.assertEqual(mod.rank_to_perm(40319),(7,6,5,4,3,2,1,0))
+        for rank in (0,1,2,5039,20160,40319):
+            self.assertEqual(mod.perm_to_rank(mod.rank_to_perm(rank)),rank)
+        for s in mod.SPECTRA:
+            for p in mod.PRIMARY:
+                for rank in (0,20160,40319):
+                    for sec in (0,5):
+                        for tet in (0,7):
+                            i=mod.encode(s,p,rank,sec,tet)
+                            out=mod.decode(i)
+                            self.assertEqual((out["spectrum"],out["primary"],out["perm_rank"],
+                                              out["secondary"],out["tetrary"]),
+                                             (s,p,rank,sec,tet))
+        self.assertEqual([mod.decode(mod.ACTIVE_TOTAL+i)["spectrum"]
+                          for i in range(3)],list(mod.SPECTRA))
+        self.assertEqual(mod.verify()["all_spectra_total"],17418243)
+        frozen=json.loads((ROOT/"models/h034-rgb-factorial-spectrum.json").read_text())
+        self.assertEqual(frozen["grand_total"],17418243)
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
