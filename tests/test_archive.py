@@ -108,6 +108,43 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(actual["verified_full_address_count"], 0)
         self.assertEqual(sum(actual["detector_counts"].values()), 40)
 
+    def test_h023_real_cms_dimuon_rows(self):
+        spec = importlib.util.spec_from_file_location(
+            "h023_cms", ROOT / "tools/h023_cms_events.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        rows = module.load_rows(ROOT / "data/h023-cms-dimuon-excerpt.csv")
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(rows[0]["Run"], 146436)
+        self.assertEqual(rows[0]["Event"], 90830792)
+        self.assertAlmostEqual(rows[0]["M"], 2.73205)
+        self.assertEqual([row["Event"] for row in rows],
+                         [90830792, 90862225, 90644850, 90678594])
+        for row in rows:
+            mass = module.invariant_mass_from_four_vectors(row)
+            self.assertAlmostEqual(mass, row["M"], delta=0.05)
+
+    def test_h023_provenance_and_no_fabricated_times(self):
+        spec = importlib.util.spec_from_file_location(
+            "h023_cms", ROOT / "tools/h023_cms_events.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        import hashlib
+        source = ROOT / "data/h023-cms-dimuon-excerpt.csv"
+        provenance = json.loads(
+            (ROOT / "data/h023-cms-dimuon-provenance.json").read_text())
+        report = module.summarize(
+            module.load_rows(source),
+            hashlib.sha256(source.read_bytes()).hexdigest(),
+            provenance)
+        self.assertEqual(report["rows"], 4)
+        self.assertEqual(report["doi"], "10.7483/OPENDATA.CMS.4M97.3SQ9")
+        self.assertEqual(sum(report["mass_histogram_10GeV_bins"]), 4)
+        self.assertTrue(all(x["source_event_timestamp"] is None
+                            and x["mesh_coordinate"] is None
+                            for x in report["event_rows"]))
+        self.assertEqual(report["four_vector_checks"]["mismatches"], [])
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
