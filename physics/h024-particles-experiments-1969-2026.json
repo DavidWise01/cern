@@ -1,0 +1,454 @@
+{
+  "schema": "cern.h024.particle-experiments-and-sizes.v1",
+  "coverage": "1969–2026 selected major CERN experiment milestones and the complete named Standard Model particle types plus composite scale references",
+  "updated_utc_date": "2026-11-14",
+  "disclaimers": [
+    "A particle's mass or Compton wavelength is NOT its physical radius.",
+    "Elementary Standard Model particles have no measured geometric size. The quark/electron <10^-19 m figure is a representative resolution statement from CERN educational material, not separately proven radius limits for each species.",
+    "Physical proton/pion/kaon charge radii are rms radii, not hard sphere boundaries.",
+    "Timeline is selected highlights, not every CERN experiment since 1969.",
+    "Discoveries of charm, bottom, top, gluon and tau neutrino were made outside CERN; do not reattribute them."
+  ],
+  "timeline": [
+    {
+      "year": 1969,
+      "experiment": "Pre-ISR / bubble-chamber era",
+      "measurement": "PS and ISOLDE experiments; preparations for ISR and Gargamelle",
+      "interpretation": "CERN boundary chosen for this atlas, not the year CERN first began experimenting",
+      "source": "https://home.cern/cern-celebrates-40th-anniversary/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1970,
+      "experiment": "Gargamelle commissioning",
+      "measurement": "Neutrino bubble-chamber program begins",
+      "interpretation": "Neutral-current search and quark evidence developed from exposures",
+      "source": "https://home.cern/science/experiments/gargamelle/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1971,
+      "experiment": "ISR proton–proton first collisions",
+      "measurement": "World's first hadron collider at CERN",
+      "interpretation": "Two counter-rotating proton beams; 27 January first collisions",
+      "source": "https://home.cern/science/accelerators/intersecting-storage-rings/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1973,
+      "experiment": "Gargamelle weak neutral currents",
+      "measurement": "Indirect evidence for electroweak neutral exchange",
+      "interpretation": "Observed neutral-current interactions; Z boson itself was not directly observed until 1983",
+      "source": "https://home.cern/science/experiments/gargamelle/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1976,
+      "experiment": "SPS first beam",
+      "measurement": "Super Proton Synchrotron accelerator starts",
+      "interpretation": "Expanded high-energy fixed-target program; later collider conversion",
+      "source": "https://timeline-upgrade.web.cern.ch/taxonomy/term/89",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1981,
+      "experiment": "SPS proton–antiproton collider",
+      "measurement": "UA1 and UA2 study collision products",
+      "interpretation": "Preparation for direct W and Z searches",
+      "source": "https://home.cern/science/experiments/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1983,
+      "experiment": "UA1 and UA2 W and Z discoveries",
+      "measurement": "Direct production and detection of weak gauge bosons",
+      "interpretation": "W announced in January and Z in June",
+      "source": "https://home.cern/science/experiments/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1989,
+      "experiment": "LEP, ALEPH / DELPHI / L3 / OPAL",
+      "measurement": "Z line-shape and electroweak precision measurements",
+      "interpretation": "Established three light active neutrino families consistent with the Z width",
+      "source": "https://home.cern/cern-celebrates-40th-anniversary/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1995,
+      "experiment": "PS210 antihydrogen",
+      "measurement": "First production of antihydrogen atoms at CERN",
+      "interpretation": "Composite antiatom, not a new elementary particle",
+      "source": "https://home.cern/science/experiments/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 1999,
+      "experiment": "NA48 direct CP violation",
+      "measurement": "Neutral kaon decay measurements",
+      "interpretation": "Evidence for direct CP violation in the kaon system",
+      "source": "https://home.cern/science/experiments/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 2000,
+      "experiment": "LEP shutdown / Higgs bounds",
+      "measurement": "Direct Higgs searches reached lower-mass exclusion",
+      "interpretation": "LEP-era result constrained Higgs mass; no Higgs discovery yet",
+      "source": "https://home.cern/science/experiments/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 2008,
+      "experiment": "LHC first beams",
+      "measurement": "ATLAS, CMS, ALICE, LHCb infrastructure",
+      "interpretation": "First LHC beam circulation, not the start of regular high-energy collisions",
+      "source": "https://home.cern/science/accelerators/large-hadron-collider/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 2010,
+      "experiment": "LHC 7 TeV physics",
+      "measurement": "Four principal experiments",
+      "interpretation": "Proton-proton datasets and first extended LHC physics runs",
+      "source": "https://home.cern/science/accelerators/large-hadron-collider/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 2012,
+      "experiment": "ATLAS and CMS Higgs boson",
+      "measurement": "Two collaborations independently observe a new boson near 125 GeV",
+      "interpretation": "Discovery announced 4 July 2012; later measurements confirm Higgs properties",
+      "source": "https://home.cern/science/physics/higgs-boson/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 2013,
+      "experiment": "Higgs spin/parity studies",
+      "measurement": "ATLAS and CMS",
+      "interpretation": "Consistent with scalar 0+ Higgs of Standard Model",
+      "source": "https://home.cern/science/physics/higgs-boson/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 2022,
+      "experiment": "LHC Run 3",
+      "measurement": "Higher collision energy 13.6 TeV",
+      "interpretation": "Renewed precision/rare-decay/new-physics searches",
+      "source": "https://home.cern/science/accelerators/large-hadron-collider/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    },
+    {
+      "year": 2026,
+      "experiment": "LHCb B_d → μ+ μ− evidence",
+      "measurement": "Rare beauty-meson decay",
+      "interpretation": "Evidence, not discovery; decay rate near one in ten billion; announced 3 November",
+      "source": "https://home.cern/lhcb-finds-evidence-of-one-in-ten-billion-particle-decay/",
+      "source_class": "CERN institutional history or CERN experiment news",
+      "not_all_experiments": true
+    }
+  ],
+  "particles": [
+    {
+      "name": "up quark",
+      "symbol": "u",
+      "family": "quark",
+      "nature": "pointlike",
+      "size_label": "<10^-19 m approximate scattering resolution",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 2.2,
+      "mass_unit": "MeV/c²",
+      "experiment_context": "1969 deep-inelastic quark evidence and Gargamelle 1970s"
+    },
+    {
+      "name": "down quark",
+      "symbol": "d",
+      "family": "quark",
+      "nature": "pointlike",
+      "size_label": "<10^-19 m approximate scattering resolution",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 4.7,
+      "mass_unit": "MeV/c²",
+      "experiment_context": "1969 deep-inelastic quark evidence and Gargamelle 1970s"
+    },
+    {
+      "name": "strange quark",
+      "symbol": "s",
+      "family": "quark",
+      "nature": "pointlike",
+      "size_label": "<10^-19 m approximate scattering resolution",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 93,
+      "mass_unit": "MeV/c²",
+      "experiment_context": "Strange hadrons studied in CERN bubble chambers"
+    },
+    {
+      "name": "charm quark",
+      "symbol": "c",
+      "family": "quark",
+      "nature": "pointlike",
+      "size_label": "<10^-19 m approximate scattering resolution",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 1.27,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "J/ψ discovery in 1974 at BNL and SLAC, not CERN"
+    },
+    {
+      "name": "bottom quark",
+      "symbol": "b",
+      "family": "quark",
+      "nature": "pointlike",
+      "size_label": "<10^-19 m approximate scattering resolution",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 4.18,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "Bottomonium discovered 1977 at Fermilab; studied at LHCb"
+    },
+    {
+      "name": "top quark",
+      "symbol": "t",
+      "family": "quark",
+      "nature": "pointlike",
+      "size_label": "<10^-19 m approximate scattering resolution",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 172.6,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "Discovered 1995 Fermilab; studied at ATLAS/CMS"
+    },
+    {
+      "name": "electron",
+      "symbol": "e−",
+      "family": "charged lepton",
+      "nature": "pointlike",
+      "size_label": "<10^-19 m approximate scattering resolution",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 0.511,
+      "mass_unit": "MeV/c²",
+      "experiment_context": "LEP e+e− beams"
+    },
+    {
+      "name": "muon",
+      "symbol": "μ−",
+      "family": "charged lepton",
+      "nature": "pointlike",
+      "size_label": "Unresolved; no measured radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 105.66,
+      "mass_unit": "MeV/c²",
+      "experiment_context": "Muon detector tracks and rare decays"
+    },
+    {
+      "name": "tau",
+      "symbol": "τ−",
+      "family": "charged lepton",
+      "nature": "pointlike",
+      "size_label": "Unresolved; no measured radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 1.777,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "LEP, LHC tau reconstruction"
+    },
+    {
+      "name": "electron neutrino",
+      "symbol": "νe",
+      "family": "neutrino",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": null,
+      "mass_unit": null,
+      "experiment_context": "Gargamelle neutral-current research"
+    },
+    {
+      "name": "muon neutrino",
+      "symbol": "νμ",
+      "family": "neutrino",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": null,
+      "mass_unit": null,
+      "experiment_context": "Gargamelle νμ beams"
+    },
+    {
+      "name": "tau neutrino",
+      "symbol": "ντ",
+      "family": "neutrino",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": null,
+      "mass_unit": null,
+      "experiment_context": "LEP determined three light active families; ντ direct detection 2000 Fermilab"
+    },
+    {
+      "name": "photon",
+      "symbol": "γ",
+      "family": "gauge boson",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius; not equivalent to wavelength",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 0,
+      "mass_unit": "massless",
+      "experiment_context": "Electromagnetic interactions and H→γγ"
+    },
+    {
+      "name": "gluon",
+      "symbol": "g",
+      "family": "gauge boson",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius; confined parton, no isolated free gluon",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 0,
+      "mass_unit": "massless",
+      "experiment_context": "Three-jet events observed 1979 at PETRA/DESY, not CERN; QCD at LHC"
+    },
+    {
+      "name": "W boson",
+      "symbol": "W±",
+      "family": "gauge boson",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 80.4,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "UA1 and UA2 direct discovery 1983"
+    },
+    {
+      "name": "Z boson",
+      "symbol": "Z0",
+      "family": "gauge boson",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 91.19,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "UA1/UA2 1983; LEP resonance measurements"
+    },
+    {
+      "name": "Higgs boson",
+      "symbol": "H",
+      "family": "scalar boson",
+      "nature": "pointlike",
+      "size_label": "No measured geometric radius; 125 GeV Compton length ≈1.6×10^-18 m is NOT its radius",
+      "characteristic_radius_m": null,
+      "physical_radius_measured": false,
+      "mass_approx": 125.1,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "ATLAS and CMS discovery 2012"
+    },
+    {
+      "name": "proton",
+      "symbol": "p",
+      "family": "hadron",
+      "nature": "composite",
+      "size_label": "Measured charge rms radius ≈0.84×10^-15 m",
+      "characteristic_radius_m": 8.4e-16,
+      "physical_radius_measured": true,
+      "mass_approx": 0.938,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "ISR pp beams and LHC collisions"
+    },
+    {
+      "name": "neutron",
+      "symbol": "n",
+      "family": "hadron",
+      "nature": "composite",
+      "size_label": "Characteristic strong-interaction length ~10^-15 m, not a simple measured charge radius",
+      "characteristic_radius_m": 1e-15,
+      "physical_radius_measured": false,
+      "mass_approx": 0.94,
+      "mass_unit": "GeV/c²",
+      "experiment_context": "Target materials, nuclear collisions"
+    },
+    {
+      "name": "charged pion",
+      "symbol": "π±",
+      "family": "meson",
+      "nature": "composite",
+      "size_label": "Measured charge rms radius ≈0.67×10^-15 m",
+      "characteristic_radius_m": 6.7e-16,
+      "physical_radius_measured": true,
+      "mass_approx": 139.57,
+      "mass_unit": "MeV/c²",
+      "experiment_context": "Bubble-chamber tracks and hadron spectroscopy"
+    },
+    {
+      "name": "charged kaon",
+      "symbol": "K±",
+      "family": "meson",
+      "nature": "composite",
+      "size_label": "Charge rms radius ~0.56×10^-15 m",
+      "characteristic_radius_m": 5.6e-16,
+      "physical_radius_measured": true,
+      "mass_approx": 493.7,
+      "mass_unit": "MeV/c²",
+      "experiment_context": "NA48 and kaon program"
+    },
+    {
+      "name": "hydrogen atom",
+      "symbol": "H atom",
+      "family": "atom",
+      "nature": "composite",
+      "size_label": "Atomic scale ~10^-10 m (Bohr radius 5.29×10^-11 m)",
+      "characteristic_radius_m": 5.29e-11,
+      "physical_radius_measured": false,
+      "mass_approx": null,
+      "mass_unit": null,
+      "experiment_context": "Reference scale; not CERN discovery"
+    },
+    {
+      "name": "lead nucleus",
+      "symbol": "Pb nucleus",
+      "family": "nucleus",
+      "nature": "composite",
+      "size_label": "Nuclear radius ~7×10^-15 m",
+      "characteristic_radius_m": 7e-15,
+      "physical_radius_measured": false,
+      "mass_approx": null,
+      "mass_unit": null,
+      "experiment_context": "Pb–Pb collisions at ALICE"
+    }
+  ],
+  "sources": [
+    "https://home.cern/science/experiments/",
+    "https://home.cern/science/experiments/gargamelle/",
+    "https://home.cern/science/accelerators/intersecting-storage-rings/",
+    "https://home.cern/science/physics/higgs-boson/",
+    "https://home.cern/lhcb-finds-evidence-of-one-in-ten-billion-particle-decay/",
+    "https://pdg.lbl.gov/2026/listings/particle_properties.html",
+    "https://home.cern/sites/default/files/2018-07/CERN-Brochure-2017-002-Eng_0.pdf"
+  ]
+}
