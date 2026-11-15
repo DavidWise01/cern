@@ -1,0 +1,39 @@
+name: H033 Temporal Witness Audit
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/h033_temporal_checkpoints.py"
+      - "models/h033-temporal-results.json"
+      - "tests/test_archive.py"
+      - ".github/workflows/h033-temporal-ci.yml"
+jobs:
+  temporal-consistency:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate reproducible hash-linked checkpoint ledger
+        run: python3 tools/h033_temporal_checkpoints.py --output /tmp/h033-results.json
+      - name: Check H033 scenarios and retained checkpoint hashes
+        run: |
+          python3 - <<'PY'
+          import json
+          with open("/tmp/h033-results.json",encoding="utf-8") as f: data=json.load(f)
+          cases={x["scenario"]:x for x in data["scenarios"]}
+          assert len(cases)==6
+          assert cases["late_agreement"]["late_confirmation_count"]==1
+          assert cases["late_contradiction"]["late_revision_count"]==1
+          assert cases["late_contradiction"]["frozen_ticks"]==[14399]
+          assert cases["arrival_out_of_order"]["frozen_ticks"]==[14399,14400]
+          assert all(not cases[s]["frozen_ticks"] for s in
+              ["shared_ancestry","pre_freeze_contradiction","unverified"])
+          assert all(x["append_only_verified"] for x in cases.values())
+          print("H033 independent assertions passed")
+          PY
+      - name: Run complete offline regression suite
+        run: python3 -m unittest discover -s tests -p 'test_archive.py' -v
