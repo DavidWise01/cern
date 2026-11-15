@@ -100,3 +100,9 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - Red advances 1 slot/tick, Blue 1 slot/2 ticks, Green 1 slot/3 ticks. Individual periods: 120, 240, 360 ticks. Exact **first simultaneous return = lcm(120,240,360) = 720 ticks**.
 - Same H027 120 permutations are projected in each band (not 360 novel permutations), with five fixed reserved diagonal cube addresses. All 721 states have injective, reversible maps; no collisions.
 - Rate choices are artificial and not measured CERN magnet frequencies or particle dynamics. H026's six signed Cartesian axes are separate from H027's five reserved cube cells.
+
+## H030 — Nested carry-coupled triple-toroid clock
+- [Interactive 120³ carry viewer](docs/h030-coupled-orbit.html)
+- [Exact Python orbit verifier](tools/h030_coupled_orbit.py) and [exhaustive independent state-sweep results](models/h030-carry-coupled-results.json).
+- Rule: R increments every tick, B on R wrap, G on B wrap. Encoding: `t = R + 120×B + 14400×G` modulo `120³`. **1,728,000 unique states**, first return at tick 1,728,000, no premature repeats.
+- Five reserved H027 cube cells stay fixed; 120 active cells remain mapped bijectively per projection. Exact recurrence is constructed mathematical behavior, not a measured physical CERN/Higgs property.
