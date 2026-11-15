@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>H041 Witness Failure and Recovery</title><style>body{margin:0;background:#060c21;color:#d8f6ff;font:16px system-ui}main{max-width:1080px;margin:auto;padding:26px}h1{color:#75efff}pre{background:#0c1b32;border:1px solid #417d99;border-radius:13px;padding:20px;color:#98ffe0;overflow:auto;font:16px/1.45 Consolas,monospace}a{color:#8eeaff}</style><main><h1>H041 · Witness Failure and Recovery</h1><p>ASCII-only visual storytelling; reproducible finite-geometry error checks.</p><pre>H041 — WITNESS FAILURE / RECOVERY
+========================================
+
+              W1 *
+                / \
+               / 0 \
+              /     \
+          W2 *-------* W3
+
+ERASE W2:
+    W1 + W3
+    non-opposite -> ONE rotation
+    opposite     -> THREE possibilities
+
+3 CORNERS (56 DISTINCT SETS)
+    32 sets survive ANY one deletion
+    24 sets fail SOME deletion
+    144 / 168 erasures decode uniquely
+
+ONE CORRUPTED CORNER:
+    3 pairwise non-opposite corners
+        distance = 2 -> DETECT, not CORRECT
+    3 corners containing opposite pair
+        distance = 1 -> detection NOT guaranteed
+
+4 CORNERS (70 DISTINCT SETS)
+    16 antipodal-free sets
+        distance = 3 -> CORRECT one bad point
+    54 sets with antipodal pair
+        distance = 2 -> detect, not guarantee correction
+
+                {{0}} SINGLET
+
+RULE: GEOMETRIC REDUNDANCY != SOURCE INDEPENDENCE
+     THREE REPORTS FROM ONE ANCESTOR ARE STILL ONE ROOT
+
+NEXT: H042 -- FOUR-CORNER CODE + ROOT ANCESTRY
+========================================
+</pre><p>Three corners can detect corruption if no pair is antipodal; four such corners can correct one arbitrary corrupted observation.</p><p>Run <code>node tests/h041-witness-failure.cjs</code>. Geometry is not independent evidence-source ancestry.</p></main></html>
