@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H036 · Return to origin</title><style>body{margin:0;background:#070b21;color:#e7f5ff;font:16px system-ui}main{max-width:1240px;margin:auto;padding:26px}h1{color:#86ebff}canvas{width:100%;border:1px solid #41649b;border-radius:16px;background:#080c28}button{background:#123a61;color:#fff;padding:12px;border-radius:8px;border:1px solid #47c8e8;cursor:pointer}pre{white-space:pre-wrap;color:#a9e6d1}img{width:100%;border-radius:12px}</style><main><h1>H036 · Rotate → Rotate → Invert</h1><p>24 proper rotations × 24 proper rotations · three symbolic layers · central singlet held fixed</p><canvas id="c" width="1600" height="900"></canvas><p><button id="save">Save generated JPG</button></p><img id="jpeg" alt="H036 JPEG embedded as a data URL after rendering"/><h2>Conservation law</h2><pre>R⁻¹(R₂(R₁(x))) = x
+R = R₂ ∘ R₁
+RGB labels are carried covariantly, not assumed stationary.
+24 × 24 × 3 × 3 × 6 × 8 = 248,832 explicit cases.
+Rank independence extends to 10,032,906,240 cases.</pre><p>Run <code>node tests/h036-rotation-composition.cjs</code> to test closure, inverse, pairs and coordinates. This is a symbolic construction, not a particle-physics observation.</p></main><script>
+const c=document.querySelector('canvas'),g=c.getContext('2d');const centers=[260,800,1340],colors=['#00ddff','#ae65ff','#ff913b'],names=['VISIBLE','ULTRAVIOLET','INFRARED'];
+g.fillStyle='#080c28';g.fillRect(0,0,1600,900);g.textAlign='center';g.font='bold 43px system-ui';g.fillStyle='#e8faff';g.fillText('H036 · ROTATE · COMPOSE · RETURN',800,77);
+centers.forEach((cx,l)=>{const cy=430,co=colors[l];g.strokeStyle=co;g.lineWidth=4;g.globalAlpha=.65;[180,220].forEach(r=>{g.beginPath();g.ellipse(cx,cy,r,r*.6,-.25,0,2*Math.PI);g.stroke()});g.globalAlpha=1;
+const points=[];for(const x of [-1,1])for(const y of [-1,1])for(const z of [-1,1])points.push([cx+x*105+z*47,cy+y*105-z*45]);
+for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){const [x1,y1]=points[i],[x2,y2]=points[j];if(Math.hypot(x2-x1,y2-y1)<240){g.strokeStyle=co+'66';g.lineWidth=2;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();}}
+points.forEach(([x,y],i)=>{g.beginPath();g.fillStyle=['#23e8ff','#9a5bff','#ff3a7c','#fcbb4d'][i%4];g.arc(x,y,10,0,2*Math.PI);g.fill();g.strokeStyle=co+'77';g.beginPath();g.moveTo(cx,cy);g.lineTo(x,y);g.stroke()});
+g.shadowColor='#fff';g.shadowBlur=38;g.fillStyle='#fff';g.beginPath();g.arc(cx,cy,20,0,2*Math.PI);g.fill();g.shadowBlur=0;g.font='bold 30px system-ui';g.fillStyle=co;g.fillText(names[l],cx,700);g.fillStyle='#e2e9fd';g.font='22px system-ui';g.fillText('R₁  →  R₂  →  R⁻¹',cx,747)});
+g.fillStyle='#94ffcf';g.font='bold 30px system-ui';g.fillText('IDENTITY CONSERVED · SINGLET FIXED · ORDERED PAIRS RECOVERED',800,842);
+document.querySelector('#jpeg').src=c.toDataURL('image/jpeg',.88);
+document.querySelector('#save').onclick=()=>{const a=document.createElement('a');a.href=c.toDataURL('image/jpeg',.94);a.download='h036-return-to-origin.jpg';a.click()};
+</script></html>
