@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H049 — Hypergraph Source Cut</title><style>body{margin:0;background:#071024;color:#e5f5ff;font:16px system-ui}main{max-width:1150px;margin:auto;padding:28px}h1{color:#70ebff}pre{background:#0b1934;border:1px solid #477fa7;border-radius:14px;padding:22px;white-space:pre;overflow:auto;font:16px/1.45 Consolas,monospace;color:#a6ffe2}a{color:#83eaff}</style><main><h1>H049 — Exact Source Cuts in Merged Ancestry</h1><p>ASCII visual chapter. One root may support several witnesses; one witness may depend on multiple roots.</p><pre>H049 :: MINIMUM SOURCE CUT IN A HYPERGRAPH
+==================================================
+      X          Y          Z          Q
+      | \      / |          |          |
+      |  \    /  |          |          |
+      |   \  /   |          |          |
+     WX   WXY    WY         WZ         WQ
+      |    |      |          |          |
+      +----+------+----------+----------+
+                       |
+                ROOT-DISJOINT PACKING
+                       |
+                   THRESHOLD = 3
+                       |
+              ENUMERATE ROOT CUTS
+                       |
+              MINIMUM CAUSAL FAILURE
+                       |
+                     {{0}}
+
+      ROOT SET(WXY) = {X,Y}
+      WX + WXY = INVALID (SHARES X)
+      WX + WY + WZ = VALID (X,Y,Z)
+
+      CASE                     PACKING     CUT
+      independent3               3          1
+      independent5               5          3
+      mirrors                    3          1
+      mergedButIndependent       3          1
+      overlappingNoQuorum        2          0
+      mergedWithAlternates       4          2
+      chain                      4          2
+
+  CUT 0 = NO QUORUM AT BASELINE, NOT IMMUNITY.
+  DECLARED ANCESTRY IS NOT AUTHENTICATED ANCESTRY.
+  NEXT H050: CORRELATED FAILURE DOMAINS
+==================================================</pre><p>Reproduce with <code>node tests/h049-hypergraph-cut.cjs</code>. Exact finite enumeration limited to 20 source roots in this implementation.</p></main></html>
