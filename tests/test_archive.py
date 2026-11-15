@@ -262,6 +262,31 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(frozen["joint_minimal_period_ticks"],720)
         self.assertEqual(frozen["per_tick_active_mapping_collisions"],0)
 
+    def test_h030_coupled_carry_period(self):
+        spec = importlib.util.spec_from_file_location(
+            "carry_h030", ROOT / "tools/h030_coupled_orbit.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(module.TOTAL, 1728000)
+        for t in (0,1,119,120,14399,14400,1727999):
+            self.assertEqual(module.encode(*module.decode(t)), t)
+            self.assertEqual(module.backward(module.forward(module.decode(t))),
+                             module.decode(t))
+        self.assertEqual(module.forward((119,0,0)), (0,1,0))
+        self.assertEqual(module.forward((119,119,0)), (0,0,1))
+        self.assertEqual(module.forward((119,119,119)), (0,0,0))
+        self.assertEqual(module.backward((0,0,0)), (119,119,119))
+        frozen = json.loads((ROOT / "models/h030-carry-coupled-results.json").read_text())
+        self.assertEqual(frozen["distinct_states_exhaustively_checked"], 1728000)
+        self.assertEqual(frozen["duplicate_states_before_closure"], 0)
+        self.assertEqual(frozen["fixed_white_cube_addresses"], [0,31,62,93,124])
+        cube = json.loads((ROOT / "models/h027-permutation-cube-map.json").read_text())
+        ids = module.active_ids(cube)
+        self.assertEqual(len(ids),120)
+        for band, values in module.transported_ids(cube, (0,1,119)).items():
+            self.assertEqual(len(set(values)),120)
+            self.assertEqual(set(values),set(ids))
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
