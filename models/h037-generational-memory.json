@@ -1,0 +1,41 @@
+{
+  "schema": "cern.h037.generational-memory.v1",
+  "date": "2026-11-15",
+  "parent": "models/h036-rotation-composition.json",
+  "status": "PASS",
+  "group": "24 proper signed-permutation cube rotations",
+  "test_design": "Exhaustively enumerate all ordered 3-rotation sequences (24^3); for each, test 432 representative labeled states, exact inverse reconstruction, composition, singlet invariance, and provenance",
+  "sequences": 13824,
+  "address_tokens_per_sequence": 432,
+  "address_checks": 5971968,
+  "terminal_rotations": 24,
+  "collision_example": {
+    "history_A": [
+      0,
+      0,
+      1
+    ],
+    "history_B": [
+      0,
+      1,
+      0
+    ],
+    "terminal_signed_permutation": {
+      "p": [
+        0,
+        1,
+        2
+      ],
+      "s": [
+        -1,
+        1,
+        -1
+      ]
+    }
+  },
+  "supplemental": "12 deterministic representative tests of sequence lengths 1..12; not exhaustive for length >3",
+  "rank": "Represented at rank 40319; ranks are invariant in the defined action",
+  "invariant": "Current state and full ordered append-only history must both be stored; equal terminal orientations do not establish equal ancestry",
+  "domain": "Symbolic address model; not measured UV, IR, CERN, or particle physics",
+  "next": "H038 cycle length and periodicity classification"
+}
