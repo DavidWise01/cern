@@ -358,6 +358,38 @@ class ArchiveTests(unittest.TestCase):
         untrusted=mod.trial("unverified")
         self.assertFalse(untrusted["repaired"])
 
+    def test_h033_temporal_checkpoint_order_and_immutability(self):
+        spec = importlib.util.spec_from_file_location(
+            "temporal_h033", ROOT / "tools/h033_temporal_checkpoints.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        result = mod.run()
+        cases = {x["scenario"]: x for x in result["scenarios"]}
+        self.assertEqual(cases["late_agreement"]["late_confirmation_count"], 1)
+        self.assertEqual(cases["late_contradiction"]["late_revision_count"], 1)
+        self.assertEqual(cases["late_contradiction"]["frozen_ticks"], [14399])
+        self.assertEqual(cases["arrival_out_of_order"]["frozen_ticks"], [14399, 14400])
+        for bad in ("shared_ancestry", "pre_freeze_contradiction", "unverified"):
+            self.assertEqual(cases[bad]["frozen_ticks"], [])
+            self.assertEqual(cases[bad]["freeze_withheld_count"], 1)
+        _, journal = mod.run_scenario("late_contradiction")
+        original = journal.frozen[14399].copy()
+        with self.assertRaises(ValueError):
+            journal.freeze(14399)
+        self.assertEqual(journal.frozen[14399], original)
+        self.assertTrue(journal.verify())
+
+    def test_h033_temporal_hash_chain_tampering_detection(self):
+        spec = importlib.util.spec_from_file_location(
+            "temporal_h033", ROOT / "tools/h033_temporal_checkpoints.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        _, journal = mod.run_scenario("late_agreement")
+        self.assertTrue(journal.verify())
+        journal.events[0]["payload"]["rgb"] = [3, 4, 5]
+        self.assertFalse(journal.verify())
+        self.assertEqual(mod.WHITE, (0,31,62,93,124))
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
