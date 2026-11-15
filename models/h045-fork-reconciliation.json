@@ -1,0 +1,29 @@
+{
+  "schema": "cern.h045.fork-reconciliation.v1",
+  "date": "2026-11-15",
+  "parent": "models/h044-replay-fork-ledger.json",
+  "status": "PASS in local equivalent Node.js test; reproducible repository assertions",
+  "test": "tests/h045-fork-reconciliation.cjs",
+  "scenarios": 12,
+  "expected": {
+    "supported_not_merged": 2,
+    "contested": 1,
+    "unresolved": 9
+  },
+  "rules": [
+    "Preserve all original fork events",
+    "Require same parent, epoch and observation hash",
+    "Reject stale and unauthenticated witness flags, replay and equivocation",
+    "Trace distinct independent ancestor identifiers before counting support",
+    "One qualified branch -> SUPPORTED_NOT_MERGED",
+    "Both branches qualified -> CONTESTED",
+    "Neither -> UNRESOLVED"
+  ],
+  "limitations": [
+    "Authentication and ancestry are synthetic flags and identifiers",
+    "No cryptographic identity validation",
+    "No consensus/finality or auto merge",
+    "No empirical physics result"
+  ],
+  "next": "H046 verified lineage DAG and ancestry overlap"
+}
