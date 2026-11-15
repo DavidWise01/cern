@@ -287,6 +287,38 @@ class ArchiveTests(unittest.TestCase):
             self.assertEqual(len(set(values)),120)
             self.assertEqual(set(values),set(ids))
 
+    def test_h031_disturbance_persistence_and_repair(self):
+        spec = importlib.util.spec_from_file_location(
+            "h031", ROOT / "tools/h031_disturbance.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        base = module.decode(14399)
+        self.assertEqual(base, (119,119,0))
+        expected = {"R":-119, "B":-14280, "G":14400}
+        for band, offset in expected.items():
+            faulty = module.inject(base,band)
+            self.assertEqual(module.signed_minimal_offset(faulty,base), offset)
+            with self.assertRaises(PermissionError):
+                module.repair(faulty,base)
+            restored, correction = module.repair(faulty,base,verified=True)
+            self.assertEqual(restored,base)
+            for t in (0,1,120,240,1728000):
+                healthy=module.advance(base,t)
+                disturbed=module.advance(faulty,t)
+                self.assertEqual(
+                    (module.encode(disturbed)-module.encode(healthy))%module.TOTAL,
+                    offset%module.TOTAL)
+                self.assertNotEqual(healthy,disturbed)
+                self.assertEqual(module.advance(restored,t),healthy)
+        results=module.experiment()
+        self.assertEqual(len(results["cases"]),3)
+        self.assertTrue(all(not row["spontaneous_recovery"] for row in results["cases"]))
+        self.assertEqual(results["white_reservations_fixed"],[0,31,62,93,124])
+        frozen=json.loads((ROOT/"models/h031-disturbance-results.json").read_text())
+        self.assertEqual([r["integer_address_offset_signed"] for r in frozen["cases"]],
+                         [-119,-14280,14400])
+        self.assertFalse(frozen["cern_measurement"])
+
     def test_source_catalogue(self):
         data = json.loads((ROOT / "catalog/sources.json").read_text())
         keys = [x["key"] for x in data["sources"]]
