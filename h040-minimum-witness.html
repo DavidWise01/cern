@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H040 Minimum Witness Geometry</title><style>body{margin:0;background:#060c22;color:#dfedff;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#63efff}pre{color:#8affdf;background:#0c1936;border:1px solid #4f6fc8;padding:22px;overflow:auto;border-radius:14px;font:16px/1.4 ui-monospace,Consolas,monospace}p{line-height:1.6}</style><main><h1>H040 — Minimum Witness Geometry</h1><p>ASCII visual chapter · exact group action · 24 proper cube rotations.</p><pre>H040 — MINIMUM WITNESS GEOMETRY
+====================================
+
+                (+,+,+)  W1
+                  *
+                 /|\\
+                / | \\
+         W2 *--/--0--\\--* opposite W1
+                 {{0}}
+               SINGLET
+
+A. SINGLE CORNER             8 outcomes x 3 hidden rotations
+   W1 ----> {R0, R1, R2}     NOT ENOUGH
+
+B. OPPOSITE CORNERS          8 outcomes x 3 hidden rotations
+   W1 ------------ W2       STILL NOT ENOUGH
+      (same body diagonal)
+
+C. NONOPPOSITE CORNERS       24 outcomes x 1 rotation
+   W1 ---edge/face--- W2    COMPLETE ORIENTATION
+
+D. CORNER + NAMED RGB AXIS   24 outcomes x 1 rotation
+   W1 + R-direction         COMPLETE ORIENTATION
+
+E. THREE DISTINCT CORNERS   24 outcomes x 1 rotation
+   W1 + W2 + W3             REDUNDANT GEOMETRIC CHECK
+
+             +--------------------+
+             |  GEOMETRIC MIN = 2|
+             | NONOPPOSITE POINTS|
+             +--------------------+
+
+INDEPENDENT GEOMETRIC POINTS != INDEPENDENT EVIDENCE ROOTS
+3 WITNESSES CAN STILL SHARE 1 SOURCE ANCESTOR.
+====================================
+NEXT: H041 — WITNESS LOSS / ANCESTRY ROBUSTNESS
+</pre><p>Verified: single corner 3 possibilities; opposite pair 3; nonopposite pair 1; distinct triple 1; corner + tracked primary axis 1.</p><p>Reproduce with <code>node tests/h040-minimum-witness.cjs</code>.</p><p>Pure symbolic geometry. Witness provenance independence remains an additional requirement.</p></main></html>
