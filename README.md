@@ -93,3 +93,10 @@ python3 tools/harvest.py --pages 1 --size 10 --max-records 10 --download-cc0 --m
 - [Source-grounded 120-permutation rotation algorithm](tools/h028_closed_orbit.py), using the H027 125-cell cube and five fixed reserved white-axis positions.
 - [Exhaustive orbit audit (361 checkpoints)](models/h028-closed-orbit-results.json): 120 distinct active occupants, 5 fixed reservations, 0 collisions, reversibility; **payload period 120**, **RGB labeled protocol period 360**.
 - The three stages reuse the same 120 active cube positions. This is a deliberately designed permutation schedule, **not** a measurable Higgs/optical emission or a physical 360-coil assembly.
+
+## H029 — Independent three-speed toroidal projections
+- [Interactive three-speed Canvas2D model](docs/h029-three-speed-orbit.html)
+- [Executable full-orbit verifier](tools/h029_multirate_orbit.py) and [721-step frozen results](models/h029-multirate-results.json).
+- Red advances 1 slot/tick, Blue 1 slot/2 ticks, Green 1 slot/3 ticks. Individual periods: 120, 240, 360 ticks. Exact **first simultaneous return = lcm(120,240,360) = 720 ticks**.
+- Same H027 120 permutations are projected in each band (not 360 novel permutations), with five fixed reserved diagonal cube addresses. All 721 states have injective, reversible maps; no collisions.
+- Rate choices are artificial and not measured CERN magnet frequencies or particle dynamics. H026's six signed Cartesian axes are separate from H027's five reserved cube cells.
