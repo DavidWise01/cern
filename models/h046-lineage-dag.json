@@ -1,0 +1,22 @@
+{
+  "schema": "cern.h046.source-lineage-dag.v1",
+  "date": "2026-11-15",
+  "parent": "models/h045-fork-reconciliation.json",
+  "status": "exact symbolic ancestry cases authored",
+  "test": "tests/h046-lineage-dag.cjs",
+  "invariant": "A witness is independently rooted relative to other witnesses only if its full recursively reachable source-root set is disjoint from theirs, using verified identity of origins.",
+  "rules": [
+    "Immutable node insertion",
+    "Recursive transitive root enumeration",
+    "Detect shared source root across different direct parents",
+    "Handle multi-parent merges and overlapping ancestry",
+    "Reject cycles and unknown graph ancestry",
+    "Do not promote mere distinct-root count as proof of independence"
+  ],
+  "limitations": [
+    "The graph uses declared nodes; no external validation of source identities",
+    "Root-set disjointness is a necessary condition for declared independence, not sufficient proof of genuine source independence",
+    "Sequential witness order is used for overlap explanation, but allIndependent is order-independent"
+  ],
+  "next": "H047 minimal source cut and compromised-root blast radius"
+}
