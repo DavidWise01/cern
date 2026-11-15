@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H048 Root Resilience</title><style>body{margin:0;background:#071024;color:#e5f4ff;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#73edff}pre{background:#0b1936;border:1px solid #457aa6;border-radius:14px;padding:24px;overflow:auto;white-space:pre;color:#a5ffdb;font:16px/1.4 Consolas,monospace}a{color:#86deff}</style><main><h1>H048 — Root Resilience / Generational Repair</h1><p>ASCII-only conservation chapter. No JPG/PNG generated.</p><pre>H048 :: ROOT RESILIENCE / GENERATIONAL REPAIR
+==========================================================
+             THREE-ROOT THRESHOLD
+
+  [R1]     [R2]     [R3]
+    |        |        |
+   W1       W2       W3
+    \        |        /
+        +----+----+
+        |  3 / 3  |      CUT = 1
+        +---------+
+
+  [R1]   [R2]   [R3]   [R4]
+    |      |      |      |
+   W1     W2     W3     W4
+        +-----------+
+        |   3 / 4   |    CUT = 2
+        +-----------+
+
+  [R1] [R2] [R3] [R4] [R5]
+    |    |    |    |    |
+   W1   W2   W3   W4   W5
+          +---------+
+          |  3 / 5  |    CUT = 3
+          +---------+
+
+         n ROOTS -> MIN CUT = n - 2
+           [n = 3,4,5,6,7]
+
+  MIRRORS:
+       R1 ------ W1
+         \
+          +----- W1-copy       SAME ROOT. COUNT ONE.
+
+  MERGES:
+       R1 ----+
+              +------ W12      ROOT SET = {R1,R2}
+       R2 ----+                 NOT NEW INDEPENDENCE.
+
+  REPAIR:
+       R1 (GEN 0)  ---X--- COMPROMISED
+             |
+             +--> R1 (GEN 1) [PROVISIONAL]
+                    |
+               SHARE ANCESTRY
+                    |
+               NOT NEW ROOT
+
+  APPEND: REGISTER -> COMPROMISE -> GENERATION -> ASSESS
+           -> REJECT FALSE INDEPENDENCE
+  NEVER REWRITE GEN 0 EVIDENCE.
+
+  NEXT H049 : EXACT CUT IN ARBITRARY ANCESTRY HYPERGRAPHS
+==========================================================</pre><p>Exact finite-source cut results: n = 3..7 yields minimum cut n−2. A mirrored witness does not add an independent root; a new generation descended from a compromised root does not erase the compromise.</p><p>Reproduce with <code>node tests/h048-root-resilience.cjs</code>. This is synthetic source-lineage modeling, not authenticated external provenance.</p></main></html>
