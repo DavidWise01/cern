@@ -1,0 +1,30 @@
+{
+  "schema": "cern.h041.witness-failure-recovery.v1",
+  "date": "2026-11-15",
+  "parent": "models/h040-minimum-witness.json",
+  "status": "PASS in exact finite group model",
+  "group_order": 24,
+  "corners": 8,
+  "three_corner_sets": 56,
+  "three_corner_any_single_erasure_survival": 32,
+  "three_corner_not_all_erasure_survival": 24,
+  "three_corner_erasure_scenarios": 168,
+  "erasure_unique": 144,
+  "erasure_ambiguous": 24,
+  "three_corner_minimum_distance": {
+    "no_antipodal_pair": 2,
+    "contains_antipodal_pair": 1
+  },
+  "four_corner_sets": 70,
+  "four_corner_one_error_correctable": 16,
+  "four_corner_not_one_error_correctable": 54,
+  "four_corner_minimum_distance": {
+    "no_antipodal_pair": 3,
+    "contains_antipodal_pair": 2
+  },
+  "exhaustive_corrupted_observations": 10752,
+  "invariant": "For labeled, aligned corner correspondences of a proper cube rotation: two nonantipodal corners identify the rotation; three pairwise nonantipodal corners survive any one erasure and detect one corruption; four pairwise nonantipodal corners correct one arbitrary corrupted observed corner by nearest-codeword decoding.",
+  "provenance": "Geometric redundancy does not imply independent witnesses. Trace source ancestry and disallow shared-root triple counting.",
+  "scope": "Finite symbolic model only; no independent physical CERN/UV/IR measurements.",
+  "next": "H042 minimum four-corner error correcting code with independent provenance"
+}
