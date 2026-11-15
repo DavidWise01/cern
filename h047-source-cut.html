@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H047 — Source Cut</title><style>body{margin:0;background:#050b1c;color:#d9f7ff;font:16px system-ui}main{max-width:1120px;margin:auto;padding:30px}h1{color:#81eaff}pre{border:1px solid #27799b;border-radius:12px;background:#0a1b35;color:#a6ffd8;font:16px/1.5 Consolas,monospace;overflow:auto;padding:20px}</style><main><h1>H047 — Source Cut / Blast Radius</h1><p>ASCII-only visual research chapter.</p><pre>H047 — MINIMUM SOURCE CUT
+=========================================
+                    [X]
+                   /   \
+               GitHub  0root.ai
+                 |        |
+                W1       W2
+                  \      /
+                 SAME SOURCE
+                     |
+                 COUNT ONCE
+
+     X -----+
+            +---- WXY  (merged source)
+     Y -----+
+     Z ---------- WZ
+     Q ---------- WQ
+
+    FAIL X: W1 W2 WXY invalidated
+    FAIL Y: WY WXY invalidated
+
+    3 independent roots, threshold 3:
+      minimum root cut = 1
+    4 independent roots, threshold 3:
+      minimum root cut = 2
+      6 distinct minimal cuts
+
+    append: COMPROMISE
+    append: FREEZE
+    preserve: PREVIOUS RECORDS
+                {{0}}
+NEXT: H048 RESILIENCE / REPAIR WITHOUT LAUNDERING
+=========================================</pre><p>Run <code>node tests/h047-source-cut.cjs</code> to reproduce. Declared roots are not authenticated, and the test's audit chain is in memory.</p></main></html>
