@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>H062 Dataset Leakage</title><style>body{background:#071225;color:#e1f6ff;font:16px system-ui;margin:0}main{max-width:1050px;margin:auto;padding:25px}h1{color:#87efff}pre{padding:22px;border:1px solid #4b8eb0;background:#0c1d36;color:#a7ffdc;overflow:auto;border-radius:12px;font:16px/1.45 monospace}</style><main><h1>H062 — Dataset Leakage and Hidden Sample Overlap</h1><p>ASCII-only synthetic witness ancestry experiment.</p><pre>H062 -- HIDDEN DATASET LEAKAGE
+===============================================
+   DATASET X            DATASET Y
+   +-----------+        +-----------+
+   | x-a alpha |        | y-b beta  |
+   | x-b beta  |--------| SAME DATA |
+   | x-c gamma |--+     | y-crop    |
+   +-----------+  |     +-----+-----+
+                  +-----------+
+                      |
+                 SOURCE C
+                      |
+               NOT INDEPENDENT
+                      |
+                     {{0}}
+
+   X vs Y: EXACT DUPLICATE AND TRANSFORMED COPY
+   X vs Z: NO DECLARED OVERLAP
+   X vs Q: UNKNOWN ORIGIN => UNRESOLVED
+   CYCLE / MISSING PARENT / REUSED ID => REJECT
+
+   H063: LEAKAGE-AWARE TRAIN / TEST ISOLATION
+===============================================</pre><p>Run <code>node tests/h062-dataset-leakage.cjs</code>. Exact-content and declared lineage tests cannot rule out undiscovered paraphrases or hidden provenance.</p></main></html>
