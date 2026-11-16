@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H052 — Cost-Constrained Allocation</title><style>body{margin:0;background:#060e20;color:#d8f7ff;font:16px system-ui}main{max-width:1120px;margin:auto;padding:26px}h1{color:#7ceeff}pre{white-space:pre;overflow:auto;background:#0c1b33;color:#a9ffdd;border:1px solid #367da7;border-radius:12px;padding:24px;font:16px/1.4 Consolas,monospace}</style><main><h1>H052 — Cost-Constrained Witness Allocation</h1><p>ASCII-only chapter. Four distinct source roots, three-root quorum, six synthetic sites.</p><pre>H052 :: COST-CONSTRAINED WITNESS ALLOCATION
+===================================================
+   CANDIDATES:
+    SITE  COST  REGION  PROVIDER  POWER
+      A     2      N       P1       G1
+      B     2      N       P2       G2
+      C     3      S       P1       G2
+      D     3      S       P3       G3
+      E     4      E       P4       G4
+      F     5      W       P5       G5
+
+  BUDGET 10                      BUDGET 14
+    [A][B][C][D]                   [A][D][E][F]
+      N  N  S  S                    N  S  E  W
+         \ | /                         \ | /
+       [3 OF 4]                       [3 OF 4]
+           |                               |
+        CUT = 1                         CUT = 2
+           |                               |
+        COST 10                         COST 14
+
+    ALL 15 FOUR-SITE COMBINATIONS TESTED
+    BUDGET  9: INFEASIBLE
+    BUDGET 10: CUT 1
+    BUDGET 13: CUT 1
+    BUDGET 14: CUT 2
+    BUDGET 20: CUT 2
+
+    SHARED POWER ACROSS A,D,E,F => CUT 1
+    MIRRORED ORIGIN != NEW ROOT
+
+        {{ 0 }} :: PRESERVE ANCESTRY
+NEXT: H053 -- PARETO FRONTIER / UNCERTAIN DOMAINS
+===================================================</pre><p>Run <code>node tests/h052-allocation.cjs</code>. No JPEG is generated. The sites and cost units are a synthetic optimization model.</p></main></html>
