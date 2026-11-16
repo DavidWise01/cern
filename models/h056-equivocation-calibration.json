@@ -1,0 +1,38 @@
+{
+  "schema": "cern.h056.equivocation-calibration.v1",
+  "date": "2026-11-16",
+  "parent": "models/h055-noisy-witnesses.json",
+  "status": "PASS locally executed Node.js equivalent",
+  "test": "tests/h056-equivocation-calibration.cjs",
+  "governance_scenarios": 10,
+  "calibration_combinations": 16,
+  "prior": 0.25,
+  "sensitivities": [
+    0.65,
+    0.8,
+    0.9,
+    0.98
+  ],
+  "specificities": [
+    0.6,
+    0.75,
+    0.8,
+    0.95
+  ],
+  "posterior_range_three_shared": [
+    0.588535,
+    0.999602
+  ],
+  "posterior_range_two_shared_one_separate": [
+    0.062524,
+    0.954032
+  ],
+  "equivocation_rule": "One source contradicting itself at the same checkpoint is excluded; preserve both claims and freeze checkpoint promotion.",
+  "append_only_records": 7,
+  "caveats": [
+    "Synthetic root identities and likelihoods, not measured calibration",
+    "Authenticated/calibrated/fresh are declared flags, not independently verified",
+    "In-memory hash chain is not durable or externally authenticated"
+  ],
+  "next": "H057 sequential retesting and calibration uncertainty bands"
+}
