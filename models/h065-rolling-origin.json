@@ -1,0 +1,95 @@
+{
+  "schema": "cern.h065.rolling-origin-v1",
+  "date": "2026-11-16",
+  "parent": "models/h064-temporal-holdout.json",
+  "test": "tests/h065-rolling-origin.cjs",
+  "status": "PASS exact equivalent local Node.js execution",
+  "sample_count": 12,
+  "window_days": 7,
+  "folds": [
+    {
+      "cutoff": "2026-01-07T00:00:00Z",
+      "train": [
+        "a"
+      ],
+      "test": [
+        "c",
+        "d"
+      ],
+      "quarantine": [
+        "b",
+        "b-copy",
+        "unknown"
+      ],
+      "crossing": [
+        [
+          "b",
+          "b-copy"
+        ]
+      ]
+    },
+    {
+      "cutoff": "2026-01-14T00:00:00Z",
+      "train": [
+        "a",
+        "b",
+        "b-copy",
+        "c",
+        "d"
+      ],
+      "test": [
+        "e",
+        "f",
+        "late"
+      ],
+      "quarantine": [
+        "unknown"
+      ],
+      "crossing": []
+    },
+    {
+      "cutoff": "2026-01-21T00:00:00Z",
+      "train": [
+        "a",
+        "b",
+        "b-copy",
+        "d",
+        "e",
+        "f",
+        "late"
+      ],
+      "test": [
+        "g",
+        "h"
+      ],
+      "quarantine": [
+        "c",
+        "c-transform",
+        "unknown"
+      ],
+      "crossing": [
+        [
+          "c",
+          "c-transform"
+        ]
+      ]
+    }
+  ],
+  "checks": [
+    "All training samples available by cutoff",
+    "Test samples available strictly after cutoff and within next seven days",
+    "Shared roots and exact duplicate content never split across train and test",
+    "Unknown availability quarantined",
+    "Future-only record cannot alter earlier train/test/quarantine assignments",
+    "Cycles, missing parents, duplicate identifiers, and reversed availability rejected",
+    "Four-entry hash-chain history tampering detected"
+  ],
+  "limitations": [
+    "Synthetic declared ancestry and timestamps",
+    "Earlier fold quarantine is conservative in retrospective audit",
+    "No verification of undiscovered semantic duplicates",
+    "In-memory SHA-256 chain does not make a durable independently authenticated ledger",
+    "GitHub Actions and Pages execution not verified"
+  ],
+  "next": "H066 out-of-time contamination under model selection and repeated tuning"
+}
