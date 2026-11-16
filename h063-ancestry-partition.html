@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H063 — Ancestry-Safe Partition</title><style>body{margin:0;background:#081022;color:#e5f7ff;font:16px system-ui}main{max-width:1120px;margin:auto;padding:28px}h1{color:#81efff}pre{padding:24px;overflow:auto;border-radius:13px;border:1px solid #487fa9;background:#0d1c36;color:#a6ffe3;font:16px/1.45 Consolas,monospace}</style><main><h1>H063 — Ancestry-Safe Training/Evaluation Split</h1><p>ASCII illustrated experiment with quarantine and connected-component assignment.</p><pre>H063 -- ANCESTRY-SAFE TRAIN/TEST PARTITION
+=====================================================
+             NINE SAMPLE RECORDS
+                      |
+              RESOLVE SOURCE ROOTS
+                      |
+              SIX CONNECTED GROUPS
+                      |
+         +------------+------------+
+         |                         |
+       TRAIN                      TEST
+         |                         |
+       x-a                        x-c
+       x-b                       y-crop
+       y-b                        z-new
+       y-new                     z-new2
+         |                         |
+         +------------+------------+
+                      |
+              ZERO KNOWN LEAKAGE
+                      |
+                    {{0}}
+
+    x-b === y-b       => TRAIN TOGETHER
+    x-c -> y-crop     => TEST TOGETHER
+    q-unknown         => QUARANTINE
+    DUPLICATE ID / CYCLE / MISSING PARENT => REJECT
+
+    OPTIMAL BALANCE: 4 TRAIN, 4 TEST
+    PROVENANCE UNKNOWN != CONFIRMED CLEAN
+NEXT: H064 TEMPORAL HOLDOUS AND TRANSFORMATIONS
+=====================================================</pre><p>Reproduce: <code>node tests/h063-ancestry-partition.cjs</code>. Synthetic records; zero known crossover only.</p></main></html>
