@@ -1,0 +1,34 @@
+{
+  "schema": "cern.h050.correlated-domain-cuts.v1",
+  "date": "2026-11-15",
+  "parent": "models/h049-hypergraph-cut.json",
+  "status": "PASS: nine finite deterministic scenarios executed",
+  "test": "tests/h050-correlated-domains.cjs",
+  "threshold": 3,
+  "definition": "A failed domain disables every ultimate source root depending on that domain; affected witnesses are removed, and the largest root-disjoint packing is recomputed.",
+  "minimumDomainCut": "min size of a subset of domains whose failure reduces maximum independent witness packing below 3",
+  "scenarios": {
+    "sharedProvider": 1,
+    "distinctProviders": 1,
+    "fourIsolated": 2,
+    "fourTwoByTwo": 1,
+    "fiveThreeShared": 1,
+    "fiveTwoShared": 2,
+    "cascadingDependencies": 1,
+    "mirrored": 1,
+    "merged": 2
+  },
+  "invariants": [
+    "Distinct source roots can share one operational failure domain",
+    "Mirrors add neither origin diversity nor failure-domain diversity",
+    "Merged witnesses do not create new ultimate source roots",
+    "Domain cut is not the same as independent source-root cut",
+    "A quorum lacking three independent witnesses has minimum cut zero"
+  ],
+  "limits": [
+    "Root dependencies and domain membership are declared, not verified",
+    "Exhaustive domain subset enumeration limited to 18 domains",
+    "No probabilistic reliability or cryptographic source authentication"
+  ],
+  "next": "H051 multi-layer correlated failures and domain diversity optimization"
+}
