@@ -1,0 +1,51 @@
+{
+  "schema": "cern.h053.uncertain-dependency-robustness.v1",
+  "date": "2026-11-15",
+  "parent": "models/h052-allocation.json",
+  "status": "PASS exact local Node.js test",
+  "selection_count": 15,
+  "nominal_winner": {
+    "sites": [
+      "A",
+      "D",
+      "E",
+      "F"
+    ],
+    "cost": 14,
+    "cut": 2
+  },
+  "uncertainty_set": "Any one previously unknown common failure domain linking any two selected sites",
+  "worst_case": {
+    "all_selections_cut": 1,
+    "budget14_cheapest_worst_case_optimum": {
+      "sites": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "cost": 10,
+      "cut": 1
+    }
+  },
+  "synthetic_discovery": {
+    "link": [
+      "A",
+      "D"
+    ],
+    "old_cut": 2,
+    "revised_cut": 1
+  },
+  "journal": [
+    "original certificate retained",
+    "dependency discovery appended",
+    "revised certificate appended"
+  ],
+  "caveats": [
+    "Hypothetical dependencies, not actual infrastructure discovery",
+    "Brute-force finite selection, fixed 3-of-4 quorum",
+    "In-memory SHA-256 chain is not tamper-proof or durable",
+    "Source identities are assumed distinct, not authenticated"
+  ],
+  "next": "H054 distinguish uncertainty bounds from verified topology; prioritize dependency discovery"
+}
