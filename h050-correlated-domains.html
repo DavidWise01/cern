@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H050 — Correlated Failure Domains</title><style>body{margin:0;background:#071124;color:#e2f5ff;font:16px system-ui}main{max-width:1130px;margin:auto;padding:28px}h1{color:#83eaff}pre{background:#0c1d35;border:1px solid #4585a8;border-radius:12px;padding:22px;white-space:pre;overflow:auto;color:#9affdc;font:16px/1.45 Consolas,monospace}a{color:#83eaff}</style><main><h1>H050 · Correlated Failure Domains</h1><p>ASCII-only illustrated chapter. No generated bitmap images.</p><pre>H050 -- CORRELATED FAILURE DOMAINS
+==================================================
+                   PROVIDER P
+                  /    |    \
+                 /     |     \
+               ROOT X ROOT Y ROOT Z
+                 |      |      |
+                W1     W2     W3
+                  \    |    /
+                   [ 3 OF 3 ]
+                       |
+                  P FAILS (X)
+                       |
+                  W1 W2 W3
+                   X  X  X
+                       |
+                   {{ 0 }}
+
+     Distinct information roots = 3
+     Distinct failure domains  = 1
+     Minimum domain cut        = 1
+
+     FOUR ROOTS, FOUR PROVIDERS
+       P1   P2   P3   P4
+        |    |    |    |
+       W1   W2   W3   W4    MIN CUT = 2
+
+     FOUR ROOTS, TWO PROVIDERS
+           PA        PB
+          /  \      /  \
+         W1  W2    W3  W4  MIN CUT = 1
+
+     ROOT ANCESTRY != FAILURE-DOMAIN INDEPENDENCE
+
+     9 EXACT FINITE CASES: PASS
+     NEXT H051: DOMAIN DIVERSITY / CORRELATED LAYERS
+==================================================</pre><p>Reproduce: <code>node tests/h050-correlated-domains.cjs</code>. Model assumes declared source/provider mappings.</p></main></html>
