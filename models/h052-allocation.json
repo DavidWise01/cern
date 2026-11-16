@@ -1,0 +1,123 @@
+{
+  "schema": "cern.h052.cost-constrained-allocation.v1",
+  "date": "2026-11-15",
+  "parent": "models/h051-multilayer-resilience.json",
+  "status": "PASS locally verified",
+  "root_count": 4,
+  "quorum": 3,
+  "sites": [
+    {
+      "id": "A",
+      "cost": 2,
+      "region": "N",
+      "provider": "P1",
+      "power": "G1"
+    },
+    {
+      "id": "B",
+      "cost": 2,
+      "region": "N",
+      "provider": "P2",
+      "power": "G2"
+    },
+    {
+      "id": "C",
+      "cost": 3,
+      "region": "S",
+      "provider": "P1",
+      "power": "G2"
+    },
+    {
+      "id": "D",
+      "cost": 3,
+      "region": "S",
+      "provider": "P3",
+      "power": "G3"
+    },
+    {
+      "id": "E",
+      "cost": 4,
+      "region": "E",
+      "provider": "P4",
+      "power": "G4"
+    },
+    {
+      "id": "F",
+      "cost": 5,
+      "region": "W",
+      "provider": "P5",
+      "power": "G5"
+    }
+  ],
+  "all_options": 15,
+  "minimum_cost": {
+    "sites": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "cost": 10,
+    "minimum_domain_cut": 1
+  },
+  "maximum_resilience": {
+    "sites": [
+      "A",
+      "D",
+      "E",
+      "F"
+    ],
+    "cost": 14,
+    "minimum_domain_cut": 2
+  },
+  "budget13_maximum_cut": 1,
+  "shared_power_counterexample": {
+    "sites": [
+      "A",
+      "D",
+      "E",
+      "F"
+    ],
+    "cut_when_all_share_power": 1
+  },
+  "pareto": [
+    {
+      "sites": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "cost": 10,
+      "cut": 1
+    },
+    {
+      "sites": [
+        "A",
+        "D",
+        "E",
+        "F"
+      ],
+      "cost": 14,
+      "cut": 2
+    },
+    {
+      "sites": [
+        "B",
+        "D",
+        "E",
+        "F"
+      ],
+      "cost": 14,
+      "cut": 2
+    }
+  ],
+  "invariant": "Maximize weakest modeled failure-domain cut subject to total site cost budget; preserve distinct source ancestry and never count mirrors as additional roots.",
+  "limitations": [
+    "All costs are abstract, not market estimates",
+    "Provider, region, power and backbone dependencies are declared, not authenticated",
+    "No correlated failure probabilities modeled",
+    "Exhaustive finite selection, not a general large-scale optimizer"
+  ],
+  "next": "H053 Pareto frontier and robust optimization under uncertain domain maps"
+}
