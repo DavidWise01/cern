@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h067.holdout-custody.v1",
+  "date": "2026-11-16",
+  "parent": "models/h066-evaluation-leakage.json",
+  "test": "tests/h067-holdout-custody.cjs",
+  "status": "PASS exact script run locally in Node.js",
+  "protocol": {
+    "campaign": "H067-FINAL-2026-11",
+    "request": "Ed25519 signed campaign/model ID/model digest/nonce",
+    "persistence": "atomic local-file exclusive claim via wx with file fsync",
+    "receipt": "bound to request hash, model digest and claim hash",
+    "replay": "campaign-level one-time claim consumed before score"
+  },
+  "cases_passed": 7,
+  "first_valid_model": "m4",
+  "synthetic_score": 0.61,
+  "results": {
+    "accepted_requests": 1,
+    "replay_rejected": true,
+    "alternate_model_rejected": true,
+    "invalid_signature_rejected": true,
+    "crash_fails_closed": true,
+    "partial_claim_fails_closed": true,
+    "receipt_claim_binding_verified": true
+  },
+  "limitations": [
+    "A distinct subprocess is not an independently secured custodian: same-OS-user filesystem access can bypass separation",
+    "Local O_EXCL is not a distributed atomic transaction and network filesystems can differ",
+    "A crash after claim but before receipt makes the result unavailable; safe recovery not implemented",
+    "Sample scores are fixtures, not actual evaluation results",
+    "No durable external signature or trusted timestamp on audit",
+    "Trustworthy input model digest must be checked against immutable artifact by actual custodian"
+  ],
+  "next": "H068 recovery-safe custody with sealed execution receipts and independent authorization"
+}
