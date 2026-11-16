@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H054 Active Dependency Discovery</title><style>body{margin:0;background:#061025;color:#e5f3ff;font:16px system-ui}main{max-width:1110px;margin:auto;padding:28px}h1{color:#72efff}pre{border:1px solid #3d7ca9;border-radius:14px;background:#0b1b36;color:#a9ffe0;padding:22px;white-space:pre;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H054 — Active Dependency Discovery</h1><p>ASCII-only illustrated chapter. No generated bitmap images.</p><pre>H054 — ACTIVE DEPENDENCY DISCOVERY
+================================================
+            [A] [D] [E] [F]
+             |   |   |   |
+            W1  W2  W3  W4
+               [3 OF 4]
+                   |
+          UNKNOWN DEPENDENCIES
+                   |
+          +--------+--------+
+          |        |        |
+         A-D      A-E      A-F
+        .811     .610     .402 bits
+          |
+       TEST FIRST
+          |
+      +---+---+
+      |       |
+    SHARED  SEPARATE
+      |       |
+    CUT 1    CUT 1
+      |       |
+      +---+---+
+          |
+      APPEND RESULT
+          |
+         {{0}}
+
+  Synthetic hypotheses: NONE or exactly one hidden link.
+  Prior weights: NONE 40, AD 25, AE 15, AF 8,
+                 DE 5, DF 4, EF 3.
+  All six tests say SEPARATE => worst cut 2.
+  One result alone is NOT proof of resilience.
+
+  UNKNOWN != SEPARATE. QUERY != OBSERVATION.
+NEXT: H055 -- NOISY TESTS / INDEPENDENT VALIDATION
+================================================</pre><p>Test with <code>node tests/h054-active-discovery.cjs</code>. All priors and outcomes are synthetic, and none of these unknown dependencies has been externally verified.</p></main></html>
