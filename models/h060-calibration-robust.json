@@ -1,0 +1,58 @@
+{
+  "schema": "cern.h060.calibration-robust.v1",
+  "date": "2026-11-16",
+  "parent": "models/h059-adaptive-posterior.json",
+  "status": "PASS local independently written equivalent implementation",
+  "test": "tests/h060-calibration-robust.cjs",
+  "threshold_bits_per_cost": 0.1,
+  "calibration_models": [
+    {
+      "s": 0.65,
+      "c": 0.6
+    },
+    {
+      "s": 0.8,
+      "c": 0.75
+    },
+    {
+      "s": 0.9,
+      "c": 0.8
+    },
+    {
+      "s": 0.98,
+      "c": 0.95
+    }
+  ],
+  "SHARED": {
+    "posterior": 0.571429,
+    "decision": "REVIEW_CALIBRATION",
+    "B_gain_band": [
+      0.01494,
+      0.259073
+    ],
+    "C_gain_band": [
+      0.008964,
+      0.155444
+    ]
+  },
+  "SEPARATE": {
+    "posterior": 0.076923,
+    "decision": "STOP",
+    "B_gain_band": [
+      0.004327,
+      0.086174
+    ],
+    "C_gain_band": [
+      0.002596,
+      0.051704
+    ]
+  },
+  "duplicate_root_D": "EXCLUDED",
+  "journal_entries": 5,
+  "limits": [
+    "Hypothetical observations and calibration rates",
+    "No authenticated roots",
+    "No durable externally anchored history"
+  ],
+  "next": "H061 calibration provenance and independent model roots"
+}
