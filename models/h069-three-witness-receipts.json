@@ -1,0 +1,26 @@
+{
+  "schema": "cern.h069.three-witness-receipts.v1",
+  "date": "2026-11-16",
+  "parent": "models/h068-recovery-custody.json",
+  "test": "tests/h069-three-witness-receipts.cjs",
+  "verification": "PASS exact script executed locally",
+  "required_disjoint_roots": 3,
+  "signed_receipt": "Ed25519 custodian signature over canonical JSON; witness signs receipt SHA-256 digest and campaign",
+  "examples": {
+    "three_disjoint": "ANCHORED",
+    "mirror_plus_two": "INSUFFICIENT_INDEPENDENT_ROOTS",
+    "shared_ancestry": "INSUFFICIENT_INDEPENDENT_ROOTS",
+    "valid_conflicting_receipt": "CONFLICT_FREEZE",
+    "single_witness_equivocation": "CONFLICT_FREEZE",
+    "altered_attestation": "REJECTED"
+  },
+  "append_only_records": 4,
+  "limitations": [
+    "Witness roots and Ed25519 keys are synthetic and locally controlled, not authenticated organizations",
+    "No physically independent receipt replicas or durable remote anchoring",
+    "JSON serialization is deterministic only within the constrained test representation; production needs a canonical serialization standard",
+    "A forged valid custodian signature is out of scope",
+    "Signing a receipt and signing an attestation are distinct operations"
+  ],
+  "next": "H070 distributed anchoring and independent observer checkpoint divergence"
+}
