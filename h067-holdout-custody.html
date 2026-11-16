@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H067 — Replay-Resistant Custody</title><style>body{margin:0;background:#071124;color:#e7f5ff;font:16px system-ui}main{max-width:1120px;margin:auto;padding:28px}h1{color:#8aeeff}pre{background:#0d1c36;color:#a9ffdd;border:1px solid #468aae;border-radius:14px;padding:24px;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H067 — Independent Holdout Custody and Replay Resistance</h1><p>ASCII-only chapter. An Ed25519 request, process restart and disk-backed claim were exercised locally.</p><pre>H067 -- REPLAY-RESISTANT HOLDOUT CUSTODY
+====================================================
+                   DEVELOPER
+                       |
+                 FROZEN MODEL
+                       |
+               Ed25519 REQUEST
+                       |
+               +-------v-------+
+               |  CUSTODIAN    |
+               | VERIFY REQUEST|
+               +-------+-------+
+                       |
+                 CLAIM EXISTS?
+                /           \
+              NO            YES
+               |             |
+         EXCLUSIVE CLAIM    REJECT
+               |
+         FSYNC TO DISK
+               |
+         SCORE m4 = .61
+               |
+         WRITE RECEIPT
+               |
+              {{0}}
+
+  RESTART                -> REPLAY REJECTED
+  ANOTHER MODEL          -> REJECTED
+  SIGNATURE FORGERY      -> REJECTED
+  CRASH AFTER CLAIM      -> FAIL CLOSED
+  PARTIAL CLAIM FILE     -> FAIL CLOSED
+
+  PASS: 7 LOCAL CROSS-PROCESS CASES
+  Caveat: same-user subprocess != secured custody.
+NEXT: H068 -- RECOVERY / INDEPENDENT AUTHORIZATION
+====================================================</pre><p>Reproduce: <code>node tests/h067-holdout-custody.cjs</code>. The custodian is a separate subprocess, not a production security boundary. A failed execution may consume the one-time claim.</p></main></html>
