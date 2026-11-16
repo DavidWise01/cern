@@ -1,0 +1,68 @@
+{
+  "schema": "cern.h051.multilayer-failure-domains.v1",
+  "date": "2026-11-15",
+  "parent": "models/h050-correlated-domains.json",
+  "status": "PASS: Node.js executed locally",
+  "threshold": 3,
+  "domain_layers": [
+    "source",
+    "provider",
+    "region",
+    "power",
+    "backbone"
+  ],
+  "cases": {
+    "oneRegion": {
+      "all": 1,
+      "region": 1
+    },
+    "twoRegions": {
+      "all": 1,
+      "region": 1
+    },
+    "fourRegions": {
+      "all": 2,
+      "region": 2
+    },
+    "commonPower": {
+      "all": 1,
+      "region": 2
+    },
+    "bridgeBackbone": {
+      "all": 1,
+      "region": 2
+    },
+    "twoProviders": {
+      "all": 1,
+      "region": 2,
+      "provider": 1
+    },
+    "fiveTwoTwoOne": {
+      "all": 2,
+      "region": 2
+    },
+    "fiveIndependent": {
+      "all": 3,
+      "region": 3
+    }
+  },
+  "optimization_four_roots": {
+    "one_region_capacity": 1,
+    "two_region_capacity": 1,
+    "three_region_capacity": 1,
+    "four_region_capacity": 2,
+    "optimal_assignments_with_four_labeled_regions": 24
+  },
+  "definitions": {
+    "full_domain_cut": "Minimum number of declared failure domains over all modeled layers that reduces the maximum root-disjoint surviving witness packing below three.",
+    "layer_cut": "Same computation restricted to a specified layer, with failures in other layers not invoked."
+  },
+  "independence": "Declared source identity and operational failure-domain independence are separate requirements.",
+  "limitations": [
+    "Synthetic failure model, not measured site reliability",
+    "No proof that declared roots/providers/regions are genuinely independent",
+    "No failure probabilities, correlated likelihoods, or temporal persistence",
+    "Brute force exact domain search; not suitable for unbounded networks"
+  ],
+  "next": "H052 failure domain allocation and adversarial placement with cost constraints"
+}
