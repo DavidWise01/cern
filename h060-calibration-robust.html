@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H060 — Calibration-Robust Stopping</title><style>body{background:#081126;color:#e5f5ff;font:16px system-ui;margin:0}main{max-width:1080px;margin:auto;padding:26px}h1{color:#7ceaff}pre{background:#0d1b35;color:#aaffde;padding:20px;overflow:auto;border:1px solid #4c88ac;border-radius:14px;font:16px/1.45 Consolas,monospace}</style><main><h1>H060 — Calibration-Robust Stopping</h1><p>ASCII-only experimental chapter.</p><pre>H060 — CALIBRATION-ROBUST STOPPING
+==========================================
+           H059 TEST A
+              |
+       +------+------+
+       |             |
+     SHARED       SEPARATE
+    P=.5714       P=.0769
+       |             |
+   FOUR MODELS    FOUR MODELS
+       |             |
+   B .015-.259    B .004-.086
+   C .009-.155    C .003-.052
+       |             |
+   CROSSES .10    BELOW .10
+       |             |
+     REVIEW          STOP
+       |             |
+       +------+------+
+              |
+         APPEND LOG
+             {{0}}
+
+ CONTINUE only when MIN gain/cost >= .10
+ REVIEW when plausible but not guaranteed
+ STOP when all MAX gain/cost < .10
+ Duplicate source D is excluded.
+ Outcomes are hypothetical, not observed.
+ NEXT H061: CALIBRATION PROVENANCE
+==========================================</pre><p>Run <code>node tests/h060-calibration-robust.cjs</code>. No observed dependency measurements or source authentication claimed.</p></main></html>
