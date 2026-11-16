@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H068 — Recovery-Safe Custody</title><style>body{margin:0;background:#061224;color:#def6ff;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#7ceaff}pre{overflow:auto;border:1px solid #428caf;border-radius:14px;background:#0b1b36;color:#a6ffdf;padding:24px;font:16px/1.45 monospace}</style><main><h1>H068 — Recovery Without Reopening the Holdout</h1><p>ASCII-only chapter with exact cross-process tests. Signed receipts may be redelivered; claimed executions without receipts remain frozen.</p><pre>H068 — RECOVERY-SAFE HOLDOUT CUSTODY
+==================================================
+            SIGNED FROZEN REQUEST
+                      |
+               VERIFY / CLAIM
+                      |
+              CLAIM DURABLE
+                      |
+            +---------+---------+
+            |                   |
+         CRASH HERE         EVALUATE ONCE
+            |                   |
+       NO RECEIPT           SIGN RECEIPT
+            |                   |
+         FREEZE             FSYNC + RENAME
+                                |
+                         +------+------+
+                         |             |
+                       CRASH        DELIVER
+                         |             |
+                       RESTART        |
+                         |             |
+                  VERIFY SIGNATURE    |
+                         |             |
+                    REDELIVER SAME RECEIPT
+                                |
+                              {{0}}
+
+   CLAIM + NO RECEIPT = FROZEN
+   CLAIM + SIGNED RECEIPT = SAFE REDELIVERY
+   INVALID RECEIPT = FROZEN; NO REEXECUTION
+   NO SECOND FINAL EVALUATION
+NEXT H069: THREE-WITNESS DURABLE ANCHORS
+==================================================</pre><p>Reproduce with <code>node tests/h068-recovery-custody.cjs</code>. Not a secure multi-host custody deployment.</p></main></html>
