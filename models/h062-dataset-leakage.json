@@ -1,0 +1,53 @@
+{
+  "schema": "cern.h062.dataset-leakage.v1",
+  "date": "2026-11-16",
+  "parent": "models/h061-calibration-ancestry.json",
+  "test": "tests/h062-dataset-leakage.cjs",
+  "status": "PASS local Node.js execution",
+  "synthetic_samples": 9,
+  "findings": {
+    "X_Y": {
+      "exact_duplicate_pairs": [
+        [
+          "x-b",
+          "y-b"
+        ]
+      ],
+      "shared_origin_pairs": [
+        [
+          "x-b",
+          "y-b"
+        ],
+        [
+          "x-c",
+          "y-crop"
+        ]
+      ],
+      "classification": "NOT_INDEPENDENT"
+    },
+    "X_Z": {
+      "classification": "NO_DECLARED_OVERLAP"
+    },
+    "X_Q": {
+      "classification": "UNKNOWN_ORIGIN_NOT_INDEPENDENTLY_VERIFIED"
+    }
+  },
+  "assertions": [
+    "reject repeated global IDs",
+    "detect identical content under different IDs",
+    "trace transformed-copy parents",
+    "reject missing ancestor and cycles",
+    "detect exact content even when root identifiers differ",
+    "flag unknown ancestry",
+    "detect tampering of hash-chained history"
+  ],
+  "append_only_records": 4,
+  "limitations": [
+    "Synthetic sample identities and declared source roots",
+    "SHA-256 exact-content matching cannot detect all semantic copies",
+    "No actual training corpus analyzed",
+    "No durable externally anchored log",
+    "No demonstrated complete independence of X and Z"
+  ],
+  "next": "H063 leakage-aware dataset partition and holdout isolation"
+}
