@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h055.noisy-observation-gate.v1",
+  "date": "2026-11-16",
+  "parent": "models/h054-active-discovery.json",
+  "test": "tests/h055-noisy-witnesses.cjs",
+  "status": "Synthetic exact assertion suite",
+  "hypotheses": [
+    "SHARED",
+    "SEPARATE"
+  ],
+  "prior_shared": 0.25,
+  "sensitivity": 0.9,
+  "specificity": 0.8,
+  "cases": 9,
+  "policy": {
+    "deduplicate_by": "source root",
+    "reject": [
+      "unauthenticated",
+      "stale",
+      "uncalibrated",
+      "invalid outcome"
+    ],
+    "conflict": "CONFLICT_FREEZE, even if a numerical posterior is high",
+    "three_matching_distinct_roots": "REVIEW_ELIGIBLE, never automatic trusted checkpoint",
+    "insufficient_roots": "INSUFFICIENT_ROOTS"
+  },
+  "limitations": [
+    "Root identity and source independence are declared, not externally authenticated",
+    "Likelihood calculation assumes conditional independence across accepted roots, not established in real deployment",
+    "Calibration values are synthetic and not empirical measurements",
+    "High confidence alone cannot graduate evidence",
+    "First accepted packet per root is retained; production should preserve and flag equivocation from the same root"
+  ],
+  "next": "H056 root equivocation and posterior sensitivity under misspecified noise rates"
+}
