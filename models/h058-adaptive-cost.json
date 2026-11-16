@@ -1,0 +1,59 @@
+{
+  "schema": "cern.h058.adaptive-cost-aware-retesting.v1",
+  "date": "2026-11-16",
+  "parent": "models/h057-sequential-retesting.json",
+  "status": "PASS locally executed with Node.js 22",
+  "test": "tests/h058-adaptive-cost.cjs",
+  "prior_shared": 0.25,
+  "minimum_bits_per_cost": 0.05,
+  "synthetic_candidates": [
+    {
+      "id": "A",
+      "cost": 1,
+      "gain_bits": 0.21214,
+      "bits_per_cost": 0.21214,
+      "eligible": true
+    },
+    {
+      "id": "B",
+      "cost": 3,
+      "gain_bits": 0.599172,
+      "bits_per_cost": 0.199724,
+      "eligible": true
+    },
+    {
+      "id": "C",
+      "cost": 5,
+      "gain_bits": 0.738314,
+      "bits_per_cost": 0.147663,
+      "eligible": true
+    },
+    {
+      "id": "D",
+      "cost": 1,
+      "eligible": false,
+      "reason": "duplicate-root"
+    },
+    {
+      "id": "E",
+      "cost": 2,
+      "eligible": false,
+      "reason": "unverified-source"
+    }
+  ],
+  "highest_raw_gain": "C",
+  "highest_efficiency": "A",
+  "budget_one_selection": "A",
+  "stopping_case": "STOP when no eligible test meets budget and efficiency threshold",
+  "append_only_journal_entries": 4,
+  "tamper_detection": true,
+  "limitations": [
+    "Costs and test accuracies are synthetic",
+    "Source independence assumed, not authenticated",
+    "Information gain assumes conditional independence and calibration",
+    "One-step greedy selection is not global budget optimization",
+    "Journal in-memory rather than durable externally anchored storage",
+    "Selection is not observation or checkpoint graduation"
+  ],
+  "next": "H059 adaptive posterior recalibration after observing selected test"
+}
