@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H057 — Sequential Retesting</title><style>body{background:#061022;color:#e3f7ff;font:16px system-ui;margin:0}main{max-width:1130px;margin:auto;padding:28px}h1{color:#81eaff}pre{background:#0b1a34;color:#abffe1;border:1px solid #45809d;border-radius:14px;padding:23px;white-space:pre;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H057 — Sequential Retesting and Calibration Bands</h1><p>ASCII-only witness kernel chapter. No bitmap imagery.</p><pre>H057 -- SEQUENTIAL RETESTING
+================================================
+        UNKNOWN DEPENDENCY A-D
+                 |
+       ROOT A         ROOT B
+       SHARED         SHARED
+          \             /
+           [ TWO ROOTS ]
+                 |
+             NEW PACKET
+            /          \
+        A-MIRROR       ROOT C
+           |              |
+       DUPLICATE       SHARED
+           |              |
+       NO UPDATE       NEW EVIDENCE
+           |              |
+           +------+-------+
+                  |
+          CALIBRATION BAND
+                  |
+           CHECK AGREEMENT
+                  |
+             +----+----+
+             |         |
+           REVIEW     FREEZE
+             |         |
+            {{0}}    PRESERVE
+
+   P(SHARED | A,B):     0.4681 -- 0.9923
+   P(SHARED | A,B,C):   0.5885 -- 0.9996
+   P(SHARED | A,B,A):   UNCHANGED
+
+   EXPECTED ENTROPY DROP CAN BE POSITIVE
+   WHILE A PARTICULAR RESULT RAISES ENTROPY.
+
+   ROOT DIVERSITY != AUTOMATIC TRUST
+   APPEND HISTORY; NEVER REWRITE.
+NEXT: H058 ADAPTIVE RETESTING COST / VALUE
+================================================</pre><p>Run <code>node tests/h057-sequential-retesting.cjs</code>. Synthetic calibration, assumed independence, no external authentication. A reported result is review eligibility, not automatic graduation.</p></main></html>
