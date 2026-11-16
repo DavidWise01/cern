@@ -1,0 +1,32 @@
+{
+  "schema": "cern.h066.evaluation-leakage.v1",
+  "date": "2026-11-16",
+  "parent": "models/h065-rolling-origin.json",
+  "test": "tests/h066-evaluation-leakage.cjs",
+  "status": "PASS local Node.js execution",
+  "candidates": 6,
+  "validation_winner": "m4",
+  "selected_validation_score": 0.82,
+  "selected_final_holdout_score": 0.61,
+  "validation_holdout_gap": 0.21,
+  "sealed_holdout_fingerprint_sha256": "7108bcd4fbd21368596f3f06e544cb03c85193a81936cefab49b28929991e0d3",
+  "final_evaluations_per_protocol": 1,
+  "audit_records": 7,
+  "tests": [
+    "early peek rejected",
+    "post-freeze search rejected",
+    "post-freeze retune rejected",
+    "one-time final score released",
+    "second final evaluation rejected",
+    "refreeze rejected",
+    "history tampering detected"
+  ],
+  "invariant": "A final holdout may be evaluated only after a model and its selection policy are frozen. Feedback from the final holdout must never be used to select or change that model under the same final-evaluation claim.",
+  "limits": [
+    "All model scores are synthetic",
+    "The protocol runs in memory and does not enforce access across processes or machines",
+    "SHA-256 detects modification against the stored ledger but is not externally anchored",
+    "The alternate m1 holdout is a synthetic scenario, not a second permitted comparison within one evaluation session"
+  ],
+  "next": "H067 — Independent final-holdout custody and replay-resistant access control"
+}
