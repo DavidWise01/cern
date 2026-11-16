@@ -1,0 +1,33 @@
+{
+  "schema": "cern.h068.recovery-safe-custody.v1",
+  "date": "2026-11-16",
+  "parent": "models/h067-holdout-custody.json",
+  "test": "tests/h068-recovery-custody.cjs",
+  "status": "PENDING local exact-source execution",
+  "protocol": {
+    "request": "Ed25519-signed frozen model request",
+    "claim": "exclusive durable local claim keyed to request hash",
+    "receipt": "custodian-signed score/model digest and request hash, fsynced before rename",
+    "recovery": "matching and authenticated existing receipt may be redelivered; no receipt freezes claim",
+    "tampering": "invalid signature or claim mismatch freezes or rejects"
+  },
+  "expected_cases": [
+    "first valid evaluation",
+    "identical receipt redelivery",
+    "different frozen-model request rejected",
+    "crash immediately after durable claim frozen",
+    "crash immediately after durable receipt redelivered",
+    "forged receipt freezes",
+    "orphan receipt freezes",
+    "forged developer request rejected"
+  ],
+  "limitations": [
+    "Same OS user can access test keys; not a deployed independent custodian",
+    "Local filesystem durability assumptions are system-dependent",
+    "No multi-host atomic coordination",
+    "No authenticated remote timestamp or immutable independent witness",
+    "Synthetic score 0.61, not measured evaluation",
+    "Crash after claiming but before output cannot safely recover the score"
+  ],
+  "next": "H069 multi-witness receipt anchoring and durable ledger verification"
+}
