@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H058 Adaptive Retesting</title><style>body{margin:0;background:#081122;color:#e5f8ff;font:16px system-ui}main{max-width:1080px;margin:auto;padding:28px}h1{color:#70eaff}pre{padding:24px;border:1px solid #387ba7;border-radius:12px;background:#0b1a34;color:#a8ffe0;overflow:auto;font:16px/1.4 Consolas,monospace}</style><main><h1>H058 — Adaptive Retesting: Information Gain / Cost</h1><p>ASCII illustrated chapter, exact synthetic model.</p><pre>H058 -- ADAPTIVE COST-AWARE RETESTING
+================================================
+               UNCERTAINTY
+                    |
+             AVAILABLE TESTS
+                    |
+          +---------+---------+
+          |         |         |
+          A         B         C
+       COST 1    COST 3    COST 5
+          |         |         |
+        .2121     .1997     .1477
+          |         |         |
+          +---------+---------+
+                    |
+             SELECT TEST A
+                    |
+            VALIDATE SOURCE
+                    |
+            OBSERVE RESULT
+                    |
+          UPDATE PRIOR / RE-RANK
+                    |
+                  {{0}}
+
+    D = DUPLICATE SOURCE (EXCLUDED)
+    E = UNVERIFIED SOURCE (EXCLUDED)
+
+    HIGHEST RAW GAIN = C
+    HIGHEST GAIN PER COST = A
+    MIN THRESHOLD = 0.05 BITS / UNIT
+    APPEND-ONLY JOURNAL = 4 ENTRIES
+
+    QUERY != OBSERVATION != TRUST
+NEXT H059: POST-OBSERVATION ADAPTATION
+================================================</pre><p>Run <code>node tests/h058-adaptive-cost.cjs</code>. Synthetic costs, likelihoods, and declared roots; no externally verified measurements. This is a one-step greedy selection policy.</p></main></html>
