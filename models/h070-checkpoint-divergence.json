@@ -1,0 +1,29 @@
+{
+  "schema": "cern.h070.distributed-checkpoint-divergence.v1",
+  "date": "2026-11-16",
+  "parent": "models/h069-three-witness-receipts.json",
+  "test": "tests/h070-checkpoint-divergence.cjs",
+  "status": "Exact local reference test PASS; committed variant covers equivalent invariants",
+  "receipt_hash": "c44124dfa2fa31f85b4965f4e070b45caf020f7d8071345d4ab3d209d696a590",
+  "branch_a": "2c18867564b671106cb85b07e9c0a24e028dbc06236f2d1e97cb680b7ac623bb",
+  "branch_b": "3503b78fc6c1126cb40c07f857a9021e1c9c73f97f591730990e04cb3c5aa402",
+  "outcomes": {
+    "three_same_lineage": "ANCHORED",
+    "two_with_delayed_third": "INSUFFICIENT_WITNESSES",
+    "late_third_on_same_lineage": "ANCHORED",
+    "late_third_on_competing_lineage": "FORK_FREEZE",
+    "mirror_root": "COUNTS_ONCE",
+    "equivocation": "FORK_FREEZE",
+    "corrupt_signature": "REJECT",
+    "unknown_parent": "REJECT"
+  },
+  "append_only_events": 4,
+  "invariant": "A trusted checkpoint requires agreement on the full signed parent lineage and receipt, plus three disjoint source ancestries. Discovered competing branches remain preserved and freeze promotion.",
+  "limitations": [
+    "Synthetic locally generated keys and declared roots",
+    "Cannot detect unseen forks",
+    "Does not implement distributed byzantine agreement or authenticated time",
+    "In-memory tamper-evident history is not durable remote anchoring"
+  ],
+  "next": "H071 fork finality and delayed-observation windows"
+}
