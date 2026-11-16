@@ -1,0 +1,55 @@
+{
+  "schema": "cern.h059.adaptive-posterior-v1",
+  "date": "2026-11-16",
+  "parent": "models/h058-adaptive-cost.json",
+  "status": "PASS in local equivalent Node.js implementation",
+  "test": "tests/h059-adaptive-posterior.cjs",
+  "prior": 0.25,
+  "min_bits_per_cost": 0.1,
+  "first_test": "A",
+  "counterfactual_branches": {
+    "SHARED": {
+      "posterior": 0.571429,
+      "next": "B",
+      "ranking": [
+        {
+          "test": "B",
+          "bits_per_cost": 0.248404
+        },
+        {
+          "test": "C",
+          "bits_per_cost": 0.181004
+        }
+      ]
+    },
+    "SEPARATE": {
+      "posterior": 0.076923,
+      "next": "STOP",
+      "ranking": [
+        {
+          "test": "B",
+          "bits_per_cost": 0.086647
+        },
+        {
+          "test": "C",
+          "bits_per_cost": 0.068016
+        }
+      ]
+    }
+  },
+  "invariants": [
+    "Do not double count repeated reports from the same source root",
+    "Recompute posterior after each genuinely independent observation",
+    "Re-rank remaining available tests using updated probability",
+    "Stop if no test clears declared cost-adjusted threshold",
+    "Record alternative branches as counterfactual, not observed facts",
+    "Append new decisions without rewriting previous certificates"
+  ],
+  "limitations": [
+    "Synthetic calibration and declared ancestry",
+    "Greedy one-step policy, not global multistep optimum",
+    "In-memory hash chain only",
+    "No real external observations"
+  ],
+  "next": "H060 stopping-policy robustness over calibration bands"
+}
