@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H064 — Temporal Holdout</title><style>body{margin:0;background:#071125;color:#e3f7ff;font:16px system-ui}main{max-width:1110px;margin:auto;padding:28px}h1{color:#81edff}pre{padding:24px;border:1px solid #488cac;border-radius:13px;background:#0b1b36;color:#a7ffe3;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H064 — Temporal Holdout and Transformation-Aware Leakage</h1><p>ASCII-only experiment. One synthetic information cutoff, nine samples, seven source groups.</p><pre>H064 -- TEMPORAL CAUSALITY AND HOLDOUT
+==================================================
+           INFORMATION AVAILABILITY
+                    |
+   PRE-CUTOFF       |         POST-CUTOFF
+                    |
+     TRAIN          |            TEST
+   train-clean      |       late-report
+                    |       test-new
+                    |       test-new2
+                    |
+    +---------------+---------------+
+    |                               |
+  train-parent ---------> future-transform
+  train-copy-source ----> future-copy
+    |                               |
+    +---------- QUARANTINE ---------+
+                    |
+                {{ 0 }}
+
+     UNKNOWN-TIME => QUARANTINE
+     EVENT TIME != AVAILABLE TIME
+     DERIVED DATA INHERITS SOURCE ANCESTRY
+     CAUSALITY ERROR => REJECT
+     ZERO KNOWN LEAKAGE, NOT PROOF OF ZERO LEAKAGE
+NEXT: H065 ROLLING-ORIGIN CAUSAL EVALUATION
+==================================================</pre><p>Reproduce with <code>node tests/h064-temporal-holdout.cjs</code>. Information availability—not historical event date—determines the causal boundary.</p></main></html>
