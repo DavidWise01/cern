@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H056 Witness Equivocation</title><style>body{margin:0;background:#061023;color:#e3f5ff;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#77eeff}pre{background:#0b1b35;border:1px solid #397fa2;border-radius:12px;padding:22px;white-space:pre;overflow:auto;color:#aaffdf;font:16px/1.45 Consolas,monospace}</style><main><h1>H056 — Equivocation and Calibration</h1><p>ASCII-only chapter. 10 governance cases and 16 synthetic calibration combinations.</p><pre>H056 — WITNESS EQUIVOCATION / CALIBRATION
+==================================================
+                     ROOT A
+                    /      \
+              SHARED      SEPARATE
+                    \      /
+                     CONFLICT
+                        |
+                FLAG EQUIVOCATION
+                        |
+           +------------+------------+
+           |                         |
+       PRESERVE CLAIMS         QUARANTINE ROOT A
+           |                         |
+           +------------+------------+
+                        |
+                 FREEZE PROMOTION
+                        |
+                      {{0}}
+
+  10 GOVERNANCE SCENARIOS: PASS
+  16 SYNTHETIC CALIBRATIONS TESTED
+  P(SHARED | 3 SHARED): .588535 .. .999602
+  P(SHARED | 2 SHARED, 1 SEPARATE): .062524 .. .954032
+  APPEND ONLY: 7 EVENTS; TAMPER ATTEMPT DETECTED
+
+  HIGH POSTERIOR != PROOF
+  REVISED CLAIM != REWRITTEN HISTORY
+  NEXT H057: SEQUENTIAL RETESTING UNDER UNCERTAINTY
+==================================================</pre><p>Run <code>node tests/h056-equivocation-calibration.cjs</code>. Declared source identities and synthetic likelihood parameters are not real-world authentication or measurement.</p></main></html>
