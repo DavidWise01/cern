@@ -1,0 +1,53 @@
+{
+  "schema": "cern.h063.ancestry-safe-partition.v1",
+  "date": "2026-11-16",
+  "parent": "models/h062-dataset-leakage.json",
+  "status": "PASS local equivalent Node.js test; committed test not independently executed by GitHub Actions",
+  "test": "tests/h063-ancestry-partition.cjs",
+  "input_records": 9,
+  "known_records": 8,
+  "source_connected_groups": [
+    [
+      "x-a"
+    ],
+    [
+      "x-b",
+      "y-b"
+    ],
+    [
+      "x-c",
+      "y-crop"
+    ],
+    [
+      "y-new"
+    ],
+    [
+      "z-new"
+    ],
+    [
+      "z-new2"
+    ]
+  ],
+  "partition": {
+    "train": [
+      "x-a",
+      "x-b",
+      "y-b",
+      "y-new"
+    ],
+    "test": [
+      "x-c",
+      "y-crop",
+      "z-new",
+      "z-new2"
+    ],
+    "quarantine": [
+      "q-unknown"
+    ]
+  },
+  "balance_delta": 0,
+  "append_only_records": 4,
+  "conservation": "All samples connected by a declared common source root, derivation ancestry or identical content stay on one side of the train/test split. Unknown origins are quarantined.",
+  "scope": "Zero known leakage, not proof of zero hidden or semantic overlap",
+  "next": "H064 temporal holdout and transformation-aware leakage resistance"
+}
