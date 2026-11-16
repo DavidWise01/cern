@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H070 — Distributed Checkpoint Divergence</title><style>body{background:#071124;color:#e5f7ff;margin:0;font:16px system-ui}main{max-width:1120px;margin:auto;padding:27px}h1{color:#7becff}pre{background:#0c1b36;color:#a7ffdd;border-radius:13px;border:1px solid #4a88ad;padding:23px;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H070 — Distributed Checkpoint Divergence</h1><p>ASCII-only three-root signed lineage experiment.</p><pre>H070 — DISTRIBUTED CHECKPOINT DIVERGENCE
+==================================================
+                CHECKPOINT 001
+                       |
+                CHECKPOINT 002
+                       |
+                +------+------+
+                |             |
+               003A          003B
+                |             |
+              A + C            B
+                |             |
+                +------+------+
+                       |
+             SAME RECEIPT HASH
+             DIFFERENT ANCESTRY
+                       |
+                  FORK FREEZE
+                       |
+                 PRESERVE BOTH
+                       |
+                     {{0}}
+
+  B DELAYED    => INSUFFICIENT ROOTS
+  B ON 003A    => ANCHORED
+  B ON 003B    => FORK FREEZE
+  A + A-MIRROR => ONE SOURCE ANCESTOR
+  A SIGNS BOTH => EQUIVOCATION FREEZE
+  UNKNOWN PARENT / MODIFIED SIGNATURE => REJECT
+
+  NO CLAIM OF LIVE BYZANTINE CONSENSUS
+NEXT H071: FORK FINALITY / OBSERVATION DELAY
+==================================================</pre><p>Run <code>node tests/h070-checkpoint-divergence.cjs</code>. Keys and witness ancestries are synthetic. Hidden forks cannot be detected until their evidence arrives.</p></main></html>
