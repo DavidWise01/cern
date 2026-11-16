@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H061 — Calibration Ancestry</title><style>body{margin:0;background:#071024;color:#e4f7ff;font:16px system-ui}main{max-width:1080px;margin:auto;padding:28px}h1{color:#87eaff}pre{background:#0c1c36;color:#a4ffe1;border:1px solid #458eab;padding:22px;border-radius:14px;white-space:pre;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H061 — Calibration Ancestry Conservation</h1><p>ASCII-only lineage chapter; thirteen declared graph nodes.</p><pre>H061 — CALIBRATION ANCESTRY
+=============================================
+               DATASET X
+              /    |    \
+           FOLD1  FOLD2   |
+             |      |     |
+            CAL1   CAL2  CAL3
+              \      |   /
+               \     |  /
+                ROOT X
+                   |
+              COUNT ONCE
+                   |
+                 {{0}}
+
+   DATASET X    DATASET Y    DATASET Z
+       |            |            |
+      CAL1         CAL4         CAL5
+        \           |           /
+           THREE DISTINCT ROOTS
+
+   CAL_MERGED has roots {X,Y}
+   CAL_MERGED cannot count with CAL1 or CAL4.
+   FOUR numerical calibrations use TWO data origins.
+   Cycle / unknown ancestry / rewrite => REJECT.
+   NEXT H062: DATASET OVERLAP / LEAKAGE
+=============================================</pre><p>Run <code>node tests/h061-calibration-ancestry.cjs</code>. Synthetic source ancestry, not externally verified identity or physical measurement.</p></main></html>
