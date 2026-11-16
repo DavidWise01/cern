@@ -1,0 +1,37 @@
+{
+  "schema": "cern.h071.delayed-fork-finality.v1",
+  "date": "2026-11-16",
+  "parent": "models/h070-checkpoint-divergence.json",
+  "status": "PENDING exact committed-test execution",
+  "test": "tests/h071-delayed-fork-finality.cjs",
+  "deadline_tick": 100,
+  "clock": "Synthetic injected observation clock; not authenticated or synchronized",
+  "quorum": "Three disjoint root ancestries on the identical signed branch",
+  "states": [
+    "OBSERVING",
+    "INSUFFICIENT_WITNESSES",
+    "FINALITY_ELIGIBLE",
+    "FORK_FREEZE"
+  ],
+  "cases": [
+    "three independent witnesses before deadline: observing until deadline",
+    "three matching witnesses at deadline: finality eligible",
+    "only two independent witnesses: insufficient",
+    "A plus A mirror plus B: only two roots",
+    "unseen branch cannot be detected before arrival",
+    "late competing signed branch freezes trust but preserves earlier decision",
+    "same-root equivocation freezes",
+    "late agreeing third root can establish eligibility after deadline",
+    "tampered witness signature rejected",
+    "altered history detected"
+  ],
+  "append_only_events": 4,
+  "claim": "Finality eligibility is conditional on observed signed evidence and deadline; late conflicting evidence retroactively invalidates current trust but not the recorded decision event.",
+  "limitations": [
+    "Synthetic arrival ticks, no authenticated network timing",
+    "All keys controlled in same local process",
+    "Cannot prove hidden branches are absent",
+    "Hash chain does not establish external durable storage or a trusted timestamp"
+  ],
+  "next": "H072 auditable finality retraction and monotonic evidence status"
+}
