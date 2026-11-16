@@ -1,0 +1,40 @@
+{
+  "schema": "cern.h064.temporal-holdout.v1",
+  "date": "2026-11-16",
+  "parent": "models/h063-ancestry-partition.json",
+  "test": "tests/h064-temporal-holdout.cjs",
+  "status": "PASS exact local Node.js test",
+  "cutoff": "2026-01-10T00:00:00Z",
+  "samples": 9,
+  "groups": 7,
+  "train": [
+    "train-clean"
+  ],
+  "test_split": [
+    "late-report",
+    "test-new",
+    "test-new2"
+  ],
+  "quarantine": [
+    "future-copy",
+    "future-transform",
+    "train-copy-source",
+    "train-parent",
+    "unknown-time"
+  ],
+  "group_rules": [
+    "Availability time, not event time, determines eligibility for pre-cutoff training",
+    "Ancestry-connected or exact-content-matched samples cannot cross temporal split",
+    "Mixed pre/post availability groups are quarantined as a unit",
+    "Unknown provenance/times are quarantined",
+    "Derived sample may not be available before its declared parent"
+  ],
+  "append_only_events": 4,
+  "limits": [
+    "Synthetic data and declared ancestry",
+    "Conservative quarantine loses some valid pre-cutoff training records",
+    "No guarantee against undiscovered semantic duplication",
+    "Hash-chain audit is in-memory, not externally anchored"
+  ],
+  "next": "H065 rolling-origin temporal backtests with ancestry isolation"
+}
