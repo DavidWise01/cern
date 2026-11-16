@@ -1,0 +1,44 @@
+{
+  "schema": "cern.h057.sequential-calibration.v1",
+  "date": "2026-11-16",
+  "parent": "models/h056-equivocation-calibration.json",
+  "status": "PASS in local Node.js test of same assertions; GitHub CI not verified",
+  "test": "tests/h057-sequential-retesting.cjs",
+  "prior_shared": 0.25,
+  "calibration_models": [
+    {
+      "sensitivity": 0.65,
+      "specificity": 0.6
+    },
+    {
+      "sensitivity": 0.8,
+      "specificity": 0.75
+    },
+    {
+      "sensitivity": 0.9,
+      "specificity": 0.8
+    },
+    {
+      "sensitivity": 0.98,
+      "specificity": 0.95
+    }
+  ],
+  "baseline_two_shared_band": [
+    0.4681440443213296,
+    0.9922512656266143
+  ],
+  "three_independent_shared_band": [
+    0.5885346905973747,
+    0.9996017277580884
+  ],
+  "governance_cases": 8,
+  "append_only_records": 6,
+  "rule": "Only valid independent source roots update evidence; duplicates do not; disagreement or same-root equivocation freezes checkpoint promotion; numerical confidence never grants trust automatically.",
+  "note": "Information gain refers to expected entropy reduction. Individual outcomes may increase entropy.",
+  "limits": [
+    "Synthetic likelihood and assumed conditionally independent roots",
+    "No externally authenticated source ancestry",
+    "In-memory append-only hash chain, not transactional durable storage"
+  ],
+  "next": "H058 adaptive retesting with source-cost and expected information gain"
+}
