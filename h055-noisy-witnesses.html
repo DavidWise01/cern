@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H055 Noisy Witness Verification</title><style>body{background:#070f23;color:#e1f6ff;font:16px system-ui;margin:0}main{max-width:1150px;margin:auto;padding:28px}h1{color:#7ef0ff}pre{background:#0b1d38;color:#a2ffda;padding:24px;border:1px solid #4b82ae;border-radius:14px;overflow:auto;font:16px/1.4 Consolas,monospace}</style><main><h1>H055 · Noisy Observations and Independent Verification</h1><p>ASCII-only chapter. Source diversity and numerical confidence are separate tests.</p><pre>H055 — NOISY MEASUREMENTS / INDEPENDENT VERIFICATION
+===========================================================
+                DEPENDENCY A-D
+                       |
+        +--------------+--------------+
+        |              |              |
+        A              B              C
+        |              |              |
+      SHARED         SEPARATE        SHARED
+        |              |              |
+        +--------------+--------------+
+                       |
+                 ROOT CHECK
+                       |
+                  3 ROOTS
+                       |
+                   CONFLICT
+                       |
+                FREEZE / REVIEW
+                       |
+                     {{0}}
+
+  THREE MATCHING REPORTS -> REVIEW_ELIGIBLE
+  NOT -> automatic checkpoint graduation
+
+  A + A-copy + A-copy = ONE ROOT
+  INVALID / STALE / UNCALIBRATED -> EXCLUDE
+
+  Synthetic statistical assumptions:
+  Prior shared 0.25, sensitivity .90, specificity .80.
+  Bayesian posterior measures model-based belief,
+  NOT proof of physical source independence.
+
+  H056: root equivocation + calibration sensitivity
+===========================================================</pre><p>Run <code>node tests/h055-noisy-witnesses.cjs</code>. The model uses synthetic noise rates and declared witness roots.</p></main></html>
