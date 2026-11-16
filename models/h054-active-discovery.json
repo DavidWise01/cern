@@ -1,0 +1,88 @@
+{
+  "schema": "cern.h054.active-dependency-discovery.v1",
+  "date": "2026-11-16",
+  "parent": "models/h053-uncertain-domains.json",
+  "test": "tests/h054-active-discovery.cjs",
+  "status": "PASS locally, exact finite synthetic scenarios",
+  "hypotheses": [
+    {
+      "id": "NONE",
+      "weight": 40
+    },
+    {
+      "id": "AD",
+      "weight": 25
+    },
+    {
+      "id": "AE",
+      "weight": 15
+    },
+    {
+      "id": "AF",
+      "weight": 8
+    },
+    {
+      "id": "DE",
+      "weight": 5
+    },
+    {
+      "id": "DF",
+      "weight": 4
+    },
+    {
+      "id": "EF",
+      "weight": 3
+    }
+  ],
+  "prior_semantics": "Synthetic relative weights totaling 100; not observed probabilities. Exactly zero or one unknown pairwise common dependency among A,D,E,F.",
+  "ranking": [
+    [
+      "AD",
+      0.811278
+    ],
+    [
+      "AE",
+      0.60984
+    ],
+    [
+      "AF",
+      0.402179
+    ],
+    [
+      "DE",
+      0.286397
+    ],
+    [
+      "DF",
+      0.242292
+    ],
+    [
+      "EF",
+      0.194392
+    ]
+  ],
+  "method": "Rank yes/no tests by expected Shannon entropy reduction, using conditional normalization of synthetic weights.",
+  "branch_results": {
+    "AD_SHARED": {
+      "remaining_hypotheses": 1,
+      "worst_case_cut": 1
+    },
+    "AD_SEPARATE": {
+      "remaining_hypotheses": 6,
+      "worst_case_cut": 1
+    },
+    "ALL_SIX_SEPARATE": {
+      "remaining_hypotheses": 1,
+      "worst_case_cut": 2
+    }
+  },
+  "immutability": "Append H053 prior certificate, H054 proposed query, and counterfactual branch record in hash-chained simulated journal; do not overwrite prior model.",
+  "limits": [
+    "No actual measurement of site dependencies was performed",
+    "Outcome branches are hypothetical, not observed",
+    "Model presumes at most one unknown pairwise link",
+    "Information gain is not guaranteed resilience gain",
+    "Hash chain is in-memory rather than externally anchored"
+  ],
+  "next": "H055 active discovery with uncertain measurements and independent verification"
+}
