@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H066 — Evaluation Feedback Leakage</title><style>body{margin:0;background:#061327;color:#e5f7ff;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#7ceeff}pre{background:#0c1b35;color:#abffe2;border:1px solid #478caf;padding:24px;border-radius:14px;overflow:auto;font:16px/1.45 Consolas,monospace}</style><main><h1>H066 — Evaluation Feedback Leakage</h1><p>Sealed final-holdout experiment, fully ASCII-illustrated. All scores synthetic.</p><pre>
+              H066 — FINAL HOLDOUT SEAL
+=================================================
+          SIX MODEL CANDIDATES
+                   |
+              VALIDATION
+                   |
+           m4 WINS AT 82%
+                   |
+         FREEZE MODEL + ID
+                   |
+        +----------+----------+
+        |                     |
+   EARLY PEEK               FINAL
+      REJECT              OPEN ONCE
+                              |
+                            61%
+                              |
+                        APPEND CERT
+                              |
+                            {{0}}
+
+    DIFFERENCE = 21 PERCENTAGE POINTS
+    RETUNE AFTER FREEZE => REJECT
+    REPLAY FINAL HOLDOUT => REJECT
+    SEALED HOLDOUT HASH => PRESERVE
+
+NEXT H067: INDEPENDENT HOLDOUT CUSTODY
+=================================================
+</pre><p>Reproduce: <code>node tests/h066-evaluation-leakage.cjs</code>. This is an in-memory protocol simulation; a real holdout requires independent access controls.</p></main></html>
