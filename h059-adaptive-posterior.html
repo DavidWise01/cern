@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H059 Adaptive Posterior</title><style>body{background:#071124;color:#e5f7ff;font:16px system-ui;margin:0}main{max-width:1100px;margin:auto;padding:28px}h1{color:#7ff0ff}pre{background:#0c1c37;color:#a1ffe1;border:1px solid #528aab;padding:24px;overflow:auto;border-radius:12px;font:16px/1.45 Consolas,monospace}</style><main><h1>H059 — Adaptive Posterior Recalibration</h1><p>ASCII-only visual experiment: two counterfactual observations, two different next decisions.</p><pre>H059 -- RECURSIVE POSTERIOR LEARNING
+================================================
+                  PRIOR .25
+                      |
+                 SELECT A
+                      |
+             +--------+--------+
+             |                 |
+           SHARED           SEPARATE
+             |                 |
+          .571429           .076923
+             |                 |
+          RE-RANK           RE-RANK
+          B .2484           B .0866
+          C .1810           C .0680
+             |                 |
+          TEST B              STOP
+             |                 |
+             +--------+--------+
+                      |
+               APPEND HISTORY
+                      |
+                    {{0}}
+
+       THRESHOLD = 0.10 BITS / COST
+       D = ALREADY USED ROOT, E = UNVERIFIED
+       DUPLICATE OF A = NO BAYESIAN UPDATE
+       NO ACTUAL OBSERVATION MADE
+NEXT H060: CALIBRATION-ROBUST STOPPING POLICY
+================================================</pre><p>Run <code>node tests/h059-adaptive-posterior.cjs</code>. All likelihoods are synthetic and no observation has occurred.</p></main></html>
