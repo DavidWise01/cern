@@ -1,0 +1,27 @@
+{
+  "schema": "cern.h061.calibration-ancestry.v1",
+  "date": "2026-11-16",
+  "parent": "models/h060-calibration-robust.json",
+  "status": "PASS locally in Node.js, GitHub Actions not separately verified",
+  "test": "tests/h061-calibration-ancestry.cjs",
+  "graph_nodes": 13,
+  "shared_models_count_as_one": 1,
+  "three_root_disjoint_models": 3,
+  "merged_ancestry_requires_all_parents": true,
+  "numerical_model_count": 4,
+  "independent_calibration_data_origins": 2,
+  "append_only_events": 5,
+  "gain_bits": {
+    "CAL1": 0.034209,
+    "CAL2": 0.174227,
+    "CAL3": 0.295739,
+    "CAL4": 0.608677
+  },
+  "invariant": "Calibration models sharing any ultimate data ancestry cannot be counted as independent evidence. Preserve model outputs, trace all root sets, and compare only disjoint source ancestry.",
+  "caveats": [
+    "Declared roots are not independently authenticated",
+    "Disjoint datasets do not by themselves prove statistically independent errors",
+    "Synthetic calibration, in-memory log, no measured physical evidence"
+  ],
+  "next": "H062 training and evaluation data leakage via overlapping examples"
+}
