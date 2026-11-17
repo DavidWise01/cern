@@ -1,0 +1,36 @@
+<!doctype html><meta charset="utf-8"><title>H082 24-cell</title><style>body{background:#081225;color:#adffdf;max-width:960px;margin:3em auto;font:16px monospace}pre{overflow:auto}</style><h1>H082 — 24-cell</h1><pre>H082 :: 24-CELL
+========================================
+ CASIMIR -    RADI 0      KELVIN +
+     8           8           8
+      \    32   / \   32    /
+       +-------+   +-------+
+       \--------32--------/
+                |
+          96 EDGES
+          96 TRIANGLES
+          24 OCTAHEDRA
+                |
+          R4 -> R3
+          24 -> 15
+     PAIRED SHADOWS -> 24
+              {{i}}
+========================================
+Python PASS; Lean candidate uncompiled.
+No physical mass-gap claim.</pre><pre>import Mathlib
+namespace H082
+def sign (b : Bool) : ℤ := if b then 1 else -1
+abbrev K := ℤ × ℤ × ℤ × ℤ
+def normSq (p : K) : ℤ := p.1^2 + p.2.1^2 + p.2.2.1^2 + p.2.2.2^2
+def embed (band : Fin 3) (a b c : Bool) : K :=
+ let x := sign a
+ let y := sign b
+ let z := sign c
+ if band = 0 then (x,y,z,x*y*z)
+ else if band = 1 then (x,y,z,-(x*y*z))
+ else if b then (if c then (0,0,0,2*x) else (0,0,2*x,0))
+ else (if c then (0,2*x,0,0) else (2*x,0,0,0))
+theorem shell (t : Fin 3) (a b c : Bool) :
+ normSq (embed t a b c) = 4 := by
+ fin_cases t &lt;;> cases a &lt;;> cases b &lt;;> cases c &lt;;> decide
+end H082
+</pre>
