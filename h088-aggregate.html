@@ -1,0 +1,8 @@
+<!doctype html><meta charset="utf-8"><title>H088 aggregate curvature</title><style>body{background:#081225;color:#d3faff;max-width:960px;margin:3em auto;font:16px monospace}pre{white-space:pre-wrap}</style><h1>H088 — Aggregate curvature conservation</h1><pre>3 implicit bands | 10 explicit labels | 24 states
+96 edges / 96 faces / 3 faces per edge / 12 faces per vertex
+F = sum ||I-H_f||²
+lambda_min >= F/(600+F/4)
+Combine with H087 by taking maximum.
+133 local numerical tests passed. 128/128 random cases improved.
+4/4 single defects: retain H087.
+Lean candidate uncompiled. Finite graph only.</pre><p>Let r_v=||psi_v||, m=mean(r), q=r-m. Scalar Poincare gives ||q||²<=E/4. w_v=sum incident delta_f² <=48, sum w=3F. Triangle telescoping gives sum w_v r_v²<=27E. Weighted triangle inequality yields sqrt(3F)m <= sqrt(27E)+sqrt(12E), so 3F m²<=75E. Then F||psi||²<= (600+F/4)E.</p><p>Next: spatially resolved curvature potential.</p>
