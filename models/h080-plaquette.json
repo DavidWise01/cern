@@ -1,0 +1,37 @@
+{
+  "schema": "cern.h080.plaquette.v1",
+  "parent": "models/h079-manifold.json",
+  "bands": [
+    {
+      "label": "Casimir",
+      "op": -1
+    },
+    {
+      "label": "Radi/CMB",
+      "op": 0
+    },
+    {
+      "label": "Kelvin",
+      "op": 1
+    }
+  ],
+  "planes": [
+    "xy",
+    "xz",
+    "xw",
+    "yz",
+    "yw",
+    "zw"
+  ],
+  "channels": 18,
+  "group": "Q8 subgroup of SU(2)",
+  "test": {
+    "status": "PASS local Python",
+    "checks": 266240,
+    "coverage": "all 4096 oriented link quadruples with 64 gauge assignments, plus all 4096 gauge assignments on one nontrivial commutator loop",
+    "commutator": -1
+  },
+  "lean": "uncompiled proof candidate for arbitrary group",
+  "scope": "symbolic bands, not physical Planck foam model or continuum quantum mass gap",
+  "next": "H081 Wilson action and nontrivial holonomy sectors"
+}
