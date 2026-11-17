@@ -1,0 +1,37 @@
+{
+  "schema": "cern.h086.holonomy-nullity.v1",
+  "parent": "models/h085-covariant.json",
+  "seed": 86,
+  "vertices": 24,
+  "edges": 96,
+  "complex_dimension": 48,
+  "flat_Q8": 64,
+  "curved_Q8": 64,
+  "continuous_defects": 4,
+  "curved_min_range": [
+    2.8711264163149135,
+    3.468488662056986
+  ],
+  "defects": [
+    [
+      1,
+      0.02929627632201985
+    ],
+    [
+      0.1,
+      0.00031659576627762536
+    ],
+    [
+      0.01,
+      0.000003168378320566671
+    ],
+    [
+      0.001,
+      3.168402316572578e-8
+    ]
+  ],
+  "rayleigh_upper_bound": "(1-cos(theta))/12",
+  "verification": "Local NumPy PASS; Q8 holonomy exact, eigenvalues numerical; Lean candidate uncompiled",
+  "scope": "Connected finite graph, fundamental SU(2) representation; no uniform positive lower bound over nonflat connections",
+  "next": "H087 quantitative holonomy lower bound"
+}
