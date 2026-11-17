@@ -1,0 +1,8 @@
+<!doctype html><meta charset="utf-8"><title>H087</title><style>body{background:#081225;color:#d3faff;max-width:960px;margin:3em auto;font:16px monospace}pre{white-space:pre-wrap}</style><h1>H087 — Quantitative holonomy stability</h1><pre>24 vertices | 96 edges | 96 faces
+Distance shells 3,12,9; sum 30
+delta = max_f ||I-H_f||
+lambda_min >= delta^2/(72+30 delta^2)
+133 numerical configurations passed.
+128 random Q8, 4 defects, 1 flat.
+Proof uses SU(2) fundamental representation and disjoint face/path energies.
+Finite graph only; Lean supporting lemmas uncompiled.</pre><p>For every vertex choose a shortest path to the selected face. The loop telescoping inequality and the path transport inequality give delta ||psi_v|| <= sqrt(3 E_f) + delta sqrt(d E_path). Cauchy-Schwarz and disjoint edges give delta^2 ||psi_v||^2 <= (3+delta^2 d) E. Sum over vertices.</p>
