@@ -1,0 +1,22 @@
+{
+  "schema": "cern.h082.24cell.v1",
+  "parent": "models/h081-implicit-explicit.json",
+  "embedding": [
+    "(a,b,c,abc)",
+    "(a,b,c,-abc)",
+    "signed coordinate axes scaled by 2"
+  ],
+  "counts": {
+    "vertices": 24,
+    "edges": 96,
+    "triangles": 96,
+    "octahedra": 24,
+    "edges_per_band_pair": 32,
+    "single_shadows": 15,
+    "paired_shadows": 24
+  },
+  "norm_squared": 4,
+  "antipodal_note": "Axis block flips only sign bit; other two blocks flip all three bits. H081 uniform complement is not geometric antipodality under this embedding.",
+  "verification": "Python reference executed locally; Lean candidate uncompiled",
+  "scope": "Euclidean polytope; symbolic physical bands only"
+}
