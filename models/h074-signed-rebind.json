@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h074.signed-rebind.v1",
+  "date": "2026-11-16",
+  "parent": "models/h073-rebinding.json",
+  "status": "PASS locally; 15 assertion checks",
+  "test": "tests/h074-signed-rebind.cjs",
+  "model_type": "single-process signed authorization simulation",
+  "initial_checkpoint": "004C",
+  "initial_epoch": 2,
+  "new_checkpoint": "005D",
+  "new_epoch": 3,
+  "signing": "Ed25519",
+  "used_tickets": 3,
+  "ledger_entries": 5,
+  "final_access": {
+    "jane": "ALLOW",
+    "toph": "BLOCK"
+  },
+  "rules": [
+    "Each signed permission includes agent, state digest, checkpoint, epoch, nonce and purpose",
+    "Forgery and cross-agent edits fail signature verification",
+    "Three distinct source roots required; mirrored root does not count again",
+    "Each ticket can be consumed only once",
+    "Revocation increments epoch and blocks previously rebound agents",
+    "New epoch requires fresh signed authorization",
+    "Every accepted rebind and revocation appended without rewriting history"
+  ],
+  "limitations": [
+    "Single-process generated private key, not secured hardware or trusted custodian",
+    "Witness identities and revalidation inputs are mock data",
+    "Replay set and evidence ledger are in-memory, not durable across restart",
+    "Quorum witness IDs are declared rather than individually signed"
+  ],
+  "next": "H075 durable replay ledger and atomic epoch transitions across process restarts"
+}
