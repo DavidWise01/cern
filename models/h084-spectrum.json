@@ -1,0 +1,21 @@
+{
+  "schema": "cern.h084.spectrum.v1",
+  "parent": "models/h083-triangular-gauge.json",
+  "spectrum": {
+    "0": 1,
+    "4": 4,
+    "8": 9,
+    "10": 8,
+    "12": 2
+  },
+  "gap": 4,
+  "band_spectrum": [
+    0,
+    12,
+    12
+  ],
+  "verification": "Exact SymPy local execution PASS",
+  "lean": "Uncompiled band-energy lemma",
+  "scope": "Finite scalar graph Laplacian, not quantum mass gap",
+  "next": "Gauge-covariant Laplacian"
+}
