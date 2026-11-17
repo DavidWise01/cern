@@ -1,0 +1,41 @@
+{
+  "schema": "cern.h073.explicit-rebinding.v1",
+  "date": "2026-11-16",
+  "parent": "models/h072-finality-retraction.json",
+  "test": "tests/h073-rebinding.cjs",
+  "status": "PASS locally; 12 stated governance cases",
+  "checkpoint_revoked": "003A",
+  "checkpoint_replacement": "004C",
+  "witness_threshold": 3,
+  "agents": [
+    "jane",
+    "toph"
+  ],
+  "rebound_agents": [
+    "jane",
+    "toph"
+  ],
+  "audit_entries": 4,
+  "checks": [
+    "No automatic permission inheritance",
+    "A/A-mirror/B gives only two independent roots",
+    "State digest mismatch rejected",
+    "Missing revalidation evidence rejected",
+    "Missing explicit authorization rejected",
+    "Authorization for wrong checkpoint rejected",
+    "Altered replacement checkpoint rejected",
+    "Jane authorized individually",
+    "Toph still denied after Jane rebinding",
+    "Duplicate Jane rebind rejected",
+    "Toph authorized individually",
+    "Tampered history detected"
+  ],
+  "invariant": "A consumer pinned to a revoked checkpoint remains blocked until it demonstrates compatibility with the replacement under three disjoint witness roots and obtains its own explicit authorization. Historical decisions are append-only.",
+  "limitations": [
+    "Synthetic witness ancestry, review claims, and authorization objects",
+    "No signatures on review or authorization payloads",
+    "No network delivery, secure storage, or durable append-only database",
+    "Authorization is modeled as a boolean fixture, not independently authenticated"
+  ],
+  "next": "H074 signed rebind permissions, replay resistance, and revocation propagation"
+}
