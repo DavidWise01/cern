@@ -1,0 +1,36 @@
+{
+  "schema": "cern.h083.triangular-gauge.v1",
+  "parent": "models/h082-24cell.json",
+  "implicit": [
+    "Casimir",
+    "Radi/CMB",
+    "Kelvin"
+  ],
+  "explicit": [
+    "x",
+    "y",
+    "z",
+    "w",
+    "xy",
+    "xz",
+    "xw",
+    "yz",
+    "yw",
+    "zw"
+  ],
+  "vertices": 24,
+  "edges": 96,
+  "faces": 96,
+  "three_band_faces": 96,
+  "group": "Q8 subgroup of SU(2)",
+  "seed": 83,
+  "configurations": 128,
+  "face_cases": 12288,
+  "action_histogram": {
+    "0": 1491,
+    "1": 9263,
+    "2": 1534
+  },
+  "verification": "Python executed locally PASS; Lean authored not compiled",
+  "scope": "finite symbolic gauge model; no physical foam or continuum mass gap claim"
+}
