@@ -1,0 +1,33 @@
+{
+  "schema": "cern.h077.witness-freshness.v1",
+  "parent": "models/h076-epoch-anchor.json",
+  "test": "tests/h077-witness-freshness.cjs",
+  "status": "PASS local Node.js 12 assertions",
+  "nonce_bits": 256,
+  "window_ticks": 10,
+  "quorum": 3,
+  "signature": "Ed25519",
+  "trusted_epoch_floor": 3,
+  "results": {
+    "fresh": "ALLOW",
+    "same_challenge_replay": "REPLAY",
+    "old_packets_new_challenge": "QUORUM",
+    "expired": "EXPIRED",
+    "before_issued": "EXPIRED",
+    "mirror": "QUORUM",
+    "forged": "QUORUM",
+    "conflict": "CONFLICT",
+    "fresh_but_stale": "STALE",
+    "local_rollback": "MISMATCH",
+    "same_epoch_edit": "MISMATCH",
+    "new_challenge": "ALLOW"
+  },
+  "limitations": [
+    "Simulated clock and trusted epoch floor",
+    "Locally generated witness keys and declared source roots",
+    "Challenge objects supplied by trusted harness; no authenticated issuance registry",
+    "Consumed nonce set is volatile; no cross-restart replay protection in this test",
+    "No durable evidence journal or live network transport"
+  ],
+  "next": "H078 durable challenge issuance and consumption with monotonic observation clock"
+}
