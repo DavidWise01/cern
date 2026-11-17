@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H072 — Auditable Finality Retraction</title><style>body{background:#071125;color:#e5f7ff;margin:0;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#7cecff}pre{background:#0c1c36;color:#a8ffe0;border:1px solid #4989b1;border-radius:14px;padding:23px;overflow:auto;font:16px/1.45 monospace}</style><main><h1>H072 — Auditable Finality Retraction</h1><p>ASCII-only checkpoint governance experiment. Revocation never erases the original decision.</p><pre>H072 — AUDITABLE FINALITY RETRACTION
+================================================
+             CHECKPOINT 003A
+                   |
+               TRUSTED NOW
+                   |
+          LATE FORK 003B
+                   |
+            FORK EVIDENCE
+                   |
+             REVOKE 003A
+                   |
+        +----------+----------+
+        |                     |
+    PRESERVE PAST      BLOCK CONSUMERS
+        |                     |
+    DECISION LOG         JANE + TOPH
+        |                     |
+        +----------+----------+
+                   |
+              NEW 004C
+                   |
+           3 DISJOINT ROOTS
+                   |
+               ACTIVATE
+                   |
+                 {{0}}
+
+  OLD DECISION IS NEVER REWRITTEN
+  OLD CONSUMERS REMAIN BLOCKED
+  A + A-MIRROR + B = ONLY 2 ROOTS
+  UNRESOLVED 003B CANNOT GRADUATE
+  NOTIFICATIONS ARE AUDIT ENTRIES, NOT DELIVERED
+NEXT H073: REBINDING CONSENT / DOWNSTREAM REVALIDATION
+================================================</pre><p>Reproduce with <code>node tests/h072-finality-retraction.cjs</code>. All witness roots and fork proofs are synthetic. Notifications are recorded, not sent.</p></main></html>
