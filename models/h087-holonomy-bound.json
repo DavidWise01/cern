@@ -1,0 +1,53 @@
+{
+  "schema": "cern.h087.quantitative-holonomy.v1",
+  "parent": "models/h086-holonomy.json",
+  "scope": "Fundamental SU(2) representation, finite 24-cell graph",
+  "geometry": {
+    "vertices": 24,
+    "edges": 96,
+    "faces": 96,
+    "distance_shells": [
+      3,
+      12,
+      9
+    ],
+    "distance_sum": 30
+  },
+  "bound": "delta^2/(72+30*delta^2)",
+  "delta": "maximum over triangular faces of operator norm of I-H",
+  "tests": {
+    "executed": 133,
+    "random_Q8": 128,
+    "continuous_defects": 4,
+    "flat": 1,
+    "random_min_range": [
+      2.7348437706705795,
+      3.604025522236506
+    ],
+    "random_bound": 0.020833333333333332,
+    "defects": [
+      [
+        1,
+        0.02929627632201985,
+        0.009232558751656976
+      ],
+      [
+        0.1,
+        0.00031659576627762536,
+        0.00013819784207322886
+      ],
+      [
+        0.01,
+        0.000003168378320566671,
+        0.000001388819447859029
+      ],
+      [
+        0.001,
+        3.168402316572578e-8,
+        1.388888194423032e-8
+      ]
+    ]
+  },
+  "verification": "Python/NumPy executed; exact graph enumeration; numerical eigenvalues; Lean elementary lemmas uncompiled",
+  "next": "H088 aggregate curvature bound via face incidence and overlap"
+}
