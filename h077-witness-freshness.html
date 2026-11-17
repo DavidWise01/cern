@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H077 Witness Freshness</title><style>body{margin:0;background:#071125;color:#e3f7ff;font:16px system-ui}main{max-width:1000px;margin:auto;padding:28px}h1{color:#7ceeff}pre{background:#0b1b36;color:#aaffdf;padding:24px;border:1px solid #478cad;border-radius:12px;overflow:auto;font:16px/1.45 monospace}</style><main><h1>H077 — Challenge-Bound Witness Freshness</h1><pre>H077 -- WITNESS FRESHNESS
+========================================
+       256-BIT RANDOM NONCE
+                |
+         A      B      C
+         |      |      |
+        SIG    SIG    SIG
+         +------+------+
+                |
+       NONCE / TIME / ROOTS
+       EPOCH / STATE DIGEST
+                |
+        +-------+-------+
+        |               |
+      ALLOW           FREEZE
+        |               |
+        +-------+-------+
+                |
+              {{0}}
+
+  12 LOCAL ASSERTIONS PASSED
+  FRESH RESPONSE != FRESH STATE
+  OLD NONCE != NEW CHALLENGE
+  MIRROR != INDEPENDENT ROOT
+  NEXT H078: DURABLE CHALLENGE REGISTRY
+========================================</pre><p>Run <code>node tests/h077-witness-freshness.cjs</code>. Synthetic witness roots, trusted epoch floor and clock. The nonce registry is volatile. No distributed deployment is claimed.</p></main></html>
