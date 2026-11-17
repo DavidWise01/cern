@@ -1,0 +1,30 @@
+{
+  "schema": "cern.h081.implicit-explicit.v1",
+  "parent": "models/h080-plaquette.json",
+  "implicit": [
+    "Casimir",
+    "Radi/CMB",
+    "Kelvin"
+  ],
+  "explicit_interpretation": "Provisional: four coordinate axes plus six coordinate rotation planes, geometric labels rather than ten independent dimensions",
+  "axes": [
+    "x",
+    "y",
+    "z",
+    "w"
+  ],
+  "planes": [
+    "xy",
+    "xz",
+    "xw",
+    "yz",
+    "yw",
+    "zw"
+  ],
+  "direction_layers": 3,
+  "states": 24,
+  "complement_pairs": 12,
+  "test": "PASS Python exact enumeration",
+  "lean": "Uncompiled candidate",
+  "scope": "Symbolic labels, not physical manifold identification or Yang-Mills mass gap"
+}
