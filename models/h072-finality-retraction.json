@@ -1,0 +1,38 @@
+{
+  "schema": "cern.h072.auditable-finality-retraction.v1",
+  "date": "2026-11-16",
+  "parent": "models/h071-delayed-fork-finality.json",
+  "test": "tests/h072-finality-retraction.cjs",
+  "status": "PASS exact local Node.js script",
+  "scenarios": 10,
+  "original_checkpoint": "003A",
+  "competing_branch": "003B",
+  "replacement": "004C",
+  "blocked_consumers": [
+    "agent-jane",
+    "agent-toph"
+  ],
+  "notified_consumers": [
+    "agent-jane",
+    "agent-toph"
+  ],
+  "audit_entries": 9,
+  "rules": [
+    "Preserve original FINALITY_ELIGIBLE decision",
+    "Discovered competing branch revokes current trust",
+    "Invalidate downstream consumers pinned to revoked checkpoint",
+    "Mirror witnesses do not add independent roots",
+    "Unresolved competing branch cannot itself become replacement",
+    "Replacement needs 3 disjoint source roots",
+    "Never silently migrate stale consumers to new checkpoint",
+    "Detect ledger tampering"
+  ],
+  "limits": [
+    "Proof object is synthetic and not cryptographically authenticated",
+    "Witness roots are declared and not independently verified",
+    "Notification is an append-only queue record, not delivered to real consumers",
+    "State and hash-chain log are in-memory rather than durable transactional storage",
+    "Replacing forked ancestry is permitted here only as a toy governance transition, not a full consensus protocol"
+  ],
+  "next": "H073 explicit rebind after revoked checkpoint and downstream revalidation"
+}
