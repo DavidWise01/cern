@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h088.aggregate-curvature.v1",
+  "parent": "models/h087-holonomy-bound.json",
+  "scope": "Finite 24-cell connection Laplacian, fundamental SU(2)",
+  "incidence": {
+    "vertices": 24,
+    "edges": 96,
+    "faces": 96,
+    "faces_per_edge": 3,
+    "faces_per_vertex": 12
+  },
+  "bound": "F/(600+F/4)",
+  "F": "sum of squared operator norm defects",
+  "combined": "max(H087,H088)",
+  "proof": "Let r_v=||psi_v||, m=mean(r), q=r-m. Scalar Poincare gives ||q||²<=E/4. w_v=sum incident delta_f² <=48, sum w=3F. Triangle telescoping gives sum w_v r_v²<=27E. Weighted triangle inequality yields sqrt(3F)m <= sqrt(27E)+sqrt(12E), so 3F m²<=75E. Then F||psi||²<= (600+F/4)E.",
+  "tests": {
+    "seed": 88,
+    "total": 133,
+    "random": 128,
+    "defects": 4,
+    "flat": 1,
+    "random_min": [
+      2.7372859333499586,
+      3.570282389512869
+    ],
+    "aggregate_bound_range": [
+      0.26459143968871596,
+      0.3274674827850038
+    ],
+    "random_improved": 128,
+    "defect_improved": 0
+  },
+  "lean": "conditional algebraic lemma, uncompiled",
+  "next": "H089 spatially resolved curvature potential and optimized spectral certificate"
+}
