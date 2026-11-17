@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H075 Durable Epoch Ledger</title><style>body{margin:0;background:#081121;color:#e4f6ff;font:16px system-ui}main{max-width:1100px;margin:auto;padding:28px}h1{color:#80eeff}pre{padding:24px;border:1px solid #4488ad;border-radius:12px;background:#0c1b35;color:#a9ffdf;overflow:auto;font:16px/1.45 monospace}</style><main><h1>H075 — Durable Epoch Ledger</h1><p>Local cross-process SQLite transaction test with signed rebind tickets.</p><pre>H075 :: DURABLE EPOCH LEDGER
+==========================================
+           SIGNED TICKET
+                 |
+          BEGIN IMMEDIATE
+                 |
+        VERIFY EPOCH / NONCE
+                 |
+       CONSUME + BIND + AUDIT
+                 |
+           ATOMIC COMMIT
+                 |
+        +--------+--------+
+        |                 |
+    CRASH BEFORE      CRASH AFTER
+        |                 |
+     ROLLBACK          PERSISTED
+        |                 |
+    RETRY VALID       REPLAY DENIED
+        |                 |
+        +--------+--------+
+                 |
+               {{0}}
+
+  CONCURRENT REDEMPTION: REBOUND + REPLAY
+  EPOCH 2 -> EPOCH 3: OLD BINDINGS BLOCKED
+  CONSUMED TICKETS: 3
+  AUDIT EVENTS: 4
+  LOCAL PROCESS CRASH TEST: PASS
+
+  NEXT H076: BACKUP ROLLBACK / SIGNED REVOCATION
+==========================================</pre><p>Run <code>node tests/h075-durable-epoch.cjs</code> with Node.js 22.16 or compatible version. Trusted harness, mock state, no authenticated revocation API or independent witness quorum. Not resistant to database backup rollback.</p></main></html>
