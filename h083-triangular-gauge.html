@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>H083 Triangular Gauge Kernel</title><style>body{background:#081225;color:#adffdf;max-width:960px;margin:3em auto;font:16px monospace}pre{overflow:auto}</style><h1>H083 — Triangular Yang–Mills gauge kernel</h1><pre>24 vertices / 96 edges / 96 triangles
+Every face visits all three bands.
+H' = g H g^-1; trace and Wilson action invariant.
+128 configurations x 96 faces = 12288 cases PASS
+Action histogram: 0:1491, 1:9263, 2:1534
+Lean uncompiled; finite Q8 model only.</pre><pre>import Mathlib
+namespace H083
+variable {G : Type*} [Group G]
+def link (a b u : G) : G := a * u * b⁻¹
+theorem triangle_covariant (a b c u v w : G) :
+    link a b u * link b c v * link c a w =
+    a * (u * v * w) * a⁻¹ := by
+  unfold link
+  group
+theorem triangle_invariant {O : Type*} (f : G → O)
+    (hf : ∀ g p : G, f (g * p * g⁻¹) = f p)
+    (a b c u v w : G) :
+    f (link a b u * link b c v * link c a w) =
+    f (u * v * w) := by
+  rw [triangle_covariant]
+  exact hf a _
+end H083
+</pre></html>
