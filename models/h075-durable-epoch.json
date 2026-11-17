@@ -1,0 +1,31 @@
+{
+  "schema": "cern.h075.durable-epoch.v1",
+  "date": "2026-11-16",
+  "parent": "models/h074-signed-rebind.json",
+  "test": "tests/h075-durable-epoch.cjs",
+  "verification": "PASS local Node.js 22.16.0 execution",
+  "storage": "SQLite WAL, synchronous FULL, BEGIN IMMEDIATE",
+  "result": {
+    "epoch": 3,
+    "consumed": 3,
+    "audit": 4,
+    "concurrent": [
+      "REBOUND",
+      "REPLAY"
+    ],
+    "crashBefore": "ROLLBACK",
+    "crashAfter": "COMMITTED",
+    "revocation": "ATOMIC"
+  },
+  "invariant": "Ticket consumption, agent binding and audit insertion commit atomically. Epoch changes invalidate prior bindings without deleting their audit history.",
+  "limitations": [
+    "Local process termination tested, not physical power loss or storage failure",
+    "Mock state digests; H074 witness quorum not reimplemented in this persistence-focused test",
+    "Revocation entry point is not authenticated; trusted test harness only",
+    "Database operator can alter audit rows or restore old backups; no external anchoring or rollback defense",
+    "No independent custodian or multi-host consensus",
+    "Temporary database removed after test",
+    "Node.js 22.16 node:sqlite is experimental"
+  ],
+  "next": "H076 rollback-resistant epoch anchoring and signed revocation authority"
+}
