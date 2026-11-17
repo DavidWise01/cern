@@ -1,0 +1,41 @@
+{
+  "schema": "cern.h079.manifold-kernel.v1",
+  "parent": "models/h078-4d-shadow.json",
+  "planes": [
+    "xy",
+    "xz",
+    "xw",
+    "yz",
+    "yw",
+    "zw"
+  ],
+  "manifolds": {
+    "R4": 4,
+    "R3": 3,
+    "S4": 4,
+    "S3": 3,
+    "T4": 4,
+    "T3": 3,
+    "SO4": 6,
+    "Spin4": 6,
+    "SU2": 3,
+    "SU3": 8,
+    "U1": 1,
+    "CP1": 2
+  },
+  "finite_test": {
+    "states": 625,
+    "plane_state_pairs": 3750,
+    "paired_shadow_counts": [
+      125,
+      125,
+      625,
+      125,
+      625,
+      625
+    ]
+  },
+  "lean_status": "authored, uncompiled",
+  "scope": "Euclidean rotations, not quantum Yang-Mills existence or mass gap",
+  "next": "H080 discrete gauge links, plaquette holonomy and gauge invariance"
+}
