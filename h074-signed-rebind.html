@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>H074 Signed Rebind</title><style>body{margin:0;background:#071227;color:#e2f6ff;font:16px system-ui}main{max-width:1140px;margin:auto;padding:27px}h1{color:#86ebff}pre{background:#0b1c34;color:#b1ffe1;border:1px solid #448cb4;border-radius:14px;padding:24px;overflow:auto;font:16px/1.45 monospace}</style><main><h1>H074 — Signed Authorization and Epoch Rebinding</h1><p>ASCII-only visual, with reproducible Ed25519 signature tests.</p><pre>H074 — SIGNED REBIND / REPLAY PROTECTION
+================================================
+         CHECKPOINT 004C :: EPOCH 2
+                      |
+                SIGNED TICKETS
+                      |
+              +-------+-------+
+              |               |
+            JANE             TOPH
+              |               |
+          REDEEM ONCE     REDEEM ONCE
+              |               |
+              +-------+-------+
+                      |
+                  REVOKE
+                      |
+         CHECKPOINT 005D :: EPOCH 3
+                      |
+                BLOCK BOTH
+                      |
+             NEW JANE TICKET
+                      |
+                JANE ALLOWED
+                TOPH BLOCKED
+                      |
+                    {{0}}
+
+    FORGERY / WRONG STATE => REJECT
+    A + A-MIRROR + B => ONLY TWO ROOTS
+    SAME TICKET TWICE => REPLAY
+    OLD EPOCH TICKET => STALE
+    APPEND-ONLY RECORDS: FIVE
+NEXT H075: DURABLE REPLAY LEDGER
+================================================</pre><p>Run <code>node tests/h074-signed-rebind.cjs</code>. This is a synthetic single-process prototype, not a live agent permission system.</p></main></html>
