@@ -1,0 +1,22 @@
+{
+  "schema": "cern.h078.4d-shadow.v1",
+  "parent": "models/h077-witness-freshness.json",
+  "lean": "proofs/H078.lean",
+  "space": "R^4",
+  "shadow": "(x,y,z)",
+  "rotation": "(-w,y,z,x)",
+  "finite_check": {
+    "states": 625,
+    "single_shadows": 125,
+    "paired_shadows": 625,
+    "norm_preserved": true,
+    "period_four": true
+  },
+  "lean_status": "UNCOMPILED: Lean/mathlib not installed in local runner",
+  "limits": [
+    "Euclidean fourth coordinate, not physical time or Lorentz spacetime",
+    "Finite enumeration is not a formal proof over reals",
+    "Geometry alone does not establish witness independence"
+  ],
+  "next": "H079 arbitrary SO(4) rotations and rank of stacked shadows"
+}
