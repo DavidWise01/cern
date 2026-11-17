@@ -1,0 +1,30 @@
+{
+  "schema": "cern.h076.epoch-anchor.v1",
+  "parent": "models/h075-durable-epoch.json",
+  "test": "tests/h076-epoch-anchor.cjs",
+  "status": "PASS local Node.js execution",
+  "checks": 11,
+  "witness_quorum": 3,
+  "epoch_floor": 3,
+  "signatures": "Ed25519",
+  "results": {
+    "current": "ALLOW",
+    "backup": "FREEZE_ROLLBACK",
+    "same_epoch_edit": "FREEZE_UNANCHORED_STATE",
+    "mirror": "FREEZE_QUORUM",
+    "conflict": "FREEZE_CONFLICT",
+    "ahead": "FREEZE_UNANCHORED_STATE",
+    "stale_anchors": "FREEZE_STALE_ANCHOR",
+    "no_anchors": "FREEZE_STALE_ANCHOR",
+    "forged": "FREEZE_QUORUM",
+    "unauthorized_revocation": "DENIED",
+    "replayed_revocation": "DENIED"
+  },
+  "limitations": [
+    "Simulated backup objects rather than SQLite file restore",
+    "Trusted external epoch floor supplied by test",
+    "Locally generated keys and declared ancestry; no deployed independent anchors",
+    "No freshness challenge or trusted transport implemented"
+  ],
+  "next": "H077 challenge-bound witness freshness and replay-resistant epoch synchronization"
+}
