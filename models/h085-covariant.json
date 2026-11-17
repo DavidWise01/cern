@@ -1,0 +1,25 @@
+{
+  "schema": "cern.h085.covariant-laplacian.v1",
+  "parent": "models/h084-spectrum.json",
+  "dimension": 48,
+  "group": "SU(2), sampled Q8",
+  "flat_spectrum": {
+    "0": 2,
+    "4": 8,
+    "8": 18,
+    "10": 16,
+    "12": 4
+  },
+  "defect_min": 0.12998736,
+  "random_min_range": [
+    2.6850493026131383,
+    3.4374118735754853
+  ],
+  "configs": 130,
+  "seed": 85,
+  "max_spectral_error": 3.019806626980426e-14,
+  "verification": "Local NumPy test executed PASS; exact matrix covariance, numerical eigenspectrum",
+  "lean": "Uncompiled elementary lemmas only",
+  "scope": "Finite connection Laplacian, not quantum Yang-Mills energy gap",
+  "next": "H086 holonomy fixed subspace and nullity"
+}
