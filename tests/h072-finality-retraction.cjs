@@ -1,0 +1,23 @@
+'use strict';
+const assert=require('node:assert/strict'),crypto=require('node:crypto');
+const digest=x=>crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex');
+const roots={A:['R1'],B:['R2'],C:['R3'],D:['R4'],Amirror:['R1']};
+const ledger=[];function append(type,data){const seq=ledger.length,prev=seq?ledger.at(-1).hash:'0'.repeat(64),entry={seq,prev,type,data:structuredClone(data)};ledger.push({...entry,hash:digest(entry)});return entry}
+function audit(){let prev='0'.repeat(64);return ledger.every((x,i)=>{const valid=x.seq===i&&x.prev===prev&&x.hash===digest({seq:x.seq,prev:x.prev,type:x.type,data:x.data});prev=x.hash;return valid})}
+const checkpointA={id:'003A',parent:'002',receipt:'receipt-h069',decision:'FINALITY_ELIGIBLE'};
+const checkpointB={id:'003B',parent:'002',receipt:'receipt-h069',decision:'COMPETING_SIGNED_BRANCH'};
+const consumers=[{id:'agent-jane',dependsOn:'003A'},{id:'agent-toph',dependsOn:'003A'},{id:'archive-reader',dependsOn:'002'}];
+const status={current:'003A',revoked:new Set(),blocked:new Set(),notified:new Set(),pending:null};
+append('DECISION',{checkpoint:checkpointA});
+append('CONSUMER_REGISTRY',{consumers});
+function revoke(branch,proof){assert.equal(branch.parent,checkpointA.parent);assert.notEqual(branch.id,checkpointA.id);assert.equal(proof.parent,checkpointA.parent);assert.deepEqual(proof.branches.sort(),[checkpointA.id,branch.id].sort());if(status.revoked.has(checkpointA.id))return 'ALREADY_REVOKED';status.revoked.add(checkpointA.id);status.current=null;for(const x of consumers)if(x.dependsOn===checkpointA.id){status.blocked.add(x.id);status.notified.add(x.id)}append('FORK_EVIDENCE',{branch,proof});append('REVOKE',{checkpoint:checkpointA.id});append('INVALIDATE_CONSUMERS',{ids:[...status.blocked].sort()});append('NOTIFY',{recipients:[...status.notified].sort()});return 'REVOKED'}
+function read(consumer){if(status.blocked.has(consumer))return 'DENY_STALE';const found=consumers.find(x=>x.id===consumer);return found&&status.current===found.dependsOn?'ALLOW_CURRENT':'NOT_CURRENT'}
+function independent(ids){let best=0;function visit(i,used,n){if(i===ids.length){best=Math.max(n,best);return}visit(i+1,used,n);const rr=roots[ids[i]]||[];if(rr.length&&rr.every(x=>!used.has(x)))visit(i+1,new Set([...used,...rr]),n+1)}visit(0,new Set(),0);return best}
+function replace(candidate,witnesses){assert(status.revoked.has('003A'),'revocation required');assert.notEqual(candidate.id,'003A');assert.equal(candidate.parent,'002');assert.equal(candidate.receipt,checkpointA.receipt);assert(!status.revoked.has(candidate.id));const count=independent([...new Set(witnesses)]);if(count<3){append('REPLACEMENT_REJECTED',{candidate:candidate.id,count});return 'INSUFFICIENT_ROOTS'}if(candidate.id===checkpointB.id){append('REPLACEMENT_REJECTED',{candidate:candidate.id,reason:'unresolved fork'});return 'UNRESOLVED_FORK'}status.current=candidate.id;status.pending=null;append('REPLACEMENT_ACTIVATED',{candidate,witnesses,independent:count});return 'ACTIVATED'}
+assert.equal(read('agent-jane'),'ALLOW_CURRENT');
+const forkProof={parent:'002',branches:['003A','003B'],witnesses:['A','D']};
+assert.equal(revoke(checkpointB,forkProof),'REVOKED');assert.equal(status.current,null);assert.equal(read('agent-jane'),'DENY_STALE');assert.equal(read('agent-toph'),'DENY_STALE');assert.equal(read('archive-reader'),'NOT_CURRENT');assert.deepEqual([...status.notified].sort(),['agent-jane','agent-toph']);assert.equal(revoke(checkpointB,forkProof),'ALREADY_REVOKED');
+const replacement={id:'004C',parent:'002',receipt:checkpointA.receipt};
+assert.equal(replace(replacement,['A','Amirror','B']),'INSUFFICIENT_ROOTS');assert.equal(replace(checkpointB,['A','B','C']),'UNRESOLVED_FORK');assert.equal(status.current,null);assert.equal(replace(replacement,['A','B','C']),'ACTIVATED');assert.equal(status.current,'004C');assert.equal(read('agent-jane'),'DENY_STALE');
+assert.equal(ledger[0].data.checkpoint.decision,'FINALITY_ELIGIBLE');assert(audit());const tampered=structuredClone(ledger);tampered[0].data.checkpoint.decision='REVOKED';let previous='0'.repeat(64);assert(!tampered.every((x,i)=>{const valid=x.prev===previous&&x.hash===digest({seq:i,prev:previous,type:x.type,data:x.data});previous=x.hash;return valid}));
+console.log(JSON.stringify({status:'PASS',scenarios:10,checkpoint:'003A',fork:'003B',replacedWith:status.current,notifications:[...status.notified],blocked:[...status.blocked],auditEntries:ledger.length,originalDecisionPreserved:true,replacementRequiredThreeRoots:true,limitations:'Synthetic signed-proof fixture and declared root identities; notifications are queued records, not delivered over network.'},null,2));
