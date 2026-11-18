@@ -1,0 +1,39 @@
+{
+  "schema": "cern.h090.edge-budget.v1",
+  "parent": "models/h089-localized.json",
+  "bound": "lambda_min(t L+(1-t) W_alpha/9)",
+  "weights": "alpha>=0, C alpha<=1; W_alpha(v,v)=sum incident alpha_f delta_f^2",
+  "derivation": "At each of three face vertices, delta_f^2 r_v^2 <= 3 E_f. Sum with alpha_f gives r^T W_alpha r <= 9 E; weighted edge budgets prevent duplicate contributions. Combine with diamagnetic inequality.",
+  "optimization": "LP maximizes sum alpha_f delta_f^2; t scanned at 101 points; retain max previous certificates",
+  "tests": {
+    "seed": 90,
+    "total": 133,
+    "random": 128,
+    "defects": 4,
+    "flat": 1,
+    "improved": 128,
+    "actual": [
+      2.5446304150087453,
+      3.4866365884481674
+    ],
+    "uniform": [
+      0.6743798397205603,
+      0.9247887747905827
+    ],
+    "adaptive": [
+      0.779415866357984,
+      1.0499610209287171
+    ],
+    "weighted_curvature": [
+      68,
+      86
+    ]
+  },
+  "limitations": [
+    "Numerical LP and eigenvalues, tolerance 1e-10; not interval certified",
+    "Lean supporting lemma uncompiled",
+    "Finite graph only; no continuum gap",
+    "LP maximizes weighted curvature, not spectral objective"
+  ],
+  "next": "H091 joint semidefinite optimization"
+}
