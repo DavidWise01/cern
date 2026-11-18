@@ -1,0 +1,39 @@
+{
+  "schema": "cern.h109.temporal-reserve.v1",
+  "parent": "models/h108-temporal.json",
+  "boundary": 11,
+  "modes": 10,
+  "delta": 0.06988445853297448,
+  "threshold": "d*(r-x*exp(-d*t))/(1-exp(-d*t)), d>0; (r-x)/t when d=0",
+  "tests": {
+    "total": 300,
+    "accepted": 188,
+    "rejected": 112,
+    "status": "local Python executed PASS"
+  },
+  "sequence": [
+    {
+      "candidate": 0.9423570337803471,
+      "accepted": true
+    },
+    {
+      "candidate": 1.2542609040040626,
+      "accepted": false
+    },
+    {
+      "candidate": 0.46850165498451257,
+      "accepted": true
+    },
+    {
+      "candidate": 0.9201476984115536,
+      "accepted": true
+    }
+  ],
+  "limitations": [
+    "Scalar comparison envelope, constant parameters per pulse, fixed Q",
+    "Rejected proposal consumes no modeled time; real uncontrolled disturbances cannot be rejected",
+    "No durable ledger or atomic concurrent reservation implemented",
+    "Lean lemma uncompiled"
+  ],
+  "next": "H110 concurrent reservations, atomic admission and double-spend counterexample"
+}
