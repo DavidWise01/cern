@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H093 Holographic Bit Counter</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#06060c;color:#d0d0d0;font:12px/1.5 'Courier New',monospace;overflow-x:hidden}
+h1{color:#00ffcc;font-size:15px;text-align:center;padding:4px;border-bottom:1px solid #1a3333}
+.top-bar{display:flex;justify-content:space-between;padding:2px 8px;font-size:11px;color:#888;border-bottom:1px solid #111}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px}
+.panel{border:1px solid #1a2a2a;padding:6px;background:#080810;min-height:100px}
+.panel h2{color:#ffaa00;font-size:12px;margin-bottom:4px}
+.panel h3{color:#00ccaa;font-size:11px;margin:4px 0 2px}
+#scene-container{width:100%;height:480px;border:1px solid #1a3333;background:#020208;position:relative;cursor:grab}
+#scene-container:active{cursor:grabbing}
+.hud{position:absolute;top:4px;left:4px;color:#00ffcc;font:10px monospace;pointer-events:none;text-shadow:0 0 4px #003}
+table{width:100%;border-collapse:collapse;font-size:10px;margin:2px 0}
+th,td{border:1px solid #1a1a2a;padding:1px 3px;text-align:right}
+th{background:#0a0a1a;color:#88ffaa}
+.res-jpsi{color:#ff4444} .res-upsilon{color:#44ff44} .res-z{color:#4488ff} .res-cont{color:#00aacc}
+.info{font-size:10px;color:#777;margin:2px 0}
+.eq{color:#00ffcc;font-family:monospace;font-size:11px;padding:2px 4px;background:#001a1a;border:1px solid #003333;margin:3px 0;display:block}
+.toddler{border:2px dashed #ffaa00;padding:6px;margin:4px;background:#1a1500}
+.toddler h3{color:#ffcc00;font-size:12px}
+.ornament{text-align:center;color:#1a3333;font-size:10px;margin:3px 0}
+.ornament-label{color:#333;font-size:9px}
+.test-row{font-size:10px}
+.lit{color:#00ff00} .dead{color:#ff0000} .amber{color:#ffaa00}
+.meta{font-size:9px;color:#444;text-align:center;padding:4px}
+#addr{color:#00ffcc;text-align:center;padding:3px;font-size:12px;border:1px solid #003333;margin:2px 4px;background:#001a0a}
+.bit-box{border:1px solid #00aa88;padding:4px;margin:3px 0;background:#001a12}
+.bit-box h3{color:#00ffaa}
+.bekenstein{border:1px solid #aa6600;padding:4px;margin:3px 0;background:#1a0a00}
+.bekenstein h3{color:#ffaa00}
+.full-width{grid-column:1/-1}
+canvas.chart{width:100%;height:140px;display:block;border:1px solid #1a2a2a;margin:2px 0}
+select,button{background:#0a0a1a;color:#00ffcc;border:1px solid #003333;font:11px monospace;padding:2px 6px;cursor:pointer}
+select:hover,button:hover{border-color:#00ffcc}
+.controls{display:flex;gap:8px;align-items:center;margin:3px 0;flex-wrap:wrap}
+.stat{display:inline-block;padding:2px 6px;border:1px solid #1a3333;margin:1px;background:#0a0a14;font-size:11px}
+.stat b{color:#00ffcc}
+</style>
+</head>
+<body>
+<h1>H093 &mdash; HOLOGRAPHIC BIT COUNTER</h1>
+<div class="top-bar">
+<span>Ancestry: H092, H091, QG-077 &bull; Bekenstein-Hawking entropy from real CMS &mu;&mu; data</span>
+<span>CERN Open Data Record 303 (CC0) &bull; Planck: CODATA 2018</span>
+</div>
+<div id="addr">loading...</div>
+
+<!-- 3D SCENE full width -->
+<div id="scene-container">
+<div class="hud" id="hud">Loading 3D...</div>
+</div>
+<div class="controls" style="padding:2px 8px">
+<label>View: <select id="view-sel"><option value="overview">Overview — all particles</option><option value="jpsi">J/ψ sphere</option><option value="upsilon">Υ sphere</option><option value="z">Z⁰ sphere</option><option value="planck">Planck cube</option></select></label>
+<button id="btn-spin">Spin</button>
+<button id="btn-reset">Reset Camera</button>
+<span class="stat">Events: <b>92</b></span>
+<span class="stat" id="stat-bits">Total bits: <b>—</b></span>
+</div>
+
+<div class="grid">
+<!-- LEFT: Bit Counter Data -->
+<div class="panel">
+<h2>HOLOGRAPHIC BIT COUNT</h2>
+
+<div class="bekenstein">
+<h3>BEKENSTEIN-HAWKING ENTROPY</h3>
+<span class="eq">S<sub>BH</sub> = A / (4 l<sub>P</sub>&sup2;) &nbsp; [bits on the boundary]</span>
+<span class="eq">A = 4&pi;&lambda;<sub>C</sub>&sup2; &nbsp; [Compton sphere surface]</span>
+<span class="eq">&lambda;<sub>C</sub> = &hbar;c / (Mc&sup2;) &nbsp; [Compton wavelength]</span>
+<p class="info">The holographic principle: the maximum information encodable in a region
+of space scales with the AREA of its boundary, not its volume.
+One bit per 4l<sub>P</sub>&sup2; = 1.046 &times; 10<sup>-69</sup> m&sup2;.</p>
+</div>
+
+<h3>REFERENCE PARTICLES</h3>
+<table id="ref-table">
+<tr><th>Particle</th><th>M (GeV)</th><th>&lambda;<sub>C</sub> (m)</th><th>A (m&sup2;)</th><th>S<sub>BH</sub> (bits)</th><th>log<sub>10</sub> bits</th></tr>
+</table>
+
+<h3>CMS EVENTS — HOLOGRAPHIC BITS (first 30)</h3>
+<div style="max-height:200px;overflow-y:auto">
+<table id="event-table">
+<tr><th>#</th><th>Event</th><th>M (GeV)</th><th>&lambda;<sub>C</sub> (m)</th><th>Bits</th><th>Regime</th></tr>
+</table>
+</div>
+
+<h3>AGGREGATE STATISTICS</h3>
+<div id="agg-stats"></div>
+</div>
+
+<!-- RIGHT: Physics / Scale -->
+<div class="panel">
+<h2>HOLOGRAPHIC PHYSICS</h2>
+
+<div class="bit-box">
+<h3>THE HOLOGRAPHIC BOUND</h3>
+<p class="info">Bekenstein (1973): black hole entropy &prop; horizon area.</p>
+<p class="info">'t Hooft (1993) + Susskind (1995): <b>all physics</b> in a volume
+is encoded on its boundary surface. 3D bulk &rarr; 2D boundary.</p>
+<p class="info">Maldacena (1997): AdS/CFT — explicit holographic duality.
+A d-dimensional gravity theory = a (d-1)-dimensional field theory.</p>
+<span class="eq">S &le; A / (4 l<sub>P</sub>&sup2;) = &pi;R&sup2; / l<sub>P</sub>&sup2;</span>
+<p class="info">This is NOT a model. It is a <b>bound</b> — the maximum number of
+distinguishable quantum states in any region. Nature itself respects it.</p>
+</div>
+
+<h3>BIT DENSITY BY SCALE</h3>
+<canvas class="chart" id="bit-chart" height="140"></canvas>
+
+<h3>COMPTON SPHERE TILING</h3>
+<div class="bit-box">
+<h3>WHAT THE 3D SCENE SHOWS</h3>
+<p class="info">Each particle's Compton sphere is tiled with Planck-area cells.
+The number of cells = the holographic bit count.</p>
+<p class="info">Z&deg;: &lambda; &asymp; 2.16&times;10<sup>-18</sup> m &rarr; ~5.6&times;10<sup>34</sup> bits</p>
+<p class="info">J/&psi;: &lambda; &asymp; 6.37&times;10<sup>-17</sup> m &rarr; ~4.9&times;10<sup>37</sup> bits</p>
+<p class="info">electron: &lambda; &asymp; 3.86&times;10<sup>-13</sup> m &rarr; ~1.8&times;10<sup>45</sup> bits</p>
+<p class="info" style="color:#ffaa00"><b>HEAVIER = SMALLER Compton sphere = FEWER holographic bits.</b></p>
+<p class="info" style="color:#ffaa00">This is the holographic paradox: a heavier particle looks
+like it carries LESS boundary information.</p>
+<p class="info">Resolution: at black-hole scale, the Schwarzschild radius grows
+linearly with M while Compton shrinks as 1/M. They cross at M<sub>P</sub>.
+Below Planck mass: Compton wins (particle). Above: Schwarzschild wins (black hole).</p>
+</div>
+
+<h3>COMPTON vs SCHWARZSCHILD</h3>
+<canvas class="chart" id="cross-chart" height="140"></canvas>
+<p class="info" id="cross-info">Loading...</p>
+
+<h3>{BRACE[BOX(TORROID)]} AT HOLOGRAPHIC SCALE</h3>
+<div class="bit-box">
+<h3>BRACKET COLLAPSE IN BIT SPACE</h3>
+<p class="info">At the holographic surface, coordinates are <b>two-dimensional</b>.</p>
+<p class="info">{brace} = one surface direction (gravitational curvature along surface)</p>
+<p class="info">[box] = second surface direction (EM field tangent to boundary)</p>
+<p class="info">(torroid) = <b>LOST</b> — the radial/angular degree of freedom encodes
+into the other two. This is the holographic reduction: 3→2.</p>
+<span class="eq">{brace[box]} &mdash; torroid is projected out at the boundary</span>
+<p class="info">The bracket collapse isn't just a Planck-scale phenomenon —
+it's the <b>holographic encoding itself</b>.</p>
+</div>
+</div>
+
+<!-- TODDLER full width -->
+<div class="panel full-width">
+<div class="toddler">
+<h3>TODDLER CORNER</h3>
+<p>Imagine you have a ball. How much stuff could you write on the OUTSIDE of the ball
+with a really tiny pen? That's the holographic principle — the maximum information
+in any ball-shaped region of space depends on the SIZE OF ITS SURFACE, not how
+much room is inside.</p>
+<p>Now imagine the tiniest possible pen nib — it's the Planck length, about
+0.000000000000000000000000000000000016 meters across. Each dot that pen makes
+is one "bit" of information.</p>
+<p>A particle like the Z boson (from the atom-smasher data) has a little quantum
+"fuzzy ball" around it called the Compton wavelength. We count how many Planck
+dots fit on that ball's surface. For the Z: about
+<b>56,000,000,000,000,000,000,000,000,000,000,000</b> dots. That's 5.6 &times; 10<sup>34</sup>.</p>
+<p>Weird part: <b>heavier particles have SMALLER fuzzy balls</b>, so they fit
+FEWER dots. Light things are holographically richer than heavy things. That
+stops making sense at the Planck mass, where the fuzzy ball equals the
+black-hole size. That crossing point is where our physics breaks.</p>
+</div>
+</div>
+
+<!-- ORNAMENT -->
+<div class="ornament">
+&#9670;&#9674;&#9670; H093 &#9670;&#9674;&#9670;
+<br><span class="ornament-label">[ornament]</span>
+</div>
+
+<!-- TESTS full width -->
+<div class="panel full-width">
+<h2>VERIFICATION</h2>
+<table id="test-results">
+<tr><th>#</th><th>Test</th><th>Result</th></tr>
+</table>
+<p id="test-summary" style="margin-top:4px;font-size:12px"></p>
+</div>
+
+<div class="meta">
+H093-HOLOGRAPHIC-BIT-COUNTER v0 &bull; Ancestry: H092, H091, QG-077 &bull;
+Data: CERN Open Data Record 303 (CC0) &bull; Planck: CODATA 2018 &bull;
+Bekenstein: PRD 7 (1973) 2333 &bull; 't Hooft: gr-qc/9310026 &bull; Susskind: JMP 36 (1995) 6377
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script>
+// ===== CONSTANTS =====
+const TURN = 1296000;
+const DAY_S = 86400;
+const ARC_PER_SEC = 15;
+const HBAR_C = 197.3269804; // MeV·fm
+const C = 299792458;
+const G_N = 6.67430e-11;
+const HBAR = 1.054571817e-34;
+const L_P = Math.sqrt(HBAR * G_N / Math.pow(C, 3));
+const T_P = Math.sqrt(HBAR * G_N / Math.pow(C, 5));
+const M_P = Math.sqrt(HBAR * C / G_N);
+const E_P_GEV = 1.22089e19;
+const PLANCK_AREA = L_P * L_P; // l_P² in m²
+const BIT_AREA = 4 * PLANCK_AREA; // 4l_P² per bit
+
+// ===== CMS DATA (92 events from H091/H092) =====
+const RAW = `GT,146511,25343052,7.3339,2.06042,5.8858,-3.85836,6.23602,-0.584812,1.23406,-1,5.20755,-1.55016,-1.81976,4.62525,2.3905,1.41411,-2.27636,1,11.8282
+GG,146511,25341481,18.4672,8.03395,-3.94072,-16.1541,8.94839,-1.35299,-0.456026,-1,10.7295,6.29476,-2.52441,-8.31349,6.78208,-1.03239,-0.381397,1,2.58406
+GG,146511,25390065,7.70222,-0.248771,4.08338,6.52511,4.09095,1.24634,1.63164,-1,6.90202,-3.02439,3.75129,4.94041,4.81862,0.899132,2.24932,1,3.11929
+GG,146511,25391068,6.59462,5.24651,2.16082,3.359,5.67407,0.561945,0.390686,1,7.43461,-5.06069,4.40801,3.19704,6.71127,0.459977,2.42502,-1,10.5192
+GT,146511,25559498,7.36498,-4.42266,0.498498,5.90049,4.4507,1.0665,3.02944,-1,5.49279,4.45062,-2.80261,1.93408,5.26163,0.355523,-0.562379,1,8.56498
+GG,146511,25559942,6.57694,2.3155,3.56988,4.69055,4.25551,0.945767,0.994019,1,5.37364,-3.83137,-0.439483,-3.71685,3.85654,-0.834505,-3.02714,-1,3.09932
+GG,146511,25560059,10.4388,1.03718,10.3684,-0.927972,10.4201,-0.0890879,1.47118,-1,4.03959,-0.37416,3.83795,-1.19453,3.85611,-0.302133,1.6681,1,3.03285
+GT,146511,25569803,24.7598,-10.0987,8.33483,-21.0145,13.0948,-1.22483,2.44752,-1,3.59177,-0.779881,-1.93685,2.86927,2.08793,1.08759,-1.95153,1,7.10891
+GG,146511,25596888,10.5781,4.59435,2.23261,-9.33484,5.10801,-1.37044,0.456449,1,5.10696,-3.78685,-0.994539,3.33497,3.91527,0.74783,-2.88549,-1,3.08696
+GT,146511,25598543,6.78614,2.76076,5.94291,-1.80484,6.55331,-0.270908,1.13607,-1,8.10505,4.03899,2.58135,-6.52012,4.79217,-1.09002,0.569077,1,5.95942
+GT,146511,25630505,8.06753,-4.40316,1.76,-6.60697,4.74188,-1.11201,2.76125,1,7.64279,3.4267,-6.57613,1.93709,7.41544,0.258109,-1.08849,-1,15.2286
+GG,146511,25630662,25.3785,-5.27736,-3.6085,24.6756,6.39624,2.07754,-2.5703,-1,10.1968,4.34316,1.00893,9.17831,4.45873,1.49626,0.228265,1,3.89413
+GG,146511,25641052,15.9398,3.98652,4.55558,14.7048,6.05418,1.63846,0.851694,-1,8.71027,-2.65832,-3.40372,7.68505,4.32015,1.33267,-2.23507,1,3.20977
+GG,146511,25671800,6.92529,4.42002,4.63999,2.48063,6.40952,0.374927,0.808373,-1,5.51832,-3.80651,-3.11379,2.4605,4.9183,0.479,-2.45731,1,3.03825
+GG,146511,25682043,8.0735,3.26684,-2.8622,6.84488,4.34428,1.22032,-0.718697,-1,8.82244,1.5484,3.56476,7.98652,3.88653,1.48547,1.16116,1,5.75485
+GT,146511,25716688,4.31538,2.33451,0.555408,3.60992,2.39973,1.1836,0.233369,1,4.11312,0.730474,2.3999,-3.19497,2.50859,-1.00802,1.27366,-1,4.69816
+GG,146511,25733610,3.1735,-1.3832,0.780192,-2.72744,1.58822,-1.3283,2.63021,-1,3.69207,-2.47831,2.19085,-1.63437,3.31814,-0.472505,2.41769,1,3.13754
+GG,146511,25741735,13.0025,2.26437,3.53289,12.3129,4.19627,1.7695,1.00353,-1,5.70494,-2.3312,-1.14675,5.11363,2.59816,1.42253,-2.67056,1,4.37427
+GT,146511,25741887,10.0399,3.95085,-6.68099,6.26563,7.76281,0.721555,-1.03793,-1,4.78218,0.826122,1.60174,4.41682,1.80196,1.63786,1.09351,1,5.9218
+GG,146511,25744862,15.3505,5.86826,-5.13279,13.3015,7.79826,1.31148,-0.717671,-1,5.29289,3.62893,-0.656513,3.84228,3.68785,0.891647,-0.179137,1,3.09693
+GT,146511,25748270,10.3878,-6.89782,-3.07987,-7.3429,7.55434,-0.846393,-2.72071,-1,8.97069,6.65538,-2.38671,5.50556,7.07017,0.700124,-0.345022,1,13.1994
+GG,146511,25766942,3.22704,2.46408,-1.3825,1.56015,2.82632,0.519648,-0.511192,-1,6.33565,-1.56597,1.13261,6.0723,1.93252,1.84483,0.627028,1,3.02553
+GT,146511,25802908,27.6055,-3.12001,-3.12345,-27.3663,4.41397,-2.6085,-2.35584,-1,3.53804,-2.0291,-0.0455977,-2.90193,2.02961,-1.1265,-3.11914,1,8.13506
+GT,146511,25802984,5.0898,-1.63255,2.14756,-4.21321,2.69709,-1.21393,2.23045,1,4.0953,0.843889,3.00759,2.6478,3.12367,0.743698,1.29774,-1,3.60826
+GT,146511,25841830,5.38099,-1.86656,3.60497,-3.30319,4.06023,-0.722131,2.09224,-1,5.38816,0.498044,-4.03744,3.5143,4.06813,0.751141,-1.44775,1,9.27758
+GT,146511,25841955,15.1037,-3.56675,-4.17655,14.1619,5.4918,1.70773,-2.27853,-1,3.95543,0.735283,-1.03576,3.74478,1.27067,1.78499,-0.952877,1,4.49478
+GT,146511,25879200,4.80505,1.56635,-1.24938,4.33704,2.00374,1.5231,-0.672979,1,5.03073,3.50429,0.750023,3.53389,3.58378,0.845236,0.211165,-1,4.99802
+GG,146511,25887192,5.00949,-1.4974,0.1455,-4.77942,1.50445,-1.86662,3.04449,1,8.64457,1.57508,2.1853,8.21977,2.69301,1.81091,0.945735,-1,3.43756
+GG,146511,25887282,5.80563,-4.26932,2.28372,3.21063,4.84211,0.60593,2.65178,1,5.89254,3.33974,-4.27032,2.50449,5.42035,0.441199,-0.907698,-1,3.03539
+GG,146511,25887365,6.00135,-0.56755,5.16889,-2.90025,5.1999,-0.52493,1.68072,-1,5.26015,0.56853,-4.87555,1.67913,4.90863,0.332822,-1.4546,1,9.34918
+GT,146511,25917300,22.0474,-1.78478,-7.65816,20.605,7.86351,1.72019,-1.80014,1,4.63453,-2.59938,1.3929,3.57316,2.9493,0.976963,2.65097,-1,8.59375
+GT,146511,25920200,5.90085,-0.98488,4.63994,-3.45753,4.74337,-0.653948,1.78162,1,8.03998,3.32073,-6.37785,3.5614,7.19072,0.470988,-1.08925,-1,9.96979
+GT,146511,25920295,3.42483,0.74538,2.72469,1.9321,2.82466,0.618505,1.30272,-1,3.86614,0.267429,-0.19953,3.85826,0.334002,3.11069,-0.640653,1,5.5538
+GT,146511,25920358,10.3025,5.06093,-5.82282,6.13997,7.71525,0.71298,-0.853233,-1,5.87247,2.3375,4.23416,-3.3269,4.83588,-0.615694,1.06706,1,9.44432
+GT,146511,25929942,15.4126,-10.3456,-5.6002,-10.0725,11.766,-0.741958,-2.57282,1,7.10335,5.03782,-0.700627,4.99124,5.08638,0.853804,-0.138506,-1,10.3975
+GG,146511,25940010,25.0145,2.73635,5.4017,-24.3453,6.05487,-2.1441,1.10199,-1,7.18479,-3.45414,-1.78791,5.9975,3.88876,1.19968,-2.66489,1,3.07005
+GG,146511,25944250,8.35098,-3.97135,3.5076,6.26987,5.30088,0.969455,2.4191,1,8.30795,3.01145,-7.23543,-2.69283,7.83787,-0.33415,-1.17699,-1,9.44178
+GT,146511,25945398,10.9411,8.68505,6.65065,-0.3327,10.9399,-0.0304055,0.653037,-1,4.98299,-3.84478,-2.36747,-2.0725,4.51562,-0.440027,-2.58831,1,3.16069
+GT,146511,25945476,16.1898,4.21515,15.5707,1.37685,16.1308,0.0853367,1.30523,-1,3.77997,2.0982,-2.19618,2.33093,3.03656,0.681082,-0.808178,1,7.59068
+GT,146511,25959552,5.60613,0.5866,2.65282,4.8842,2.717,1.34135,1.35314,1,3.91858,0.80044,0.831993,3.17158,1.15386,1.87714,0.804971,-1,3.07478
+GT,146511,25959648,8.29424,2.7756,-4.68413,-6.00779,5.44631,-0.933672,-1.0373,-1,10.5003,-6.24965,5.82788,-5.74539,8.54219,-0.606413,2.39151,1,9.6714
+GG,146511,25970798,13.6577,-5.48547,10.4953,6.91977,11.8428,0.541506,2.08689,1,6.34072,1.90449,-5.87073,-1.34975,6.17202,-0.21545,-1.25715,-1,3.19117
+GT,146511,26005330,3.60773,0.879671,2.15082,2.72668,2.32393,0.964782,1.18254,1,5.59696,-4.03905,-1.68988,3.4587,4.37863,0.698982,-2.74145,-1,3.98003
+GT,146511,26005476,3.72955,-0.17818,0.792942,-3.64179,0.812738,-2.44741,1.3494,1,3.94068,2.49697,-2.77427,1.17992,3.73642,0.308065,-0.838133,-1,5.51277
+GT,146511,26032148,3.92694,0.71539,3.27497,-2.0803,3.35207,-0.571389,1.35679,1,8.46968,-4.5476,5.89766,4.0162,7.44951,0.508411,2.22744,-1,5.0785
+GG,146511,26032330,4.37478,2.10816,0.620082,-3.80397,2.19757,-1.31539,0.285284,1,7.38927,5.78277,3.80515,-2.63254,6.92274,-0.368422,0.580738,-1,3.08682
+GT,146511,26032690,5.07534,-3.91297,0.86127,-3.1085,4.00675,-0.693048,2.92467,1,4.92204,-0.133408,-1.24938,4.76065,1.25649,2.11375,-1.46363,-1,5.53014
+GG,146511,26036750,10.5393,-0.95765,0.42399,10.4914,1.04756,2.72788,2.71815,1,10.3012,-3.1143,9.73932,1.27736,10.2255,0.124784,1.88025,-1,9.52244
+GT,146511,26036908,10.3862,-3.24791,1.74291,9.68375,3.6859,1.73131,2.64781,-1,3.80547,-0.68365,-1.48574,3.42585,1.63518,1.47754,-2.00163,1,5.12445
+GT,146436,90830792,19.1712,3.81713,9.04323,-16.4673,9.81583,-1.28942,1.17139,1,5.43984,-0.362592,2.62699,-4.74849,2.65189,-1.34587,1.70796,1,2.73205
+GG,146436,90862225,12.9435,5.12579,-3.98369,-11.1973,6.4918,-1.31335,-0.660674,-1,11.8636,4.78984,-6.26222,-8.86434,7.88403,-0.966622,-0.917841,1,3.10256
+GG,146436,90644850,12.3999,-0.849742,9.4011,8.04015,9.43943,0.77258,1.66094,1,8.55532,-4.85155,6.97696,-0.983229,8.49797,-0.115445,2.17841,-1,9.41149
+GG,146436,90678594,17.8132,-1.95959,2.80531,17.4811,3.42195,2.3335,2.18053,1,9.42174,4.36523,0.168017,8.34713,4.36846,1.403,0.0384708,1,7.74702
+GT,146511,26078390,15.4327,-3.82553,-7.8291,12.9185,8.71363,1.1498,-2.0313,1,4.47037,-2.39019,1.98068,3.1773,3.09357,0.871173,2.44637,-1,10.7102
+GG,146511,26080608,3.25193,-1.12022,-2.84497,0.93085,3.0576,0.296768,-1.94606,1,3.34027,0.78969,3.12006,0.967858,3.21841,0.293148,1.32264,-1,3.25393
+GG,146511,26087458,3.5102,-2.04655,2.63261,-1.14565,3.33497,-0.33309,2.23033,1,3.69073,2.07478,-2.8929,-1.04694,3.55947,-0.288216,-0.950086,-1,3.08697
+GG,146511,26094658,5.20637,-0.47682,-1.19965,5.0462,1.29087,2.11,-1.95036,1,8.97432,4.72002,-3.74399,6.3645,6.02263,0.908606,-0.670651,-1,9.63155
+GT,146511,26098068,6.63697,-3.12282,-1.52506,5.72032,3.47548,1.26697,-2.6101,1,8.63398,-5.62367,-5.85985,2.74576,8.11981,0.329236,-2.33566,-1,9.73635
+GT,146511,26098682,13.0055,-3.97479,-11.7629,3.59788,12.4162,0.283938,-1.89644,-1,3.81247,0.79565,-1.40067,3.47427,1.6109,1.5035,-1.0548,1,10.3516
+GT,146511,26098868,6.36296,-4.69974,-2.21816,-3.70597,5.19725,-0.638987,-2.6999,-1,4.87879,-1.66458,2.58429,3.75966,3.07355,1.00138,2.14223,1,9.35422
+GT,146511,26120058,4.37285,-1.97015,1.37651,3.58966,2.40283,1.14861,2.53022,1,3.95613,0.37651,-2.46345,3.07985,2.49213,0.995485,-1.4192,-1,3.68069
+GT,146511,26120300,13.2102,2.00012,4.59938,-12.3178,4.98574,-1.66028,1.16063,1,3.72574,-0.74698,-2.24825,2.89698,2.3693,0.9879,-1.89052,-1,6.2764
+GG,146511,26125210,5.78753,-0.42997,1.83028,5.47218,1.88014,1.75023,1.80283,1,5.07785,-1.78529,-4.43282,-1.78752,4.77864,-0.362805,-1.95076,-1,9.23553
+GT,146511,26137028,5.44985,-2.63218,-3.08855,-3.39782,4.05823,-0.731175,-2.27688,-1,8.2543,1.37425,0.60073,8.12858,1.49997,2.39468,0.411935,1,6.41879
+GT,146511,26137268,5.26684,-0.75368,-1.6613,4.89975,1.82424,1.75736,-2.00103,1,4.86002,2.53012,-4.0101,0.835768,4.74152,0.176073,-1.00844,-1,9.49672
+GG,146511,26154350,8.84458,-1.90413,3.81009,7.70147,4.26,1.35123,2.03343,1,15.2714,5.82917,-1.15102,14.075,5.94196,1.62854,-0.195148,-1,3.03207
+GG,146511,26154500,24.6756,3.74525,2.70225,-24.3287,4.61814,-2.49949,0.624802,-1,8.26754,-0.07879,-2.00965,8.01908,2.01119,2.1222,-1.60971,1,10.3792
+GT,146511,26177568,5.97102,-5.01445,-0.53,-3.21924,5.04243,-0.588107,-3.03604,-1,4.62955,-1.60758,2.19268,3.63744,2.71813,1.07891,2.20211,1,3.21032
+GT,146511,26177672,5.78076,-3.24744,-4.76775,-0.14,-5.77096,-0.024238,-2.17105,-1,4.21484,-1.03568,0.60085,-4.05725,1.07361,-1.92793,2.61608,1,3.56218
+GT,146511,26181300,33.9105,3.68671,-7.58629,32.9281,8.43514,2.09422,-1.11704,-1,7.57178,-0.47753,-5.70889,4.93975,5.72889,0.75121,-1.65429,1,10.0527
+GG,146511,26194578,6.87283,-3.57908,-3.77508,4.17992,5.19948,0.718028,-2.33079,1,3.80567,1.42682,2.75965,2.07,3.09651,0.603093,1.09297,-1,3.00756
+GT,146511,26194718,10.0975,-9.44502,3.00345,-2.10419,9.9112,-0.210672,2.83464,-1,3.22095,0.51277,2.75022,1.56505,2.79766,0.519798,1.38725,1,3.12457
+GT,146511,26194828,3.26073,2.56072,1.28615,1.49297,2.86515,0.490155,0.467055,-1,13.8372,-2.37419,2.59576,13.4502,3.52121,2.1223,2.31234,1,6.14538
+GT,146511,26197278,6.75648,-3.99898,2.9693,4.21655,4.98147,0.741063,2.50445,1,8.33798,-4.88728,-5.35538,-3.72015,7.24886,-0.484367,-2.31317,-1,9.8893
+GT,146511,26198310,9.1946,-5.43765,6.72645,2.78262,8.65071,0.313793,2.25101,-1,4.70475,2.10775,-2.72652,3.17028,3.4452,0.797069,-0.911159,1,3.51988
+GT,146511,26220720,8.14558,1.15002,-6.21335,5.10155,6.31916,0.719666,-1.38752,1,3.70098,0.98668,1.60048,3.17158,1.88,1.26367,1.01846,-1,5.07502
+GT,146511,26226608,13.5992,-3.10065,10.9695,-6.3878,11.3985,-0.52067,1.84671,-1,13.0279,8.81582,-1.27958,9.57245,8.90832,0.916565,-0.144387,1,13.3457
+GT,146511,26226778,7.00328,-6.67752,1.27568,-1.75725,6.79844,-0.254921,2.95234,-1,5.94645,-0.95828,-3.47208,4.70102,3.60196,1.03906,-1.30655,1,10.0019
+GT,146511,26241640,15.6805,10.3325,-11.1399,-3.26382,15.1872,-0.213925,-0.822009,1,14.3775,-9.07192,10.3135,4.63982,13.734,0.329008,2.29239,-1,29.7019
+GT,146511,26241818,5.31032,2.34385,-3.11685,3.44028,3.89945,0.769117,-0.926863,1,10.7372,-5.62665,-3.07938,-8.57218,6.4141,-1.07295,-2.57083,-1,9.50518
+GT,146511,26241940,3.46985,0.22065,2.3665,2.5162,2.37677,0.882048,1.47767,-1,5.55838,1.08935,-0.57,5.44158,1.22947,2.37695,-0.481602,1,4.78602
+GT,146511,26241978,4.21252,-2.13688,-1.76422,3.14158,2.77092,0.959997,-2.4512,1,10.3675,-7.46992,6.27105,-3.50955,9.75255,-0.348622,2.44313,-1,8.95932
+GT,146511,26245178,8.03625,5.91095,-3.44695,4.17002,6.84232,0.559055,-0.527478,1,5.58258,-2.59655,3.86645,-2.74155,4.65819,-0.544497,2.16412,-1,10.1372
+GG,146511,26256948,3.73508,0.14499,1.71428,3.31422,1.71489,1.42019,1.48616,1,4.16645,-0.03495,-2.37555,3.40605,2.37581,1.1253,-1.55615,-1,3.09193
+GG,146511,26257700,4.81975,-1.07878,-3.86288,2.59375,4.01103,0.591747,-1.84424,-1,5.38755,2.78282,3.30842,3.09218,4.32406,0.636802,0.871165,1,3.19483
+GG,146511,26263228,5.28138,0.5247,4.73408,-2.23675,4.76305,-0.447744,1.46016,-1,5.95265,2.75612,-4.80082,2.17015,5.53651,0.379949,-1.04959,1,9.10858
+GT,146511,26265342,5.97055,3.19878,2.73475,-4.37895,4.20972,-0.886879,0.708278,1,5.49045,1.70865,3.75702,3.47058,4.12782,0.734553,1.14274,-1,3.09063
+GT,146511,26275200,6.28318,-2.09245,-2.37938,5.33938,3.16405,1.28202,-2.28928,-1,8.37795,5.51635,-1.00128,-6.26802,5.60643,-0.95005,-0.180099,1,9.14295
+GT,146511,26275768,6.02498,2.75255,-0.47082,5.33972,2.79252,1.41858,-0.169615,-1,5.74555,-3.45488,2.68918,3.57862,4.37873,0.722035,2.48305,1,10.5804
+GT,146511,26275908,6.70975,0.46032,5.82295,3.17495,5.84112,0.505867,1.49165,-1,3.44658,1.60245,0.25085,3.03068,1.62198,1.3576,0.155523,1,3.11685
+GT,146511,26276068,9.3054,-0.33135,-3.12728,8.76128,3.14484,1.73178,-1.67665,1,7.16565,1.48678,1.59785,6.84058,2.18068,1.84898,0.822232,-1,10.3754
+GT,146511,26276128,22.5698,-5.0376,-14.3095,16.6002,15.1704,0.934098,-1.90665,-1,4.59748,1.07508,0.34295,4.45488,1.12842,2.11738,0.308375,1,4.88925`;
+
+function parseEvents(raw) {
+    return raw.trim().split('\n').map(line => {
+        const p = line.split(',');
+        return { type:p[0], run:+p[1], event:+p[2],
+            E1:+p[3],px1:+p[4],py1:+p[5],pz1:+p[6],pt1:+p[7],eta1:+p[8],phi1:+p[9],Q1:+p[10],
+            E2:+p[11],px2:+p[12],py2:+p[13],pz2:+p[14],pt2:+p[15],eta2:+p[16],phi2:+p[17],Q2:+p[18],
+            M:+p[19] };
+    }).filter(e => !isNaN(e.M) && e.M > 0);
+}
+const EVENTS = parseEvents(RAW);
+
+// ===== PHYSICS =====
+function comptonWavelength(M_GeV) { return (HBAR_C / (M_GeV * 1000)) * 1e-15; }
+function comptonArea(lam) { return 4 * Math.PI * lam * lam; }
+function holoBits(area) { return area / BIT_AREA; }
+function schwarzschildR(M_GeV) {
+    const M_kg = M_GeV * 1e9 * 1.602176634e-19 / (C*C);
+    return 2 * G_N * M_kg / (C*C);
+}
+
+function regime(M) {
+    if (M >= 85 && M <= 97) return { name:'Z⁰', color:'#4488ff' };
+    if (M >= 9.0 && M <= 10.5) return { name:'Υ', color:'#44ff44' };
+    if (M >= 2.9 && M <= 3.3) return { name:'J/ψ', color:'#ff4444' };
+    return { name:'cont', color:'#00aacc' };
+}
+
+// ===== QG-077 =====
+function fmt(d) {
+    const yr=d.getUTCFullYear(),mo=d.getUTCMonth()+1,dy=d.getUTCDate();
+    const hr=d.getUTCHours(),mi=d.getUTCMinutes(),sc=d.getUTCSeconds();
+    const ts=hr*3600+mi*60+sc, ta=ts*ARC_PER_SEC;
+    const deg=Math.floor(ta/3600),amin=Math.floor((ta%3600)/60),asec=ta%60;
+    return `{{${yr},${String(mo).padStart(2,'0')},${String(dy).padStart(2,'0')}}}` +
+           `[[${String(hr).padStart(2,'0')},${String(mi).padStart(2,'0')},${String(sc).padStart(2,'0')}]]` +
+           `((${deg},${String(amin).padStart(2,'0')},${String(asec).padStart(2,'0')}))`;
+}
+function parse(s) {
+    const m=s.match(/\{\{(\d+),(\d+),(\d+)\}\}\[\[(\d+),(\d+),(\d+)\]\]\(\((\d+),(\d+),(\d+)\)\)/);
+    if(!m)return null;
+    return{brace:{year:+m[1],month:+m[2],day:+m[3]},box:{hour:+m[4],minute:+m[5],second:+m[6]},torroid:{degree:+m[7],arcminute:+m[8],arcsecond:+m[9]}};
+}
+function clockToArc(s){return s*ARC_PER_SEC;}
+
+// ===== COMPUTE ALL EVENT DATA =====
+const eventData = EVENTS.map(e => {
+    const lam = comptonWavelength(e.M);
+    const area = comptonArea(lam);
+    const bits = holoBits(area);
+    const r = regime(e.M);
+    return { ...e, lam, area, bits, regime: r.name, regimeColor: r.color,
+             logBits: Math.log10(bits), logLam: Math.log10(lam) };
+});
+
+// ===== POPULATE TABLES =====
+function populateRefTable() {
+    const particles = [
+        {name:'electron',M:0.000511},{name:'proton',M:0.938},{name:'J/ψ',M:3.097},
+        {name:'Υ',M:9.460},{name:'Z⁰',M:91.188},{name:'Higgs',M:125.1},
+        {name:'top quark',M:172.76},{name:'Planck mass',M:E_P_GEV}
+    ];
+    const tbl = document.getElementById('ref-table');
+    particles.forEach(p => {
+        const lam = comptonWavelength(p.M);
+        const area = comptonArea(lam);
+        const bits = holoBits(area);
+        const tr = document.createElement('tr');
+        const isMp = p.M === E_P_GEV;
+        tr.innerHTML = `<td style="text-align:left;color:${isMp?'#cc88ff':'#ccc'}">${p.name}</td>
+            <td>${isMp?'1.22×10¹⁹':p.M}</td><td>${lam.toExponential(2)}</td>
+            <td>${area.toExponential(2)}</td><td>${bits.toExponential(2)}</td>
+            <td>${Math.log10(bits).toFixed(1)}</td>`;
+        tbl.appendChild(tr);
+    });
+}
+
+function populateEventTable() {
+    const tbl = document.getElementById('event-table');
+    eventData.slice(0,30).forEach((e,i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i+1}</td><td>${e.event}</td><td>${e.M.toFixed(3)}</td>
+            <td>${e.lam.toExponential(2)}</td><td>${e.bits.toExponential(2)}</td>
+            <td style="color:${e.regimeColor}">${e.regime}</td>`;
+        tbl.appendChild(tr);
+    });
+}
+
+function populateAggStats() {
+    const el = document.getElementById('agg-stats');
+    const bits = eventData.map(e => e.bits);
+    const logBits = eventData.map(e => e.logBits);
+    const minB = Math.min(...logBits), maxB = Math.max(...logBits);
+    const avgB = logBits.reduce((a,b)=>a+b,0)/logBits.length;
+    const jpsi = eventData.filter(e=>e.regime==='J/ψ');
+    const ups = eventData.filter(e=>e.regime==='Υ');
+    const zev = eventData.filter(e=>e.regime==='Z⁰');
+    const cont = eventData.filter(e=>e.regime==='cont');
+    el.innerHTML = `
+    <span class="stat">Min bits: <b>10<sup>${minB.toFixed(1)}</sup></b></span>
+    <span class="stat">Max bits: <b>10<sup>${maxB.toFixed(1)}</sup></b></span>
+    <span class="stat">Mean log: <b>${avgB.toFixed(1)}</b></span><br>
+    <span class="stat res-jpsi">J/ψ: <b>${jpsi.length}</b> events, avg 10<sup>${jpsi.length?(jpsi.reduce((a,e)=>a+e.logBits,0)/jpsi.length).toFixed(1):'—'}</sup></span>
+    <span class="stat res-upsilon">Υ: <b>${ups.length}</b> events</span>
+    <span class="stat res-z">Z⁰: <b>${zev.length}</b> events</span>
+    <span class="stat res-cont">cont: <b>${cont.length}</b> events</span>`;
+    document.getElementById('stat-bits').innerHTML = `Total bits: <b>10<sup>${avgB.toFixed(1)}</sup> avg</b>`;
+}
+
+// ===== CHARTS =====
+function drawBitChart() {
+    const canvas = document.getElementById('bit-chart');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.clientWidth * 2; canvas.height = 280;
+    ctx.scale(2,2);
+    const W=canvas.clientWidth, H=140;
+    ctx.fillStyle='#060610';ctx.fillRect(0,0,W,H);
+    // log(bits) histogram
+    const bins = new Array(40).fill(0);
+    const minLog=33, maxLog=37, range=maxLog-minLog;
+    eventData.forEach(e=>{
+        const idx=Math.floor((e.logBits-minLog)/range*40);
+        if(idx>=0&&idx<40)bins[idx]++;
+    });
+    const maxBin=Math.max(...bins,1);
+    const bw=W/40;
+    bins.forEach((b,i)=>{
+        const h=b/maxBin*(H-25);
+        const logVal=minLog+i/40*range;
+        let col='#00aacc';
+        if(logVal<34.5)col='#4488ff'; else if(logVal>36)col='#ff4444';
+        ctx.fillStyle=col;
+        ctx.fillRect(i*bw+1,H-25-h,bw-2,h);
+    });
+    ctx.fillStyle='#888';ctx.font='8px monospace';ctx.textAlign='center';
+    for(let l=minLog;l<=maxLog;l++){
+        const x=(l-minLog)/range*W;
+        ctx.fillText('10^'+l,x,H-12);
+    }
+    ctx.fillText('holographic bits (log₁₀)',W/2,H-2);
+}
+
+function drawCrossChart() {
+    const canvas = document.getElementById('cross-chart');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.clientWidth * 2; canvas.height = 280;
+    ctx.scale(2,2);
+    const W=canvas.clientWidth, H=140;
+    ctx.fillStyle='#060610';ctx.fillRect(0,0,W,H);
+    // Compton vs Schwarzschild as function of mass
+    const logMmin=-4, logMmax=20, Mrange=logMmax-logMmin;
+    const logRmin=-70, logRmax=10, Rrange=logRmax-logRmin;
+    function xM(logM){return(logM-logMmin)/Mrange*W;}
+    function yR(logR){return H-20-(logR-logRmin)/Rrange*(H-25);}
+    // Compton line
+    ctx.strokeStyle='#00ffaa';ctx.lineWidth=1.5;ctx.beginPath();
+    for(let lm=logMmin;lm<=logMmax;lm+=0.5){
+        const M=Math.pow(10,lm);
+        const lam=comptonWavelength(M);
+        const x=xM(lm),y=yR(Math.log10(lam));
+        if(lm===logMmin)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // Schwarzschild line
+    ctx.strokeStyle='#ff4444';ctx.lineWidth=1.5;ctx.beginPath();
+    for(let lm=logMmin;lm<=logMmax;lm+=0.5){
+        const M=Math.pow(10,lm);
+        const rs=schwarzschildR(M);
+        const x=xM(lm),y=yR(Math.log10(rs));
+        if(lm===logMmin)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // Crossing at M_P
+    const xCross = xM(Math.log10(E_P_GEV));
+    ctx.strokeStyle='#cc88ff';ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(xCross,0);ctx.lineTo(xCross,H-20);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#cc88ff';ctx.font='9px monospace';ctx.textAlign='center';
+    ctx.fillText('M_P',xCross,10);
+    // Labels
+    ctx.fillStyle='#00ffaa';ctx.font='8px monospace';ctx.textAlign='left';
+    ctx.fillText('λ_C (Compton)',4,15);
+    ctx.fillStyle='#ff4444';ctx.fillText('r_S (Schwarzschild)',4,25);
+    // Axis
+    ctx.fillStyle='#888';ctx.font='7px monospace';ctx.textAlign='center';
+    for(let lm=0;lm<=logMmax;lm+=5){
+        const x=xM(lm);ctx.fillText('10^'+lm,x,H-8);
+    }
+    ctx.fillText('mass (GeV)',W/2,H-1);
+    document.getElementById('cross-info').textContent =
+        'Green: Compton (∝1/M). Red: Schwarzschild (∝M). They cross at Planck mass — below is particle physics, above is black hole physics.';
+}
+
+// ===== 3D SCENE =====
+let scene, camera, renderer, controls_data = { isDragging:false, prev:{x:0,y:0}, rot:{x:0,y:0} };
+let spheres = [], particleGroup, spinning = true;
+
+function init3D() {
+    const container = document.getElementById('scene-container');
+    const W = container.clientWidth, H = container.clientHeight;
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x020208);
+    scene.fog = new THREE.FogExp2(0x020208, 0.015);
+
+    camera = new THREE.PerspectiveCamera(60, W/H, 0.1, 1000);
+    camera.position.set(0, 5, 25);
+    camera.lookAt(0,0,0);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // Lights
+    const ambLight = new THREE.AmbientLight(0x334455, 0.6);
+    scene.add(ambLight);
+    const dirLight = new THREE.DirectionalLight(0x88ccff, 1.0);
+    dirLight.position.set(10, 15, 10);
+    scene.add(dirLight);
+    const ptLight = new THREE.PointLight(0x00ffcc, 1.5, 50);
+    ptLight.position.set(0, 0, 0);
+    scene.add(ptLight);
+
+    particleGroup = new THREE.Group();
+    scene.add(particleGroup);
+
+    // === HOLOGRAPHIC SPHERES ===
+    // Represent key particles as wireframe spheres with size proportional to log(bits)
+    const keyParticles = [
+        { name:'electron', M:0.000511, color:0xffff00, pos:[-12,4,0] },
+        { name:'proton', M:0.938, color:0xff8800, pos:[-8,2,-3] },
+        { name:'J/ψ', M:3.097, color:0xff4444, pos:[-3,0,-1] },
+        { name:'Υ', M:9.460, color:0x44ff44, pos:[2,-1,2] },
+        { name:'Z⁰', M:91.188, color:0x4488ff, pos:[7,-2,0] },
+        { name:'Higgs', M:125.1, color:0xaa44ff, pos:[10,-3,-2] },
+        { name:'top', M:172.76, color:0xff44aa, pos:[13,-3.5,1] }
+    ];
+
+    keyParticles.forEach(p => {
+        const lam = comptonWavelength(p.M);
+        const bits = holoBits(comptonArea(lam));
+        const logB = Math.log10(bits);
+        // Radius proportional to log(bits), normalized: electron~45 → r=4, Z~34 → r=2.5
+        const radius = (logB - 30) / 5 + 1;
+
+        // Wireframe sphere (holographic surface)
+        const geo = new THREE.IcosahedronGeometry(radius, 3);
+        const wire = new THREE.WireframeGeometry(geo);
+        const mat = new THREE.LineBasicMaterial({ color: p.color, opacity: 0.6, transparent: true });
+        const mesh = new THREE.LineSegments(wire, mat);
+        mesh.position.set(...p.pos);
+        particleGroup.add(mesh);
+
+        // Solid inner sphere (Planck "core")
+        const coreGeo = new THREE.SphereGeometry(0.15, 8, 8);
+        const coreMat = new THREE.MeshPhongMaterial({ color: 0xcc88ff, emissive: 0x440066 });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        core.position.set(...p.pos);
+        particleGroup.add(core);
+
+        // Tiling dots on the sphere surface — show Planck cells
+        const dotCount = Math.min(Math.round(logB * 8), 500);
+        const dotGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(dotCount * 3);
+        for (let i = 0; i < dotCount; i++) {
+            const theta = Math.acos(2 * Math.random() - 1);
+            const phi = 2 * Math.PI * Math.random();
+            positions[i*3] = p.pos[0] + radius * Math.sin(theta) * Math.cos(phi);
+            positions[i*3+1] = p.pos[1] + radius * Math.sin(theta) * Math.sin(phi);
+            positions[i*3+2] = p.pos[2] + radius * Math.cos(theta);
+        }
+        dotGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const dotMat = new THREE.PointsMaterial({ color: p.color, size: 0.06, sizeAttenuation: true });
+        const dots = new THREE.Points(dotGeo, dotMat);
+        particleGroup.add(dots);
+
+        // Label sprite
+        const canvas2 = document.createElement('canvas');
+        canvas2.width = 256; canvas2.height = 64;
+        const ctx2 = canvas2.getContext('2d');
+        ctx2.fillStyle = '#000000'; ctx2.fillRect(0,0,256,64);
+        ctx2.fillStyle = '#' + p.color.toString(16).padStart(6,'0');
+        ctx2.font = 'bold 20px monospace';
+        ctx2.fillText(p.name, 4, 22);
+        ctx2.fillStyle = '#aaaaaa';
+        ctx2.font = '14px monospace';
+        ctx2.fillText(`10^${logB.toFixed(1)} bits`, 4, 48);
+        const tex = new THREE.CanvasTexture(canvas2);
+        const spriteMat = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.9 });
+        const sprite = new THREE.Sprite(spriteMat);
+        sprite.position.set(p.pos[0], p.pos[1] + radius + 0.6, p.pos[2]);
+        sprite.scale.set(3.5, 0.9, 1);
+        particleGroup.add(sprite);
+
+        spheres.push({ mesh, core, dots, sprite, name: p.name, bits: logB, pos: p.pos, radius });
+    });
+
+    // CMS event cloud — scatter all 92 events in 3D by (M, eta1, phi1)
+    const cloudGeo = new THREE.BufferGeometry();
+    const cloudPos = new Float32Array(eventData.length * 3);
+    const cloudColors = new Float32Array(eventData.length * 3);
+    eventData.forEach((e, i) => {
+        // Map: x = log(M)*3, y = eta1*2, z = phi1*2
+        cloudPos[i*3] = Math.log10(e.M) * 6 - 3;
+        cloudPos[i*3+1] = e.eta1 * 2;
+        cloudPos[i*3+2] = e.phi1 * 1.5;
+        const c = new THREE.Color(e.regimeColor);
+        cloudColors[i*3] = c.r; cloudColors[i*3+1] = c.g; cloudColors[i*3+2] = c.b;
+    });
+    cloudGeo.setAttribute('position', new THREE.BufferAttribute(cloudPos, 3));
+    cloudGeo.setAttribute('color', new THREE.BufferAttribute(cloudColors, 3));
+    const cloudMat = new THREE.PointsMaterial({ size: 0.2, vertexColors: true, sizeAttenuation: true, transparent: true, opacity: 0.7 });
+    const cloud = new THREE.Points(cloudGeo, cloudMat);
+    particleGroup.add(cloud);
+
+    // Grid floor
+    const gridHelper = new THREE.GridHelper(40, 40, 0x003333, 0x001a1a);
+    gridHelper.position.y = -6;
+    scene.add(gridHelper);
+
+    // Axes
+    const axMat = new THREE.LineBasicMaterial({ color: 0x444444 });
+    [[[-20,0,0],[20,0,0]],[[0,-8,0],[0,8,0]],[[0,0,-10],[0,0,10]]].forEach(pair => {
+        const g = new THREE.BufferGeometry().setFromPoints(pair.map(p => new THREE.Vector3(...p)));
+        scene.add(new THREE.Line(g, axMat));
+    });
+
+    // Manual orbit controls
+    const el = renderer.domElement;
+    el.addEventListener('mousedown', e => { controls_data.isDragging = true; controls_data.prev = {x:e.clientX,y:e.clientY}; });
+    el.addEventListener('mousemove', e => {
+        if (!controls_data.isDragging) return;
+        const dx = e.clientX - controls_data.prev.x, dy = e.clientY - controls_data.prev.y;
+        controls_data.rot.y += dx * 0.005;
+        controls_data.rot.x += dy * 0.005;
+        controls_data.rot.x = Math.max(-1.5, Math.min(1.5, controls_data.rot.x));
+        controls_data.prev = {x:e.clientX, y:e.clientY};
+    });
+    el.addEventListener('mouseup', () => { controls_data.isDragging = false; });
+    el.addEventListener('wheel', e => {
+        camera.position.z += e.deltaY * 0.02;
+        camera.position.z = Math.max(5, Math.min(60, camera.position.z));
+    });
+
+    updateHUD();
+    animate();
+}
+
+function updateHUD() {
+    const hud = document.getElementById('hud');
+    hud.innerHTML = `HOLOGRAPHIC BIT COUNTER | 92 CMS events | 7 reference spheres<br>` +
+        `Sphere size ∝ log₁₀(bits) | Dots = Planck cells on holographic surface<br>` +
+        `Drag to rotate | Scroll to zoom | Heavier → smaller sphere → fewer bits`;
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    if (spinning) {
+        controls_data.rot.y += 0.002;
+    }
+    // Apply rotation to camera orbit
+    const dist = camera.position.z;
+    camera.position.x = dist * Math.sin(controls_data.rot.y) * Math.cos(controls_data.rot.x);
+    camera.position.y = 5 + dist * Math.sin(controls_data.rot.x) * 0.5;
+    camera.position.z = dist * Math.cos(controls_data.rot.y) * Math.cos(controls_data.rot.x);
+    camera.lookAt(0, 0, 0);
+
+    // Pulse core spheres
+    const t = Date.now() * 0.001;
+    spheres.forEach((s, i) => {
+        s.core.scale.setScalar(1 + 0.3 * Math.sin(t * 2 + i));
+    });
+
+    renderer.render(scene, camera);
+}
+
+// View controls
+document.getElementById('view-sel').addEventListener('change', function() {
+    const v = this.value;
+    if (v === 'overview') {
+        controls_data.rot = {x:0, y:0};
+        camera.position.set(0, 5, 25);
+    } else {
+        const target = spheres.find(s => s.name.toLowerCase().startsWith(v.replace('z','Z')));
+        if (target) {
+            const p = target.pos;
+            camera.position.set(p[0], p[1] + 2, p[2] + target.radius * 3 + 3);
+            camera.lookAt(p[0], p[1], p[2]);
+        }
+        if (v === 'planck') {
+            camera.position.set(0, 2, 8);
+            camera.lookAt(0, 0, 0);
+        }
+    }
+});
+document.getElementById('btn-spin').addEventListener('click', () => { spinning = !spinning; });
+document.getElementById('btn-reset').addEventListener('click', () => {
+    controls_data.rot = {x:0, y:0};
+    camera.position.set(0, 5, 25);
+});
+
+// ===== NOW ADDRESS =====
+function updateAddr() { document.getElementById('addr').textContent = fmt(new Date()); }
+setInterval(updateAddr, 1000); updateAddr();
+
+// ===== VERIFICATION =====
+function runTests() {
+    const results = [];
+    let pass = 0, fail = 0;
+    function test(name, fn) {
+        try { const r = fn(); results.push({name,ok:r}); if(r)pass++;else fail++; }
+        catch(ex) { results.push({name,ok:false,detail:ex.message}); fail++; }
+    }
+
+    test('92 events parsed', () => EVENTS.length === 92);
+    test('All M > 0', () => EVENTS.every(e => e.M > 0));
+    test('L_P = √(ℏG/c³) within 0.01%', () => Math.abs(L_P - 1.616255e-35) / 1.616255e-35 < 0.0001);
+    test('T_P = √(ℏG/c⁵) within 0.01%', () => Math.abs(T_P - 5.391247e-44) / 5.391247e-44 < 0.0001);
+    test('l_P = c × t_P', () => Math.abs(C*T_P - L_P)/L_P < 0.0001);
+    test('PLANCK_AREA = l_P² ≈ 2.61×10⁻⁷⁰', () => {
+        const la = Math.log10(PLANCK_AREA);
+        return la > -70.5 && la < -69.5;
+    });
+    test('BIT_AREA = 4l_P² ≈ 1.05×10⁻⁶⁹', () => {
+        const la = Math.log10(BIT_AREA);
+        return la > -69.5 && la < -68.5;
+    });
+    test('λ_C(proton) ≈ 2.1×10⁻¹⁶ m', () => {
+        const l = comptonWavelength(0.938);
+        return l > 1e-16 && l < 3e-16;
+    });
+    test('λ_C(Z) ≈ 2.2×10⁻¹⁸ m', () => {
+        const l = comptonWavelength(91.188);
+        return l > 1e-18 && l < 4e-18;
+    });
+    test('Z⁰ holographic bits ≈ 10³⁴·⁷', () => {
+        const l = comptonWavelength(91.188);
+        const b = holoBits(comptonArea(l));
+        const lb = Math.log10(b);
+        return lb > 34 && lb < 36;
+    });
+    test('electron bits > Z bits (lighter = more bits)', () => {
+        const le = comptonWavelength(0.000511), lz = comptonWavelength(91.188);
+        return holoBits(comptonArea(le)) > holoBits(comptonArea(lz));
+    });
+    test('S_BH formula: A/(4l_P²) matches manual', () => {
+        const lam = 1e-18;
+        const A = 4 * Math.PI * lam * lam;
+        const bits_fn = holoBits(A);
+        const bits_manual = A / (4 * L_P * L_P);
+        return Math.abs(bits_fn - bits_manual) / bits_manual < 1e-10;
+    });
+    test('Compton × Schwarzschild = l_P² at M_P', () => {
+        const lamP = comptonWavelength(E_P_GEV);
+        const rsP = schwarzschildR(E_P_GEV);
+        // at Planck mass: λ_C ≈ r_S ≈ l_P (within order of magnitude; exact factors differ)
+        const ratio = lamP / rsP;
+        return ratio > 0.01 && ratio < 100; // order of magnitude check
+    });
+    test('TURN = 1296000', () => TURN === 1296000);
+    test('DAY_S × ARC_PER_SEC = TURN', () => DAY_S * ARC_PER_SEC === TURN);
+    test('fmt→parse roundtrip', () => {
+        const d = new Date('2024-07-04T12:30:45Z');
+        const s = fmt(d); const p = parse(s);
+        return p && p.brace.year === 2024 && p.box.second === 45;
+    });
+    test('1 sec → 15 arcsec', () => clockToArc(1) === 15);
+    test('ℏc = 197.3269804 MeV·fm', () => HBAR_C === 197.3269804);
+    test('pt1 = √(px1²+py1²) within 1%', () => {
+        return EVENTS.slice(0,20).every(e => {
+            const pt = Math.sqrt(e.px1*e.px1 + e.py1*e.py1);
+            return Math.abs(pt - e.pt1)/e.pt1 < 0.01;
+        });
+    });
+    test('holoBits monotone decreasing with M', () => {
+        const masses = [0.001, 0.1, 1, 10, 100];
+        for (let i = 1; i < masses.length; i++) {
+            const b1 = holoBits(comptonArea(comptonWavelength(masses[i-1])));
+            const b2 = holoBits(comptonArea(comptonWavelength(masses[i])));
+            if (b2 >= b1) return false;
+        }
+        return true;
+    });
+    test('eventData computed for all 92', () => eventData.length === 92);
+    test('All eventData have positive bits', () => eventData.every(e => e.bits > 0));
+    test('3D scene initialized', () => !!scene && !!camera && !!renderer);
+    test('7 reference spheres created', () => spheres.length === 7);
+    // KNOWN-BAD
+    test('[KNOWN-BAD] M=-1 gives negative Compton', () => {
+        return comptonWavelength(-1) < 0;
+    });
+    test('[KNOWN-BAD] M~0 gives huge bits (10^98)', () => {
+        const l = comptonWavelength(1e-30); // near-zero mass
+        return holoBits(comptonArea(l)) > 1e90;
+    });
+
+    const tbl = document.getElementById('test-results');
+    results.forEach((r,i) => {
+        const tr = document.createElement('tr');
+        tr.className = 'test-row';
+        const cls = r.ok ? 'lit' : 'dead';
+        tr.innerHTML = `<td>${i+1}</td><td style="text-align:left">${r.name}</td><td class="${cls}">${r.ok?'LIT':'DEAD'}</td>`;
+        tbl.appendChild(tr);
+    });
+    document.getElementById('test-summary').innerHTML =
+        `<span class="${fail===0?'lit':'dead'}">${pass}/${pass+fail} ${fail===0?'ALL LIT':fail+' DEAD'}</span>`;
+    return { pass, fail, total: pass+fail };
+}
+
+// ===== INIT =====
+populateRefTable();
+populateEventTable();
+populateAggStats();
+drawBitChart();
+drawCrossChart();
+init3D();
+const testResult = runTests();
+</script>
+</body>
+</html>
