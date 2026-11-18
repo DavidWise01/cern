@@ -1,0 +1,63 @@
+{
+  "schema": "cern.h089.localized-curvature.v1",
+  "parent": "models/h088-aggregate.json",
+  "bound": "max over t in [0,1] of lambda_min(t L+(1-t) W/27)",
+  "potential": "w_v=sum incident squared SU(2) holonomy defects",
+  "trace_identity": "sum w=3F",
+  "proof": "Scalar diamagnetic inequality and triangle-incidence inequality each bound their respective quadratic forms by connection energy. Convex combination and Rayleigh principle give bound.",
+  "tests": {
+    "seed": 89,
+    "total": 133,
+    "random": 128,
+    "defect": 4,
+    "flat": 1,
+    "grid_points": 101,
+    "random_improved": 128,
+    "random_min": [
+      2.695458103640865,
+      3.5447723580544395
+    ],
+    "old_bound": [
+      0.25585023400936036,
+      0.33587786259541985
+    ],
+    "new_bound": [
+      0.6810154945683086,
+      0.9363229005283249
+    ],
+    "random_t": [
+      0.03,
+      0.08
+    ],
+    "defects": [
+      [
+        1,
+        0.02929627632201985,
+        0.010375068134589549
+      ],
+      [
+        0.1,
+        0.00031659576627762536,
+        0.00013564951869110553
+      ],
+      [
+        0.01,
+        0.000003168378320566671,
+        0.000001374812632223073
+      ],
+      [
+        0.001,
+        3.168402316572578e-8,
+        1.3749981292443536e-8
+      ]
+    ]
+  },
+  "limitations": [
+    "Finite graph fundamental SU(2), Q8 sampled",
+    "Numerical eigenvalues, tolerance 1e-10; flat value should be exactly zero",
+    "Grid search not continuous optimization",
+    "Lean candidate uncompiled",
+    "No continuum mass gap"
+  ],
+  "next": "H090 edge-local curvature budgeting and optimized face weights"
+}
