@@ -1,0 +1,31 @@
+{
+  "schema": "cern.h110.concurrent-reserve.v1",
+  "parent": "models/h109-reserve.json",
+  "architecture": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "modes": 10,
+  "boundary": 11,
+  "interval": 5,
+  "initial_radius": 0.5,
+  "gap": 0.06988445853297448,
+  "terminal_budget": 0.647452344593449,
+  "naive_radius": 1.5179618756747593,
+  "atomic_radius": 0.7410190621626204,
+  "tests": {
+    "rounds": 64,
+    "concurrent_requests": 192,
+    "initial_admissions": 64,
+    "initial_rejections": 128,
+    "double_spends": 0,
+    "replay_conflict_checks": 128,
+    "fill_checks": 64,
+    "overflow_checks": 64
+  },
+  "limits": [
+    "Single fixed common interval and constant forcing bounds",
+    "Thread concurrency on one SQLite database; no distributed consensus or crash testing",
+    "Fixture reset between rounds; not production append-only ledger",
+    "No authenticated agents or external forcing enforcement",
+    "Lean uncompiled"
+  ],
+  "next": "H111 overlapping time intervals and prefix-safe reservations"
+}
