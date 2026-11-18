@@ -1,0 +1,30 @@
+{
+  "schema": "cern.h092.hermit-crab.v1",
+  "parent": "H091 Jacobi shell architecture (conversation)",
+  "implicit": [
+    "Casimir",
+    "Radi/CMB",
+    "Kelvin"
+  ],
+  "shells": [
+    "brace A",
+    "torroid B",
+    "box C"
+  ],
+  "transitions": [
+    "D cyclic",
+    "E inverse"
+  ],
+  "geometry": "equal-mass planar Jacobi coordinates, C^2",
+  "rotation": "120 degrees, D^3=I, D^T D=I",
+  "gauge": "independent SU(2) connection on shell cycle; Q8 exhaustive test",
+  "results": {
+    "assignments": 512,
+    "trivial": 64,
+    "nontrivial": 448,
+    "exact_covariance_checks": 262144
+  },
+  "status": "Executed Python/SymPy exact; Lean candidate uncompiled",
+  "scope": "coordinate changes alone are flat; nontrivial holonomy requires added connection. No continuum mass gap claim.",
+  "next": "H093 return-order classification and shape projection"
+}
