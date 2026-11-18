@@ -13,7 +13,7 @@ h1{color:#00ffcc;font-size:15px;text-align:center;padding:4px;border-bottom:1px 
 .panel{border:1px solid #1a2a2a;padding:6px;background:#080810;min-height:100px}
 .panel h2{color:#ffaa00;font-size:12px;margin-bottom:4px}
 .panel h3{color:#00ccaa;font-size:11px;margin:4px 0 2px}
-#scene-container{width:100%;height:480px;border:1px solid #1a3333;background:#020208;position:relative;cursor:grab}
+#scene-container{width:100%;height:580px;border:1px solid #1a3333;background:#020208;position:relative;cursor:grab}
 #scene-container:active{cursor:grabbing}
 .hud{position:absolute;top:4px;left:4px;color:#00ffcc;font:10px monospace;pointer-events:none;text-shadow:0 0 4px #003}
 table{width:100%;border-collapse:collapse;font-size:10px;margin:2px 0}
@@ -190,7 +190,7 @@ Data: CERN Open Data Record 303 (CC0) &bull; Planck: CODATA 2018 &bull;
 Bekenstein: PRD 7 (1973) 2333 &bull; 't Hooft: gr-qc/9310026 &bull; Susskind: JMP 36 (1995) 6377
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ===== CONSTANTS =====
 const TURN = 1296000;
@@ -628,6 +628,67 @@ function init3D() {
         scene.add(new THREE.Line(g, axMat));
     });
 
+    // === v0+1 APPEND: ORBITAL RINGS around each sphere ===
+    spheres.forEach(s => {
+        const ringGeo = new THREE.TorusGeometry(s.radius * 1.3, 0.02, 8, 64);
+        const ringMat = new THREE.MeshBasicMaterial({ color: s.mesh.material.color || 0x00ffcc, transparent: true, opacity: 0.4 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.set(...s.pos);
+        ring.rotation.x = Math.PI / 2;
+        particleGroup.add(ring);
+        s.ring = ring;
+        // Second ring tilted
+        const ring2Geo = new THREE.TorusGeometry(s.radius * 1.5, 0.015, 8, 64);
+        const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x00ffcc, transparent: true, opacity: 0.25 });
+        const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+        ring2.position.set(...s.pos);
+        ring2.rotation.x = Math.PI / 3;
+        ring2.rotation.y = Math.PI / 4;
+        particleGroup.add(ring2);
+        s.ring2 = ring2;
+    });
+
+    // === v0+1 APPEND: PLANCK FOAM ambient particles ===
+    const foamCount = 2000;
+    const foamGeo = new THREE.BufferGeometry();
+    const foamPos = new Float32Array(foamCount * 3);
+    const foamCol = new Float32Array(foamCount * 3);
+    for (let i = 0; i < foamCount; i++) {
+        foamPos[i*3] = (Math.random() - 0.5) * 50;
+        foamPos[i*3+1] = (Math.random() - 0.5) * 20;
+        foamPos[i*3+2] = (Math.random() - 0.5) * 30;
+        const c = Math.random();
+        foamCol[i*3] = c * 0.1;
+        foamCol[i*3+1] = c * 0.5 + 0.2;
+        foamCol[i*3+2] = c * 0.4 + 0.3;
+    }
+    foamGeo.setAttribute('position', new THREE.BufferAttribute(foamPos, 3));
+    foamGeo.setAttribute('color', new THREE.BufferAttribute(foamCol, 3));
+    const foamMat = new THREE.PointsMaterial({ size: 0.08, vertexColors: true, transparent: true, opacity: 0.4, sizeAttenuation: true });
+    const foam = new THREE.Points(foamGeo, foamMat);
+    scene.add(foam);
+
+    // === v0+1 APPEND: COMPTON-SCHWARZSCHILD crossing sphere at center ===
+    const crossGeo = new THREE.SphereGeometry(0.5, 16, 16);
+    const crossMat = new THREE.MeshPhongMaterial({ color: 0xcc88ff, emissive: 0x220044, transparent: true, opacity: 0.8 });
+    const crossSphere = new THREE.Mesh(crossGeo, crossMat);
+    crossSphere.position.set(0, 0, 0);
+    particleGroup.add(crossSphere);
+    // Planck label at center
+    const plCanvas = document.createElement('canvas');
+    plCanvas.width = 256; plCanvas.height = 64;
+    const plCtx = plCanvas.getContext('2d');
+    plCtx.fillStyle = '#000'; plCtx.fillRect(0,0,256,64);
+    plCtx.fillStyle = '#cc88ff'; plCtx.font = 'bold 18px monospace';
+    plCtx.fillText('M_P crossing', 4, 22);
+    plCtx.fillStyle = '#888'; plCtx.font = '12px monospace';
+    plCtx.fillText('λ_C = r_S here', 4, 44);
+    const plTex = new THREE.CanvasTexture(plCanvas);
+    const plSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: plTex, transparent: true }));
+    plSprite.position.set(0, 1.5, 0);
+    plSprite.scale.set(3.5, 0.9, 1);
+    particleGroup.add(plSprite);
+
     // Manual orbit controls
     const el = renderer.domElement;
     el.addEventListener('mousedown', e => { controls_data.isDragging = true; controls_data.prev = {x:e.clientX,y:e.clientY}; });
@@ -668,10 +729,14 @@ function animate() {
     camera.position.z = dist * Math.cos(controls_data.rot.y) * Math.cos(controls_data.rot.x);
     camera.lookAt(0, 0, 0);
 
-    // Pulse core spheres
+    // Pulse core spheres + rotate rings
     const t = Date.now() * 0.001;
     spheres.forEach((s, i) => {
         s.core.scale.setScalar(1 + 0.3 * Math.sin(t * 2 + i));
+        if (s.ring) { s.ring.rotation.z = t * 0.5 + i; }
+        if (s.ring2) { s.ring2.rotation.z = -t * 0.3 + i * 0.7; s.ring2.rotation.x = Math.PI/3 + 0.1*Math.sin(t+i); }
+        // Pulse wireframe opacity
+        if (s.mesh.material) { s.mesh.material.opacity = 0.4 + 0.2 * Math.sin(t * 1.5 + i * 0.8); }
     });
 
     renderer.render(scene, camera);
