@@ -1,0 +1,27 @@
+{
+  "schema": "cern.h094.phase-witness.v1",
+  "parent": "models/h093-return.json",
+  "assignments": 512,
+  "reconstructions": 2048,
+  "return_pairs": {
+    "3,3": 64,
+    "3,6": 64,
+    "3,12": 128,
+    "6,12": 256
+  },
+  "premature_visible_return": 448,
+  "initial_spinor": [
+    1,
+    0
+  ],
+  "witness": "chart index and selected complex component in registered phase frame",
+  "chart_rule": "select larger magnitude, first on ties",
+  "symbolic_chart_identities": 2,
+  "verification": "Local Python/SymPy execution PASS; Lean candidate uncompiled",
+  "limitations": [
+    "Relative phase between spinor components is already encoded by Hopf shadow; witness must retain phase relative to external registered reference",
+    "No global continuous Hopf section",
+    "Finite Q8 test; not physical mass gap proof"
+  ],
+  "next": "H095 redundant phase witnesses and same-frame consistency"
+}
