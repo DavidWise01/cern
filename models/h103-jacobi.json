@@ -1,0 +1,66 @@
+{
+  "schema": "cern.h103.jacobi-registry.v1",
+  "parent": "models/h102-recovery.json",
+  "ranking": "provisional relevance registry; not a mathematical equivalence",
+  "ranks": [
+    "Jacobi coordinates",
+    "Jacobi matrix",
+    "Jacobi rotations",
+    "Jacobi identity",
+    "Jacobi metric",
+    "Jacobi fields",
+    "Jacobi operator",
+    "Jacobi sum",
+    "Jacobi theta functions",
+    "Jacobi elliptic functions",
+    "Jacobi polynomials",
+    "Jacobi-Davidson method",
+    "Hamilton-Jacobi equation",
+    "Gauss-Jacobi quadrature",
+    "Jacobi varieties",
+    "Jacobi manifolds",
+    "Jacobi-Anger expansion",
+    "Jacobi triple product"
+  ],
+  "architecture": {
+    "implicit": 3,
+    "explicit_labels": 10,
+    "operants": 6,
+    "grid": [
+      24,
+      24
+    ],
+    "singlet": 1
+  },
+  "gap": "min(577 B/576,B/576+Delta_T)",
+  "test": {
+    "cases": [
+      [
+        1,
+        1,
+        1,
+        0.069884458533
+      ],
+      [
+        1,
+        0,
+        1,
+        0.00173611111111
+      ],
+      [
+        0,
+        0,
+        1,
+        0.00173611111111
+      ],
+      [
+        1,
+        1,
+        0.01,
+        0.0100173611111
+      ]
+    ],
+    "local": "PASS SciPy numerical gap, Jacobi rotation numerical, integer bracket identity exact"
+  },
+  "limits": "Periodic cyclic Jacobi operator rather than ordinary tridiagonal Jacobi matrix; torus is Kronecker sum; hub augmentation is not tridiagonal in vertex basis. Lean uncompiled; no continuum mass gap claim."
+}
