@@ -41,6 +41,15 @@ select:hover,button:hover{border-color:#00ffcc}
 .controls{display:flex;gap:8px;align-items:center;margin:3px 0;flex-wrap:wrap}
 .stat{display:inline-block;padding:2px 6px;border:1px solid #1a3333;margin:1px;background:#0a0a14;font-size:11px}
 .stat b{color:#00ffcc}
+/* v0+2 substrate styles */
+.substrate{border:1px solid #884400;padding:4px;margin:3px 0;background:#0a0800}
+.substrate h3{color:#ffcc44}
+.trit-neg{color:#4488ff;font-weight:bold}
+.trit-zero{color:#ffcc00;font-weight:bold}
+.trit-pos{color:#ff4444;font-weight:bold}
+.trit-cell{display:inline-block;width:18px;text-align:center;font-family:monospace;font-size:11px}
+.sub-row{display:flex;justify-content:space-between;padding:1px 0;border-bottom:1px solid #111;font-size:10px}
+.sub-row:hover{background:#111}
 </style>
 </head>
 <body>
@@ -169,6 +178,37 @@ black-hole size. That crossing point is where our physics breaks.</p>
 </div>
 </div>
 
+<!-- v0+2 APPEND: THERMAL SUBSTRATE PANEL full width -->
+<div class="panel full-width">
+<h2>THERMAL SUBSTRATES — BALANCED TERNARY REGISTER</h2>
+<div class="substrate">
+<h3>3 SUBSTRATES AS BALANCED TERNARY</h3>
+<span class="eq">T = Mc&sup2; / k<sub>B</sub> &nbsp; [thermal equivalent temperature]</span>
+<span class="eq">k<sub>B</sub> = 8.617333262 &times; 10<sup>-5</sup> eV/K &nbsp; [Boltzmann constant]</span>
+<span class="eq">T<sub>CMB</sub> = 2.72548 K &nbsp; [COBE/FIRAS 1996]</span>
+<div style="margin:6px 0;padding:4px;border:1px solid #333;background:#0a0a00">
+<span class="trit-neg">T = -1 &nbsp; 0 K</span> — absolute zero. Unreachable floor (3rd law of thermodynamics).<br>
+<span class="trit-zero">0 = &nbsp;0 &nbsp; 2.725 K</span> — CMB temperature. The universe's ACTUAL ground state. Thermal noise floor.<br>
+<span class="trit-pos">1 = +1 &nbsp; 2.725+n K</span> — excitations above CMB. Where particles and physics happen.
+</div>
+<p class="info">The CMB is the ZERO POINT of a balanced ternary thermal register.
+Every CMS event exists at trit = +1 (massively above CMB).
+Number of trits to encode excitation: log<sub>3</sub>(T<sub>particle</sub> / T<sub>CMB</sub>).</p>
+</div>
+
+<h3>CMS EVENTS — THERMAL READOUT (first 20)</h3>
+<div style="max-height:220px;overflow-y:auto" id="substrate-panel">
+<div class="sub-row" style="font-weight:bold;color:#888">
+<span style="width:40px">Event</span>
+<span style="width:55px">M (GeV)</span>
+<span style="width:70px">T (K)</span>
+<span style="width:40px">Trits</span>
+<span style="width:30px">Trit</span>
+<span style="flex:1">Balanced Ternary</span>
+</div>
+</div>
+</div>
+
 <!-- ORNAMENT -->
 <div class="ornament">
 &#9670;&#9674;&#9670; H093 &#9670;&#9674;&#9670;
@@ -185,7 +225,7 @@ black-hole size. That crossing point is where our physics breaks.</p>
 </div>
 
 <div class="meta">
-H093-HOLOGRAPHIC-BIT-COUNTER v0 &bull; Ancestry: H092, H091, QG-077 &bull;
+H093-HOLOGRAPHIC-BIT-COUNTER v0+2 &bull; Ancestry: H092, H091, QG-077 &bull;
 Data: CERN Open Data Record 303 (CC0) &bull; Planck: CODATA 2018 &bull;
 Bekenstein: PRD 7 (1973) 2333 &bull; 't Hooft: gr-qc/9310026 &bull; Susskind: JMP 36 (1995) 6377
 </div>
@@ -206,6 +246,11 @@ const M_P = Math.sqrt(HBAR * C / G_N);
 const E_P_GEV = 1.22089e19;
 const PLANCK_AREA = L_P * L_P; // l_P² in m²
 const BIT_AREA = 4 * PLANCK_AREA; // 4l_P² per bit
+
+// === v0+2 APPEND: THERMAL SUBSTRATE CONSTANTS ===
+const T_CMB = 2.72548;              // K — COBE/FIRAS 1996 measurement
+const K_B = 8.617333262e-5;         // eV/K — Boltzmann constant
+const K_B_SI = 1.380649e-23;        // J/K — Boltzmann SI
 
 // ===== CMS DATA (92 events from H091/H092) =====
 const RAW = `GT,146511,25343052,7.3339,2.06042,5.8858,-3.85836,6.23602,-0.584812,1.23406,-1,5.20755,-1.55016,-1.81976,4.62525,2.3905,1.41411,-2.27636,1,11.8282
@@ -321,6 +366,43 @@ function schwarzschildR(M_GeV) {
     return 2 * G_N * M_kg / (C*C);
 }
 
+// === v0+2 APPEND: THERMAL SUBSTRATE FUNCTIONS ===
+// Temperature equivalent: T = Mc²/k_B
+function thermalTemp(M_GeV) {
+    return M_GeV * 1e9 / K_B; // M in GeV → eV → T in Kelvin
+}
+
+// Balanced ternary: digits are T(-1), 0, 1
+// Encode integer n into balanced ternary string
+function toBalancedTernary(n) {
+    if (n === 0) return '0';
+    const digits = [];
+    let val = Math.round(n);
+    const neg = val < 0; if (neg) val = -val;
+    while (val > 0) {
+        let rem = val % 3;
+        val = Math.floor(val / 3);
+        if (rem === 2) { rem = -1; val += 1; }
+        digits.push(rem);
+    }
+    if (neg) digits.forEach((d,i) => digits[i] = -d);
+    return digits.reverse().map(d => d === -1 ? 'T' : d === 1 ? '1' : '0').join('');
+}
+
+// Number of balanced trits needed to encode thermal excitation above CMB
+function thermalTrits(M_GeV) {
+    const T = thermalTemp(M_GeV);
+    if (T <= T_CMB) return 0;
+    return Math.log(T / T_CMB) / Math.log(3);
+}
+
+// Substrate classification: -1 (below CMB), 0 (at CMB), +1 (above CMB)
+function substrateTrit(T) {
+    if (T <= 0) return -1;        // absolute zero / unphysical
+    if (T <= T_CMB * 1.01) return 0; // at CMB floor (within 1%)
+    return 1;                      // excited above CMB
+}
+
 function regime(M) {
     if (M >= 85 && M <= 97) return { name:'Z⁰', color:'#4488ff' };
     if (M >= 9.0 && M <= 10.5) return { name:'Υ', color:'#44ff44' };
@@ -351,8 +433,13 @@ const eventData = EVENTS.map(e => {
     const area = comptonArea(lam);
     const bits = holoBits(area);
     const r = regime(e.M);
+    const T = thermalTemp(e.M);
+    const trits = thermalTrits(e.M);
+    const trit = substrateTrit(T);
+    const balTern = toBalancedTernary(Math.round(trits));
     return { ...e, lam, area, bits, regime: r.name, regimeColor: r.color,
-             logBits: Math.log10(bits), logLam: Math.log10(lam) };
+             logBits: Math.log10(bits), logLam: Math.log10(lam),
+             thermalT: T, thermalTrits: trits, substrateTrit: trit, balancedTernary: balTern };
 });
 
 // ===== POPULATE TABLES =====
@@ -496,6 +583,8 @@ function drawCrossChart() {
 // ===== 3D SCENE =====
 let scene, camera, renderer, controls_data = { isDragging:false, prev:{x:0,y:0}, rot:{x:0,y:0} };
 let spheres = [], particleGroup, spinning = true;
+let camDist = 25; // v0+2: proper distance tracking for orbit
+let touchData = { active:false, prevDist:0, prevCenter:{x:0,y:0} }; // v0+2: touch state
 
 function init3D() {
     const container = document.getElementById('scene-container');
@@ -689,6 +778,48 @@ function init3D() {
     plSprite.scale.set(3.5, 0.9, 1);
     particleGroup.add(plSprite);
 
+    // === v0+2 APPEND: 3 THERMAL SUBSTRATE SHELLS ===
+    // Shell 1: 0K — absolute zero (blue, innermost, unreachable floor)
+    const sub0Geo = new THREE.IcosahedronGeometry(3, 2);
+    const sub0Wire = new THREE.WireframeGeometry(sub0Geo);
+    const sub0Mat = new THREE.LineBasicMaterial({ color: 0x4488ff, transparent: true, opacity: 0.15 });
+    const sub0 = new THREE.LineSegments(sub0Wire, sub0Mat);
+    sub0.position.set(0, 0, 0);
+    scene.add(sub0);
+
+    // Shell 2: 2.725K — CMB temperature (yellow, middle, the actual ground state)
+    const sub1Geo = new THREE.IcosahedronGeometry(6, 2);
+    const sub1Wire = new THREE.WireframeGeometry(sub1Geo);
+    const sub1Mat = new THREE.LineBasicMaterial({ color: 0xffcc00, transparent: true, opacity: 0.12 });
+    const sub1 = new THREE.LineSegments(sub1Wire, sub1Mat);
+    sub1.position.set(0, 0, 0);
+    scene.add(sub1);
+
+    // Shell 3: CMB+n — excitations above CMB (red, outermost, where physics happens)
+    const sub2Geo = new THREE.IcosahedronGeometry(10, 2);
+    const sub2Wire = new THREE.WireframeGeometry(sub2Geo);
+    const sub2Mat = new THREE.LineBasicMaterial({ color: 0xff4444, transparent: true, opacity: 0.10 });
+    const sub2 = new THREE.LineSegments(sub2Wire, sub2Mat);
+    sub2.position.set(0, 0, 0);
+    scene.add(sub2);
+
+    // Substrate labels
+    [[3.2,'0K (T)','#4488ff'],[6.2,'2.725K (0)','#ffcc00'],[10.2,'CMB+n (1)','#ff4444']].forEach(([y,text,col]) => {
+        const lc = document.createElement('canvas');
+        lc.width = 256; lc.height = 48;
+        const lx = lc.getContext('2d');
+        lx.fillStyle = '#000'; lx.fillRect(0,0,256,48);
+        lx.fillStyle = col; lx.font = 'bold 16px monospace';
+        lx.fillText(text, 4, 20);
+        lx.fillStyle = '#888'; lx.font = '11px monospace';
+        lx.fillText('balanced ternary substrate', 4, 38);
+        const lt = new THREE.CanvasTexture(lc);
+        const ls = new THREE.Sprite(new THREE.SpriteMaterial({ map: lt, transparent: true }));
+        ls.position.set(-8, y, 0);
+        ls.scale.set(4, 1, 1);
+        scene.add(ls);
+    });
+
     // Manual orbit controls
     const el = renderer.domElement;
     el.addEventListener('mousedown', e => { controls_data.isDragging = true; controls_data.prev = {x:e.clientX,y:e.clientY}; });
@@ -702,8 +833,47 @@ function init3D() {
     });
     el.addEventListener('mouseup', () => { controls_data.isDragging = false; });
     el.addEventListener('wheel', e => {
-        camera.position.z += e.deltaY * 0.02;
-        camera.position.z = Math.max(5, Math.min(60, camera.position.z));
+        e.preventDefault();
+        camDist += e.deltaY * 0.02;
+        camDist = Math.max(5, Math.min(60, camDist));
+    }, { passive: false });
+
+    // === v0+2 APPEND: TOUCH CONTROLS ===
+    el.addEventListener('touchstart', e => {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+            controls_data.isDragging = true;
+            controls_data.prev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        } else if (e.touches.length === 2) {
+            controls_data.isDragging = false;
+            const dx = e.touches[1].clientX - e.touches[0].clientX;
+            const dy = e.touches[1].clientY - e.touches[0].clientY;
+            touchData.prevDist = Math.sqrt(dx*dx + dy*dy);
+            touchData.active = true;
+        }
+    }, { passive: false });
+    el.addEventListener('touchmove', e => {
+        e.preventDefault();
+        if (e.touches.length === 1 && controls_data.isDragging) {
+            const dx = e.touches[0].clientX - controls_data.prev.x;
+            const dy = e.touches[0].clientY - controls_data.prev.y;
+            controls_data.rot.y += dx * 0.005;
+            controls_data.rot.x += dy * 0.005;
+            controls_data.rot.x = Math.max(-1.5, Math.min(1.5, controls_data.rot.x));
+            controls_data.prev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        } else if (e.touches.length === 2 && touchData.active) {
+            const dx = e.touches[1].clientX - e.touches[0].clientX;
+            const dy = e.touches[1].clientY - e.touches[0].clientY;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            const delta = touchData.prevDist - dist;
+            camDist += delta * 0.05;
+            camDist = Math.max(5, Math.min(60, camDist));
+            touchData.prevDist = dist;
+        }
+    }, { passive: false });
+    el.addEventListener('touchend', e => {
+        controls_data.isDragging = false;
+        touchData.active = false;
     });
 
     updateHUD();
@@ -714,7 +884,8 @@ function updateHUD() {
     const hud = document.getElementById('hud');
     hud.innerHTML = `HOLOGRAPHIC BIT COUNTER | 92 CMS events | 7 reference spheres<br>` +
         `Sphere size ∝ log₁₀(bits) | Dots = Planck cells on holographic surface<br>` +
-        `Drag to rotate | Scroll to zoom | Heavier → smaller sphere → fewer bits`;
+        `Drag/touch to rotate | Scroll/pinch to zoom | Heavier → smaller sphere → fewer bits<br>` +
+        `3 substrate shells: <span style="color:#4488ff">0K(T)</span> | <span style="color:#ffcc00">2.725K(0)</span> | <span style="color:#ff4444">CMB+n(1)</span>`;
 }
 
 function animate() {
@@ -722,11 +893,10 @@ function animate() {
     if (spinning) {
         controls_data.rot.y += 0.002;
     }
-    // Apply rotation to camera orbit
-    const dist = camera.position.z;
-    camera.position.x = dist * Math.sin(controls_data.rot.y) * Math.cos(controls_data.rot.x);
-    camera.position.y = 5 + dist * Math.sin(controls_data.rot.x) * 0.5;
-    camera.position.z = dist * Math.cos(controls_data.rot.y) * Math.cos(controls_data.rot.x);
+    // Apply rotation to camera orbit — v0+2: use camDist (fixes orbit collapse bug)
+    camera.position.x = camDist * Math.sin(controls_data.rot.y) * Math.cos(controls_data.rot.x);
+    camera.position.y = 5 + camDist * Math.sin(controls_data.rot.x) * 0.5;
+    camera.position.z = camDist * Math.cos(controls_data.rot.y) * Math.cos(controls_data.rot.x);
     camera.lookAt(0, 0, 0);
 
     // Pulse core spheres + rotate rings
@@ -853,6 +1023,44 @@ function runTests() {
     test('All eventData have positive bits', () => eventData.every(e => e.bits > 0));
     test('3D scene initialized', () => !!scene && !!camera && !!renderer);
     test('7 reference spheres created', () => spheres.length === 7);
+    // === v0+2 APPEND: THERMAL SUBSTRATE TESTS ===
+    test('T_CMB = 2.72548 K (COBE/FIRAS)', () => T_CMB === 2.72548);
+    test('K_B = 8.617333262e-5 eV/K', () => K_B === 8.617333262e-5);
+    test('thermalTemp(Z⁰) ≈ 1.058×10¹⁵ K', () => {
+        const T = thermalTemp(91.188);
+        return T > 1e15 && T < 1.1e15;
+    });
+    test('thermalTemp(electron) ≈ 5.93×10⁹ K', () => {
+        const T = thermalTemp(0.000511);
+        return T > 5e9 && T < 7e9;
+    });
+    test('thermalTrits(Z⁰) ≈ 30-31', () => {
+        const tr = thermalTrits(91.188);
+        return tr > 30 && tr < 32;
+    });
+    test('substrateTrit for all CMS events = +1', () => {
+        return eventData.every(e => e.substrateTrit === 1);
+    });
+    test('toBalancedTernary(0) = "0"', () => toBalancedTernary(0) === '0');
+    test('toBalancedTernary(1) = "1"', () => toBalancedTernary(1) === '1');
+    test('toBalancedTernary(-1) = "T"', () => toBalancedTernary(-1) === 'T');
+    test('toBalancedTernary(5) = "1TT"', () => {
+        // 5 in balanced ternary: 5 = 9 - 3 - 1 = 1*9 + (-1)*3 + (-1)*1 = 1TT
+        return toBalancedTernary(5) === '1TT';
+    });
+    test('toBalancedTernary(13) = "111"', () => {
+        // 13 = 9+3+1 = 111
+        return toBalancedTernary(13) === '111';
+    });
+    test('All events have thermalT > T_CMB', () => {
+        return eventData.every(e => e.thermalT > T_CMB);
+    });
+    test('3 substrate shells in scene', () => {
+        // Count wireframe icosahedrons added for substrates
+        let wireCount = 0;
+        scene.children.forEach(c => { if (c.isLineSegments) wireCount++; });
+        return wireCount >= 3;
+    });
     // KNOWN-BAD
     test('[KNOWN-BAD] M=-1 gives negative Compton', () => {
         return comptonWavelength(-1) < 0;
@@ -875,12 +1083,37 @@ function runTests() {
     return { pass, fail, total: pass+fail };
 }
 
+// === v0+2 APPEND: POPULATE SUBSTRATE PANEL ===
+function populateSubstratePanel() {
+    const panel = document.getElementById('substrate-panel');
+    eventData.slice(0, 20).forEach((e, i) => {
+        const row = document.createElement('div');
+        row.className = 'sub-row';
+        const tritClass = e.substrateTrit === -1 ? 'trit-neg' : e.substrateTrit === 0 ? 'trit-zero' : 'trit-pos';
+        const tritSymbol = e.substrateTrit === -1 ? 'T' : e.substrateTrit === 0 ? '0' : '1';
+        // Color the balanced ternary digits
+        const coloredBT = e.balancedTernary.split('').map(d => {
+            if (d === 'T') return '<span class="trit-neg">T</span>';
+            if (d === '1') return '<span class="trit-pos">1</span>';
+            return '<span class="trit-zero">0</span>';
+        }).join('');
+        row.innerHTML = `<span style="width:40px;color:${e.regimeColor}">${i+1}</span>` +
+            `<span style="width:55px">${e.M.toFixed(2)}</span>` +
+            `<span style="width:70px">${e.thermalT.toExponential(2)}</span>` +
+            `<span style="width:40px">${e.thermalTrits.toFixed(1)}</span>` +
+            `<span style="width:30px" class="${tritClass}">${tritSymbol}</span>` +
+            `<span style="flex:1;font-family:monospace;letter-spacing:1px">${coloredBT}</span>`;
+        panel.appendChild(row);
+    });
+}
+
 // ===== INIT =====
 populateRefTable();
 populateEventTable();
 populateAggStats();
 drawBitChart();
 drawCrossChart();
+populateSubstratePanel();
 init3D();
 const testResult = runTests();
 </script>
