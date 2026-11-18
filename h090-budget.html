@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>H090</title><style>body{background:#081225;color:#d3faff;font:17px system-ui;max-width:960px;margin:3em auto}pre{white-space:pre-wrap}</style><h1>H090 — Adaptive curvature budgeting</h1><pre>3 implicit / 10 explicit / 24 states
+96 face weights / 96 edge budgets
+C alpha <= 1
+B(t,alpha) = t L + (1-t) W_alpha/9
+133 cases passed. 128/128 random cases improved.
+Uniform: 0.674380–0.924789
+Adaptive: 0.779416–1.049961
+Next H091: joint spectral optimization.</pre><p>At each of three face vertices, delta_f^2 r_v^2 <= 3 E_f. Sum with alpha_f gives r^T W_alpha r <= 9 E; weighted edge budgets prevent duplicate contributions. Combine with diamagnetic inequality.</p><p>Numerical solver, uncompiled Lean lemma, finite graph only.</p></html>
