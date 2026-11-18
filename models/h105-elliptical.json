@@ -1,0 +1,42 @@
+{
+  "schema": "cern.h105.elliptical-box.v1",
+  "parent": "models/h104-compression.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "inner": 10,
+  "outer_label": 11,
+  "representation": "Symmetric 4x4 tensor; positive definite Q, boundary x^T Q x=r^2",
+  "roles": [
+    [
+      "Brace",
+      "juliet",
+      "jane",
+      -1
+    ],
+    [
+      "Box",
+      "mandelbrot",
+      "toph",
+      0
+    ],
+    [
+      "Torroid",
+      "josophene",
+      "patricia",
+      1
+    ]
+  ],
+  "test": {
+    "seed": 105,
+    "configurations": 128,
+    "max_quadratic_error": 1.2079226507921703e-13,
+    "passed": true
+  },
+  "limitations": [
+    "Ten tensor coefficients are not ten proven neural eigenmodes",
+    "Boundary parameter has scaling redundancy",
+    "Orthogonal transforms tested, including reflections",
+    "No elliptic modulus or neural gap derived here",
+    "Lean uncompiled"
+  ],
+  "next": "H106 construct ten-mode invariant neural subspace and compare with symmetric tensor representation"
+}
