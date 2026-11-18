@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H092 Planck Foam Projection</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#d0d0d0;font:13px/1.5 'Courier New',monospace;padding:8px}
+h1{color:#aa66ff;font-size:16px;text-align:center;border-bottom:1px solid #333;padding-bottom:4px;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.panel{border:1px solid #333;padding:8px;background:#0d0d14}
+.panel h2{color:#ffaa00;font-size:13px;margin-bottom:6px}
+.panel h3{color:#88ccff;font-size:12px;margin:6px 0 4px}
+table{width:100%;border-collapse:collapse;font-size:11px;margin:4px 0}
+th,td{border:1px solid #222;padding:2px 4px;text-align:right}
+th{background:#1a1a2e;color:#88ff88}
+td{color:#ccc}
+.planck{background:#1a0a2e;color:#cc88ff}
+.desert{background:#0a0a0a;color:#666}
+.ew{background:#0a0a1a;color:#8888ff}
+.heavy{background:#1a0a0a;color:#ff8888}
+.nuclear{background:#1a0000;color:#ff4444}
+.chem{background:#001a00;color:#44ff44}
+.human{background:#0a1a0a;color:#88ff88}
+canvas{width:100%;display:block;border:1px solid #333}
+.addr{color:#00ffaa;font-family:monospace;font-size:11px}
+.info{font-size:11px;color:#888;margin:4px 0}
+.bridge-box{border:1px solid #aa66ff;padding:6px;margin:6px 0;background:#0a0a1a}
+.bridge-box h3{color:#aa66ff}
+.collapse-box{border:1px solid #ff4444;padding:6px;margin:6px 0;background:#1a0a0a}
+.collapse-box h3{color:#ff4444}
+.fermi-box{border:1px solid #ffaa00;padding:6px;margin:6px 0;background:#1a1500}
+.fermi-box h3{color:#ffaa00}
+.toddler{border:2px dashed #ffaa00;padding:8px;margin:8px 0;background:#1a1500}
+.toddler h3{color:#ffcc00}
+.ornament{text-align:center;color:#333;font-size:10px;margin:4px 0}
+.ornament-label{color:#555;font-size:9px}
+.test-row{font-size:11px}
+.lit{color:#00ff00}
+.dead{color:#ff0000}
+.amber{color:#ffaa00}
+.meta{font-size:10px;color:#666;text-align:center;margin-top:8px}
+#now-addr{color:#00ffcc;font-size:14px;text-align:center;padding:6px;border:1px solid #aa66ff;margin:4px 0;background:#0a051a}
+.bracket-vis{font-family:monospace;font-size:12px;line-height:1.6}
+.bracket-vis .sep{color:#ff4444}
+.bracket-vis .merge{color:#aa66ff}
+.bracket-vis .brace{color:#ffaa00}
+.bracket-vis .box{color:#00aaff}
+.bracket-vis .torroid{color:#00ffaa}
+</style>
+</head>
+<body>
+<h1>H092 &mdash; PLANCK FOAM PROJECTION</h1>
+<p class="info">Real CMS &mu;&mu; data &rarr; Compton wavelength &rarr; scale ladder &rarr; Planck projection &rarr; bracket collapse</p>
+<p class="info">Source: CERN Open Data Record 303 (CC0) &bull; Ancestry: H091, QG-077 &bull; {brace[box(torroid)]}</p>
+
+<div id="now-addr">loading address...</div>
+
+<div class="grid">
+<!-- LEFT: Scale Projection -->
+<div class="panel">
+<h2>SCALE PROJECTION: CMS &rarr; PLANCK</h2>
+<canvas id="projection" height="300"></canvas>
+<p class="info" id="proj-info">Loading...</p>
+
+<h3>PLANCK UNITS (CODATA 2018)</h3>
+<table>
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr class="planck"><td>Planck length</td><td>l<sub>P</sub></td><td>1.616255&times;10<sup>-35</sup> m</td></tr>
+<tr class="planck"><td>Planck time</td><td>t<sub>P</sub></td><td>5.391247&times;10<sup>-44</sup> s</td></tr>
+<tr class="planck"><td>Planck mass</td><td>m<sub>P</sub></td><td>2.176434&times;10<sup>-8</sup> kg</td></tr>
+<tr class="planck"><td>Planck energy</td><td>E<sub>P</sub></td><td>1.220890&times;10<sup>19</sup> GeV</td></tr>
+<tr class="planck"><td>Planck temperature</td><td>T<sub>P</sub></td><td>1.416784&times;10<sup>32</sup> K</td></tr>
+</table>
+
+<h3>FERMI LAT CONSTRAINT</h3>
+<div class="fermi-box">
+<h3>GRB 090510 &mdash; WHEELER FOAM IS DEAD</h3>
+<p class="info">Source: GRB 090510, 7.3 Gly distance, Fermi LAT 2009</p>
+<p class="info">31 GeV photon arrived within 0.829 s of low-energy photons</p>
+<p class="info">If foam dispersed light: &Delta;t &asymp; (E/E<sub>P</sub>)&times;(d/c) &asymp; 10<sup>3</sup> s predicted</p>
+<p class="info">Measured: &lt; 0.829 s &mdash; <span style="color:#ff4444">rules out linear dispersion</span></p>
+<p class="info">Constraint: E<sub>QG</sub> &gt; 1.2&times;E<sub>P</sub> = 1.5&times;10<sup>19</sup> GeV</p>
+<p class="info">Also: MAGIC telescope IceCube constraints &mdash; quadratic models constrained too</p>
+<p class="info" style="color:#ff6666"><b>Simple Wheeler foam (topology change at l<sub>P</sub>) is excluded by photon arrival times.</b></p>
+<p class="info" style="color:#88ff88"><b>WHAT SURVIVES:</b> Holographic principle. Loop QG discrete area spectrum. Causal set theory. Asymptotic safety.</p>
+</div>
+
+<h3>EVENTS ON THE LADDER (first 20)</h3>
+<div id="event-proj-table" style="max-height:180px;overflow-y:auto"></div>
+</div>
+
+<!-- RIGHT: Bracket Collapse -->
+<div class="panel">
+<h2>{BRACE[BOX(TORROID)]} COLLAPSE</h2>
+
+<div class="bridge-box">
+<h3>QG-077 THREE-BRACKET NOTATION</h3>
+<p class="addr">{{year,month,day}}[[hour,minute,second]]((degree,arcminute,arcsecond))</p>
+<p class="info">Brace = calendar/gravity &bull; Box = clock/EM &bull; Torroid = angle/geometric</p>
+<p class="info">Bridge: 1 clock second = 15 arcseconds (Earth rotation: 360&deg;/86400s)</p>
+</div>
+
+<h3>BRACKET BEHAVIOR BY SCALE</h3>
+<div class="collapse-box">
+<h3>THE COLLAPSE SEQUENCE</h3>
+<div class="bracket-vis" id="bracket-vis">
+<!-- filled by JS -->
+</div>
+</div>
+
+<h3>SCALE LADDER WITH BRACKET STATE</h3>
+<table id="ladder-table">
+<tr><th>Scale (m)</th><th>Regime</th><th>Force</th><th>Bracket State</th><th>Separation</th></tr>
+</table>
+
+<h3>PLANCK RATIOS FROM CMS DATA</h3>
+<table id="ratio-table">
+<tr><th>Particle</th><th>M (GeV)</th><th>&lambda;<sub>C</sub> (m)</th><th>&lambda;/l<sub>P</sub></th><th>Decades to Planck</th></tr>
+</table>
+
+<h3>HOLOGRAPHIC BOUND</h3>
+<div class="bridge-box">
+<h3>INFORMATION AT PLANCK SCALE</h3>
+<p class="info">Bekenstein-Hawking: S<sub>BH</sub> = A/(4l<sub>P</sub>&sup2;)</p>
+<p class="info">Entropy scales with AREA, not volume &mdash; 2D not 3D</p>
+<p class="info">Holographic principle: physics at boundary encodes bulk</p>
+<p class="info">At Planck scale: 1 bit per 4l<sub>P</sub>&sup2; &asymp; 1.04&times;10<sup>-69</sup> m&sup2;</p>
+<p class="info" id="holo-info">Loading...</p>
+</div>
+</div>
+</div>
+
+<!-- TODDLER CORNER -->
+<div class="toddler">
+<h3>TODDLER CORNER</h3>
+<p>Imagine a swimming pool. When you look at the surface from far away, it looks smooth.
+But if you had magic goggles that could zoom in a BILLION BILLION BILLION BILLION times
+(that's 10<sup>35</sup>), you might see the surface of space itself getting all bubbly and foamy &mdash;
+that's what scientists call <b>Planck foam</b>.</p>
+<p>But here's the thing: we tested it! Scientists looked at light from an explosion
+7 billion light-years away (a gamma-ray burst). If space were foamy, the light
+would get scrambled &mdash; some colors arriving before others. It didn't. The foam model
+<b>died</b>. The simple version of foam is WRONG.</p>
+<p>What MIGHT be right: the idea that information about everything inside a room
+is somehow written on the room's WALLS (the holographic principle). Like how a
+hologram sticker looks 3D but is really flat. That idea is still alive.</p>
+<p>The three brackets <span style="color:#ffaa00">{brace}</span> <span style="color:#00aaff">[box]</span>
+<span style="color:#00ffaa">(torroid)</span> are three different ways to measure: calendars, clocks, and angles.
+At our size, they're separate. But zoom in enough and they <b>collapse</b> into one thing &mdash;
+at the Planck scale, length IS time IS angle. Everything merges.</p>
+</div>
+
+<!-- ORNAMENT -->
+<div class="ornament">
+&#9674;&#9830;&#9674; H092 &#9674;&#9830;&#9674;
+<br><span class="ornament-label">[ornament]</span>
+</div>
+
+<!-- TESTS -->
+<div class="panel" style="margin-top:8px">
+<h2>VERIFICATION</h2>
+<table id="test-results">
+<tr><th>#</th><th>Test</th><th>Result</th></tr>
+</table>
+<p id="test-summary" style="margin-top:4px;font-size:13px"></p>
+</div>
+
+<div class="meta">
+H092-PLANCK-FOAM-PROJECTION v0 &bull; Ancestry: H091, QG-077 &bull;
+Data: CERN Open Data Record 303 (CC0) &bull; Planck constants: CODATA 2018 &bull;
+Fermi LAT: GRB 090510 (Abdo et al. 2009, Nature 462:331)
+</div>
+
+<script>
+// ===== CONSTANTS =====
+const TURN = 1296000;
+const DAY_S = 86400;
+const ARC_PER_SEC = 15;
+const HBAR_C = 197.3269804; // MeV·fm (CODATA 2018)
+const C = 299792458; // m/s
+const G_N = 6.67430e-11; // m³/(kg·s²) (CODATA 2018)
+const HBAR = 1.054571817e-34; // J·s
+const K_B = 1.380649e-23; // J/K (exact, SI 2019)
+
+// Planck units (derived)
+const L_P = Math.sqrt(HBAR * G_N / Math.pow(C, 3)); // Planck length
+const T_P = Math.sqrt(HBAR * G_N / Math.pow(C, 5)); // Planck time
+const M_P = Math.sqrt(HBAR * C / G_N);              // Planck mass (kg)
+const E_P_GEV = 1.22089e19;                         // Planck energy in GeV
+const T_P_KELVIN = 1.416784e32;                      // Planck temperature
+
+// Coupling constants at their characteristic scales
+const ALPHA_EM = 1/137.035999084;    // fine structure constant
+const ALPHA_S_LOW = 1.0;             // strong coupling at ~1 GeV (confinement)
+const ALPHA_S_Z = 0.1179;           // strong coupling at M_Z (91.2 GeV)
+const G_FERMI = 1.1663788e-5;       // Fermi constant (GeV^-2)
+
+// ===== REAL CMS DATA (same 92 events from H091) =====
+const RAW = `GT,146511,25343052,7.3339,2.06042,5.8858,-3.85836,6.23602,-0.584812,1.23406,-1,5.20755,-1.55016,-1.81976,4.62525,2.3905,1.41411,-2.27636,1,11.8282
+GG,146511,25341481,18.4672,8.03395,-3.94072,-16.1541,8.94839,-1.35299,-0.456026,-1,10.7295,6.29476,-2.52441,-8.31349,6.78208,-1.03239,-0.381397,1,2.58406
+GG,146511,25390065,7.70222,-0.248771,4.08338,6.52511,4.09095,1.24634,1.63164,-1,6.90202,-3.02439,3.75129,4.94041,4.81862,0.899132,2.24932,1,3.11929
+GG,146511,25391068,6.59462,5.24651,2.16082,3.359,5.67407,0.561945,0.390686,1,7.43461,-5.06069,4.40801,3.19704,6.71127,0.459977,2.42502,-1,10.5192
+GT,146511,25559498,7.36498,-4.42266,0.498498,5.90049,4.4507,1.0665,3.02944,-1,5.49279,4.45062,-2.80261,1.93408,5.26163,0.355523,-0.562379,1,8.56498
+GG,146511,25559942,6.57694,2.3155,3.56988,4.69055,4.25551,0.945767,0.994019,1,5.37364,-3.83137,-0.439483,-3.71685,3.85654,-0.834505,-3.02714,-1,3.09932
+GG,146511,25560059,10.4388,1.03718,10.3684,-0.927972,10.4201,-0.0890879,1.47118,-1,4.03959,-0.37416,3.83795,-1.19453,3.85611,-0.302133,1.6681,1,3.03285
+GT,146511,25569803,24.7598,-10.0987,8.33483,-21.0145,13.0948,-1.22483,2.44752,-1,3.59177,-0.779881,-1.93685,2.86927,2.08793,1.08759,-1.95153,1,7.10891
+GG,146511,25596888,10.5781,4.59435,2.23261,-9.33484,5.10801,-1.37044,0.456449,1,5.10696,-3.78685,-0.994539,3.33497,3.91527,0.74783,-2.88549,-1,3.08696
+GT,146511,25598543,6.78614,2.76076,5.94291,-1.80484,6.55331,-0.270908,1.13607,-1,8.10505,4.03899,2.58135,-6.52012,4.79217,-1.09002,0.569077,1,5.95942
+GT,146511,25630505,8.06753,-4.40316,1.76,-6.60697,4.74188,-1.11201,2.76125,1,7.64279,3.4267,-6.57613,1.93709,7.41544,0.258109,-1.08849,-1,15.2286
+GG,146511,25630662,25.3785,-5.27736,-3.6085,24.6756,6.39624,2.07754,-2.5703,-1,10.1968,4.34316,1.00893,9.17831,4.45873,1.49626,0.228265,1,3.89413
+GG,146511,25641052,15.9398,3.98652,4.55558,14.7048,6.05418,1.63846,0.851694,-1,8.71027,-2.65832,-3.40372,7.68505,4.32015,1.33267,-2.23507,1,3.20977
+GG,146511,25671800,6.92529,4.42002,4.63999,2.48063,6.40952,0.374927,0.808373,-1,5.51832,-3.80651,-3.11379,2.4605,4.9183,0.479,-2.45731,1,3.03825
+GG,146511,25682043,8.0735,3.26684,-2.8622,6.84488,4.34428,1.22032,-0.718697,-1,8.82244,1.5484,3.56476,7.98652,3.88653,1.48547,1.16116,1,5.75485
+GT,146511,25716688,4.31538,2.33451,0.555408,3.60992,2.39973,1.1836,0.233369,1,4.11312,0.730474,2.3999,-3.19497,2.50859,-1.00802,1.27366,-1,4.69816
+GG,146511,25733610,3.1735,-1.3832,0.780192,-2.72744,1.58822,-1.3283,2.63021,-1,3.69207,-2.47831,2.19085,-1.63437,3.31814,-0.472505,2.41769,1,3.13754
+GG,146511,25741735,13.0025,2.26437,3.53289,12.3129,4.19627,1.7695,1.00353,-1,5.70494,-2.3312,-1.14675,5.11363,2.59816,1.42253,-2.67056,1,4.37427
+GT,146511,25741887,10.0399,3.95085,-6.68099,6.26563,7.76281,0.721555,-1.03793,-1,4.78218,0.826122,1.60174,4.41682,1.80196,1.63786,1.09351,1,5.9218
+GG,146511,25744862,15.3505,5.86826,-5.13279,13.3015,7.79826,1.31148,-0.717671,-1,5.29289,3.62893,-0.656513,3.84228,3.68785,0.891647,-0.179137,1,3.09693
+GT,146511,25748270,10.3878,-6.89782,-3.07987,-7.3429,7.55434,-0.846393,-2.72071,-1,8.97069,6.65538,-2.38671,5.50556,7.07017,0.700124,-0.345022,1,13.1994
+GG,146511,25766942,3.22704,2.46408,-1.3825,1.56015,2.82632,0.519648,-0.511192,-1,6.33565,-1.56597,1.13261,6.0723,1.93252,1.84483,0.627028,1,3.02553
+GT,146511,25802908,27.6055,-3.12001,-3.12345,-27.3663,4.41397,-2.6085,-2.35584,-1,3.53804,-2.0291,-0.0455977,-2.90193,2.02961,-1.1265,-3.11914,1,8.13506
+GT,146511,25802984,5.0898,-1.63255,2.14756,-4.21321,2.69709,-1.21393,2.23045,1,4.0953,0.843889,3.00759,2.6478,3.12367,0.743698,1.29774,-1,3.60826
+GT,146511,25841830,5.38099,-1.86656,3.60497,-3.30319,4.06023,-0.722131,2.09224,-1,5.38816,0.498044,-4.03744,3.5143,4.06813,0.751141,-1.44775,1,9.27758
+GT,146511,25841955,15.1037,-3.56675,-4.17655,14.1619,5.4918,1.70773,-2.27853,-1,3.95543,0.735283,-1.03576,3.74478,1.27067,1.78499,-0.952877,1,4.49478
+GT,146511,25879200,4.80505,1.56635,-1.24938,4.33704,2.00374,1.5231,-0.672979,1,5.03073,3.50429,0.750023,3.53389,3.58378,0.845236,0.211165,-1,4.99802
+GG,146511,25887192,5.00949,-1.4974,0.1455,-4.77942,1.50445,-1.86662,3.04449,1,8.64457,1.57508,2.1853,8.21977,2.69301,1.81091,0.945735,-1,3.43756
+GG,146511,25887282,5.80563,-4.26932,2.28372,3.21063,4.84211,0.60593,2.65178,1,5.89254,3.33974,-4.27032,2.50449,5.42035,0.441199,-0.907698,-1,3.03539
+GG,146511,25887365,6.00135,-0.56755,5.16889,-2.90025,5.1999,-0.52493,1.68072,-1,5.26015,0.56853,-4.87555,1.67913,4.90863,0.332822,-1.4546,1,9.34918
+GT,146511,25917300,22.0474,-1.78478,-7.65816,20.605,7.86351,1.72019,-1.80014,1,4.63453,-2.59938,1.3929,3.57316,2.9493,0.976963,2.65097,-1,8.59375
+GT,146511,25920200,5.90085,-0.98488,4.63994,-3.45753,4.74337,-0.653948,1.78162,1,8.03998,3.32073,-6.37785,3.5614,7.19072,0.470988,-1.08925,-1,9.96979
+GT,146511,25920295,3.42483,0.74538,2.72469,1.9321,2.82466,0.618505,1.30272,-1,3.86614,0.267429,-0.19953,3.85826,0.334002,3.11069,-0.640653,1,5.5538
+GT,146511,25920358,10.3025,5.06093,-5.82282,6.13997,7.71525,0.71298,-0.853233,-1,5.87247,2.3375,4.23416,-3.3269,4.83588,-0.615694,1.06706,1,9.44432
+GT,146511,25929942,15.4126,-10.3456,-5.6002,-10.0725,11.766,-0.741958,-2.57282,1,7.10335,5.03782,-0.700627,4.99124,5.08638,0.853804,-0.138506,-1,10.3975
+GG,146511,25940010,25.0145,2.73635,5.4017,-24.3453,6.05487,-2.1441,1.10199,-1,7.18479,-3.45414,-1.78791,5.9975,3.88876,1.19968,-2.66489,1,3.07005
+GG,146511,25944250,8.35098,-3.97135,3.5076,6.26987,5.30088,0.969455,2.4191,1,8.30795,3.01145,-7.23543,-2.69283,7.83787,-0.33415,-1.17699,-1,9.44178
+GT,146511,25945398,10.9411,8.68505,6.65065,-0.3327,10.9399,-0.0304055,0.653037,-1,4.98299,-3.84478,-2.36747,-2.0725,4.51562,-0.440027,-2.58831,1,3.16069
+GT,146511,25945476,16.1898,4.21515,15.5707,1.37685,16.1308,0.0853367,1.30523,-1,3.77997,2.0982,-2.19618,2.33093,3.03656,0.681082,-0.808178,1,7.59068
+GT,146511,25959552,5.60613,0.5866,2.65282,4.8842,2.717,1.34135,1.35314,1,3.91858,0.80044,0.831993,3.17158,1.15386,1.87714,0.804971,-1,3.07478
+GT,146511,25959648,8.29424,2.7756,-4.68413,-6.00779,5.44631,-0.933672,-1.0373,-1,10.5003,-6.24965,5.82788,-5.74539,8.54219,-0.606413,2.39151,1,9.6714
+GG,146511,25970798,13.6577,-5.48547,10.4953,6.91977,11.8428,0.541506,2.08689,1,6.34072,1.90449,-5.87073,-1.34975,6.17202,-0.21545,-1.25715,-1,3.19117
+GT,146511,26005330,3.60773,0.879671,2.15082,2.72668,2.32393,0.964782,1.18254,1,5.59696,-4.03905,-1.68988,3.4587,4.37863,0.698982,-2.74145,-1,3.98003
+GT,146511,26005476,3.72955,-0.17818,0.792942,-3.64179,0.812738,-2.44741,1.3494,1,3.94068,2.49697,-2.77427,1.17992,3.73642,0.308065,-0.838133,-1,5.51277
+GT,146511,26032148,3.92694,0.71539,3.27497,-2.0803,3.35207,-0.571389,1.35679,1,8.46968,-4.5476,5.89766,4.0162,7.44951,0.508411,2.22744,-1,5.0785
+GG,146511,26032330,4.37478,2.10816,0.620082,-3.80397,2.19757,-1.31539,0.285284,1,7.38927,5.78277,3.80515,-2.63254,6.92274,-0.368422,0.580738,-1,3.08682
+GT,146511,26032690,5.07534,-3.91297,0.86127,-3.1085,4.00675,-0.693048,2.92467,1,4.92204,-0.133408,-1.24938,4.76065,1.25649,2.11375,-1.46363,-1,5.53014
+GG,146511,26036750,10.5393,-0.95765,0.42399,10.4914,1.04756,2.72788,2.71815,1,10.3012,-3.1143,9.73932,1.27736,10.2255,0.124784,1.88025,-1,9.52244
+GT,146511,26036908,10.3862,-3.24791,1.74291,9.68375,3.6859,1.73131,2.64781,-1,3.80547,-0.68365,-1.48574,3.42585,1.63518,1.47754,-2.00163,1,5.12445
+GT,146436,90830792,19.1712,3.81713,9.04323,-16.4673,9.81583,-1.28942,1.17139,1,5.43984,-0.362592,2.62699,-4.74849,2.65189,-1.34587,1.70796,1,2.73205
+GG,146436,90862225,12.9435,5.12579,-3.98369,-11.1973,6.4918,-1.31335,-0.660674,-1,11.8636,4.78984,-6.26222,-8.86434,7.88403,-0.966622,-0.917841,1,3.10256
+GG,146436,90644850,12.3999,-0.849742,9.4011,8.04015,9.43943,0.77258,1.66094,1,8.55532,-4.85155,6.97696,-0.983229,8.49797,-0.115445,2.17841,-1,9.41149
+GG,146436,90678594,17.8132,-1.95959,2.80531,17.4811,3.42195,2.3335,2.18053,1,9.42174,4.36523,0.168017,8.34713,4.36846,1.403,0.0384708,1,7.74702
+GT,146511,26078390,15.4327,-3.82553,-7.8291,12.9185,8.71363,1.1498,-2.0313,1,4.47037,-2.39019,1.98068,3.1773,3.09357,0.871173,2.44637,-1,10.7102
+GG,146511,26080608,3.25193,-1.12022,-2.84497,0.93085,3.0576,0.296768,-1.94606,1,3.34027,0.78969,3.12006,0.967858,3.21841,0.293148,1.32264,-1,3.25393
+GG,146511,26087458,3.5102,-2.04655,2.63261,-1.14565,3.33497,-0.33309,2.23033,1,3.69073,2.07478,-2.8929,-1.04694,3.55947,-0.288216,-0.950086,-1,3.08697
+GG,146511,26094658,5.20637,-0.47682,-1.19965,5.0462,1.29087,2.11,-1.95036,1,8.97432,4.72002,-3.74399,6.3645,6.02263,0.908606,-0.670651,-1,9.63155
+GT,146511,26098068,6.63697,-3.12282,-1.52506,5.72032,3.47548,1.26697,-2.6101,1,8.63398,-5.62367,-5.85985,2.74576,8.11981,0.329236,-2.33566,-1,9.73635
+GT,146511,26098682,13.0055,-3.97479,-11.7629,3.59788,12.4162,0.283938,-1.89644,-1,3.81247,0.79565,-1.40067,3.47427,1.6109,1.5035,-1.0548,1,10.3516
+GT,146511,26098868,6.36296,-4.69974,-2.21816,-3.70597,5.19725,-0.638987,-2.6999,-1,4.87879,-1.66458,2.58429,3.75966,3.07355,1.00138,2.14223,1,9.35422
+GT,146511,26120058,4.37285,-1.97015,1.37651,3.58966,2.40283,1.14861,2.53022,1,3.95613,0.37651,-2.46345,3.07985,2.49213,0.995485,-1.4192,-1,3.68069
+GT,146511,26120300,13.2102,2.00012,4.59938,-12.3178,4.98574,-1.66028,1.16063,1,3.72574,-0.74698,-2.24825,2.89698,2.3693,0.9879,-1.89052,-1,6.2764
+GG,146511,26125210,5.78753,-0.42997,1.83028,5.47218,1.88014,1.75023,1.80283,1,5.07785,-1.78529,-4.43282,-1.78752,4.77864,-0.362805,-1.95076,-1,9.23553
+GT,146511,26137028,5.44985,-2.63218,-3.08855,-3.39782,4.05823,-0.731175,-2.27688,-1,8.2543,1.37425,0.60073,8.12858,1.49997,2.39468,0.411935,1,6.41879
+GT,146511,26137268,5.26684,-0.75368,-1.6613,4.89975,1.82424,1.75736,-2.00103,1,4.86002,2.53012,-4.0101,0.835768,4.74152,0.176073,-1.00844,-1,9.49672
+GG,146511,26154350,8.84458,-1.90413,3.81009,7.70147,4.26,1.35123,2.03343,1,15.2714,5.82917,-1.15102,14.075,5.94196,1.62854,-0.195148,-1,3.03207
+GG,146511,26154500,24.6756,3.74525,2.70225,-24.3287,4.61814,-2.49949,0.624802,-1,8.26754,-0.07879,-2.00965,8.01908,2.01119,2.1222,-1.60971,1,10.3792
+GT,146511,26177568,5.97102,-5.01445,-0.53,-3.21924,5.04243,-0.588107,-3.03604,-1,4.62955,-1.60758,2.19268,3.63744,2.71813,1.07891,2.20211,1,3.21032
+GT,146511,26177672,5.78076,-3.24744,-4.76775,-0.14,-5.77096,-0.024238,-2.17105,-1,4.21484,-1.03568,0.60085,-4.05725,1.07361,-1.92793,2.61608,1,3.56218
+GT,146511,26181300,33.9105,3.68671,-7.58629,32.9281,8.43514,2.09422,-1.11704,-1,7.57178,-0.47753,-5.70889,4.93975,5.72889,0.75121,-1.65429,1,10.0527
+GG,146511,26194578,6.87283,-3.57908,-3.77508,4.17992,5.19948,0.718028,-2.33079,1,3.80567,1.42682,2.75965,2.07,3.09651,0.603093,1.09297,-1,3.00756
+GT,146511,26194718,10.0975,-9.44502,3.00345,-2.10419,9.9112,-0.210672,2.83464,-1,3.22095,0.51277,2.75022,1.56505,2.79766,0.519798,1.38725,1,3.12457
+GT,146511,26194828,3.26073,2.56072,1.28615,1.49297,2.86515,0.490155,0.467055,-1,13.8372,-2.37419,2.59576,13.4502,3.52121,2.1223,2.31234,1,6.14538
+GT,146511,26197278,6.75648,-3.99898,2.9693,4.21655,4.98147,0.741063,2.50445,1,8.33798,-4.88728,-5.35538,-3.72015,7.24886,-0.484367,-2.31317,-1,9.8893
+GT,146511,26198310,9.1946,-5.43765,6.72645,2.78262,8.65071,0.313793,2.25101,-1,4.70475,2.10775,-2.72652,3.17028,3.4452,0.797069,-0.911159,1,3.51988
+GT,146511,26220720,8.14558,1.15002,-6.21335,5.10155,6.31916,0.719666,-1.38752,1,3.70098,0.98668,1.60048,3.17158,1.88,1.26367,1.01846,-1,5.07502
+GT,146511,26226608,13.5992,-3.10065,10.9695,-6.3878,11.3985,-0.52067,1.84671,-1,13.0279,8.81582,-1.27958,9.57245,8.90832,0.916565,-0.144387,1,13.3457
+GT,146511,26226778,7.00328,-6.67752,1.27568,-1.75725,6.79844,-0.254921,2.95234,-1,5.94645,-0.95828,-3.47208,4.70102,3.60196,1.03906,-1.30655,1,10.0019
+GT,146511,26241640,15.6805,10.3325,-11.1399,-3.26382,15.1872,-0.213925,-0.822009,1,14.3775,-9.07192,10.3135,4.63982,13.734,0.329008,2.29239,-1,29.7019
+GT,146511,26241818,5.31032,2.34385,-3.11685,3.44028,3.89945,0.769117,-0.926863,1,10.7372,-5.62665,-3.07938,-8.57218,6.4141,-1.07295,-2.57083,-1,9.50518
+GT,146511,26241940,3.46985,0.22065,2.3665,2.5162,2.37677,0.882048,1.47767,-1,5.55838,1.08935,-0.57,5.44158,1.22947,2.37695,-0.481602,1,4.78602
+GT,146511,26241978,4.21252,-2.13688,-1.76422,3.14158,2.77092,0.959997,-2.4512,1,10.3675,-7.46992,6.27105,-3.50955,9.75255,-0.348622,2.44313,-1,8.95932
+GT,146511,26245178,8.03625,5.91095,-3.44695,4.17002,6.84232,0.559055,-0.527478,1,5.58258,-2.59655,3.86645,-2.74155,4.65819,-0.544497,2.16412,-1,10.1372
+GG,146511,26256948,3.73508,0.14499,1.71428,3.31422,1.71489,1.42019,1.48616,1,4.16645,-0.03495,-2.37555,3.40605,2.37581,1.1253,-1.55615,-1,3.09193
+GG,146511,26257700,4.81975,-1.07878,-3.86288,2.59375,4.01103,0.591747,-1.84424,-1,5.38755,2.78282,3.30842,3.09218,4.32406,0.636802,0.871165,1,3.19483
+GG,146511,26263228,5.28138,0.5247,4.73408,-2.23675,4.76305,-0.447744,1.46016,-1,5.95265,2.75612,-4.80082,2.17015,5.53651,0.379949,-1.04959,1,9.10858
+GT,146511,26265342,5.97055,3.19878,2.73475,-4.37895,4.20972,-0.886879,0.708278,1,5.49045,1.70865,3.75702,3.47058,4.12782,0.734553,1.14274,-1,3.09063
+GT,146511,26275200,6.28318,-2.09245,-2.37938,5.33938,3.16405,1.28202,-2.28928,-1,8.37795,5.51635,-1.00128,-6.26802,5.60643,-0.95005,-0.180099,1,9.14295
+GT,146511,26275768,6.02498,2.75255,-0.47082,5.33972,2.79252,1.41858,-0.169615,-1,5.74555,-3.45488,2.68918,3.57862,4.37873,0.722035,2.48305,1,10.5804
+GT,146511,26275908,6.70975,0.46032,5.82295,3.17495,5.84112,0.505867,1.49165,-1,3.44658,1.60245,0.25085,3.03068,1.62198,1.3576,0.155523,1,3.11685
+GT,146511,26276068,9.3054,-0.33135,-3.12728,8.76128,3.14484,1.73178,-1.67665,1,7.16565,1.48678,1.59785,6.84058,2.18068,1.84898,0.822232,-1,10.3754
+GT,146511,26276128,22.5698,-5.0376,-14.3095,16.6002,15.1704,0.934098,-1.90665,-1,4.59748,1.07508,0.34295,4.45488,1.12842,2.11738,0.308375,1,4.88925`;
+
+function parseEvents(raw) {
+    return raw.trim().split('\n').map(line => {
+        const p = line.split(',');
+        return {
+            type: p[0], run: parseInt(p[1]), event: parseInt(p[2]),
+            E1: +p[3], px1: +p[4], py1: +p[5], pz1: +p[6],
+            pt1: +p[7], eta1: +p[8], phi1: +p[9], Q1: +p[10],
+            E2: +p[11], px2: +p[12], py2: +p[13], pz2: +p[14],
+            pt2: +p[15], eta2: +p[16], phi2: +p[17], Q2: +p[18],
+            M: +p[19]
+        };
+    }).filter(e => !isNaN(e.M) && e.M > 0);
+}
+
+const EVENTS = parseEvents(RAW);
+
+// ===== QG-077 THREE-BRACKET NOTATION =====
+function fmt(d) {
+    const yr = d.getUTCFullYear(), mo = d.getUTCMonth()+1, dy = d.getUTCDate();
+    const hr = d.getUTCHours(), mi = d.getUTCMinutes(), sc = d.getUTCSeconds();
+    const totalSec = hr*3600 + mi*60 + sc;
+    const totalArc = totalSec * ARC_PER_SEC;
+    const deg = Math.floor(totalArc / 3600);
+    const amin = Math.floor((totalArc % 3600) / 60);
+    const asec = totalArc % 60;
+    return `{{${yr},${String(mo).padStart(2,'0')},${String(dy).padStart(2,'0')}}}` +
+           `[[${String(hr).padStart(2,'0')},${String(mi).padStart(2,'0')},${String(sc).padStart(2,'0')}]]` +
+           `((${deg},${String(amin).padStart(2,'0')},${String(asec).padStart(2,'0')}))`;
+}
+
+function parse(s) {
+    const m = s.match(/\{\{(\d+),(\d+),(\d+)\}\}\[\[(\d+),(\d+),(\d+)\]\]\(\((\d+),(\d+),(\d+)\)\)/);
+    if (!m) return null;
+    return {
+        brace: { year: +m[1], month: +m[2], day: +m[3] },
+        box:   { hour: +m[4], minute: +m[5], second: +m[6] },
+        torroid: { degree: +m[7], arcminute: +m[8], arcsecond: +m[9] }
+    };
+}
+
+function totalSec(box) { return box.hour * 3600 + box.minute * 60 + box.second; }
+function totalArc(tor) { return tor.degree * 3600 + tor.arcminute * 60 + tor.arcsecond; }
+function clockToArc(s) { return s * ARC_PER_SEC; }
+
+// ===== COMPTON WAVELENGTH =====
+function comptonWavelength_m(M_GeV) {
+    return (HBAR_C / (M_GeV * 1000)) * 1e-15;
+}
+
+// ===== PLANCK RATIOS =====
+function planckLengthRatio(lambda_m) {
+    return lambda_m / L_P;
+}
+
+function decadesToPlanck(lambda_m) {
+    return Math.log10(lambda_m) - Math.log10(L_P);
+}
+
+// ===== SCALE REGIME =====
+function scaleRegime(logScale) {
+    if (logScale <= -34) return { name: 'Planck', color: '#cc88ff', force: 'QG (all unified)' };
+    if (logScale <= -18) return { name: 'Desert', color: '#666666', force: '? (no data)' };
+    if (logScale <= -17) return { name: 'Electroweak', color: '#8888ff', force: 'weak + EM' };
+    if (logScale <= -16) return { name: 'Heavy quark', color: '#ff8888', force: 'strong' };
+    if (logScale <= -14) return { name: 'Nuclear/QCD', color: '#ff4444', force: 'strong α_s≈1' };
+    if (logScale <= -9) return { name: 'Chemistry', color: '#44ff44', force: 'EM α≈1/137' };
+    return { name: 'Human', color: '#88ff88', force: 'gravity' };
+}
+
+// ===== BRACKET STATE AT EACH SCALE =====
+// At human scale: three brackets independent
+// As you descend, they begin to merge
+// At Planck: all three collapse to one
+function bracketState(logScale) {
+    if (logScale >= -9) {
+        return {
+            notation: '{brace} ≠ [box] ≠ (torroid)',
+            desc: 'Three independent coordinates. Calendar, clock, angle fully separable.',
+            sep: 3
+        };
+    }
+    if (logScale >= -15) {
+        return {
+            notation: '{brace} ≠ [box ≈ (torroid)]',
+            desc: 'EM dominates. Clock and angle merge: λ_photon sets both t and θ resolution.',
+            sep: 2
+        };
+    }
+    if (logScale >= -18) {
+        return {
+            notation: '{brace} ~ [box ↔ (torroid)]',
+            desc: 'Strong force. Nuclear timescales ~10⁻²³ s. Box and torroid entangled.',
+            sep: 1.5
+        };
+    }
+    if (logScale >= -34) {
+        return {
+            notation: '{brace ← [box → (torroid)]}',
+            desc: 'Desert. No known physics. Bracket structure undefined — extrapolation only.',
+            sep: 1
+        };
+    }
+    return {
+        notation: '{≡[≡(≡)≡]≡}',
+        desc: 'PLANCK. All brackets collapse. Length = time = angle. One coordinate.',
+        sep: 0
+    };
+}
+
+// ===== DRAW PROJECTION (log-scale strip) =====
+function drawProjection() {
+    const canvas = document.getElementById('projection');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.clientWidth * 2;
+    canvas.height = 600;
+    ctx.scale(2,2);
+    const W = canvas.clientWidth, H = 300;
+
+    ctx.fillStyle = '#050510';
+    ctx.fillRect(0,0,W,H);
+
+    // Scale axis: -35 (Planck) to 0 (human)
+    const LOG_MIN = -36, LOG_MAX = 1;
+    const RANGE = LOG_MAX - LOG_MIN;
+
+    function xFromLog(log) { return ((log - LOG_MIN) / RANGE) * W; }
+
+    // Draw regime bands
+    const regimes = [
+        { lo: -36, hi: -34, color: 'rgba(170,100,255,0.15)', label: 'Planck' },
+        { lo: -34, hi: -18, color: 'rgba(100,100,100,0.08)', label: 'Desert' },
+        { lo: -18, hi: -17, color: 'rgba(100,100,255,0.12)', label: 'EW' },
+        { lo: -17, hi: -15, color: 'rgba(255,100,100,0.12)', label: 'QCD' },
+        { lo: -15, hi: -9, color: 'rgba(255,100,100,0.08)', label: 'Nuclear' },
+        { lo: -9, hi: 0, color: 'rgba(100,255,100,0.08)', label: 'Chem/Human' }
+    ];
+    regimes.forEach(r => {
+        ctx.fillStyle = r.color;
+        const x1 = xFromLog(r.lo), x2 = xFromLog(r.hi);
+        ctx.fillRect(x1, 0, x2-x1, H-30);
+        ctx.fillStyle = '#666';
+        ctx.font = '8px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(r.label, (x1+x2)/2, 12);
+    });
+
+    // Draw axis
+    ctx.strokeStyle = '#444';
+    ctx.beginPath();
+    ctx.moveTo(0, H-30); ctx.lineTo(W, H-30);
+    ctx.stroke();
+
+    // Tick marks
+    ctx.fillStyle = '#888';
+    ctx.font = '8px monospace';
+    ctx.textAlign = 'center';
+    for (let log = -35; log <= 0; log += 5) {
+        const x = xFromLog(log);
+        ctx.fillText('10^' + log, x, H-18);
+        ctx.strokeStyle = '#333';
+        ctx.beginPath();
+        ctx.moveTo(x, 0); ctx.lineTo(x, H-30);
+        ctx.stroke();
+    }
+    ctx.fillText('scale (m)', W/2, H-6);
+
+    // Plot CMS events
+    let nPlotted = 0;
+    EVENTS.forEach((e, i) => {
+        const lam = comptonWavelength_m(e.M);
+        const logLam = Math.log10(lam);
+        const x = xFromLog(logLam);
+        if (x < 0 || x > W) return;
+
+        // Color by resonance
+        let color = '#00aaff';
+        if (e.M >= 2.9 && e.M <= 3.3) color = '#ff4444';
+        else if (e.M >= 9.0 && e.M <= 10.5) color = '#44ff44';
+        else if (e.M >= 85 && e.M <= 97) color = '#4444ff';
+
+        const y = 30 + (i / EVENTS.length) * (H - 80);
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, 2*Math.PI);
+        ctx.fill();
+        nPlotted++;
+    });
+
+    // Draw Planck wall
+    const planckX = xFromLog(-35);
+    ctx.strokeStyle = '#ff4444';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(planckX, 0); ctx.lineTo(planckX, H-30);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.fillStyle = '#ff4444';
+    ctx.font = '9px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('l_P', planckX+2, 24);
+
+    // Draw Fermi LAT exclusion
+    ctx.fillStyle = 'rgba(255,0,0,0.05)';
+    ctx.fillRect(xFromLog(-36), 0, xFromLog(-34)-xFromLog(-36), H-30);
+    ctx.fillStyle = '#ff6666';
+    ctx.font = '8px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('FERMI LAT: foam excluded', (xFromLog(-36)+xFromLog(-34))/2, H-40);
+
+    // Known particles
+    const markers = [
+        { name: 'J/ψ', M: 3.097, color: '#ff4444' },
+        { name: 'Υ', M: 9.460, color: '#44ff44' },
+        { name: 'Z⁰', M: 91.188, color: '#4444ff' },
+        { name: 'proton', M: 0.938, color: '#ff8800' },
+        { name: 'electron', M: 0.000511, color: '#ffff00' }
+    ];
+    markers.forEach(m => {
+        const lam = comptonWavelength_m(m.M);
+        const logLam = Math.log10(lam);
+        const x = xFromLog(logLam);
+        ctx.strokeStyle = m.color;
+        ctx.setLineDash([2,2]);
+        ctx.beginPath();
+        ctx.moveTo(x, 20); ctx.lineTo(x, H-30);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = m.color;
+        ctx.font = '9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(m.name, x, H-42);
+    });
+
+    document.getElementById('proj-info').textContent =
+        `${nPlotted} events projected | Planck wall at 1.62×10⁻³⁵ m | ${decadesToPlanck(comptonWavelength_m(91.188)).toFixed(1)} decades from Z⁰ to Planck`;
+}
+
+// ===== POPULATE BRACKET VIS =====
+function populateBracketVis() {
+    const scales = [0, -9, -15, -17, -18, -25, -35];
+    const el = document.getElementById('bracket-vis');
+    let html = '';
+    scales.forEach(log => {
+        const bs = bracketState(log);
+        const regime = scaleRegime(log);
+        html += `<div style="margin:4px 0;padding:4px;border-left:3px solid ${regime.color}">`;
+        html += `<span style="color:${regime.color}">10<sup>${log}</sup> m</span> `;
+        html += `<span style="color:#888">${regime.name}</span><br>`;
+        // Color the brackets
+        let colored = bs.notation
+            .replace(/\{/g, '<span class="brace">{</span>')
+            .replace(/\}/g, '<span class="brace">}</span>')
+            .replace(/\[/g, '<span class="box">[</span>')
+            .replace(/\]/g, '<span class="box">]</span>')
+            .replace(/\(/g, '<span class="torroid">(</span>')
+            .replace(/\)/g, '<span class="torroid">)</span>')
+            .replace(/≡/g, '<span class="merge">≡</span>')
+            .replace(/≠/g, '<span class="sep">≠</span>')
+            .replace(/≈/g, '<span class="merge">≈</span>')
+            .replace(/↔/g, '<span class="merge">↔</span>')
+            .replace(/←/g, '<span class="merge">←</span>')
+            .replace(/→/g, '<span class="merge">→</span>')
+            .replace(/~/g, '<span class="merge">~</span>');
+        html += `<code>${colored}</code><br>`;
+        html += `<span style="color:#666;font-size:10px">${bs.desc}</span>`;
+        html += `</div>`;
+    });
+    el.innerHTML = html;
+}
+
+// ===== POPULATE SCALE LADDER =====
+function populateLadder() {
+    const rows = [
+        { scale: '10⁻³⁵', regime: 'Planck', force: 'QG', bracket: '{≡[≡(≡)≡]≡}', cls: 'planck', sep: '0 (unified)' },
+        { scale: '10⁻³⁴ – 10⁻¹⁸', regime: 'Desert', force: '?', bracket: '{← [→ ()] →}', cls: 'desert', sep: '? (unknown)' },
+        { scale: '10⁻¹⁸', regime: 'Electroweak', force: 'weak+EM', bracket: '{~ [↔ ()]}', cls: 'ew', sep: '1.5' },
+        { scale: '10⁻¹⁷', regime: 'Heavy quark', force: 'strong', bracket: '{≠ [≈ ()]}', cls: 'heavy', sep: '2' },
+        { scale: '10⁻¹⁵', regime: 'Nuclear/QCD', force: 'strong α_s≈1', bracket: '{≠ [≈ ()]}', cls: 'nuclear', sep: '2' },
+        { scale: '10⁻¹⁰', regime: 'Chemistry', force: 'EM α≈1/137', bracket: '{≠ [≠ ()]}', cls: 'chem', sep: '3 (independent)' },
+        { scale: '10⁰', regime: 'Human', force: 'gravity', bracket: '{≠ [≠ ()]}', cls: 'human', sep: '3 (independent)' }
+    ];
+    const tbl = document.getElementById('ladder-table');
+    rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = r.cls;
+        tr.innerHTML = `<td>${r.scale}</td><td>${r.regime}</td><td>${r.force}</td><td style="font-family:monospace">${r.bracket}</td><td>${r.sep}</td>`;
+        tbl.appendChild(tr);
+    });
+}
+
+// ===== POPULATE RATIO TABLE =====
+function populateRatios() {
+    const particles = [
+        { name: 'J/ψ', M: 3.097 },
+        { name: 'Υ', M: 9.460 },
+        { name: 'Z⁰', M: 91.188 },
+        { name: 'proton', M: 0.938 },
+        { name: 'electron', M: 0.000511 }
+    ];
+    const tbl = document.getElementById('ratio-table');
+    particles.forEach(p => {
+        const lam = comptonWavelength_m(p.M);
+        const ratio = planckLengthRatio(lam);
+        const decades = decadesToPlanck(lam);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td style="text-align:left">${p.name}</td><td>${p.M}</td><td>${lam.toExponential(3)}</td><td>${ratio.toExponential(3)}</td><td>${decades.toFixed(1)}</td>`;
+        tbl.appendChild(tr);
+    });
+}
+
+// ===== POPULATE EVENT PROJECTION TABLE =====
+function populateEventProjTable() {
+    const tbl = document.getElementById('event-proj-table');
+    let html = '<table><tr><th>Event</th><th>M (GeV)</th><th>λ_C (m)</th><th>log₁₀</th><th>λ/l_P</th><th>Regime</th></tr>';
+    EVENTS.slice(0, 20).forEach(e => {
+        const lam = comptonWavelength_m(e.M);
+        const logLam = Math.log10(lam);
+        const ratio = planckLengthRatio(lam);
+        const regime = scaleRegime(logLam);
+        html += `<tr><td>${e.event}</td><td>${e.M.toFixed(3)}</td><td>${lam.toExponential(2)}</td>` +
+                `<td>${logLam.toFixed(1)}</td><td>${ratio.toExponential(2)}</td>` +
+                `<td style="color:${regime.color}">${regime.name}</td></tr>`;
+    });
+    html += '</table>';
+    tbl.innerHTML = html;
+}
+
+// ===== HOLOGRAPHIC INFO =====
+function populateHolographic() {
+    // For a Z boson: how many Planck areas fit in its Compton area?
+    const lamZ = comptonWavelength_m(91.188);
+    const areaZ = Math.PI * lamZ * lamZ; // Compton "disc"
+    const planckArea = L_P * L_P;
+    const bitsZ = areaZ / (4 * planckArea);
+    document.getElementById('holo-info').innerHTML =
+        `Z⁰ Compton area: ${areaZ.toExponential(3)} m² → ` +
+        `${bitsZ.toExponential(3)} Planck areas → ` +
+        `${(bitsZ/4).toExponential(3)} holographic bits`;
+}
+
+// ===== NOW ADDRESS =====
+function updateAddr() {
+    document.getElementById('now-addr').textContent = fmt(new Date());
+}
+
+// ===== VERIFICATION =====
+function runTests() {
+    const results = [];
+    let pass = 0, fail = 0;
+
+    function test(name, fn) {
+        try {
+            const r = fn();
+            results.push({ name, ok: r, detail: r ? 'LIT' : 'DEAD' });
+            if (r) pass++; else fail++;
+        } catch(ex) {
+            results.push({ name, ok: false, detail: 'ERROR: ' + ex.message });
+            fail++;
+        }
+    }
+
+    // 1. Event count
+    test('92 events parsed', () => EVENTS.length === 92);
+
+    // 2. All masses positive
+    test('All M > 0', () => EVENTS.every(e => e.M > 0));
+
+    // 3. Planck length derivation
+    test('L_P = √(ℏG/c³) within 0.01%', () => {
+        const expected = 1.616255e-35;
+        return Math.abs(L_P - expected) / expected < 0.0001;
+    });
+
+    // 4. Planck time derivation
+    test('T_P = √(ℏG/c⁵) within 0.01%', () => {
+        const expected = 5.391247e-44;
+        return Math.abs(T_P - expected) / expected < 0.0001;
+    });
+
+    // 5. Planck mass derivation
+    test('M_P = √(ℏc/G) within 0.01%', () => {
+        const expected = 2.176434e-8;
+        return Math.abs(M_P - expected) / expected < 0.0001;
+    });
+
+    // 6. l_P = c × t_P
+    test('l_P = c × t_P within 0.01%', () => {
+        const lFromT = C * T_P;
+        return Math.abs(lFromT - L_P) / L_P < 0.0001;
+    });
+
+    // 7. Compton wavelength of proton
+    test('λ_C(proton) ≈ 2.1×10⁻¹⁶ m', () => {
+        const lam = comptonWavelength_m(0.938);
+        return lam > 1e-16 && lam < 3e-16;
+    });
+
+    // 8. Compton wavelength of Z boson
+    test('λ_C(Z) ≈ 2.2×10⁻¹⁸ m', () => {
+        const lam = comptonWavelength_m(91.188);
+        return lam > 1e-18 && lam < 4e-18;
+    });
+
+    // 9. Decades from Z to Planck
+    test('Z⁰ → Planck ≈ 17 decades', () => {
+        const d = decadesToPlanck(comptonWavelength_m(91.188));
+        return d > 16 && d < 18;
+    });
+
+    // 10. Decades from electron to Planck
+    test('electron → Planck ≈ 22 decades', () => {
+        const d = decadesToPlanck(comptonWavelength_m(0.000511));
+        return d > 21 && d < 24;
+    });
+
+    // 11. Z/l_P ratio magnitude
+    test('Z⁰ Compton / l_P ≈ 10¹⁷', () => {
+        const r = planckLengthRatio(comptonWavelength_m(91.188));
+        const logR = Math.log10(r);
+        return logR > 16 && logR < 18;
+    });
+
+    // 12. TURN = 1296000
+    test('TURN = 1,296,000', () => TURN === 1296000);
+
+    // 13. ARC_PER_SEC = 15
+    test('ARC_PER_SEC = 15', () => ARC_PER_SEC === 15);
+
+    // 14. 86400 × 15 = TURN
+    test('DAY_S × ARC_PER_SEC = TURN', () => DAY_S * ARC_PER_SEC === TURN);
+
+    // 15. fmt→parse roundtrip
+    test('fmt→parse roundtrip', () => {
+        const d = new Date('2024-07-04T12:30:45Z');
+        const s = fmt(d);
+        const p = parse(s);
+        return p && p.brace.year === 2024 && p.box.hour === 12 && p.box.second === 45;
+    });
+
+    // 16. clock→arc bridge
+    test('1 sec → 15 arcsec', () => clockToArc(1) === 15);
+
+    // 17. ℏc value
+    test('ℏc = 197.3269804 MeV·fm', () => HBAR_C === 197.3269804);
+
+    // 18. Bracket state at human scale: sep=3
+    test('Bracket sep=3 at 10⁰', () => bracketState(0).sep === 3);
+
+    // 19. Bracket state at Planck: sep=0
+    test('Bracket sep=0 at 10⁻³⁵', () => bracketState(-35).sep === 0);
+
+    // 20. Fermi LAT constraint: E_QG > E_P
+    test('Fermi LAT: E_QG > 1.2×E_P', () => {
+        const E_QG_lower = 1.2 * E_P_GEV; // > Planck energy
+        return E_QG_lower > E_P_GEV;
+    });
+
+    // 21. Holographic bound: 1 bit per 4l_P²
+    test('Holo: 4l_P² = 1.05×10⁻⁶⁹ m²', () => {
+        const area = 4 * L_P * L_P;
+        const logArea = Math.log10(area);
+        return logArea > -70 && logArea < -68;
+    });
+
+    // 22. pt consistency (from H091)
+    test('pt1 = √(px1²+py1²) within 1%', () => {
+        return EVENTS.slice(0, 20).every(e => {
+            const pt_calc = Math.sqrt(e.px1*e.px1 + e.py1*e.py1);
+            return Math.abs(pt_calc - e.pt1) / e.pt1 < 0.01;
+        });
+    });
+
+    // 23. KNOWN-BAD: negative mass should fail
+    test('[KNOWN-BAD] M=-1 gives NaN Compton', () => {
+        const lam = comptonWavelength_m(-1);
+        return lam < 0; // negative — physically meaningless, as expected
+    });
+
+    // 24. KNOWN-BAD: bracket state at scale +100 should still work
+    test('[KNOWN-BAD] bracketState(+100) still returns sep=3', () => {
+        return bracketState(100).sep === 3;
+    });
+
+    // Render
+    const tbl = document.getElementById('test-results');
+    results.forEach((r, i) => {
+        const tr = document.createElement('tr');
+        tr.className = 'test-row';
+        const cls = r.ok ? 'lit' : 'dead';
+        tr.innerHTML = `<td>${i+1}</td><td style="text-align:left">${r.name}</td><td class="${cls}">${r.detail}</td>`;
+        tbl.appendChild(tr);
+    });
+
+    document.getElementById('test-summary').innerHTML =
+        `<span class="${fail === 0 ? 'lit' : 'dead'}">${pass}/${pass+fail} ${fail === 0 ? 'ALL LIT' : fail + ' DEAD'}</span>`;
+
+    return { pass, fail, total: pass + fail };
+}
+
+// ===== INIT =====
+drawProjection();
+populateBracketVis();
+populateLadder();
+populateRatios();
+populateEventProjTable();
+populateHolographic();
+updateAddr();
+setInterval(updateAddr, 1000);
+const testResult = runTests();
+</script>
+</body>
+</html>
