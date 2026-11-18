@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>H110 Concurrent Reserve</title><style>body{background:#081225;color:#d3faff;max-width:960px;margin:3em auto;font:17px system-ui}pre{white-space:pre-wrap}</style><h1>H110 — Concurrent Jacobi Reserve Conservation</h1><pre>10 interior / 11 exterior
+64 rounds / 192 concurrent requests
+64 admitted / 128 rejected / zero double-spends
+Terminal budget = 0.647452344593449
+Naive radius = 1.5179618756747593
+Atomic radius = 0.7410190621626204
+SQLite BEGIN IMMEDIATE; idempotent request IDs.
+.dlw</pre><p>Single fixed common interval and constant forcing bounds; Thread concurrency on one SQLite database; no distributed consensus or crash testing; Fixture reset between rounds; not production append-only ledger; No authenticated agents or external forcing enforcement; Lean uncompiled</p><p>Next H111: overlapping intervals and prefix safety.</p></html>
