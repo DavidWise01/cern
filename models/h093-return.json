@@ -1,0 +1,32 @@
+{
+  "schema": "cern.h093.hermit-return.v1",
+  "parent": "models/h092-hermit-crab.json",
+  "shells": [
+    "{a}",
+    "(b)",
+    "[c]"
+  ],
+  "transitions": [
+    "D",
+    "E"
+  ],
+  "geometry_order": 3,
+  "group": "Q8",
+  "periods": {
+    "3": 64,
+    "6": 64,
+    "12": 384
+  },
+  "conjugation_checks": 4096,
+  "hopf": {
+    "antipodes_identical": true,
+    "norm_identity": true
+  },
+  "verification": "Executed exact SymPy and integer quaternion test; Lean candidate uncompiled",
+  "limitations": [
+    "Full return includes shell label and nonzero fundamental spinor, fixed repeated forward cycle",
+    "Hopf shadow is a separately selected projection, not ordinary coordinate projection",
+    "No quantum mass gap claim"
+  ],
+  "next": "H094 observable return order and phase-sensitive witness"
+}
