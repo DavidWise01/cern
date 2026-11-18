@@ -1,0 +1,51 @@
+{
+  "schema": "cern.h101.toroidal-neural.v1",
+  "parent": "H100 neural gap convention",
+  "operants": [
+    "{}",
+    "()",
+    "[]",
+    "/|\\",
+    "\\|/",
+    "| | |"
+  ],
+  "implicit": [
+    "Casimir",
+    "Radi/CMB",
+    "Kelvin"
+  ],
+  "grid": [
+    24,
+    24
+  ],
+  "center": "reference only",
+  "neuron_gap": "(2-2 cos(pi/12))*min(a,b), a,b>=0",
+  "cases": [
+    [
+      1,
+      1,
+      0.06814834742186127,
+      1
+    ],
+    [
+      1,
+      0.5,
+      0.034074173710943116,
+      1
+    ],
+    [
+      1,
+      0.1,
+      0.006814834742174432,
+      1
+    ],
+    [
+      1,
+      0,
+      0,
+      24
+    ]
+  ],
+  "verification": "Local NumPy executed PASS; numerical eigenspectrum compared to analytic formula; Lean uncompiled",
+  "next": "H102 shared singlet coupling and recovery under anisotropic failure"
+}
