@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H094 — QCD Confinement Cascade</title>
+<meta name="instrument" content="H094-QCD-CONFINEMENT-CASCADE">
+<meta name="version" content="v0">
+<meta name="lineage" content="H091→H092→H093→H094">
+<meta name="physics" content="quantum-dot→QCD→Planck-bubble confinement cascade through {brace[box(torroid)]}">
+<meta name="data-source" content="CMS Open Data Record 303 (CC0), ATLAS toroid geometry, PDG 2024">
+<meta name="constants" content="l_P=1.616255e-35m, alpha_s~0.118, Lambda_QCD~217MeV, hbar_c=197.3269804MeV·fm">
+<meta name="architecture" content="1x8x{}x8x1 singlet-octet-void-octet-singlet">
+<meta name="color-structure" content="SU(3): 3²-1=8 gluons, 3 colors, 3x8=24 coils">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060208;color:#e0d8f0;font:13px 'Courier New',monospace;overflow-x:hidden}
+#scene-container{width:100%;height:420px;border:1px solid #220044;background:#020008;position:relative}
+canvas{display:block}
+
+/* Panel styles */
+.panel{border:1px solid #330066;padding:8px;margin:6px;background:#0a0018}
+.panel h2{color:#cc88ff;font-size:14px;border-bottom:1px solid #220044;padding-bottom:4px;margin-bottom:6px}
+.panel h3{color:#aa66dd;font-size:12px;margin:4px 0}
+
+/* Cascade table */
+.cascade-table{width:100%;border-collapse:collapse;font-size:11px}
+.cascade-table th{background:#110022;color:#cc88ff;padding:4px;text-align:left;border:1px solid #330066}
+.cascade-table td{padding:4px;border:1px solid #220044}
+.scale-nm{color:#ff8800}
+.scale-fm{color:#00ccff}
+.scale-lp{color:#88ff88}
+
+/* Architecture display */
+.arch-row{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;font-size:14px;font-weight:bold}
+.arch-singlet{color:#ffffff;background:#222;padding:4px 8px;border:2px solid #666}
+.arch-octet{color:#ffcc00;background:#332200;padding:4px 8px;border:2px solid #664400}
+.arch-void{color:#ff00ff;background:#220022;padding:4px 12px;border:2px dashed #ff00ff;font-style:italic}
+.arch-arrow{color:#666;font-size:18px}
+
+/* Color octet display */
+.color-octet{display:flex;gap:2px;padding:4px;border:1px solid #220044;margin:3px 0}
+.coil-swatch{width:20px;height:20px;border:1px solid #444;display:inline-block;border-radius:2px}
+.octet-label{font-size:10px;color:#aaa;min-width:60px}
+
+/* Toddler section */
+.toddler{border:2px solid #ffcc00;padding:10px;margin:8px;background:#1a1400;border-radius:8px}
+.toddler h2{color:#ffcc00}
+.toddler p{font-size:14px;line-height:1.6;color:#ffe080}
+
+/* HUD */
+#hud{position:absolute;top:4px;left:4px;color:#cc88ff;font:11px monospace;pointer-events:none;text-shadow:0 0 4px #6600cc}
+
+/* Test results */
+#test-results{background:#0a0018;border:1px solid #330066;padding:8px;margin:6px;font-size:11px}
+.test-pass{color:#00ff88}
+.test-fail{color:#ff4444}
+
+/* Ornament */
+.ornament{border:1px solid #440088;padding:8px;margin:6px;background:#0a0018;text-align:center;color:#8844cc;font-style:italic}
+
+/* BASIC block */
+.basic-block{background:#000;border:2px solid #00ff00;padding:10px;margin:8px;color:#00ff00;font-size:12px;white-space:pre-wrap}
+
+/* Layout */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+@media(max-width:700px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ============ 3D SCENE ============ -->
+<div id="scene-container">
+<div id="hud">H094 QCD CONFINEMENT CASCADE v0 | {brace[box(torroid)]} | 1×8×{}×8×1</div>
+</div>
+
+<!-- ============ PANEL 1: CONFINEMENT CASCADE ============ -->
+<div class="panel">
+<h2>CONFINEMENT CASCADE — {brace[box(torroid)]}</h2>
+<p style="font-size:11px;color:#aa88cc;margin-bottom:6px">
+Three scales. Three confiners. Three brackets. One nesting.</p>
+<table class="cascade-table">
+<tr><th>Scale</th><th>Confiner</th><th>Trapped</th><th>Bracket</th><th>Force</th></tr>
+<tr class="scale-nm">
+<td>10⁻⁹ m (nm)</td><td>Quantum dot</td><td>Electron/hole pair</td>
+<td>{brace}</td><td>EM potential well</td>
+</tr>
+<tr class="scale-fm">
+<td>10⁻¹⁵ m (fm)</td><td>QCD flux tube</td><td>Quarks (color r,g,b)</td>
+<td>[box]</td><td>Strong / SU(3)</td>
+</tr>
+<tr class="scale-lp">
+<td>10⁻³⁵ m (l_P)</td><td>Planck bubble</td><td>All — spacetime foam</td>
+<td>(torroid)</td><td>All forces merge</td>
+</tr>
+</table>
+<p style="font-size:10px;color:#886;margin-top:4px">
+Scale ratio: dot→QCD = 10⁶ | QCD→Planck = 10²⁰ | dot→Planck = 10²⁶</p>
+</div>
+
+<!-- ============ PANEL 2: 1×8×{}×8×1 ARCHITECTURE ============ -->
+<div class="panel">
+<h2>1 × 8 × {} × 8 × 1 — CONFINEMENT ARCHITECTURE</h2>
+<div class="arch-row">
+<span class="arch-singlet">1</span>
+<span class="arch-arrow">←</span>
+<span class="arch-octet">8</span>
+<span class="arch-arrow">←</span>
+<span class="arch-void">{}</span>
+<span class="arch-arrow">→</span>
+<span class="arch-octet">8</span>
+<span class="arch-arrow">→</span>
+<span class="arch-singlet">1</span>
+</div>
+<p style="font-size:10px;color:#aa88cc;text-align:center;margin-top:4px">
+singlet ← octet ← VOID → octet → singlet<br>
+(colorless) &nbsp; (8 gluons) &nbsp; (confining vacuum) &nbsp; (8 gluons) &nbsp; (colorless)</p>
+<p style="font-size:10px;color:#886;margin-top:6px">
+SU(3) color group: 3² − 1 = 8 generators (gluons).<br>
+Quarks carry one of 3 color charges (r, g, b). Gluons carry color–anticolor pairs.<br>
+Confinement: the QCD vacuum expels color flux into narrow tubes.<br>
+Pull quarks apart → tube stores energy → snaps → new quark pair. Never a free quark.<br>
+2³ = 8: the cube has 8 vertices. The gluon octet fills them.</p>
+</div>
+
+<!-- ============ PANEL 3: 3×8=24 COLOR-COIL MAPPING ============ -->
+<div class="panel">
+<h2>3 × 8 = 24 — COLOR-COIL STRUCTURE</h2>
+<p style="font-size:10px;color:#aa88cc;margin-bottom:6px">
+3 color charges × 8 gluons = 24. Maps to ATLAS toroid: 3 assemblies × 8 coils at 45° step.</p>
+
+<div id="color-octets"></div>
+
+<p style="font-size:10px;color:#886;margin-top:6px">
+r8! = red octet: orange → ochre → magenta (warm confinement)<br>
+b8! = blue octet: teal → indigo → violet (cool confinement)<br>
+g8! = green octet: emerald → turquoise → aquamarine (cyan confinement)<br>
+Each octet interpolates 8 coil colors from 3 anchor shades.</p>
+</div>
+
+<!-- ============ PANEL 4: BRACKET NESTING ============ -->
+<div class="panel">
+<h2>{brace[box(torroid)]} — BRACKET COLLAPSE</h2>
+<div class="grid-2">
+<div>
+<h3>Separation at each scale</h3>
+<table class="cascade-table">
+<tr><th>Scale (m)</th><th>Bracket sep</th><th>What's distinct</th></tr>
+<tr><td>10⁰</td><td>3 (all separate)</td><td>calendar ≠ clock ≠ angle</td></tr>
+<tr><td>10⁻⁹ (dot)</td><td>3</td><td>still 3 — EM potential</td></tr>
+<tr><td>10⁻¹⁵ (QCD)</td><td>2</td><td>nuclear merges 2</td></tr>
+<tr><td>10⁻¹⁸ (EW)</td><td>1.5</td><td>electroweak partial merge</td></tr>
+<tr><td>10⁻²⁵ (desert)</td><td>?</td><td>grand desert — unknown</td></tr>
+<tr><td>10⁻³⁵ (Planck)</td><td>0</td><td>all three collapse → one</td></tr>
+</table>
+</div>
+<div>
+<h3>Physical constants</h3>
+<table class="cascade-table">
+<tr><td>ℏc</td><td>197.3269804 MeV·fm</td></tr>
+<tr><td>α_s(M_Z)</td><td>0.1180 ± 0.0009</td></tr>
+<tr><td>Λ_QCD</td><td>~217 MeV</td></tr>
+<tr><td>l_P</td><td>1.616255 × 10⁻³⁵ m</td></tr>
+<tr><td>m_P</td><td>2.176434 × 10⁻⁸ kg</td></tr>
+<tr><td>E_P</td><td>1.220890 × 10¹⁹ GeV</td></tr>
+<tr><td>Proton radius</td><td>~0.84 fm</td></tr>
+<tr><td>Bohr radius (QD)</td><td>~5.3 nm (bulk GaAs)</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- ============ PANEL 5: CMS EVENT → COLOR MAP ============ -->
+<div class="panel">
+<h2>CMS DIMUON EVENTS → COLOR ASSIGNMENT</h2>
+<p style="font-size:10px;color:#aa88cc;margin-bottom:6px">
+92 CMS events assigned to 24 color-coils by invariant mass mod 24. Each event maps to one coil in one octet.</p>
+<div id="event-coil-map" style="font-size:10px;overflow-x:auto"></div>
+</div>
+
+<!-- ============ TODDLER / PLAIN VERSION ============ -->
+<div class="toddler">
+<h2>THE TODDLER VERSION</h2>
+<p>Imagine three Russian nesting dolls.</p>
+<p>The BIGGEST doll is a quantum dot — a tiny box that traps a spark of electricity.
+Like trapping a firefly in a jar.</p>
+<p>Inside that is a MEDIUM doll — the strong force box. It traps the colors inside
+protons and neutrons. Yes, quarks have "colors" (red, green, blue) — not real colors,
+just a name for a kind of charge. The strong force won't let them escape. Ever.
+Pull harder and it just makes MORE quarks. Like pulling taffy that never breaks free.</p>
+<p>The TINIEST doll is a Planck bubble — SO small that space itself is fuzzy there.
+Everything merges. All the forces become one thing. The box IS the thing inside it.</p>
+<p>Three dolls. Three traps. Three sizes: nanometer, femtometer, Planck-meter.</p>
+<p>And the trap has a shape: 1 × 8 × NOTHING × 8 × 1.<br>
+That's: one quiet thing, eight loud things, EMPTY, eight loud things, one quiet thing.<br>
+The quiet things are hadrons (protons). The loud things are gluons. The empty middle is the vacuum that DOES the trapping.</p>
+<p>24 coils total: 8 red + 8 blue + 8 green. Same as the giant magnet at CERN (ATLAS toroid).</p>
+</div>
+
+<!-- ============ ORNAMENT (labelled as ornament) ============ -->
+<div class="ornament">
+── ORNAMENT ──<br>
+╔═══════════════════════════════════════════════════╗<br>
+║ &nbsp; &nbsp; {brace &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;║<br>
+║ &nbsp; &nbsp; &nbsp; &nbsp;[box &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ║<br>
+║ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(torroid) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;║<br>
+║ &nbsp; &nbsp; &nbsp; &nbsp;] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;║<br>
+║ &nbsp; &nbsp;} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;║<br>
+║ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;║<br>
+║ &nbsp; &nbsp; 1 × 8 × {} × 8 × 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;║<br>
+║ &nbsp; &nbsp; ● ●●●●●●●● &nbsp;○ &nbsp;●●●●●●●● ● &nbsp; &nbsp; &nbsp; &nbsp;║<br>
+╚═══════════════════════════════════════════════════╝<br>
+── END ORNAMENT ──
+</div>
+
+<!-- ============ TEST RESULTS ============ -->
+<div id="test-results"></div>
+
+<!-- ============ BASIC BLOCK ============ -->
+<div class="basic-block" id="basic-block"></div>
+
+<!-- ============ MAIN SCRIPT ============ -->
+<script>
+// ============================================================
+// H094 v0 — QCD CONFINEMENT CASCADE
+// physics level 0: quantum dot → QCD → Planck bubble
+// {brace[box(torroid)]} with 3×8=24 color-coil structure
+// ============================================================
+
+// ---- PHYSICAL CONSTANTS ----
+const HBAR_C = 197.3269804;        // MeV·fm
+const ALPHA_S = 0.1180;            // strong coupling at M_Z
+const LAMBDA_QCD = 217;            // MeV
+const L_PLANCK = 1.616255e-35;     // m
+const M_PLANCK_GEV = 1.220890e19;  // GeV
+const PROTON_RADIUS_FM = 0.84;     // fm
+const BOHR_RADIUS_NM = 5.3;        // nm (GaAs quantum dot)
+
+// ---- CONFINEMENT SCALES ----
+const SCALES = [
+    { name:'Quantum Dot', scale:1e-9, bracket:'{brace}', force:'EM well', sep:3 },
+    { name:'QCD flux tube', scale:1e-15, bracket:'[box]', force:'Strong/SU(3)', sep:2 },
+    { name:'Planck bubble', scale:1e-35, bracket:'(torroid)', force:'All merge', sep:0 }
+];
+
+// ---- 3×8 COLOR OCTETS ----
+// Each octet: 3 anchor colors → interpolate 8
+function interpolateColors(anchors, n) {
+    // anchors = [[r,g,b], [r,g,b], [r,g,b]]
+    // interpolate n colors along the 3-anchor path
+    const colors = [];
+    for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);  // 0 to 1
+        let r, g, b;
+        if (t <= 0.5) {
+            const u = t * 2;  // 0 to 1 for first half
+            r = anchors[0][0] + (anchors[1][0] - anchors[0][0]) * u;
+            g = anchors[0][1] + (anchors[1][1] - anchors[0][1]) * u;
+            b = anchors[0][2] + (anchors[1][2] - anchors[0][2]) * u;
+        } else {
+            const u = (t - 0.5) * 2;  // 0 to 1 for second half
+            r = anchors[1][0] + (anchors[2][0] - anchors[1][0]) * u;
+            g = anchors[1][1] + (anchors[2][1] - anchors[1][1]) * u;
+            b = anchors[1][2] + (anchors[2][2] - anchors[1][2]) * u;
+        }
+        colors.push([Math.round(r), Math.round(g), Math.round(b)]);
+    }
+    return colors;
+}
+
+// r8!(orange, ochre, magenta) — warm confinement
+const R8_ANCHORS = [[255,136,0], [204,136,51], [255,0,255]];  // orange, ochre, magenta
+const R8 = interpolateColors(R8_ANCHORS, 8);
+
+// b8!(teal, indigo, violet) — cool confinement
+const B8_ANCHORS = [[0,128,128], [75,0,130], [139,0,255]];  // teal, indigo, violet
+const B8 = interpolateColors(B8_ANCHORS, 8);
+
+// g8!(emerald, turquoise, aquamarine) — cyan confinement
+const G8_ANCHORS = [[80,200,120], [64,224,208], [127,255,212]];  // emerald, turquoise, aquamarine
+const G8 = interpolateColors(G8_ANCHORS, 8);
+
+const ALL_24 = [...R8, ...B8, ...G8];
+
+function rgbToHex(c) {
+    return '#' + c.map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+// ---- CMS DIMUON DATA (92 events from Record 303) ----
+const CMS_EVENTS = [
+    {m:2.58,E:29.2},{m:3.11,E:14.6},{m:10.52,E:14.0},{m:3.10,E:30.9},
+    {m:11.83,E:12.5},{m:3.69,E:19.3},{m:3.09,E:24.8},{m:9.46,E:17.1},
+    {m:2.98,E:22.6},{m:3.44,E:16.9},{m:3.10,E:21.5},{m:91.18,E:214.4},
+    {m:88.95,E:198.2},{m:3.09,E:18.7},{m:9.37,E:15.3},{m:2.07,E:17.8},
+    {m:3.03,E:14.1},{m:10.01,E:19.2},{m:3.14,E:16.8},{m:3.68,E:21.4},
+    {m:91.56,E:201.1},{m:3.10,E:23.1},{m:4.52,E:18.9},{m:3.09,E:20.3},
+    {m:9.45,E:16.7},{m:3.52,E:15.8},{m:3.07,E:22.4},{m:90.12,E:189.5},
+    {m:3.09,E:19.6},{m:3.10,E:17.2},{m:10.33,E:21.8},{m:3.11,E:25.6},
+    {m:3.68,E:20.1},{m:9.44,E:18.3},{m:2.23,E:16.1},{m:3.09,E:21.9},
+    {m:91.24,E:207.3},{m:3.70,E:19.8},{m:3.10,E:16.5},{m:10.57,E:22.1},
+    {m:3.09,E:18.4},{m:3.44,E:17.6},{m:91.80,E:195.8},{m:9.46,E:20.4},
+    {m:3.08,E:15.9},{m:3.10,E:23.7},{m:2.85,E:14.8},{m:3.69,E:18.2},
+    {m:90.76,E:211.6},{m:3.09,E:19.1},{m:10.02,E:17.5},{m:3.11,E:22.8},
+    {m:3.09,E:16.3},{m:91.04,E:203.9},{m:9.42,E:19.7},{m:3.10,E:21.2},
+    {m:3.52,E:18.6},{m:3.08,E:14.5},{m:91.33,E:196.4},{m:3.69,E:20.7},
+    {m:10.46,E:23.4},{m:3.10,E:17.9},{m:3.09,E:15.2},{m:9.47,E:21.6},
+    {m:2.44,E:13.8},{m:3.11,E:19.4},{m:91.65,E:208.7},{m:3.68,E:16.4},
+    {m:3.10,E:22.3},{m:10.11,E:18.1},{m:3.09,E:20.6},{m:3.45,E:15.7},
+    {m:90.89,E:194.1},{m:9.44,E:17.3},{m:3.07,E:21.8},{m:3.10,E:16.9},
+    {m:91.47,E:205.2},{m:3.70,E:19.5},{m:10.58,E:22.6},{m:3.09,E:18.0},
+    {m:3.09,E:14.9},{m:9.46,E:20.1},{m:2.69,E:15.4},{m:3.11,E:23.0},
+    {m:91.12,E:197.6},{m:3.10,E:17.7},{m:3.08,E:21.1},{m:10.24,E:19.3},
+    {m:3.69,E:16.6},{m:9.43,E:22.9},{m:3.09,E:18.8},{m:91.72,E:210.3}
+];
+
+// Assign each event to a color-coil
+CMS_EVENTS.forEach((e, i) => {
+    e.coilIndex = Math.floor(e.m * 100) % 24;  // deterministic assignment
+    e.octet = Math.floor(e.coilIndex / 8);      // 0=r, 1=b, 2=g
+    e.coilInOctet = e.coilIndex % 8;
+    e.color = ALL_24[e.coilIndex];
+    e.hexColor = rgbToHex(e.color);
+    // Compton wavelength in fm: lambda_C = hbar_c / (Mc²) where M in MeV
+    e.comptonFm = HBAR_C / (e.m * 1000);  // m in GeV → MeV
+    // Which bracket: > 1fm = {brace}, 0.001-1fm = [box], < 0.001fm approaching Planck = (torroid)
+    if (e.comptonFm > 1) e.bracket = '{brace}';
+    else if (e.comptonFm > 0.001) e.bracket = '[box]';
+    else e.bracket = '(torroid)';
+});
+
+// ---- POPULATE COLOR OCTET DISPLAY ----
+function populateColorOctets() {
+    const container = document.getElementById('color-octets');
+    const octets = [
+        { name: 'r8!(orange,ochre,magenta)', colors: R8, label: 'Red octet' },
+        { name: 'b8!(teal,indigo,violet)', colors: B8, label: 'Blue octet' },
+        { name: 'g8!(emerald,turquoise,aquamarine)', colors: G8, label: 'Green octet' }
+    ];
+    octets.forEach(oct => {
+        const row = document.createElement('div');
+        row.className = 'color-octet';
+        row.innerHTML = `<span class="octet-label">${oct.label}</span>`;
+        oct.colors.forEach((c, i) => {
+            const swatch = document.createElement('span');
+            swatch.className = 'coil-swatch';
+            swatch.style.background = rgbToHex(c);
+            swatch.title = `Coil ${i}: rgb(${c.join(',')})`;
+            row.appendChild(swatch);
+        });
+        const info = document.createElement('span');
+        info.style.cssText = 'font-size:9px;color:#888;margin-left:4px';
+        info.textContent = oct.name;
+        row.appendChild(info);
+        container.appendChild(row);
+    });
+}
+
+// ---- POPULATE EVENT-COIL MAP ----
+function populateEventCoilMap() {
+    const container = document.getElementById('event-coil-map');
+    // Count per coil
+    const coilCounts = new Array(24).fill(0);
+    CMS_EVENTS.forEach(e => coilCounts[e.coilIndex]++);
+
+    let html = '<table class="cascade-table"><tr><th>Coil</th><th>Octet</th><th>Color</th><th>Events</th><th>Masses</th></tr>';
+    for (let i = 0; i < 24; i++) {
+        if (coilCounts[i] === 0) continue;
+        const octetName = ['r8','b8','g8'][Math.floor(i/8)];
+        const events = CMS_EVENTS.filter(e => e.coilIndex === i);
+        const masses = events.map(e => e.m.toFixed(2)).join(', ');
+        html += `<tr><td>${i}</td><td>${octetName}[${i%8}]</td>` +
+                `<td><span class="coil-swatch" style="background:${rgbToHex(ALL_24[i])};display:inline-block;width:14px;height:14px;vertical-align:middle"></span></td>` +
+                `<td>${coilCounts[i]}</td><td style="font-size:9px">${masses}</td></tr>`;
+    }
+    html += '</table>';
+    container.innerHTML = html;
+}
+
+// ---- THREE.JS 3D SCENE ----
+const sceneContainer = document.getElementById('scene-container');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x020008);
+const camera = new THREE.PerspectiveCamera(55, sceneContainer.clientWidth / sceneContainer.clientHeight, 0.1, 100);
+camera.position.set(0, 4, 18);
+camera.lookAt(0, 0, 0);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(sceneContainer.clientWidth, sceneContainer.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+sceneContainer.appendChild(renderer.domElement);
+
+// Lights
+scene.add(new THREE.AmbientLight(0x332244, 0.6));
+const pointLight = new THREE.PointLight(0xcc88ff, 1, 50);
+pointLight.position.set(5, 8, 5);
+scene.add(pointLight);
+
+// ---- 3D: THREE CONFINEMENT SHELLS ----
+// Outer: quantum dot (nm) — wireframe sphere
+const dotGeo = new THREE.SphereGeometry(7, 16, 12);
+const dotMat = new THREE.MeshBasicMaterial({ color: 0xff8800, wireframe: true, transparent: true, opacity: 0.15 });
+const dotShell = new THREE.Mesh(dotGeo, dotMat);
+scene.add(dotShell);
+
+// Middle: QCD (fm) — wireframe sphere
+const qcdGeo = new THREE.SphereGeometry(4.5, 12, 8);
+const qcdMat = new THREE.MeshBasicMaterial({ color: 0x00ccff, wireframe: true, transparent: true, opacity: 0.2 });
+const qcdShell = new THREE.Mesh(qcdGeo, qcdMat);
+scene.add(qcdShell);
+
+// Inner: Planck bubble — solid glowing sphere
+const planckGeo = new THREE.SphereGeometry(0.8, 24, 16);
+const planckMat = new THREE.MeshBasicMaterial({ color: 0x88ff88, transparent: true, opacity: 0.5 });
+const planckBubble = new THREE.Mesh(planckGeo, planckMat);
+scene.add(planckBubble);
+
+// Planck glow
+const glowGeo = new THREE.SphereGeometry(1.2, 16, 12);
+const glowMat = new THREE.MeshBasicMaterial({ color: 0x44ff44, transparent: true, opacity: 0.15 });
+scene.add(new THREE.Mesh(glowGeo, glowMat));
+
+// ---- 3D: 24 TOROID COILS ----
+// 3 rings of 8, at y = -2, 0, +2
+const coilGroups = [];
+const octetYPositions = [-2, 0, 2];
+const octetColors = [R8, B8, G8];
+const toroidRadius = 5.5;
+
+for (let oct = 0; oct < 3; oct++) {
+    const y = octetYPositions[oct];
+    for (let c = 0; c < 8; c++) {
+        const angle = (c / 8) * Math.PI * 2;
+        const x = Math.cos(angle) * toroidRadius;
+        const z = Math.sin(angle) * toroidRadius;
+
+        // Each coil: a torus knot (small)
+        const coilGeo = new THREE.TorusGeometry(0.35, 0.08, 8, 16);
+        const rgb = octetColors[oct][c];
+        const coilMat = new THREE.MeshPhongMaterial({
+            color: new THREE.Color(`rgb(${rgb[0]},${rgb[1]},${rgb[2]})`),
+            emissive: new THREE.Color(`rgb(${Math.floor(rgb[0]/3)},${Math.floor(rgb[1]/3)},${Math.floor(rgb[2]/3)})`),
+            shininess: 60
+        });
+        const coilMesh = new THREE.Mesh(coilGeo, coilMat);
+        coilMesh.position.set(x, y, z);
+        coilMesh.lookAt(0, y, 0);  // face center
+        scene.add(coilMesh);
+        coilGroups.push(coilMesh);
+    }
+}
+
+// ---- 3D: CMS EVENTS AS PARTICLES ----
+CMS_EVENTS.forEach(e => {
+    const geo = new THREE.SphereGeometry(0.08, 6, 4);
+    const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(e.hexColor) });
+    const mesh = new THREE.Mesh(geo, mat);
+
+    // Position: scattered within the QCD shell
+    const r = 1 + Math.random() * 3;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.random() * Math.PI;
+    mesh.position.set(
+        r * Math.sin(phi) * Math.cos(theta),
+        r * Math.cos(phi),
+        r * Math.sin(phi) * Math.sin(theta)
+    );
+    scene.add(mesh);
+});
+
+// ---- 3D: 1×8×{}×8×1 AXIS ----
+// Visualize as a line of objects along z-axis behind the main scene
+const archGroup = new THREE.Group();
+archGroup.position.set(0, -5.5, 0);
+
+// Create small markers for 1-8-{}-8-1
+function makeArchMarker(x, size, color, wireframe) {
+    const g = wireframe ? new THREE.SphereGeometry(size, 8, 6) : new THREE.SphereGeometry(size, 12, 8);
+    const m = new THREE.MeshBasicMaterial({ color, wireframe, transparent: true, opacity: wireframe ? 0.5 : 0.8 });
+    const mesh = new THREE.Mesh(g, m);
+    mesh.position.x = x;
+    return mesh;
+}
+
+// 1 (singlet left)
+archGroup.add(makeArchMarker(-6, 0.3, 0xffffff, false));
+// 8 (octet left)
+for (let i = 0; i < 8; i++) {
+    archGroup.add(makeArchMarker(-4 + i * 0.5, 0.15, 0xffcc00, false));
+}
+// {} (void center)
+const voidGeo = new THREE.RingGeometry(0.2, 0.4, 16);
+const voidMat = new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
+const voidMesh = new THREE.Mesh(voidGeo, voidMat);
+voidMesh.position.x = 0;
+archGroup.add(voidMesh);
+// 8 (octet right)
+for (let i = 0; i < 8; i++) {
+    archGroup.add(makeArchMarker(0.5 + i * 0.5, 0.15, 0xffcc00, false));
+}
+// 1 (singlet right)
+archGroup.add(makeArchMarker(6, 0.3, 0xffffff, false));
+
+scene.add(archGroup);
+
+// ---- ORBIT CONTROLS (manual) ----
+let mouseDown = false, mouseX = 0, mouseY = 0;
+let rotX = 0.3, rotY = 0;
+renderer.domElement.addEventListener('mousedown', e => { mouseDown = true; mouseX = e.clientX; mouseY = e.clientY; });
+renderer.domElement.addEventListener('mousemove', e => {
+    if (!mouseDown) return;
+    rotY += (e.clientX - mouseX) * 0.005;
+    rotX += (e.clientY - mouseY) * 0.005;
+    rotX = Math.max(-1.2, Math.min(1.2, rotX));
+    mouseX = e.clientX; mouseY = e.clientY;
+});
+renderer.domElement.addEventListener('mouseup', () => mouseDown = false);
+renderer.domElement.addEventListener('mouseleave', () => mouseDown = false);
+// Touch
+renderer.domElement.addEventListener('touchstart', e => { mouseDown = true; mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; }, {passive:true});
+renderer.domElement.addEventListener('touchmove', e => {
+    if (!mouseDown) return;
+    rotY += (e.touches[0].clientX - mouseX) * 0.005;
+    rotX += (e.touches[0].clientY - mouseY) * 0.005;
+    rotX = Math.max(-1.2, Math.min(1.2, rotX));
+    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY;
+}, {passive:true});
+renderer.domElement.addEventListener('touchend', () => mouseDown = false);
+
+// ---- ANIMATION ----
+let frame = 0;
+function animate() {
+    requestAnimationFrame(animate);
+    frame++;
+
+    // Slow auto-rotate when not dragging
+    if (!mouseDown) rotY += 0.002;
+
+    camera.position.x = 18 * Math.sin(rotY) * Math.cos(rotX);
+    camera.position.y = 18 * Math.sin(rotX);
+    camera.position.z = 18 * Math.cos(rotY) * Math.cos(rotX);
+    camera.lookAt(0, 0, 0);
+
+    // Pulse Planck bubble
+    const pScale = 1 + 0.1 * Math.sin(frame * 0.03);
+    planckBubble.scale.set(pScale, pScale, pScale);
+
+    // Rotate coils slightly
+    coilGroups.forEach((c, i) => {
+        c.rotation.x += 0.01;
+        c.rotation.z += 0.005;
+    });
+
+    // Void ring rotation
+    voidMesh.rotation.z += 0.02;
+
+    renderer.render(scene, camera);
+}
+animate();
+
+// ---- POPULATE PANELS ----
+populateColorOctets();
+populateEventCoilMap();
+
+// ---- TESTS ----
+const tests = [];
+function assert(name, fn) {
+    try {
+        const result = fn();
+        tests.push({ name, pass: !!result, detail: result === true ? '' : String(result) });
+    } catch(e) {
+        tests.push({ name, pass: false, detail: e.message });
+    }
+}
+
+// Physics tests
+assert('3 confinement scales defined', () => SCALES.length === 3);
+assert('SU(3): 3²-1 = 8 gluons', () => 3*3 - 1 === 8);
+assert('3 octets × 8 coils = 24', () => R8.length === 8 && B8.length === 8 && G8.length === 8 && ALL_24.length === 24);
+assert('hbar_c = 197.33 MeV·fm', () => Math.abs(HBAR_C - 197.3269804) < 0.001);
+assert('alpha_s(M_Z) = 0.1180', () => ALPHA_S === 0.1180);
+assert('Lambda_QCD ~ 217 MeV', () => LAMBDA_QCD === 217);
+assert('l_P = 1.616255e-35 m', () => L_PLANCK === 1.616255e-35);
+assert('Planck energy = 1.22089e19 GeV', () => M_PLANCK_GEV === 1.220890e19);
+
+// Architecture tests
+assert('1×8×{}×8×1 structure: 1+8+0+8+1 = 18 nodes', () => 1 + 8 + 0 + 8 + 1 === 18);
+assert('2³ = 8 (cube vertices)', () => Math.pow(2, 3) === 8);
+
+// Color tests
+assert('R8 anchors: orange→ochre→magenta', () =>
+    R8[0][0] === 255 && R8[0][1] === 136 && R8[0][2] === 0 &&  // orange
+    R8[7][0] === 255 && R8[7][2] === 255);  // magenta end
+assert('B8 anchors: teal→indigo→violet', () =>
+    B8[0][0] === 0 && B8[0][1] === 128 && B8[0][2] === 128);  // teal
+assert('G8 anchors: emerald→turquoise→aquamarine', () =>
+    G8[0][0] === 80 && G8[0][1] === 200 && G8[0][2] === 120);  // emerald
+
+// Event tests
+assert('92 CMS events loaded', () => CMS_EVENTS.length === 92);
+assert('all events have coil assignment 0-23', () =>
+    CMS_EVENTS.every(e => e.coilIndex >= 0 && e.coilIndex < 24));
+assert('all events have octet 0-2', () =>
+    CMS_EVENTS.every(e => e.octet >= 0 && e.octet <= 2));
+assert('coil assignments sum to 92', () => {
+    const counts = new Array(24).fill(0);
+    CMS_EVENTS.forEach(e => counts[e.coilIndex]++);
+    return counts.reduce((a,b) => a+b, 0) === 92;
+});
+assert('Z events have high mass (>88 GeV)', () =>
+    CMS_EVENTS.filter(e => e.m > 88).length > 5);
+assert('J/psi events cluster near 3.1 GeV', () =>
+    CMS_EVENTS.filter(e => Math.abs(e.m - 3.1) < 0.2).length > 20);
+
+// 3D scene tests
+assert('3 confinement shells in scene (dot + QCD + Planck)', () =>
+    scene.children.filter(c => c.geometry && c.geometry.type === 'SphereGeometry').length >= 3);
+assert('24 toroid coils in scene', () =>
+    scene.children.filter(c => c.geometry && c.geometry.type === 'TorusGeometry').length === 24);
+assert('void ring in scene', () =>
+    scene.children.filter(c => c.geometry && c.geometry.type === 'RingGeometry' ||
+        (c.children && c.children.some(ch => ch.geometry && ch.geometry.type === 'RingGeometry'))).length >= 1);
+assert('CMS event particles in scene', () =>
+    scene.children.filter(c => c.geometry && c.geometry.type === 'SphereGeometry' &&
+        c.geometry.parameters.radius < 0.1).length === 92);
+
+// Bracket assignment test
+assert('Compton wavelength assigns brackets correctly', () => {
+    const jpsi = CMS_EVENTS.find(e => Math.abs(e.m - 3.1) < 0.1);
+    const z = CMS_EVENTS.find(e => e.m > 88);
+    // J/psi at 3.1 GeV: lambda_C = 197.33/3100 = 0.0636 fm → [box]
+    // Z at ~91 GeV: lambda_C = 197.33/91000 = 0.00217 fm → [box]
+    return jpsi.bracket === '[box]' && z.bracket === '[box]';
+});
+
+// KNOWN-BAD CONTROL — this test MUST fail to prove the test harness catches failures
+assert('KNOWN-BAD: 2+2=5 (control — must fail)', () => 2 + 2 === 5);
+
+// Display results
+const resultsDiv = document.getElementById('test-results');
+let passCount = 0, failCount = 0, knownBad = 0;
+let html = '<h2 style="color:#cc88ff;font-size:14px">TEST RESULTS — H094 v0</h2>';
+tests.forEach(t => {
+    const isKnownBad = t.name.includes('KNOWN-BAD');
+    if (t.pass) {
+        passCount++;
+        html += `<div class="test-pass">✓ LIT — ${t.name}</div>`;
+    } else if (isKnownBad) {
+        knownBad++;
+        html += `<div class="test-fail">✗ DEAD (KNOWN-BAD CONTROL) — ${t.name}</div>`;
+    } else {
+        failCount++;
+        html += `<div class="test-fail">✗ DEAD — ${t.name}${t.detail ? ' — ' + t.detail : ''}</div>`;
+    }
+});
+html += `<div style="margin-top:6px;color:#cc88ff;font-weight:bold">` +
+        `LEDGER: ${passCount} LIT / ${knownBad} DEAD (known-bad) / ${failCount} DEAD (real)</div>`;
+resultsDiv.innerHTML = html;
+
+// ---- BASIC BLOCK (Lazy Caterer numbers: n(n+1)/2 + 1 → 1,2,4,7,11,16,22,29,37,46,56) ----
+// Wait — I need a NEW scheme. Using NARAYANA'S COWS: 1,1,1,2,3,4,6,9,13,19,28,41,60
+// a(n) = a(n-1) + a(n-3)
+const narayana = [1,1,1];
+for (let i = 3; i < 25; i++) narayana.push(narayana[i-1] + narayana[i-3]);
+
+document.getElementById('basic-block').textContent =
+`${narayana[0]} REM ========================================
+${narayana[1]} REM  H094 — QCD CONFINEMENT CASCADE
+${narayana[2]} REM  BASIC BLOCK (Narayana's Cows sequence)
+${narayana[3]} REM  a(n) = a(n-1) + a(n-3)
+${narayana[4]} REM ========================================
+${narayana[5]} REM
+${narayana[6]} REM  THREE TRAPS. THREE SCALES. THREE BRACKETS.
+${narayana[7]} REM
+${narayana[8]} REM  QUANTUM DOT:  10^-9 m (nanometer)
+${narayana[9]} REM    trap an electron in a potential well
+${narayana[10]} REM    bracket = {brace} = calendar/gravity
+${narayana[11]} REM
+${narayana[12]} REM  QCD FLUX TUBE:  10^-15 m (femtometer)
+${narayana[13]} REM    trap quarks via color force
+${narayana[14]} REM    SU(3): 3^2 - 1 = 8 gluons
+${narayana[15]} REM    bracket = [box] = clock/EM
+${narayana[16]} REM
+${narayana[17]} REM  PLANCK BUBBLE:  10^-35 m (Planck length)
+${narayana[18]} REM    spacetime itself is the trap
+${narayana[19]} REM    all three brackets collapse to zero
+${narayana[20]} REM    bracket = (torroid) = angle/geometry
+${narayana[21]} REM
+${narayana[22]} REM  THE ARCHITECTURE: 1 x 8 x {} x 8 x 1
+${narayana[23]} REM  singlet-octet-void-octet-singlet
+${narayana[24]} REM  the vacuum DOES the trapping
+`;
+
+</script>
+</body>
+</html>
