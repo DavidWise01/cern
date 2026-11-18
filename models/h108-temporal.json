@@ -1,0 +1,29 @@
+{
+  "schema": "cern.h108.temporal-persistence.v1",
+  "parent": "models/h107-resistance.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "delta": 0.06988445853297448,
+  "bound": "rho(t) <= exp(-Gamma(t))*(rho0 + integral_0^t exp(Gamma(s))*F(s) ds)",
+  "prefix_condition": "For every prefix t: rho0 + integral_0^t exp(Gamma(s))*F(s) ds <= r*exp(Gamma(t))",
+  "test": {
+    "segments": 144,
+    "status": "Executed local Python PASS",
+    "crossing_time": 5.80193531751911,
+    "short_overload": 0.601247665581,
+    "long_overload": 1.254260904004,
+    "gap_outage": 1.19884458533,
+    "recovery": 0.447443457598,
+    "equal_total_counterexample": {
+      "peak": 1.0674984437203647,
+      "end": 0.9954439600953287
+    }
+  },
+  "limitations": [
+    "Scalar comparison envelope, not a full time-varying nine-mode simulation",
+    "Fixed Q, nonnegative forcing bound and contraction rate",
+    "Unweighted total exposure does not imply prefix safety",
+    "Lean supporting lemmas uncompiled",
+    "Finite model"
+  ],
+  "next": "H109 temporal reserve ledger and admissible pulse scheduling"
+}
