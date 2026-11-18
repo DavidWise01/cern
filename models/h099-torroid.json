@@ -1,0 +1,53 @@
+{
+  "schema": "cern.h099.stitched-torroid.v1",
+  "parent": "H098 quarter-torroid architecture",
+  "operants": [
+    "{}",
+    "()",
+    "[]",
+    "/|\\",
+    "\\|/",
+    "| | |"
+  ],
+  "factorization": [
+    2,
+    6,
+    2
+  ],
+  "address": "12a+6b+c",
+  "explicit": 24,
+  "implicit": 1,
+  "seams": [
+    [
+      5,
+      6
+    ],
+    [
+      11,
+      12
+    ],
+    [
+      17,
+      18
+    ],
+    [
+      23,
+      0
+    ]
+  ],
+  "polarity_counts": [
+    12,
+    12
+  ],
+  "graph": "W25: C24 with one shared hub, not a two-dimensional torus",
+  "rim_edges": 24,
+  "spokes": 24,
+  "rotation_order": 24,
+  "polarity_period": 2,
+  "pattern_period": 6,
+  "polarity_eigenvalue": 5,
+  "center_contrast_eigenvalue": 25,
+  "gap": "3-(sqrt(6)+sqrt(2))/2",
+  "verification": "Local exact SymPy test PASS; Lean candidate uncompiled",
+  "next": "H100 diodic forward/inverse transport with skew term"
+}
