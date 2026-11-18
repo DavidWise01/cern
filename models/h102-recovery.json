@@ -1,0 +1,90 @@
+{
+  "schema": "cern.h102.singlet-recovery.v1",
+  "parent": "models/h101-toroidal.json",
+  "explicit": 576,
+  "implicit": 1,
+  "states": 577,
+  "graph": "weighted Cartesian torus plus uniform shared hub",
+  "neuron_gap": "min(577*kappa,kappa+Delta_T)",
+  "delta_T": "(2-2*cos(pi/12))*min(a,b)",
+  "constraints": "a,b,kappa>=0",
+  "test": {
+    "spectra": 9,
+    "eigenvalues_each": 577,
+    "max_error_upper": 7e-13,
+    "passed": true
+  },
+  "cases": [
+    [
+      1,
+      1,
+      0,
+      0,
+      2
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      25
+    ],
+    [
+      1,
+      1,
+      0.01,
+      0.078148347421861,
+      1
+    ],
+    [
+      1,
+      0,
+      0.01,
+      0.01,
+      1
+    ],
+    [
+      0,
+      0,
+      0.01,
+      0.01,
+      1
+    ],
+    [
+      1,
+      0,
+      0.001736111111111111,
+      0.001736111111111111,
+      1
+    ],
+    [
+      1,
+      1,
+      0.001736111111111111,
+      0.069884458533,
+      1
+    ],
+    [
+      0,
+      0,
+      0.001736111111111111,
+      0.001736111111111111,
+      1
+    ],
+    [
+      1,
+      1,
+      1,
+      1.068148347421861,
+      1
+    ]
+  ],
+  "lean": "supporting lemmas uncompiled",
+  "limitations": [
+    "Uniform hub links assumed intact",
+    "Hub is single point of failure",
+    "Finite graph diffusion, not biological or quantum mass gap",
+    "JPEG incorrectly excludes isolated center in zero-coupling case"
+  ],
+  "next": "H103 fixed total coupling budget and sparse singlet links"
+}
