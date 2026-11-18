@@ -1,0 +1,13 @@
+{
+  "schema": "cern.h095.witness-counterexample.v1",
+  "parent": "models/h094-phase.json",
+  "observations": 2048,
+  "returns": 768,
+  "not_returns": 1280,
+  "baseline_assertions": 10240,
+  "adversarial_assertions": 1,
+  "consistent_phase_forgery": "FALSE_ACCEPT",
+  "status": "Counterexample reproduced in local Python execution",
+  "scope": "Synthetic Q8 model, declared roots and contextual identifiers, no cryptographic authentication, not a mass-gap proof",
+  "next": "H096 redundant independently rooted phase observations"
+}
