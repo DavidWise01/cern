@@ -1,0 +1,38 @@
+{
+  "schema": "cern.h107.forced-containment.v1",
+  "parent": "models/h106-containment.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "modes": 10,
+  "contracting_modes": 9,
+  "boundary": 11,
+  "delta": 0.069884458533,
+  "threshold": "F <= delta*r",
+  "energy": "V=y^T Q y",
+  "assumptions": "fixed SPD Q, compatible Q-skew circulation, bounded forcing only on nine mean-zero coordinates, radius positive",
+  "tests": {
+    "seed": 107,
+    "configurations": 128,
+    "boundary_checks": 384,
+    "max_derivative": -0.0299865657376,
+    "sharp_examples": [
+      [
+        0,
+        0.030372340806
+      ],
+      [
+        0.5,
+        0.515186170403
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1.01,
+        1.009696276592
+      ]
+    ]
+  },
+  "verification": "local NumPy execution passed; Lean candidate uncompiled",
+  "next": "H108 time-varying resistance and cumulative exposure"
+}
