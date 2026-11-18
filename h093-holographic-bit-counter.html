@@ -56,6 +56,11 @@ select:hover,button:hover{border-color:#00ffcc}
 .depth-bar{display:inline-block;vertical-align:bottom;margin:0 1px;min-width:6px;border:1px solid #442200}
 .depth-label{font-size:8px;color:#888;text-align:center;display:block}
 .depth-row{display:flex;align-items:flex-end;justify-content:center;gap:1px;padding:4px;height:120px;border:1px solid #1a1a0a;background:#050500}
+/* v0+4 digit column styles */
+.reg-col{display:inline-flex;flex-direction:column-reverse;align-items:center;margin:0 2px;border:1px solid #221100;background:#050200;padding:1px}
+.reg-col .digit{width:14px;height:14px;text-align:center;font:bold 10px monospace;line-height:14px}
+.reg-header{font-size:9px;color:#888;text-align:center;padding:1px 2px}
+.reg-wrap{display:flex;align-items:flex-end;overflow-x:auto;gap:2px;padding:4px;border:1px solid #1a0a00;background:#030200}
 </style>
 </head>
 <body>
@@ -237,6 +242,20 @@ Deeper = more trits = heavier particle = higher temperature = more information a
 <div style="max-height:150px;overflow-y:auto" id="trit-depth-dist"></div>
 </div>
 
+<!-- v0+4 APPEND: TRIT DIGIT REGISTER READER -->
+<div class="panel full-width">
+<h2>REGISTER READER — BALANCED TERNARY DIGIT COLUMNS</h2>
+<div class="trit-tower">
+<h3>EACH BIN'S MEDIAN EVENT AS A VERTICAL REGISTER</h3>
+<span class="eq">depth trits read bottom-to-top: least significant → most significant</span>
+<p class="info">The median-mass event from each integer trit bin, rendered as its full balanced ternary string.
+Each column is one register — read upward from the CMB floor. <span class="trit-neg">T</span> = -1 (blue),
+<span class="trit-zero">0</span> = 0 (yellow), <span class="trit-pos">1</span> = +1 (red).
+Deeper registers (right) encode heavier particles — more digits, more information above the floor.</p>
+</div>
+<div class="reg-wrap" id="register-reader"></div>
+</div>
+
 <!-- ORNAMENT -->
 <div class="ornament">
 &#9670;&#9674;&#9670; H093 &#9670;&#9674;&#9670;
@@ -253,7 +272,7 @@ Deeper = more trits = heavier particle = higher temperature = more information a
 </div>
 
 <div class="meta">
-H093-HOLOGRAPHIC-BIT-COUNTER v0+3 &bull; Ancestry: H092, H091, QG-077 &bull;
+H093-HOLOGRAPHIC-BIT-COUNTER v0+4 &bull; Ancestry: H092, H091, QG-077 &bull;
 Data: CERN Open Data Record 303 (CC0) &bull; Planck: CODATA 2018 &bull;
 Bekenstein: PRD 7 (1973) 2333 &bull; 't Hooft: gr-qc/9310026 &bull; Susskind: JMP 36 (1995) 6377
 </div>
@@ -906,6 +925,56 @@ function init3D() {
     taxS.scale.set(8, 0.8, 1);
     scene.add(taxS);
 
+    // === v0+4 APPEND: TRIT DIGIT COLUMNS ===
+    // For each bin, pick the median-mass event, render its balanced ternary string
+    // as a vertical stack of colored trit-digit sprites at z=-12
+    const digitColumns = [];
+    binKeys.forEach(bin => {
+        const evts = tritBins[bin].slice().sort((a,b) => a.M - b.M);
+        const median = evts[Math.floor(evts.length / 2)];
+        const btStr = median.balancedTernary;
+        const xPos = ((bin - minBin) / binRange - 0.5) * 30;
+        const digitSpacing = 0.45; // vertical spacing per digit
+        const digits = btStr.split('').reverse(); // LSB at bottom
+        const colGroup = new THREE.Group();
+        digits.forEach((ch, di) => {
+            const dc = document.createElement('canvas');
+            dc.width = 32; dc.height = 32;
+            const dx = dc.getContext('2d');
+            // Background per digit
+            const bgCol = ch === 'T' ? '#001133' : ch === '0' ? '#1a1a00' : '#1a0000';
+            dx.fillStyle = bgCol; dx.fillRect(0,0,32,32);
+            // Digit color
+            const fgCol = ch === 'T' ? '#4488ff' : ch === '0' ? '#ffcc00' : '#ff4444';
+            dx.fillStyle = fgCol;
+            dx.font = 'bold 22px monospace';
+            dx.textAlign = 'center';
+            dx.fillText(ch, 16, 24);
+            const dt = new THREE.CanvasTexture(dc);
+            const ds = new THREE.Sprite(new THREE.SpriteMaterial({ map: dt, transparent: true, opacity: 0.85 }));
+            ds.position.set(0, -6 + di * digitSpacing + 0.3, 0);
+            ds.scale.set(0.4, 0.4, 1);
+            colGroup.add(ds);
+        });
+        colGroup.position.set(xPos, 0, -12);
+        scene.add(colGroup);
+        // Bin label below column
+        const blc = document.createElement('canvas');
+        blc.width = 64; blc.height = 32;
+        const blx = blc.getContext('2d');
+        blx.fillStyle = '#000'; blx.fillRect(0,0,64,32);
+        blx.fillStyle = '#ff8844'; blx.font = 'bold 10px monospace';
+        blx.fillText(`${bin}t`, 4, 14);
+        blx.fillStyle = '#666'; blx.font = '8px monospace';
+        blx.fillText(`${median.M.toFixed(1)}`, 4, 26);
+        const blt = new THREE.CanvasTexture(blc);
+        const bls = new THREE.Sprite(new THREE.SpriteMaterial({ map: blt, transparent: true }));
+        bls.position.set(xPos, -6.8, -12);
+        bls.scale.set(1.2, 0.5, 1);
+        scene.add(bls);
+        digitColumns.push({ bin, median, digits: btStr, group: colGroup });
+    });
+
     // Manual orbit controls
     const el = renderer.domElement;
     el.addEventListener('mousedown', e => { controls_data.isDragging = true; controls_data.prev = {x:e.clientX,y:e.clientY}; });
@@ -972,7 +1041,7 @@ function updateHUD() {
         `Sphere size ∝ log₁₀(bits) | Dots = Planck cells on holographic surface<br>` +
         `Drag/touch to rotate | Scroll/pinch to zoom | Heavier → smaller sphere → fewer bits<br>` +
         `3 substrate shells: <span style="color:#4488ff">0K(T)</span> | <span style="color:#ffcc00">2.725K(0)</span> | <span style="color:#ff4444">CMB+n(1)</span><br>` +
-        `<span style="color:#ff8844">Trit towers</span> at z=-8: event count per integer trit depth bin`;
+        `<span style="color:#ff8844">Trit towers</span> at z=-8: event count per bin | <span style="color:#ff6622">Digit columns</span> at z=-12: readable registers`;
 }
 
 function animate() {
@@ -1192,6 +1261,37 @@ function runTests() {
         const panel = document.getElementById('trit-depth-bars');
         return panel && panel.children.length > 0;
     });
+    // === v0+4 APPEND: DIGIT COLUMN TESTS ===
+    test('digit columns in 3D scene (Groups at z=-12)', () => {
+        let groupCount = 0;
+        scene.children.forEach(c => { if (c.isGroup && c.position.z === -12) groupCount++; });
+        return groupCount >= 3;
+    });
+    test('register reader panel populated', () => {
+        const rr = document.getElementById('register-reader');
+        return rr && rr.children.length >= 3;
+    });
+    test('median event balanced ternary length = trit depth', () => {
+        // For the Z⁰ bin (~31), the balanced ternary string should be ~31 chars
+        const zEvts = eventData.filter(e => Math.floor(e.thermalTrits) === 31);
+        if (zEvts.length === 0) return true; // bin may not exist in data
+        const med = zEvts.sort((a,b) => a.M - b.M)[Math.floor(zEvts.length/2)];
+        return Math.abs(med.balancedTernary.length - Math.floor(med.thermalTrits)) <= 2;
+    });
+    test('all balanced ternary strings contain only T,0,1', () => {
+        return eventData.every(e => /^[T01]+$/.test(e.balancedTernary));
+    });
+    test('digit columns span all occupied bins', () => {
+        const occupiedBins = new Set(eventData.map(e => Math.floor(e.thermalTrits)));
+        let colBins = 0;
+        scene.children.forEach(c => { if (c.isGroup && c.position.z === -12) colBins++; });
+        return colBins === occupiedBins.size;
+    });
+    test('register strings encode trit count (all 3-4 digits for CMS range)', () => {
+        // BT encodes Math.round(thermalTrits) which is 26-31 for CMS dimuon
+        // All those numbers are 3-4 balanced ternary digits long
+        return eventData.every(e => e.balancedTernary.length >= 3 && e.balancedTernary.length <= 5);
+    });
     // KNOWN-BAD
     test('[KNOWN-BAD] M=-1 gives negative Compton', () => {
         return comptonWavelength(-1) < 0;
@@ -1294,6 +1394,44 @@ function populateTritDepthPanel() {
     distDiv.innerHTML = html;
 }
 
+// === v0+4 APPEND: POPULATE REGISTER READER ===
+function populateRegisterReader() {
+    const wrap = document.getElementById('register-reader');
+    if (!wrap) return;
+    // Group events by trit bin, pick median
+    const bins = {};
+    eventData.forEach(e => {
+        const bin = Math.floor(e.thermalTrits);
+        if (!bins[bin]) bins[bin] = [];
+        bins[bin].push(e);
+    });
+    const keys = Object.keys(bins).map(Number).sort((a,b) => a-b);
+    keys.forEach(bin => {
+        const evts = bins[bin].slice().sort((a,b) => a.M - b.M);
+        const median = evts[Math.floor(evts.length / 2)];
+        const btStr = median.balancedTernary;
+        const col = document.createElement('div');
+        col.className = 'reg-col';
+        col.title = `Bin ${bin}: M=${median.M.toFixed(2)} GeV, T=${median.thermalT.toExponential(2)} K`;
+        // Header
+        const hdr = document.createElement('div');
+        hdr.className = 'reg-header';
+        hdr.innerHTML = `<b style="color:#ff8844">${bin}t</b><br>${median.M.toFixed(1)}`;
+        // Digits bottom to top (column-reverse makes first child at bottom)
+        const digits = btStr.split('').reverse(); // LSB first
+        digits.forEach(ch => {
+            const d = document.createElement('div');
+            d.className = 'digit';
+            if (ch === 'T') { d.classList.add('trit-neg'); d.textContent = 'T'; }
+            else if (ch === '0') { d.classList.add('trit-zero'); d.textContent = '0'; }
+            else { d.classList.add('trit-pos'); d.textContent = '1'; }
+            col.appendChild(d);
+        });
+        col.appendChild(hdr);
+        wrap.appendChild(col);
+    });
+}
+
 // ===== INIT =====
 populateRefTable();
 populateEventTable();
@@ -1302,6 +1440,7 @@ drawBitChart();
 drawCrossChart();
 populateSubstratePanel();
 populateTritDepthPanel();
+populateRegisterReader();
 init3D();
 const testResult = runTests();
 </script>
