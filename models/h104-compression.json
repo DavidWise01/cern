@@ -1,0 +1,39 @@
+{
+  "schema": "cern.h104.jacobi-compression.v1",
+  "parent": "models/h103-jacobi.json",
+  "size": 577,
+  "budget": 1,
+  "neuron_gap": 0.069884458533,
+  "seed": 104,
+  "lanczos": [
+    [
+      3,
+      1.06429870756
+    ],
+    [
+      6,
+      0.32988324206
+    ],
+    [
+      12,
+      0.137704222434
+    ],
+    [
+      24,
+      0.0722853722722
+    ]
+  ],
+  "targeted_spectrum": [
+    0,
+    0.069884458533,
+    1.0017361111111112
+  ],
+  "verification": "Local Python/SciPy executed PASS; numerical invariant subspace and Ritz estimates",
+  "limitations": [
+    "Three modes retain the gap value but not its fourfold multiplicity",
+    "No arbitrary-state or phase reconstruction",
+    "Lean supporting lemma not compiled",
+    "Numerical not interval-certified"
+  ],
+  "next": "H105 symmetry-complete six-mode compression"
+}
