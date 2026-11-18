@@ -1,0 +1,34 @@
+{
+  "schema": "cern.h106.containment.v1",
+  "parent": "models/h105-elliptical.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "modes": [
+    "equilibrium",
+    "cos x",
+    "sin x",
+    "cos y",
+    "sin y",
+    "cos(x+y)",
+    "sin(x+y)",
+    "cos(x-y)",
+    "sin(x-y)",
+    "hub contrast"
+  ],
+  "neuron_gap": 0.069884458533,
+  "outer_boundary": "y^T Q y <= r^2 on nine mean-zero coordinates",
+  "generator": "A=C^-1(-D+S)C, Q=C^T C, S^T=-S",
+  "test": {
+    "configurations": 128,
+    "max_positive_residual": 7.370511631371647e-14,
+    "tolerance": 1e-9,
+    "status": "PASS local NumPy"
+  },
+  "limitations": [
+    "Constructed compatible dynamics, not arbitrary disturbances",
+    "Nine contracting coordinates and one conserved equilibrium coordinate",
+    "Ten neural modes distinct from ten coefficients of 4x4 symmetric tensor",
+    "Lean supporting lemmas uncompiled",
+    "JPEG local only"
+  ],
+  "next": "H107 bounded external forcing and robust containment threshold"
+}
