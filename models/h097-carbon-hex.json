@@ -1,0 +1,41 @@
+{
+  "schema": "cern.h097.carbon-hex.v1",
+  "parent": "H096 carbon hex conversation",
+  "operants": [
+    "{}",
+    "()",
+    "[]",
+    "/|\\",
+    "\\|/",
+    "| | |"
+  ],
+  "polarity": [
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1
+  ],
+  "center": "{{i}}",
+  "graph": "wheel W7, six rim edges and six radial edges",
+  "spectrum": [
+    "0",
+    "7k",
+    "1+k (2)",
+    "3+k (2)",
+    "4+k"
+  ],
+  "unit_spectrum": [
+    0,
+    2,
+    2,
+    4,
+    4,
+    5,
+    7
+  ],
+  "gap": "min(7k,1+k) for k>0",
+  "status": "Local SymPy exact test passed; Lean candidate uncompiled",
+  "next": "H098 diodic direction and skew transport"
+}
