@@ -1,0 +1,34 @@
+{
+  "schema": "cern.h116.fractional-shadow.v1",
+  "parent": "models/h115-evidence.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "model": "exact rational discrete recurrence, integer-scaled capacity rows",
+  "a": "9/10",
+  "initial_radius": "1/4",
+  "boundary": 1,
+  "horizon": 12,
+  "dual_bound": "v+y*remaining+sum(max(0,w_i-y*M_ki)); y>=0; prune if bound<incumbent+1 for integer objective",
+  "results": {
+    "cases": 33,
+    "small_baseline_nodes": 938,
+    "small_tight_nodes": 738,
+    "dual_certificates": 37,
+    "tamper_rejected": 33,
+    "large": {
+      "baseline_nodes": 449,
+      "tight_nodes": 277,
+      "baseline_certificates": 225,
+      "tight_certificates": 139,
+      "value": 24,
+      "covered": 16777216
+    }
+  },
+  "limits": [
+    "One capacity row at a time, not a full multi-row LP relaxation",
+    "Synthetic fixed rational model; integer nonnegative priority weights",
+    "Verifier shares matrix construction with search, independently traverses certificate tree and checks primal winner via recurrence",
+    "Node reductions are not measured runtime speedups",
+    "Lean lemmas uncompiled"
+  ],
+  "next": "H117 unified append-only proof ledger, bind input, incumbent and certificates to one immutable digest"
+}
