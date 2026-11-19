@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h118.signed-checkpoint.v1",
+  "parent": "models/h117-ledger.json",
+  "checkpoint": [
+    143,
+    "228dba7ae919a855718e3bb6048b0877522ddad0eba2a83430866dd4ebae3d3b"
+  ],
+  "signature": "Ed25519",
+  "domain": "cern/H118/continue/v1",
+  "successor": "H119",
+  "agent": "patricia",
+  "fields": [
+    "domain",
+    "checkpoint",
+    "epoch",
+    "successor",
+    "agent",
+    "nonce"
+  ],
+  "results": {
+    "accepted": 2,
+    "rejected": 14,
+    "mathematical_verification": true,
+    "final_epoch": 2
+  },
+  "limitations": [
+    "Ephemeral test keys and in-memory nonce state",
+    "No authenticated caller identity, only signed intended recipient",
+    "No durable or concurrent nonce consumption",
+    "No actual successor execution",
+    "Requires local H116 and H117 artifacts and normal Python assertions",
+    "Lean uncompiled"
+  ],
+  "next": "H119 durable atomic authorization consumption"
+}
