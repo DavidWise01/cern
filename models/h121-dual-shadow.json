@@ -1,0 +1,37 @@
+{
+  "schema": "cern.h121.erse-dual-shadow.v1",
+  "parent": "EeeErse canonical architecture",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "inner": 10,
+  "surrounding": 9,
+  "singlet": 1,
+  "outer": 11,
+  "fibonacci": [
+    1,
+    1,
+    2,
+    3,
+    5,
+    8,
+    13
+  ],
+  "projections": [
+    "(w,x,y)",
+    "(x,y,z)"
+  ],
+  "results": {
+    "integer_points": 625,
+    "stacked_rank": 4,
+    "quadratic_rank": 9,
+    "mixed_rank": 10
+  },
+  "missing": "wz",
+  "mixed": "(w+z)^T quadratic observation, q_ww+2q_wz+q_zz",
+  "limitations": [
+    "Projection choice is a model decision",
+    "Nine observed tensor coefficients and one hidden coefficient do not establish a physical ninth gluon or spatial arrangement",
+    "No neural gap derived in this step",
+    "Lean candidate uncompiled"
+  ],
+  "next": "H122 optimize two oblique shadow measurements or add calibrated mixed witness"
+}
