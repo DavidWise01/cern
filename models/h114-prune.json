@@ -1,0 +1,28 @@
+{
+  "schema": "cern.h114.pruning.v1",
+  "parent": "models/h113-select.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "cases": 128,
+  "exhaustive_subsets": 131072,
+  "visited_nodes": 8398,
+  "unsafe_prunes": 2412,
+  "value_prunes": 1673,
+  "large_case": {
+    "n": 24,
+    "possible_subsets": 16777216,
+    "visited_nodes": 1523,
+    "unsafe_prunes": 624,
+    "value_prunes": 136,
+    "optimal_value": 45,
+    "retained": 5,
+    "peak": 0.989200045531654
+  },
+  "limits": [
+    "Nonnegative additive forcing and fixed gap per fixture",
+    "Numerical envelope with margin, not interval certified",
+    "24-request case not independently exhaustively checked",
+    "Optimizes weighted value only, not H113 secondary tie-break criteria",
+    "Lean uncompiled"
+  ],
+  "next": "H115 admissible fractional relaxation and independently checkable pruning certificates"
+}
