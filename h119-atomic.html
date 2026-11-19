@@ -1,0 +1,7 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>H119 Durable Atomic Continuation</title><style>body{background:#081225;color:#d3faff;max-width:960px;margin:3em auto;padding:1em;font:17px system-ui}pre{white-space:pre-wrap}</style><h1>H119 — Durable Atomic Jacobi Continuation</h1><pre>{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }
+32 rounds / 256 concurrent requests
+32 commits / 224 replays / zero duplicate commits
+Crash before commit: rollback then retry.
+Crash after commit: replay existing receipt.
+34 final authorization records.
+.dlw</pre><p>One local SQLite database, WAL and FULL synchronous writes; Process termination tested, not power loss or filesystem rollback; Fixed test scope and ephemeral keys; H117 proof not reverified in this test; Commits are authorization records, not external side effects; No live successor executed, no distributed consensus; Lean candidate uncompiled</p><p>Next H120: transactional outbox.</p></html>
