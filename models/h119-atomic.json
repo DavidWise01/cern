@@ -1,0 +1,25 @@
+{
+  "schema": "cern.h119.atomic-continuation.v1",
+  "parent": "models/h118-authorization.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "checkpoint": "228dba7ae919a855718e3bb6048b0877522ddad0eba2a83430866dd4ebae3d3b",
+  "results": {
+    "rounds": 32,
+    "concurrent_requests": 256,
+    "concurrent_commits": 32,
+    "concurrent_replays": 224,
+    "crash_before": "rollback then commit",
+    "crash_after": "durable receipt replay",
+    "final_commits": 34,
+    "invalid_rejected": 2
+  },
+  "limits": [
+    "One local SQLite database, WAL and FULL synchronous writes",
+    "Process termination tested, not power loss or filesystem rollback",
+    "Fixed test scope and ephemeral keys; H117 proof not reverified in this test",
+    "Commits are authorization records, not external side effects",
+    "No live successor executed, no distributed consensus",
+    "Lean candidate uncompiled"
+  ],
+  "next": "H120 transactional outbox and idempotent consumer"
+}
