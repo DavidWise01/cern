@@ -1,0 +1,31 @@
+{
+  "schema": "cern.h115.evidence-selection.v1",
+  "parent": "models/h114-prune.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "model": "discrete rational envelope; x[k+1]=a*x[k]+sum selected loads",
+  "a": "9/10",
+  "discrete_neuron_gap": "1/10",
+  "horizon": 12,
+  "small": {
+    "cases": 32,
+    "nodes": 938,
+    "certificates": 485,
+    "incomplete_rejected": 32
+  },
+  "large": {
+    "requests": 24,
+    "nodes": 449,
+    "certificates": 225,
+    "covered_leaves": 16777216,
+    "value": 24,
+    "retained": 1
+  },
+  "limits": [
+    "Different, deliberately constrained discrete fixture, not H114 continuous-time fixture",
+    "Verifier independently recomputes recurrence but runs in same Python program; assumes nonnegative input and nonnegative weights",
+    "Python assertions require normal non-optimized execution",
+    "Lean candidate uncompiled",
+    "Output paths in Python are local experiment paths"
+  ],
+  "next": "H116 tighter fractional bounds and certificate verification against an exact rational capacity relaxation"
+}
