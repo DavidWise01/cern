@@ -1,0 +1,23 @@
+{
+  "schema": "cern.h117.proof-ledger.v1",
+  "parent": "models/h116-fractional.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "records": 143,
+  "certificates": 139,
+  "covered": 16777216,
+  "optimum": 24,
+  "checkpoint": [
+    143,
+    "228dba7ae919a855718e3bb6048b0877522ddad0eba2a83430866dd4ebae3d3b"
+  ],
+  "attacks_rejected": 13,
+  "verification": "Local Python executed using previous H116 certificate and verifier",
+  "limitations": [
+    "Trusted checkpoint simulated; not signed or externally anchored",
+    "Hash chain is tamper evident, not immutable storage",
+    "H116 verifier imported from a local path; requires ordinary Python assertions",
+    "No durable atomic append or fork resolution",
+    "Lean supporting statements uncompiled"
+  ],
+  "next": "H118 signed checkpoint authorization and lineage"
+}
