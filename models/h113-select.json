@@ -1,0 +1,30 @@
+{
+  "schema": "cern.h113.selective.v1",
+  "parent": "models/h112-revalidate.json",
+  "canonical": "{{ Brace;juliet|jane| :: -1 [ Box;mandelbrot|toph| :: 0 ( Torroid;josophene|patricia| :: +1 ) ] } }",
+  "seed": 113,
+  "cases": 256,
+  "full_safe": 85,
+  "partial": 167,
+  "none": 4,
+  "baseline_value": 2005,
+  "selected_value": 4945,
+  "baseline_count": 364,
+  "selected_count": 849,
+  "unsafe": 0,
+  "subsets": 7305,
+  "example": {
+    "all_peak": 1.25,
+    "selected_peak": 0.9,
+    "value": 5
+  },
+  "objective": "maximize retained integer priority, then count, then bit tuple",
+  "limitations": [
+    "Floating point with safety margin, not interval certified",
+    "Small exhaustive search, up to eight reservations",
+    "Synthetic priorities and immediate suspension",
+    "No concurrent transaction or mandatory reservations in this iteration",
+    "Lean lemmas uncompiled"
+  ],
+  "next": "H114 branch-and-bound with certified pruning"
+}
