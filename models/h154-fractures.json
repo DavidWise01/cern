@@ -1,0 +1,68 @@
+{
+  "schema": "cern.h154.cut-certificates.v1",
+  "parent": "models/h153-cutsets.json",
+  "chapter": "XVIII — The Eleven Fractures",
+  "story": "Jane guards the seed; Toph extracts an orthogonal parity mask; Patricia sees the two eight-state worlds.",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "roots": {
+    "P_M": [
+      1
+    ],
+    "P_I": [
+      2
+    ],
+    "P_U": [
+      4
+    ],
+    "P_B": [
+      8
+    ],
+    "A": [
+      3,
+      12
+    ],
+    "B": [
+      5,
+      10
+    ],
+    "C": [
+      9,
+      6
+    ]
+  },
+  "gate_weight": "2/5",
+  "results": {
+    "subsets": 128,
+    "walsh_checks": 32768,
+    "min_root_cut": 4,
+    "cutsets": 11,
+    "fracture_families": {
+      "all_four_primitive": 1,
+      "one_primitive_all_three_compound": 4,
+      "two_primitive_two_compound": 6
+    },
+    "four_root_cases": {
+      "total": 35,
+      "connected": 24,
+      "disconnected": 11
+    },
+    "all_minimal_cuts_rank": 3,
+    "all_minimal_cuts_components": [
+      8,
+      8
+    ]
+  },
+  "theorem": "The surviving Cayley graph of F2^4 is connected iff its gate vectors span F2^4. A nonzero bit mask orthogonal to all surviving vectors witnesses disconnection. For every minimum cut the mask is unique and divides 16 states into 8+8.",
+  "limitations": [
+    "Root independence is a model premise, not a real implementation audit",
+    "Single fixed seven-root ancestry architecture, equal gate weight 2/5",
+    "Lean candidate uncompiled",
+    "Discrete graph, not physical QCD"
+  ],
+  "next": "H155 parity witness repair: minimal independently sourced gate spanning missing direction"
+}
