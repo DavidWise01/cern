@@ -1,0 +1,24 @@
+{
+  "schema": "cern.h139.erse-transfer.v1",
+  "parent": "models/h138-bodies.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "story": "Chapter III — The Passage Between Equilibria",
+  "mu": 0.01,
+  "transfers": 20,
+  "duration": 12,
+  "max_terminal_error": 2.410016941048914e-7,
+  "min_reference_clearance": 0.14192128702393392,
+  "tracking_tube": 0.0025775505008247762,
+  "limits": [
+    "Ideal exact force cancellation with unlimited acceleration authority",
+    "Numerical integration and analytic ideal tracking tube",
+    "No conservation of uncontrolled Jacobi constant during powered motion",
+    "No physical QCD claim",
+    "Lean uncompiled"
+  ],
+  "next": "H140 finite thrust and work-accounted exchange"
+}
