@@ -1,0 +1,36 @@
+{
+  "schema": "cern.h150.erse-optimal-independence.v1",
+  "parent": "models/h149-correlated.json",
+  "story": "Chapter XIV — The Cost of Independence",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "seed": "13689",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "model": "16-state Cayley graph of C2^4; four singleton generator classes weight a and six independent pair classes weight b; after failure singleton f is zero, three incident pair classes retain fraction r and other pairs remain at b",
+  "budget": "4a+6b=4",
+  "optimal_a": "4r/(6+4r)",
+  "optimal_b": "4/(6+4r)",
+  "optimal_gap": "24r/(6+4r)",
+  "results": {
+    "failure_domains": 4,
+    "independence_levels": 17,
+    "walsh_checks": 17408,
+    "grid_allocation_checks": 6817,
+    "at_half": {
+      "a": "1/4",
+      "b": "1/2",
+      "gap": "3/2",
+      "prior_gap": "6/5"
+    }
+  },
+  "limits": [
+    "Independence fraction r is assumed rather than measured",
+    "Symmetric equal weights per class; no arbitrary asymmetric ten-weight optimization",
+    "Only one correlated primitive-domain failure at a time",
+    "No physical QCD or atomic-closure claim",
+    "Lean arithmetic lemmas uncompiled"
+  ],
+  "next": "H151 independent-provenance certificates and multi-domain failures"
+}
