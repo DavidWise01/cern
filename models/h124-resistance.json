@@ -1,0 +1,25 @@
+{
+  "schema": "cern.h124.erse-resistance.v1",
+  "parent": "models/h123-shadow-rotation.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "noise": "1/100",
+  "spectral_drift": "1/50",
+  "target": "q_wz at generation n",
+  "bound": "(2 epsilon + delta)/abs(sin(2 theta))",
+  "optimal_angles_degrees": [
+    45,
+    135
+  ],
+  "optimal_bound": "1/25",
+  "cases": 3472,
+  "violations": 0,
+  "rational_angle_fixtures": 8,
+  "limitations": [
+    "Bound pertains to recovering previous-generation coupling from two old diagonal measurements and one new mixed measurement",
+    "Bounded deterministic scalar noise and spectral norm tensor drift; no distribution assumed",
+    "Tested extremal signs and finite fixtures; proof separate",
+    "Lean candidate uncompiled",
+    "Symbolic not physical QCD"
+  ],
+  "next": "H125 adaptive recovery with simultaneous complementary mixed directions and no historical drift penalty"
+}
