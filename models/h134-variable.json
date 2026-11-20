@@ -1,0 +1,47 @@
+{
+  "schema": "cern.h134.erse-variable-feedback.v1",
+  "parent": "models/h133-weighted.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "beta_range": [
+    "0",
+    "3/8"
+  ],
+  "weights": [
+    "31/36",
+    "1",
+    "11/18"
+  ],
+  "reserve": "1/18",
+  "results": {
+    "corner_checks": 18688,
+    "switching_steps": 10000,
+    "violations": 0,
+    "local_box_switch": {
+      "source": [
+        "4/7",
+        "6/7",
+        "1"
+      ],
+      "result": [
+        "167/252",
+        "505/504",
+        "97/126"
+      ],
+      "target": [
+        "31/36",
+        "1",
+        "11/18"
+      ]
+    },
+    "above_bound_equilibrium": true
+  },
+  "proof": "A(beta) is entrywise dominated by A(3/8), so the worst-case invariant box works under arbitrary switching. Constant maximal feedback is admissible and attains the worst-case equilibrium, proving optimal uniform disturbance reserve.",
+  "limitations": [
+    "Three aggregate coordinates; nonnegative monotone feedback family",
+    "Random trajectories reset every 100 steps; scale corner tests separately executed",
+    "Initial state must belong to common box",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H135 state-aware safe feedback selection with exact one-step admissibility"
+}
