@@ -1,0 +1,25 @@
+{
+  "schema": "cern.h123.erse-shadow-rotation.v1",
+  "parent": "models/h122-obstruction.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "inner": 10,
+  "surrounding": 9,
+  "singlet": 1,
+  "outer": 11,
+  "rotation": "wz plane; A fixed, B -> B R",
+  "recovery": "m=s^2*q_ww+2*s*c*q_wz+c^2*q_zz; q_wz=(m-s^2*q_ww-c^2*q_zz)/(2*s*c)",
+  "results": {
+    "rotations": 64,
+    "full_rank": 64,
+    "reconstructions": 64,
+    "unchanged_rank9": 64,
+    "swap_rank9": 64
+  },
+  "limitations": [
+    "Static tensor across observations or known transport required",
+    "Rotations with sin(theta)*cos(theta)=0 excluded from successful schedule",
+    "Lean scalar candidate uncompiled",
+    "No physical QCD claim"
+  ],
+  "next": "H124 stable generational recovery under noise and drift"
+}
