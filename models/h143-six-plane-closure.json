@@ -1,0 +1,52 @@
+{
+  "schema": "cern.h143.erse-six-plane-closure.v1",
+  "parent": "models/h142-frontier.json",
+  "story": "Chapter VII — Beyond the Last Known Shell",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "alignment": "<-\\/->",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "planes": [
+    "wx",
+    "wy",
+    "wz",
+    "xy",
+    "xz",
+    "yz"
+  ],
+  "hodge_pairs": [
+    [
+      0,
+      5,
+      1
+    ],
+    [
+      1,
+      4,
+      -1
+    ],
+    [
+      2,
+      3,
+      1
+    ]
+  ],
+  "results": {
+    "hodge_ranks": [
+      3,
+      3
+    ],
+    "vector_tests": 729,
+    "added_electrons": 12,
+    "target": 184,
+    "physical_closure_established": false
+  },
+  "source": "https://pubs.rsc.org/en/content/articlehtml/2011/cp/c0cp01575j",
+  "limits": [
+    "Geometric pairing is symbolic, not an electron occupation calculation",
+    "No single complete nonrelativistic l subshell holds twelve electrons; combinations or relativistic j=11/2 can",
+    "No shell closure or physical stability derived",
+    "Lean uncompiled"
+  ]
+}
