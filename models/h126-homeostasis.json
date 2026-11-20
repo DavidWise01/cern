@@ -1,0 +1,30 @@
+{
+  "schema": "cern.h126.erse-alternating-homeostasis.v1",
+  "parent": "models/h125-antisymmetric.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "coordinates": [
+    "u=(qww-qzz)/2",
+    "v=qwz"
+  ],
+  "schedule": "Two shadows simultaneously per generation; alternate (w,z) and ((w+z)/sqrt(2),(w-z)/sqrt(2)); each shadow also spans x,y",
+  "bounds": {
+    "epsilon": "1/100",
+    "delta": "1/50",
+    "visible": "1/100",
+    "hidden": "3/100"
+  },
+  "results": {
+    "cases": 2250,
+    "violations": 0,
+    "minimax_witnesses": 2
+  },
+  "limits": [
+    "Finite scalar exact arithmetic tests, not full tensor simulator",
+    "Drift bound is spectral, scalar observations calibrated",
+    "Only after an initial two-generation warm-up",
+    "Lean candidate uncompiled",
+    "Image illustrative; mathematical schedule authoritative",
+    "No physical QCD claim"
+  ],
+  "next": "H127 adaptive minimax orientation using set-valued uncertainty"
+}
