@@ -1,0 +1,7 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>H128 EeeErse</title><style>body{background:#081225;color:#d3faff;max-width:960px;margin:3em auto;padding:1em;font:17px system-ui}pre{white-space:pre-wrap}a{color:#22d3ee}</style><h1>H128 — Six-Plane Jacobi Adaptation</h1><pre>[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}
+9 around 1 / 10 inside / 11 outside
+6 axial + 6 rotated configurations: rank 9 each, combined rank 10.
+24 generations; 549 DP states; 9330 short-horizon candidates.
+Fixed peak .040; greedy .026; planned .018.
+Combined cost .816 / .482 / .456.
+.dlw</pre><p>Independent coordinatewise error bounds in a fixed tensor frame; not arbitrary physical dynamics; Planning uses six axial pairs only; rotated pairs tested for rank and hidden diagonal contrast, not included in scheduler; Visible diagonal coefficients assumed bounded by epsilon; shared diagonal constraints not enforced by planner; Fixed switching cost, not angular distance; Exact symbolic ranks and integer-scaled objective; finite-horizon dynamic programming, independently checked by exhaustive enumeration only for horizons 1 through 5; Lean supporting lemma uncompiled.</p><p>Next: H129 infinite-horizon stability via maximum hidden dwell time and periodic schedules.</p><a href="https://github.com/DavidWise01/cern/blob/main/tests/h128-six-plane.py">Exact Python test</a></html>
