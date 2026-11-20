@@ -1,0 +1,101 @@
+{
+  "schema": "cern.h153.erse-fourth-eclipse.v1",
+  "parent": "models/h151-ancestry.json",
+  "chapter": "XVII — The Fourth Eclipse",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "seed": "13689",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "roots": {
+    "P_M": [
+      1
+    ],
+    "P_I": [
+      2
+    ],
+    "P_U": [
+      4
+    ],
+    "P_B": [
+      8
+    ],
+    "A": [
+      3,
+      12
+    ],
+    "B": [
+      5,
+      10
+    ],
+    "C": [
+      9,
+      6
+    ]
+  },
+  "weight": "2/5",
+  "complete_census": {
+    "0": [
+      1,
+      1,
+      0,
+      "16/5"
+    ],
+    "1": [
+      7,
+      7,
+      0,
+      "12/5"
+    ],
+    "2": [
+      21,
+      21,
+      0,
+      "8/5"
+    ],
+    "3": [
+      35,
+      35,
+      0,
+      "4/5"
+    ],
+    "4": [
+      35,
+      24,
+      11,
+      "0"
+    ],
+    "5": [
+      21,
+      0,
+      21,
+      "0"
+    ],
+    "6": [
+      7,
+      0,
+      7,
+      "0"
+    ],
+    "7": [
+      1,
+      0,
+      1,
+      "0"
+    ]
+  },
+  "results": {
+    "subsets_checked": 128,
+    "walsh_checks": 32768,
+    "min_root_cut": 4
+  },
+  "proof": "Connectivity iff surviving binary gate vectors span F2^4. Exhaustive 128-subset census proves all <=3 failure sets span. Four failed primitive roots leave only six even-parity pair vectors, spanning a three-dimensional even-parity subspace and causing two eight-node components.",
+  "limitations": [
+    "Seven independent roots assumed, not physically verified",
+    "Only this exact ten-gate ancestry assignment",
+    "Finite 16-state graph; not QCD or a noble-gas proof",
+    "Lean candidate not compiled"
+  ],
+  "next": "H154 classify all eleven size-four minimal cut sets, derive provenance-neutral matroid certificate"
+}
