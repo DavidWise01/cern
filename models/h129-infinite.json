@@ -1,0 +1,63 @@
+{
+  "schema": "cern.h129.erse-infinite-homeostasis.v1",
+  "parent": "models/h128-six-plane.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "planes": [
+    "wx",
+    "wy",
+    "wz",
+    "xy",
+    "xz",
+    "yz"
+  ],
+  "unit": "1/1000",
+  "noise": 10,
+  "cap": 40,
+  "drift": [
+    30,
+    18,
+    12,
+    8,
+    5,
+    2
+  ],
+  "switch_cost": 12,
+  "dwell": [
+    1,
+    1,
+    2,
+    3,
+    6,
+    15
+  ],
+  "run_cost": "10*l+d_i*l*(l+1)/2+12",
+  "certificate": {
+    "target_mean": "99/5",
+    "minimum_run_excess": [
+      "161/5",
+      "101/5",
+      "71/5",
+      "51/5",
+      "36/5",
+      "-36/5"
+    ],
+    "proof": "Every maximal yz run is separated by a non-yz run; count(yz)<=count(other)+1. All non-yz excess costs >=36/5 and yz excess >=-36/5. Removing a possibly uncharged initial switch costs at most 12. Thus any admissible finite prefix costs at least (99/5)*T-96/5, and liminf average >=99/5. The periodic yz yz yz yz xz cycle attains equality in the long run."
+  },
+  "results": {
+    "candidates": 254,
+    "generations": 10000,
+    "cycles": 2000,
+    "peak": 18,
+    "mean_radius": 15,
+    "switches": 4000,
+    "mean_cost": "99/5",
+    "violations": 0
+  },
+  "limits": [
+    "H128 six axial configuration radius-reset envelope; no rotated diagonal contrasts",
+    "Constant drift, measurement radius and symbolic switching cost; initial radii equal epsilon",
+    "Not a full tensor or physical QCD experiment",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H130 robust infinite homeostasis under variable drift and switching-dependent constraints"
+}
