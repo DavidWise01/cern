@@ -1,0 +1,41 @@
+{
+  "schema": "cern.h132.erse-bidirectional.v1",
+  "parent": "models/h131-scale.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "matrix": [
+    [
+      "1/2",
+      "beta",
+      0
+    ],
+    [
+      "1/4",
+      "1/2",
+      "beta"
+    ],
+    [
+      0,
+      "1/4",
+      "1/2"
+    ]
+  ],
+  "containment": "beta+epsilon<=1/4 for beta,epsilon>=0",
+  "spectral_radius": "1/2+sqrt(beta/2)",
+  "spectral_stability": "0<=beta<1/2; zero-input asymptotic stability",
+  "results": {
+    "scales": 73,
+    "feedback_values": 4,
+    "corner_checks": 18688,
+    "above_boundary_rejected": 292,
+    "violations": 0
+  },
+  "limitations": [
+    "Three aggregate coordinates, not 134 grid cells",
+    "Chosen illustrative linear dynamics",
+    "Repeated sign corners at zero disturbance retained in test count",
+    "Lean supporting lemmas uncompiled",
+    "Not physical QCD"
+  ],
+  "next": "H133 weighted invariant boxes via positive Perron vectors and disturbance-aware weights"
+}
