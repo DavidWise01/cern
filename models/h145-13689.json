@@ -1,0 +1,31 @@
+{
+  "schema": "cern.h145.erse-13689.v1",
+  "parent": "models/h144-qcd.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "seed": [
+    1,
+    3,
+    6,
+    8,
+    9
+  ],
+  "operants": [
+    "mirrored: horizontal reflection",
+    "inverted: sign reversal",
+    "upsidedown: 180 degree rotation",
+    "backwards: traversal reversal"
+  ],
+  "results": {
+    "distinct": 16,
+    "involution_checks": 64,
+    "commutation_checks": 256,
+    "su3_transport_checks": 24
+  },
+  "limits": [
+    "Operant definitions chosen for experiment; signed labels are not physical color charges",
+    "SU3 transport tested separately; no homomorphism from path transformations established",
+    "Lean uncompiled"
+  ],
+  "story": "Chapter IX — The Color Between Worlds"
+}
