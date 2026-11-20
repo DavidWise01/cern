@@ -1,0 +1,50 @@
+{
+  "schema": "cern.h151.erse-independent-origins.v1",
+  "parent": "models/h150-optimal.json",
+  "story": "Chapter XV — The Three Roots",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "four_primitive_roots": [
+    "P_M",
+    "P_I",
+    "P_U",
+    "P_B"
+  ],
+  "three_compound_roots": {
+    "A": [
+      "MI",
+      "UB"
+    ],
+    "B": [
+      "MU",
+      "IB"
+    ],
+    "C": [
+      "MB",
+      "IU"
+    ]
+  },
+  "model": "One source failure removes all gates deriving from that source. Four primitive gates have distinct roots; each of six compound gates is assigned to one of exactly three additional independently operating roots. Weight of each gate=2/5, total budget 4.",
+  "results": {
+    "candidate_mappings": 729,
+    "optimal_mappings": 6,
+    "all_single_root_failures": 7,
+    "walsh_eigenvector_checks": 10752,
+    "optimal_worst_gap": "12/5",
+    "all_compounds_shared_gap": "4/5"
+  },
+  "optimality_proof": "Any allocation suffers a primitive-root failure, which removes one singleton and leaves all six compounds active; resulting gap is 12/5, an upper bound. Assignment A:MI,UB; B:MU,IB; C:MB,IU attains 12/5 under all seven root failures, proving optimality within the model.",
+  "limits": [
+    "Independence is stipulated, not externally verified",
+    "Exactly three independent compound roots and four primitive roots",
+    "One source root fails at a time; no simultaneous correlated failures",
+    "Equal per-gate weights 2/5, not reoptimized with root count",
+    "Graph model, not physical QCD or elemental physics",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H152 two simultaneous root failures, minimal additional independent roots"
+}
