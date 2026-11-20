@@ -1,0 +1,44 @@
+{
+  "schema": "cern.h127.erse-adaptive-homeostasis.v1",
+  "parent": "models/h126-homeostasis.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "coordinates": [
+    "u=(qww-qzz)/2",
+    "v=qwz"
+  ],
+  "model": "componentwise bounded drift; calibrated scalar measurement; centered rectangular uncertainty or worst-case radius envelope; observe u or v",
+  "transition": "p=r+d; selected coordinate min(p_i,epsilon_i); other coordinate p_j",
+  "objective": "minimize cumulative maximum radius over finite horizon",
+  "results": {
+    "local_optimality_cases": 4096,
+    "endpoint_checks": 128,
+    "horizon": 60,
+    "dp_states": 3661,
+    "drift": [
+      "3/100",
+      "1/200"
+    ],
+    "noise": "1/100",
+    "fixed": {
+      "peak": "1/25",
+      "mean": "11/400"
+    },
+    "adaptive": {
+      "peak": "1/25",
+      "mean": "173/6000"
+    },
+    "lookahead": {
+      "peak": "1/25",
+      "mean": "99/4000"
+    }
+  },
+  "limits": [
+    "Two-coordinate box model; not full tensor simulation",
+    "Same constant anisotropic drift and noise budgets for all three schedules",
+    "Centered observations attain worst-case radius; off-center observations may shrink interval further",
+    "Finite horizon and no rotation cost",
+    "Lean elementary lemmas uncompiled",
+    "Image illustrative, not a physical QCD claim"
+  ],
+  "next": "H128 multi-plane adaptation with shared diagonal constraints and rotation costs"
+}
