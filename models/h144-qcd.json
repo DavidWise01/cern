@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h144.erse-qcd-overlay.v1",
+  "parent": "models/h143-six-plane-closure.json",
+  "story": "Chapter VIII — The Electrum Enclosure",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "alignment": "<-\\/->",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "mapping": {
+    "wx": 1,
+    "wy": 4,
+    "wz": 6,
+    "xy": 7,
+    "xz": 5,
+    "yz": 2
+  },
+  "results": {
+    "ternary_vectors": 729,
+    "bracket_checks": 64,
+    "seed_rank": 6,
+    "generated_rank": 8,
+    "identity_extended_rank": 9,
+    "cross_shadow_bracket_nonzero": true,
+    "physical_closure": false
+  },
+  "limits": [
+    "Linear correspondence, not Lie algebra isomorphism",
+    "Hodge shadow subspaces commute in so(4) but mapped color combinations need not commute",
+    "Identity is not a physical gluon",
+    "Tenth reference is separate symbolic register",
+    "No confinement, atomic shell or element 184 proof"
+  ],
+  "next": "H145 gauge-covariant transport on the nine-node matrix register"
+}
