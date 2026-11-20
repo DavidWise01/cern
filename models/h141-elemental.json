@@ -1,0 +1,97 @@
+{
+  "schema": "cern.h141.erse-elemental.v1",
+  "parent": "models/h140-assembly.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "alignment": "<-\\/->",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "story": "Chapter V — The Architecture of the Elements",
+  "elements": [
+    [
+      "He",
+      2,
+      [
+        2
+      ]
+    ],
+    [
+      "Ne",
+      10,
+      [
+        2,
+        8
+      ]
+    ],
+    [
+      "Ar",
+      18,
+      [
+        2,
+        8,
+        8
+      ]
+    ],
+    [
+      "Kr",
+      36,
+      [
+        2,
+        8,
+        18,
+        8
+      ]
+    ],
+    [
+      "Xe",
+      54,
+      [
+        2,
+        8,
+        18,
+        18,
+        8
+      ]
+    ],
+    [
+      "Rn",
+      86,
+      [
+        2,
+        8,
+        18,
+        32,
+        18,
+        8
+      ]
+    ],
+    [
+      "Og",
+      118,
+      [
+        2,
+        8,
+        18,
+        32,
+        32,
+        18,
+        8
+      ]
+    ]
+  ],
+  "added_pairs": [
+    1,
+    4,
+    4,
+    9,
+    9,
+    16,
+    16
+  ],
+  "limits": [
+    "Pair equivalents are arithmetic counts, not independent helium atoms or three-body orbital models",
+    "No isotope or neutron counts",
+    "Oganesson configuration is theoretical",
+    "No derivation of quantum shell closure"
+  ]
+}
