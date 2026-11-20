@@ -1,0 +1,29 @@
+{
+  "schema": "cern.h125.erse-antisymmetric.v1",
+  "parent": "models/h124-resistance.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "directions": [
+    "(e_w+e_z)/sqrt(2)",
+    "(e_w-e_z)/sqrt(2)"
+  ],
+  "recovery": "q_wz=(m_plus-m_minus)/2",
+  "results": {
+    "simultaneous_cases": 5625,
+    "asynchronous_cases": 8,
+    "epsilon": "1/100",
+    "delta": "1/50",
+    "worst_simultaneous": "1/100",
+    "worst_asynchronous": "1/50",
+    "two_shadow_rank": 9,
+    "historical_rank": 10,
+    "hidden_mode": "q_ww-q_zz"
+  },
+  "limits": [
+    "Simultaneous scalar measurements cancel equal additive bias only",
+    "Sequential drift bound estimates earlier coupling",
+    "General tensor recovery still requires changed geometry and known transport or stationarity",
+    "Lean candidate uncompiled",
+    "Symbolic model not physical QCD"
+  ],
+  "next": "H126 alternating orthogonal shadow pairs, minimax tracking under bounded drift"
+}
