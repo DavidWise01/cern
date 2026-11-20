@@ -1,0 +1,67 @@
+{
+  "schema": "cern.h136.erse-imperfect-observation.v1",
+  "parent": "models/h135-state-aware.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "weights": [
+    "31/36",
+    "1",
+    "11/18"
+  ],
+  "disturbance": "1/18",
+  "feedback_cap": "3/4",
+  "rule": "Intersect prior common box [-h,h] with measurement box; compute safe beta for lower and upper endpoint vectors. A_beta is entrywise nonnegative, so these two endpoint vectors suffice.",
+  "results": {
+    "grid_states": 729,
+    "radii": [
+      {
+        "radius": "0",
+        "mean": 0.7197229496612213,
+        "above_fixed": 711
+      },
+      {
+        "radius": "1/16",
+        "mean": 0.7112343127646625,
+        "above_fixed": 711
+      },
+      {
+        "radius": "1/8",
+        "mean": 0.7010229672781113,
+        "above_fixed": 711
+      },
+      {
+        "radius": "1/4",
+        "mean": 0.6727875462443363,
+        "above_fixed": 657
+      },
+      {
+        "radius": "1/2",
+        "mean": 0.6065646173670866,
+        "above_fixed": 567
+      },
+      {
+        "radius": "1",
+        "mean": 0.45649828185836416,
+        "above_fixed": 288
+      }
+    ],
+    "corner_checks": 279936,
+    "trajectory_steps": 1000,
+    "trajectory_mean": 0.538193359375,
+    "trajectory_above_fixed": 935,
+    "naive_counterexample": {
+      "naive": "247/504",
+      "robust": "3/8"
+    },
+    "violations": 0
+  },
+  "limits": [
+    "Prior containment and certified componentwise sensing error required",
+    "Three aggregate coordinates, not the full grid or physical QCD",
+    "Only one aggregate observation box used in simulation; multi-shadow reconciliation deferred",
+    "20 trajectories of 50 steps; feedback quantized downward to 1/1024",
+    "Degenerate corner checks counted with multiplicity",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H137 intersect two independently calibrated shadow uncertainty sets; reject empty intersections and preserve fallback"
+}
