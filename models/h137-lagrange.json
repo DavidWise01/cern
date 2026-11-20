@@ -1,0 +1,65 @@
+{
+  "schema": "cern.h137.erse-gyroscopic-lagrange.v1",
+  "parent": "models/h136-robust.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "alignment": "<-\\/->",
+  "story": {
+    "title": "The Five Equilibria",
+    "chapter": 1,
+    "muse": "Isaac Asimov, The Gods Themselves (1972)",
+    "perspectives": [
+      "Jane: outside",
+      "Toph: between",
+      "Patricia: inside"
+    ],
+    "next": "The Cost of Standing Still"
+  },
+  "model": "Planar circular restricted three-body problem in normalized rotating coordinates, independent of H136 dynamics",
+  "mu": 0.01,
+  "results": {
+    "orientation_checks": 365,
+    "max_residual": 3.240741008880832e-13,
+    "routh_threshold": 0.03852089650455137,
+    "points": [
+      [
+        "L1",
+        0.8480787129760661,
+        0,
+        2.9037378316105213
+      ],
+      [
+        "L2",
+        1.1467650421238045,
+        0,
+        2.1795542907081265
+      ],
+      [
+        "L3",
+        -1.0041666119974992,
+        0,
+        0.16147655782301215
+      ],
+      [
+        "L4",
+        0.49,
+        0.8660254037844386,
+        3.8163916471489756e-17
+      ],
+      [
+        "L5",
+        0.49,
+        -0.8660254037844386,
+        0
+      ]
+    ]
+  },
+  "limits": [
+    "Numerical root and growth-rate checks, not exact eigenvalue computation",
+    "L4/L5 linear stability for chosen mass ratio; L1–L3 unstable",
+    "Display gyroscope rings do not implement station keeping",
+    "Nested kernel not a physical primary or a derived force law",
+    "Lean supporting arithmetic lemmas uncompiled"
+  ],
+  "next": "H138 controlled station keeping at L1–L3"
+}
