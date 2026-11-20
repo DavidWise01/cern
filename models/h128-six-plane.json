@@ -1,0 +1,64 @@
+{
+  "schema": "cern.h128.erse-six-plane.v1",
+  "parent": "models/h127-adaptive.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "planes": [
+    "wx",
+    "wy",
+    "wz",
+    "xy",
+    "xz",
+    "yz"
+  ],
+  "geometry": {
+    "axial_pairs": 6,
+    "rotated_pairs": 6,
+    "individual_rank": 9,
+    "combined_rank": 10
+  },
+  "planning": {
+    "horizon": 24,
+    "epsilon": 0.01,
+    "drift": [
+      0.03,
+      0.018,
+      0.012,
+      0.008,
+      0.005,
+      0.002
+    ],
+    "cap": 0.04,
+    "switch_cost": 0.012,
+    "objective": "sum(max radius + switch penalty)",
+    "dp_states": 549,
+    "exhaustive_sequences": 9330,
+    "fixed": {
+      "peak": 0.04,
+      "mean": 0.0225,
+      "switches": 23,
+      "cost": 0.816
+    },
+    "greedy": {
+      "peak": 0.026,
+      "mean": 0.018083333333333333,
+      "switches": 4,
+      "cost": 0.482
+    },
+    "planned": {
+      "peak": 0.018,
+      "mean": 0.015,
+      "switches": 8,
+      "cost": 0.456,
+      "schedule": "yz yz yz yz xz yz yz yz yz xz yz yz yz yz xz yz yz yz yz xz yz yz yz yz"
+    }
+  },
+  "limits": [
+    "Independent coordinatewise error bounds in a fixed tensor frame; not arbitrary physical dynamics",
+    "Planning uses six axial pairs only; rotated pairs tested for rank and hidden diagonal contrast, not included in scheduler",
+    "Visible diagonal coefficients assumed bounded by epsilon; shared diagonal constraints not enforced by planner",
+    "Fixed switching cost, not angular distance",
+    "Exact symbolic ranks and integer-scaled objective; finite-horizon dynamic programming, independently checked by exhaustive enumeration only for horizons 1 through 5",
+    "Lean supporting lemma uncompiled"
+  ],
+  "next": "H129 infinite-horizon stability via maximum hidden dwell time and periodic schedules"
+}
