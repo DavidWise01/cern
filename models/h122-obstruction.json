@@ -1,0 +1,28 @@
+{
+  "schema": "cern.h122.erse-dual-shadow-obstruction.v1",
+  "parent": "models/h121-dual-shadow.json",
+  "primitive": "[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}",
+  "inner": 10,
+  "surrounding": 9,
+  "singlet": 1,
+  "outer": 11,
+  "observation": "Q symmetric 4x4 -> (A Q A^T, B Q B^T), rank A = rank B = 3",
+  "kernel": "span(a*b^T+b*a^T), when ker A and ker B are distinct lines",
+  "proof": "The row spaces are distinct 3D hyperplanes in R4 with 2D intersection. Choose a basis of the intersection and extend separately to bases of both hyperplanes. In the resulting 4D basis, vanishing of the restrictions forces all symmetric bilinear entries to zero except the cross entry between the two added directions. Thus nullity=1. If row spaces coincide, nullity=4.",
+  "mixed": "v^T Q_* v = 2(v dot a)(v dot b), nonzero if v is outside both hyperplanes",
+  "results": {
+    "distinct_pairs": 64,
+    "equal_plane_pairs": 16,
+    "rank9": 64,
+    "rank6": 16,
+    "mixed_rank10": 64,
+    "kernel_checks": 64
+  },
+  "limits": [
+    "General symmetric tensors, not a single rank-one point tensor",
+    "Symbolic model, not physical QCD",
+    "Lean scalar supporting lemmas uncompiled; full rank theorem proved in prose",
+    "Generated poster illustrative"
+  ],
+  "next": "H123 generational recovery using a changed shadow orientation and calibrated transport"
+}
