@@ -1,0 +1,28 @@
+{
+  "schema": "cern.h148.erse-redundant-gates.v1",
+  "parent": "models/h147-weighted.json",
+  "story": "Chapter XII — The Passage That Remained",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "seed": "13689",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "results": {
+    "single_failures": 4,
+    "compound_trials": 24,
+    "restored": 12,
+    "walsh_checks": 6144,
+    "initial_budget": 4,
+    "weight": "2/5",
+    "healthy_gap": "16/5",
+    "robust_gap": "12/5"
+  },
+  "limits": [
+    "Independent compound channels, not serial execution through failed primitive hardware",
+    "Only single primitive channel class failure in robust optimization",
+    "Graph model, not physical QCD",
+    "Lean uncompiled"
+  ],
+  "next": "H149 correlated failures and shared dependency analysis"
+}
