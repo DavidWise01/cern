@@ -1,0 +1,38 @@
+{
+  "schema": "cern.h147.erse-weighted-operants.v1",
+  "parent": "models/h146-tesseract.json",
+  "story": "Chapter XI — The Four Gates",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "seed": "13689",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "axes": [
+    "mirror",
+    "invert",
+    "upsidedown",
+    "backwards"
+  ],
+  "results": {
+    "allocations": 969,
+    "walsh_checks": 248064,
+    "budget": 4,
+    "optimal_gap": 2,
+    "optimal_weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "fault_nullity": 2,
+    "violations": 0
+  },
+  "limits": [
+    "Nonnegative scalar edge-class weights; finite graph model, not QCD",
+    "Quarter-unit grid tested; continuous optimality follows by minimum <= mean",
+    "Zero-weight graph may disconnect; gap defined as second eigenvalue counting multiplicity",
+    "Lean uncompiled"
+  ],
+  "next": "H148 redundant operant paths under single gate failure"
+}
