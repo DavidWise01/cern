@@ -1,0 +1,7 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>H127 EeeErse</title><style>body{background:#081225;color:#d3faff;max-width:960px;margin:3em auto;padding:1em;font:17px system-ui}pre{white-space:pre-wrap}a{color:#22d3ee}</style><h1>H127 — Adaptive Jacobi Homeostasis</h1><pre>[10qcd(24:8:3:1:1){w,x,y,z}^2]^{n}
+9 around 1 / 10 inside / 11 outside
+4096 local checks + 128 endpoint checks
+60 generations; 3661 DP states.
+Fixed mean 0.02750; greedy 0.0288333; planned 0.02475.
+Peak 0.04 all three. Planned reduction 10% vs fixed.
+.dlw</pre><p>p=r+d; selected coordinate min(p_i,epsilon_i); other coordinate p_j.</p><p>Bellman recurrence: J(k,r)=min_i(max(step(r,i))+J(k-1,step(r,i))).</p><p>Two-coordinate box model; not full tensor simulation; Same constant anisotropic drift and noise budgets for all three schedules; Centered observations attain worst-case radius; off-center observations may shrink interval further; Finite horizon and no rotation cost; Lean elementary lemmas uncompiled; Image illustrative, not a physical QCD claim.</p><p>Next: H128 multi-plane adaptation with shared diagonal constraints and rotation costs.</p><a href="https://github.com/DavidWise01/cern/blob/main/tests/h127-adaptive.py">Exact Python test</a></html>
