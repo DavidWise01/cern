@@ -1,0 +1,49 @@
+{
+  "schema": "cern.h133.erse-weighted-containment.v1",
+  "parent": "models/h132-feedback.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "matrix": [
+    [
+      "1/2",
+      "beta",
+      0
+    ],
+    [
+      "1/4",
+      "1/2",
+      "beta"
+    ],
+    [
+      0,
+      "1/4",
+      "1/2"
+    ]
+  ],
+  "gain": "m=(3+4*beta)/(1-2*beta); g=(2+2*beta*m,m,2+m/2)",
+  "condition": "0<=beta<1/2; max(h)=1; A h+epsilon*1<=h",
+  "optimum": "epsilon=1/max(g); h=epsilon*g",
+  "results": {
+    "scales": 73,
+    "feedback_values": 6,
+    "corner_checks": 28032,
+    "above_bound_equilibria": 438,
+    "violations": 0,
+    "example": {
+      "beta": "3/8",
+      "epsilon": "1/18",
+      "weights": [
+        "31/36",
+        "1",
+        "11/18"
+      ]
+    }
+  },
+  "limitations": [
+    "Weighted box is a subset of original unit cube, not a guarantee from every initial point of that cube",
+    "Three aggregate coordinates; illustrative fixed nonnegative linear dynamics",
+    "Equilibrium checks repeat across scale indices; not 438 distinct dynamical trajectories",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H134 common invariant box for time-varying feedback and disturbance"
+}
