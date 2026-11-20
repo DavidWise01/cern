@@ -1,0 +1,27 @@
+{
+  "schema": "cern.h149.erse-correlated-failure.v1",
+  "parent": "models/h148-redundant.json",
+  "story": "Chapter XIII — The Illusion of Redundancy",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "seed": "13689",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "initial_weight": "2/5",
+  "rule": "Failed singleton removed; incident compound weights multiplied by independent fraction r; other weights unchanged.",
+  "gap": "12*r/5",
+  "results": {
+    "failure_domains": 4,
+    "fractions": 17,
+    "spectral_checks": 17408,
+    "violations": 0
+  },
+  "limits": [
+    "One correlated primitive failure domain at a time; uniform independent fraction",
+    "Independence is a capacity assumption, not measured probability",
+    "No physical QCD claim",
+    "Lean supporting lemma uncompiled"
+  ],
+  "next": "H150 optimal allocation across independent failure domains"
+}
