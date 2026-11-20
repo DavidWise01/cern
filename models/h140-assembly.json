@@ -1,0 +1,44 @@
+{
+  "schema": "cern.h140.erse-module-assembly.v1",
+  "parent": "models/h139-transfer.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "story": "Chapter IV — The Assembly of Worlds",
+  "counts": [
+    1,
+    2,
+    3,
+    5,
+    8,
+    13,
+    21,
+    34,
+    55,
+    89,
+    144
+  ],
+  "weights": [
+    "31/36",
+    "1",
+    "11/18"
+  ],
+  "reserve": "1/18",
+  "exchange": "1/36",
+  "external": "1/36",
+  "results": {
+    "module_updates": 24000,
+    "largest_modules": 144,
+    "structural_coordinates": 432,
+    "violations": 0
+  },
+  "limits": [
+    "Each body is an aggregate coordinate, not an atomic particle or gravitational body in this experiment",
+    "Ring exchange is normalized and is not a physical force law",
+    "No atomic shell closure derived",
+    "Lean candidate uncompiled"
+  ],
+  "next": "H141 finite exchange capacity and shell closure"
+}
