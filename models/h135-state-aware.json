@@ -1,0 +1,31 @@
+{
+  "schema": "cern.h135.erse-state-aware.v1",
+  "parent": "models/h134-variable.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "weights": [
+    "31/36",
+    "1",
+    "11/18"
+  ],
+  "disturbance": "1/18",
+  "feedback_cap": "3/4",
+  "rule": "Intersect [0,3/4] with |p_i+beta*q_i|<=h_i-epsilon. Select largest feasible beta.",
+  "results": {
+    "grid_states": 729,
+    "above_fixed_grid": 711,
+    "corner_checks": 5832,
+    "trajectory_steps": 2000,
+    "above_fixed_steps": 1981,
+    "mean_feedback": "1097807/2048000",
+    "violations": 0
+  },
+  "limits": [
+    "Exact state observed before choosing feedback",
+    "Three aggregate coordinates; feedback cap 3/4 selected for experiment",
+    "40 trajectories of 50 steps each; feedback quantized downward to increments 1/1024",
+    "Containment does not imply zero-input convergence of adaptive system",
+    "Lean candidate uncompiled"
+  ],
+  "next": "H136 robust state-aware feedback with bounded observation uncertainty"
+}
