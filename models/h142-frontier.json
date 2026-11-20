@@ -1,0 +1,38 @@
+{
+  "schema": "cern.h142.erse-elemental-frontier.v1",
+  "parent": "models/h141-elemental.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "known": [
+    2,
+    10,
+    18,
+    36,
+    54,
+    86,
+    118
+  ],
+  "candidates": [
+    {
+      "Z": 168,
+      "pairs": 84,
+      "status": "Madelung extrapolation"
+    },
+    {
+      "Z": 172,
+      "pairs": 86,
+      "status": "relativistic predicted closed shell"
+    },
+    {
+      "Z": 184,
+      "pairs": 92,
+      "status": "erse research target; no closure established"
+    }
+  ],
+  "source": "https://comptes-rendus.academie-sciences.fr/chimie/articles/en/10.5802/crchim.25/",
+  "source2": "https://pubs.rsc.org/en/content/articlehtml/2011/cp/c0cp01575j",
+  "limits": "Arithmetic only, no orbital-energy or nuclear calculation. Pair equivalents are counts, not helium atoms."
+}
