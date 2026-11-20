@@ -1,0 +1,47 @@
+{
+  "schema": "cern.h131.erse-scale-homeostasis.v1",
+  "parent": "H130 canonical user primitive",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "scale": "1x1.61658x10^{{n}}",
+  "scale_exact": "80829/50000 * 10^n",
+  "capacities": [
+    100,
+    25,
+    9
+  ],
+  "singlet": 1,
+  "A": [
+    [
+      "1/2",
+      0,
+      0
+    ],
+    [
+      "1/4",
+      "1/2",
+      0
+    ],
+    [
+      0,
+      "1/4",
+      "1/2"
+    ]
+  ],
+  "normalized_infinity_bound": 1,
+  "disturbance": "1/4",
+  "results": {
+    "scales": 73,
+    "corner_checks": 4672,
+    "adjacent_transitions": 72,
+    "contraction": "3/4",
+    "violations": 0
+  },
+  "limitations": [
+    "Matrix coefficients chosen as a sufficient illustrative model; not derived from the primitive",
+    "Three aggregate layer coordinates, not all cells simulated",
+    "Scale transport explicitly multiplies state and disturbance by the scale ratio; unscaled absolute stability does not follow",
+    "Lean candidate uncompiled",
+    "Dimensionless mathematical model, not physical QCD"
+  ],
+  "next": "H132 bidirectional feedback and sharp stability boundary"
+}
