@@ -1,0 +1,67 @@
+{
+  "schema": "cern.h156.variable-repair.v1",
+  "parent": "models/h155-repair.json",
+  "chapter": "XX — The Weight of One Passage",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "scale": "1x1.61658x10^{{n}}",
+  "root_map": {
+    "P_M": [
+      1
+    ],
+    "P_I": [
+      2
+    ],
+    "P_U": [
+      4
+    ],
+    "P_B": [
+      8
+    ],
+    "A": [
+      3,
+      12
+    ],
+    "B": [
+      5,
+      10
+    ],
+    "C": [
+      9,
+      6
+    ]
+  },
+  "base_weight": "2/5",
+  "repair_rule": "m·g=1 mod 2; independent added gate class with weight w",
+  "gap_formula": "min(2*w,minimum positive pre-repair Laplacian eigenvalue)",
+  "results": {
+    "fractures": 11,
+    "eligible_gates": 88,
+    "weights": 9,
+    "cases": 792,
+    "walsh_checks": 202752,
+    "internal_gaps": [
+      "4/5",
+      "12/5"
+    ],
+    "common_target": "4/5",
+    "common_target_minimum_weight": "2/5",
+    "full_internal_recovery_weights": [
+      "2/5",
+      "6/5"
+    ],
+    "connectivity_requires": "w>0"
+  },
+  "limits": [
+    "One independent gate class across all sixteen vertices, not one physical edge",
+    "Connectivity has no positive minimum weight over real weights, only infimum zero",
+    "No hardware cost or energy derived from graph weight",
+    "Source independence assumed, not audited",
+    "Finite Cayley graph model, not QCD",
+    "Lean lemmas uncompiled"
+  ],
+  "next": "H157 source-cost pricing and constrained multi-cut bridge selection"
+}
