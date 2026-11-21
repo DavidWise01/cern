@@ -1,0 +1,49 @@
+{
+  "schema": "cern.h167.rupert-toroid.v1",
+  "title": "H167 — The Rupert Toroid Engine",
+  "parent": "models/h166-exits.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "proposed_geometry": "two opposing Rupert-like heads p,d each with tail entering central mediator o, with head outlets p+ and d- after triggered fracture",
+  "orientation": "I-shaped POD; opposing exits redirected tangentially at +R and -R",
+  "engine_cycle": [
+    "quench and store internal stress",
+    "tail initiates fracture",
+    "head releases energy",
+    "nozzle guides impulse through p+ and d-",
+    "torque accelerates toroidal rotor",
+    "housing or fluid receives reaction",
+    "recharging needed for next cycle"
+  ],
+  "mechanics": {
+    "p_plus_position": "(+R,0)",
+    "p_plus_force": "(0,+F)",
+    "d_minus_position": "(-R,0)",
+    "d_minus_force": "(0,-F)",
+    "force_sum": "0 if balanced",
+    "torque_sum": "+2RF if both act on the same rotor",
+    "counterreaction": "housing receives equal opposite angular and linear momentum",
+    "impulse_per_port": "J=1/50",
+    "rotor_mass_and_housing_mass": "1",
+    "rotor_inertia_and_housing_inertia": "1",
+    "kinetic": "L²+P²",
+    "stored_fuel_update": "E'=E-(K_new-K_old), refuse pulse if insufficient energy"
+  },
+  "tests": {
+    "initial_states": 52,
+    "updates": 624,
+    "fired_pulses": 424,
+    "two_ports_active_pulses": 138,
+    "one_port_active_pulses": 286,
+    "closed_port_steps": 156,
+    "violations": 0
+  },
+  "limitations": [
+    "Prince Rupert heads break under rapid cracking but do not inherently form controlled nozzles",
+    "Internal exhaust must couple to a rotor; otherwise it spins the fluid only",
+    "Net total angular momentum is conserved, a free isolated rotor must counter-rotate its environment",
+    "Finite stored energy, no perpetual engine",
+    "No physical Planck bubble or cosmology validation"
+  ],
+  "next": "H168 fluid coupling, nozzle efficiency, torque losses and regenerative quench"
+}
