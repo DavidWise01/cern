@@ -1,0 +1,64 @@
+{
+  "schema": "cern.h158.three-independent-bridges.v1",
+  "parent": "models/h157-bridges.json",
+  "chapter": "XXII — Three Origins, One World",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "five_points": ".|.|.|",
+  "three_bodies": "|||",
+  "alignment": "<-\\/->",
+  "roots": {
+    "P_M": [
+      1
+    ],
+    "P_I": [
+      2
+    ],
+    "P_U": [
+      4
+    ],
+    "P_B": [
+      8
+    ],
+    "A": [
+      3,
+      12
+    ],
+    "B": [
+      5,
+      10
+    ],
+    "C": [
+      9,
+      6
+    ]
+  },
+  "requirement": "Any two of three new independent roots may fail and the remaining repair gate must carry spectral gap >= 4/5",
+  "missing_parity": "m·g_j=1 (mod 2)",
+  "minimum_weight_each": "2/5",
+  "model_price": "(3+popcount(g))/4 per unit of repair weight",
+  "results": {
+    "fractures": 11,
+    "eligible_per_fracture": 8,
+    "triples_per_fracture": 56,
+    "triples_tested": 616,
+    "failure_scenarios": 2464,
+    "walsh_checks": 630784,
+    "all_passed": true,
+    "cost_distribution": {
+      "6/5": 1,
+      "13/10": 6,
+      "7/5": 4
+    }
+  },
+  "limitations": [
+    "Independently sourced bridges assumed, not hardware verified",
+    "A bridge denotes an entire sixteen-node edge class, not a single connection",
+    "Only newly introduced roots fail after one preexisting four-root cut",
+    "Prices synthetic, not currencies or energy",
+    "Discrete Cayley graph; not physical QCD",
+    "Lean proof candidate uncompiled"
+  ],
+  "next": "H159 shared-ancestry attacks and three-source certification"
+}
