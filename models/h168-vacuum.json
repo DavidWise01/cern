@@ -1,0 +1,43 @@
+{
+  "schema": "cern.h168.vacuum-kinetic.v1",
+  "parent": "models/h167-engine.json",
+  "chapter": "XXX — Momentum Without Air",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "geometry": "I braced p→o←d; head rupture -> two outward tangential outlets p+ and d−; vacuum",
+  "scale": "ell_P/(5*pi) proposed, unverified",
+  "normalizations": {
+    "exit_radius": "1",
+    "particle_impulse": "1/20",
+    "rotor_mass": "1",
+    "rotor_inertia": "2",
+    "ejecta_mass": "1"
+  },
+  "dynamics": {
+    "L_change": "−(open_p+open_d)*J*R",
+    "P_change": "−(open_p−open_d)*J",
+    "ejected_L": "negative of rotor L",
+    "ejected_P": "negative of rotor P",
+    "rotor_kinetic": "L²/(2I)+P²/(2M)",
+    "ejecta_kinetic_per_ejection": "J²/(2*m)",
+    "fuel_condition": "E>=kinetic increment + emitted kinetic increment",
+    "conserved": "fuel+rotor_kinetic+accumulated_ejecta_kinetic"
+  },
+  "tested": {
+    "states": 52,
+    "updates": 624,
+    "fired": 403,
+    "two_open": 131,
+    "one_open": 272,
+    "closed": 156,
+    "conservation_failures": 0
+  },
+  "limits": [
+    "No external fluid required, but escaping reaction mass or radiation is needed for propulsive momentum",
+    "A sealed system cannot sustain net angular momentum without a counter-rotating component",
+    "No actual Rupert fragment nozzle or Planck scale mechanism demonstrated",
+    "Finite energy required; ideal lossless ejection",
+    "The shell fracture and debris interaction are treated as discrete assumed kinetic impulses, not stress wave fracture dynamics"
+  ],
+  "next": "H169 particle inventory and recoil efficiency—whether a finite Rupert supply generates useful delivered work"
+}
