@@ -1,0 +1,45 @@
+{
+  "schema": "cern.h163.rupert-pod.v1",
+  "previous": "h162 erse 3-planck-bubbles",
+  "name": "The Rupert POD",
+  "chapter": "XXVII — The Tail That Holds the World",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "three_bodies": "p o d",
+  "roles": {
+    "p": "upper constrained Rupert-like bulb with tail descending into o",
+    "o": "central mediator, accommodates two opposing tails",
+    "d": "lower constrained Rupert-like bulb with tail ascending into o"
+  },
+  "five_points": ".|.|.|",
+  "alignment": "<-\\/->",
+  "scale": "ell_P/(5*pi) characteristic length, proposed, about 1.02894e-36 m",
+  "growth": "1x1.61658x10^{{n}}",
+  "dynamics": {
+    "state": "a,b dimensionless penetration fractions, x center mismatch",
+    "domain": "0<=a,b; a+b<=1; |x|<=1",
+    "advance": [
+      "(3a+b)/4",
+      "(a+3b)/4",
+      "(x+a-b)/4"
+    ],
+    "conserved": "a+b",
+    "difference": "a'-b'=(a-b)/2",
+    "energy": "E=(a-b)^2+x^2; E'<=3E/8",
+    "equilibrium": "a=b=(a0+b0)/2,x=0",
+    "rupture_rule": "Breaking either tail is an irreversible separate flag, not derived from relaxation dynamics"
+  },
+  "results": {
+    "initial_states": 1386,
+    "exact_updates": 16632,
+    "violations": 0
+  },
+  "scope": [
+    "Prince Rupert drop is analogy for compressed protective exterior and vulnerable tail",
+    "No actual stress field or material constants modeled",
+    "No experimental basis for sub-Planckian bubbles",
+    "The homeostatic equilibrium follows from selected mathematical interaction law; not a discovery of physical dynamics",
+    "Lean candidate may need compilation"
+  ],
+  "next": "H164 penetration capacity and nonlinear tail fracture threshold"
+}
