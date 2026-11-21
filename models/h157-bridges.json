@@ -1,0 +1,62 @@
+{
+  "schema": "cern.h157.independent-bridge-pricing.v1",
+  "parent": "models/h156-weight.json",
+  "chapter": "XXI — The Two Bridges",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "roots": {
+    "P_M": [
+      1
+    ],
+    "P_I": [
+      2
+    ],
+    "P_U": [
+      4
+    ],
+    "P_B": [
+      8
+    ],
+    "A": [
+      3,
+      12
+    ],
+    "B": [
+      5,
+      10
+    ],
+    "C": [
+      9,
+      6
+    ]
+  },
+  "target_gap": "4/5",
+  "bridge_weight": "2/5 per independent new source",
+  "source_policy": "Each repair gate has a distinct new ancestry root; failure of either leaves the other operational.",
+  "unit_price": "(3+popcount(g))/4",
+  "total_price": "(2/5)(price(g1)+price(g2))",
+  "results": {
+    "fractures": 11,
+    "pairs_tested": 308,
+    "walsh_checks": 236544,
+    "common_source_counterexamples": 11,
+    "cheapest_costs": {
+      "4/5": 7,
+      "9/10": 4
+    }
+  },
+  "proof": "Each rank-three fracture has unique mask m and eight crossing vectors. Losing bridge 1 requires bridge 2 to carry >=2/5 and vice versa. Positive independent bridges add nonnegative Laplacian contributions, hence no surviving mode can fall below 4/5. Enumerating all 28 distinct pairs per mask and applying the stated price rule yields exact minimum weighted sum per fracture.",
+  "limitations": [
+    "Two newly independent roots are stipulated, not verified",
+    "A gate vector denotes a complete edge class, not a single physical link",
+    "Costs are synthetic unit prices, not real energy, dollars, or hardware",
+    "One new repair-root failure at a time following an original four-root fracture",
+    "Finite 16-node Cayley graph, not physical QCD",
+    "Lean lemma uncompiled"
+  ],
+  "next": "H158 three independently sourced bridges surviving any two new-root failures"
+}
