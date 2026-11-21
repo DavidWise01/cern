@@ -1,0 +1,54 @@
+{
+  "schema": "cern.h180.hidden-drift-estimator.v1",
+  "title": "H180 — The Hidden Drift Estimator",
+  "chapter": "XLII — Learning Where the Rotor Is Now",
+  "parent": "models/h179-phase.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "symbolic_field": "−K(CMB) → 0 → +K(CMD)",
+  "bodies": "p+ → o ← d−; toroids A↔B↔C",
+  "state": [
+    "theta",
+    "drift"
+  ],
+  "phase_update": "theta[t+1] = theta[t] + v[t] − u[t]",
+  "measurement": "y[t] = theta[t-delay], noiseless in this test",
+  "estimated_drift": "v_hat = theta[k] − theta[k−1] + u[k−1]",
+  "predicted_present": "theta_hat[t] = theta[k] + (t−k)*v_hat − sum(controls[k:t])",
+  "bounded_action": "u[t] = clip(theta_hat[t]/2, −cap, cap)",
+  "policies": [
+    "delayed",
+    "naive",
+    "observer",
+    "coast"
+  ],
+  "scenarios": [
+    "constant drift",
+    "unannounced drift sign reversal after update 12"
+  ],
+  "test_results": {
+    "configurations": 1440,
+    "updates": 34560,
+    "constant_drift_exact_reconstructions": 3870,
+    "cap_violations": 0,
+    "constant_observer_vs_delayed": {
+      "wins": 66,
+      "ties": 72,
+      "losses": 42
+    },
+    "reversal_observer_vs_delayed": {
+      "wins": 92,
+      "ties": 54,
+      "losses": 34
+    }
+  },
+  "limitations": [
+    "Exact noiseless observations and known delays",
+    "Control history assumed complete",
+    "Common unwrapped phase, no cycle slips",
+    "Drift reversal is detected only after observations reflect it",
+    "No demonstration of Planck-scale Rupert engine or CMB-derived power",
+    "Lean contains supporting algebraic lemmas, uncompiled"
+  ],
+  "next": "H181 — Uncertain Delay and Noisy State Estimation"
+}
