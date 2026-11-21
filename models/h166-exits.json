@@ -1,0 +1,35 @@
+{
+  "schema": "cern.h166.i-pod-exit.v1",
+  "title": "H166 — The I-POD Exit Geometry",
+  "parent": "models/h165-expansion.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "shape": "Capital I with braced ends; .-. at a braced tip indicates an exit point",
+  "roles": {
+    "p": "upper bound / ingress tail",
+    "o": "central mediator",
+    "d": "lower bound / ingress tail"
+  },
+  "coordinates": "I-shaped axial p/o/d stem with at least one candidate braced exit",
+  "experimental_ports": 3,
+  "not_assumed": "No mandatory threefold rotational symmetry or 120-degree exit angles",
+  "length": "ell_P / (5*pi), proposed scale",
+  "toy_flow": {
+    "step": "Each enabled port withdraws 1/12 of starting reservoir at each update",
+    "closure": "Closed port releases zero",
+    "conserved": "reservoir + cumulative exit outputs",
+    "study": "21 reservoir values × 8 exit masks × 12 updates",
+    "results": {
+      "states": 168,
+      "updates": 2016,
+      "failures": 0
+    }
+  },
+  "limits": [
+    "Symbolic port topology only",
+    "No claim about actual sub-Planckian structures",
+    "Egress need not imply metric expansion",
+    "Prince Rupert drop analogy does not establish Planck physics"
+  ],
+  "next": "H167 exit symmetry and circulation: derive minimal open-port arrangement without imposing equal spacing"
+}
