@@ -1,0 +1,50 @@
+{
+  "schema": "cern.h172.field-coupling.v1",
+  "parent": "models/h171-field.json",
+  "title": "H172 — Field Coupling & Efficiency",
+  "chapter": "XXXIV — The Field Meets the Toroid",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "geometry": "p→o←d; p+ and d− outlet jets around a toroid",
+  "symbolic_field": "−K(CMB)→0K(CMB)→+K(CMD)",
+  "population": "unbounded hypothetical Rupert structures; energy flux per time remains explicitly finite",
+  "state": [
+    "supplied",
+    "rotor",
+    "work",
+    "heat",
+    "ejecta"
+  ],
+  "update": {
+    "input": "q=rate at even steps, else 0",
+    "capture": "coupled=q*kappa",
+    "uncaptured": "ejecta+=q*(1-kappa)",
+    "conversion": "rotor+=coupled*eta; heat+=coupled*(1-eta)",
+    "load": "work+=load*rotor; rotor*=(1-load)",
+    "drag": "heat+=rotor/16; rotor*=15/16"
+  },
+  "conserved": "supplied=rotor+work+heat+ejecta",
+  "runs": {
+    "configurations": 1024,
+    "updates": 16384,
+    "positive_input_events": 7168,
+    "conservation_failures": 0
+  },
+  "best_tested": {
+    "coupling": "7/8",
+    "eta": "1",
+    "load": "1/2",
+    "drag": "1/16",
+    "net_work_fraction": "3842165136728785032076393/4835703278458516698824704",
+    "efficiency_approx": 0.79454113
+  },
+  "limitations": [
+    "Parameters are dimensionless and chosen, not measured",
+    "No measured free-energy differential established for CMB or CMD",
+    "No physical realization of infinite Rupert supply",
+    "No angular momentum dynamics in this energy-only ledger",
+    "No generalized relativity or quantum-gravity derivation",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H173 — Multi-toroid field network: coupling competition and energy sharing"
+}
