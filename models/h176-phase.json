@@ -1,0 +1,47 @@
+{
+  "schema": "cern.h176.phase-lock.v1",
+  "parent": "models/h175-phase.json",
+  "title": "H176 — The Phase-Locked Rupert Mesh",
+  "chapter": "XXXVIII — Three Rotors, One Rhythm",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "pod": "p+ → o ← d-; toroids A B C",
+  "symbolic_field": "−K(CMB) → 0 → +K(CMD)",
+  "phase_update": "theta_i'=(1-kappa)*theta_i+kappa*mean(theta)+epsilon_i",
+  "couplings": [
+    "0",
+    "1/2",
+    "3/4"
+  ],
+  "disturbances": [
+    "none",
+    "common +1/64",
+    "alternating differential (-1,0,+1)/64"
+  ],
+  "miss_schedules": [
+    "none",
+    "every third candidate",
+    "every fifth candidate"
+  ],
+  "lock_threshold": "spread=max(theta)-min(theta) <=1/8",
+  "ledger": "supplied=fuel+rotor kinetic+housing kinetic+work+heat; Lrotors+Lhousing+Lexternal=0",
+  "results": {
+    "configurations": 729,
+    "exact_updates": 14580,
+    "feedback_phase_locked": 486,
+    "feedback_total": 486,
+    "open_loop_phase_locked": 27,
+    "open_loop_total": 243,
+    "moderate_feedback_improvements": 216,
+    "matched_comparisons": 243,
+    "conservation_failures": 0
+  },
+  "limitations": [
+    "Phase dynamics chosen rather than physically calibrated",
+    "Relative phase control cannot detect a common mode drift",
+    "Missed impulses do not interrupt phase sensing",
+    "No physically established Planck Rupert engine or CMB kinetic energy source",
+    "Lean algebraic lemmas are not a compiled proof of complete system dynamics"
+  ],
+  "next": "H177 — Shared drift, sensor delay, predictive phase correction"
+}
