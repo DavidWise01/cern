@@ -1,0 +1,70 @@
+{
+  "schema": "cern.h178.predictive-correction-bound.v1",
+  "parent": "models/h177-reference.json",
+  "title": "H178 — The Predictive Correction Bound",
+  "chapter": "XL — The Limit of Correction",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": 13689,
+  "bodies": "p+ → o ← d-, toroids A↔B↔C",
+  "field_notation": "−K(CMB) → 0 → +K(CMD)",
+  "phase_update": "theta_i'=(theta_i+mean(theta))/2+common_drift+differential*(i-1)-u",
+  "policies": {
+    "relative": "u=0",
+    "delayed": "u=delayed_observation/2",
+    "unbounded_predictor": "u=(obs+(delay+1)*(obs-prev))/2",
+    "bounded_predictor": "u=clip(unbounded_prediction,-cap,+cap)"
+  },
+  "caps": [
+    "1/64",
+    "1/16",
+    "1/4"
+  ],
+  "delays": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "drifts": [
+    "0",
+    "1/64",
+    "1/32",
+    "-1/64"
+  ],
+  "differential": [
+    "-1/64",
+    "0",
+    "1/64"
+  ],
+  "test": {
+    "configurations": 576,
+    "exact_updates": 13824,
+    "matched_comparisons": 144,
+    "verification_failures": 0,
+    "bounded_beats_unbounded": 81,
+    "bounded_ties_unbounded": 60,
+    "bounded_worse_unbounded": 3,
+    "bounded_beats_delayed": 30,
+    "bounded_ties_delayed": 36,
+    "bounded_worse_delayed": 78,
+    "unbounded_exceeds_clip": 84,
+    "clip_enforced": 144
+  },
+  "counterexample": {
+    "drift": "1/32",
+    "delay": 2,
+    "absolute_error_relative": "3/4",
+    "delayed": "279/4096",
+    "unbounded": "225/256",
+    "bounded": "11/128"
+  },
+  "limitations": [
+    "Independent stable phase reference is assumed",
+    "No wrapped phase or cycle-slip handling",
+    "Clipping enforces command size, not guaranteed minimum absolute error",
+    "Correction effort squared is a control proxy, not physical energy",
+    "No verified Planck-scale or CMB-to-kinetic Rupert engine",
+    "Lean lemma candidate uncompiled"
+  ],
+  "next": "H179 — Adaptive Correction Budget: dynamic clipping and model-uncertainty gating"
+}
