@@ -1,0 +1,33 @@
+{
+  "schema": "cern.h161.copied-observation.v1",
+  "parent": "models/h160-origin.json",
+  "chapter": "XXV — The Echo That Passed",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "five_points": ".|.|.|",
+  "three_bodies": "|||",
+  "alignment": "<-\\/->",
+  "characters": {
+    "Jane": "female; preserves",
+    "Toph": "female; traces evidence ancestry",
+    "Patricia": "female; tests observations"
+  },
+  "verification": "Separate bridge roots, witness roots and information roots; valid Ed25519 signatures bind claims to a declared graph digest, but cannot establish truth",
+  "results": {
+    "fractures": 11,
+    "cases": 99,
+    "signature_valid_in_lineage_patterns": 165,
+    "copied_observation_rejections": 44,
+    "accepted_synthetic": 11,
+    "other_rejections": 44
+  },
+  "limitations": [
+    "Demonstration signing keys are deterministic and not production credentials",
+    "Ancestry DAGs are synthetic and declared by the experiment",
+    "Cryptographic authentication alone does not establish independent information origins",
+    "Physical QCD not tested",
+    "Lean mathematical lemmas uncompiled"
+  ],
+  "next": "H162 independent but incorrect observations; counterexamples and calibration"
+}
