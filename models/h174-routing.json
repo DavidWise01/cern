@@ -1,0 +1,49 @@
+{
+  "schema": "cern.h174.self-routing-mesh.v1",
+  "parent": "models/h173-mesh.json",
+  "title": "H174 — The Self-Routing Toroid Mesh",
+  "chapter": "XXXVI — The Gate That Follows Demand",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "field_notation": "−K(CMB) → 0K(CMB) → +K(CMD)",
+  "bodies": "p→o←d",
+  "routing": {
+    "policies": [
+      "equal",
+      "fixed_a",
+      "greedy",
+      "proportional"
+    ],
+    "loads": [
+      "rotating",
+      "alternating",
+      "pulsing",
+      "static"
+    ],
+    "allocation_sum": "fA+fB+fC=1",
+    "mix": "mixing redistributes retained energy without increasing it"
+  },
+  "conservation": "source=retained A+B+C+useful work+heat+uncaptured",
+  "test": {
+    "cases": 2048,
+    "exact_updates": 32768,
+    "positive_input_steps": 14336,
+    "mixing_cell_changes": 63196,
+    "violations": 0,
+    "greedy_better_than_fixed_and_equal": 224,
+    "paired_comparisons": 512,
+    "best_efficiency_percent": 96.04086,
+    "best_profile": "pulse",
+    "best_capture": "1",
+    "best_mix": "0",
+    "best_policy": "greedy"
+  },
+  "caveats": [
+    "Results are mathematical toy-model outputs not measured engine efficiencies",
+    "No physical CMB-to-CMD converter established",
+    "All parameters chosen, not calibrated",
+    "Art illustration says 89.34%, superseded by actual test 96.04086%",
+    "Exact verification applies to energy bookkeeping; angular momentum not modeled"
+  ],
+  "next": "H175 — Toroidal Phase Gate: pulse timing, impulse directions and angular momentum counterreaction"
+}
