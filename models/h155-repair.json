@@ -1,0 +1,58 @@
+{
+  "schema": "cern.h155.parity-repair.v1",
+  "parent": "models/h154-fractures.json",
+  "chapter": "XIX — The Bridge of One",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "root_map": {
+    "P_M": [
+      1
+    ],
+    "P_I": [
+      2
+    ],
+    "P_U": [
+      4
+    ],
+    "P_B": [
+      8
+    ],
+    "A": [
+      3,
+      12
+    ],
+    "B": [
+      5,
+      10
+    ],
+    "C": [
+      9,
+      6
+    ]
+  },
+  "repair_condition": "m·g=1 mod 2",
+  "repair_weight": "2/5",
+  "results": {
+    "rank_three_fractures": 11,
+    "candidate_gate_vectors": 15,
+    "eligible_per_fracture": 8,
+    "eligible_trials": 88,
+    "walsh_checks": 22528,
+    "recovered_gap": "4/5",
+    "rank_before": 3,
+    "rank_after": 4
+  },
+  "theorem": "A unique nonzero orthogonal mask for the rank-three surviving generator span defines the 8+8 cosets. Any new independently sourced gate of odd parity under the mask increases rank to four. With gate weight 2/5, the newly lifted zero mode has eigenvalue 4/5. The other eigenvalues are at least 4/5 for all eleven cuts.",
+  "limits": [
+    "Independent new source is assumed, not demonstrated in deployment",
+    "One new edge class, not one physical edge",
+    "No energy or hardware-cost optimum established",
+    "All claims apply only to the discrete 16-state graph",
+    "Lean proof candidate only; full span theorem not formalized"
+  ],
+  "next": "H156 minimum repair cost under variable weighted channels and independent ancestry"
+}
