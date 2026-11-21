@@ -1,0 +1,41 @@
+{
+  "schema": "cern.h160.proof-of-origin.v1",
+  "parent": "models/h159-ancestry.json",
+  "chapter": "XXIV — The Three Witnesses",
+  "story": "Jane preserves the seed. Toph (woman) independently analyzes witness ancestry. Patricia tests repaired bridges.",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "five_points": ".|.|.|",
+  "three_bodies": "|||",
+  "alignment": "<-\\/->",
+  "gate_rule": "Each new gate must cross a nonzero orthogonal GF(2) parity mask; weight 2/5 is enough for target gap 4/5 in the existing 11 cuts",
+  "source_rule": "Every new bridge must trace to a distinct ultimate source root in a finite acyclic declared provenance DAG",
+  "witness_rule": "Every observation must trace to a distinct witness root; signer identity must be distinct",
+  "signature_rule": "Ed25519 signature over canonical JSON claim including cut, gate, source, observer, witness and graph SHA-256",
+  "results": {
+    "fractures": 11,
+    "cases": 88,
+    "accepted_simulated": 11,
+    "rejected": 77,
+    "per_case": 11
+  },
+  "fixture_classes": [
+    "independent",
+    "shared_source",
+    "shared_witness",
+    "forged_signature",
+    "stale_graph",
+    "missing_witness",
+    "cyclic_lineage",
+    "repeated_signer"
+  ],
+  "limitations": [
+    "All keys deterministic and public fixtures, not security credentials",
+    "Signatures authenticate a statement, not truth of underlying claim",
+    "Declared source and witness ancestries may be incomplete or false",
+    "Not an independent audit of real providers, code, hardware, or physical QCD",
+    "Lean candidate only; no complete formalization of cryptographic or graph proofs"
+  ],
+  "next": "H161 counterfactual evidence: three correctly signed witnesses can still agree on one copied observation"
+}
