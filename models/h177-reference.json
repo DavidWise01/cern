@@ -1,0 +1,40 @@
+{
+  "schema": "cern.h177.drifting-reference.v1",
+  "parent": "models/h176-phase.json",
+  "title": "H177 — The Drifting Reference",
+  "chapter": "XXXIX — Three Clocks Can Agree and Still Be Wrong",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "bodies": "p+→o←d-; toroids A B C",
+  "field": "−K(CMB) → 0 → +K(CMD)",
+  "phase_model": "theta_i'=(theta_i+mean(theta))/2+common_drift+differential_drift*(i-1)-correction",
+  "reference": "Past common-phase errors are available with fixed delay 0..3, external stable clock assumed",
+  "control": {
+    "relative": "correction=0",
+    "delayed": "correction=last_delayed_reference/2",
+    "predictive": "correction=(obs+(delay+1)*(obs-prior))/2"
+  },
+  "tests": {
+    "configurations": 144,
+    "exact_updates": 3456,
+    "ledger_checks": 3456,
+    "conservation_failures": 0,
+    "matched_comparisons": 48,
+    "delayed_beats_relative": 36,
+    "predictive_beats_delayed": 9,
+    "predictive_worse_delayed": 27,
+    "predictive_ties_delayed": 12
+  },
+  "counterexample": {
+    "relative_spread": "1/33554432",
+    "absolute_reference_error": "3/4"
+  },
+  "limitations": [
+    "No wrapped phases or phase slips",
+    "Independent stable reference assumed rather than established",
+    "Controller heat ledger separate from mechanical energy",
+    "Naive extrapolator is deliberately not an optimal predictor",
+    "Not demonstrated CMB energy source or physical Planck engine"
+  ],
+  "next": "H178 delayed-state estimation with bounded correction and phase wrapping"
+}
