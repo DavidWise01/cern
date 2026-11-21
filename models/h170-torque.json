@@ -1,0 +1,60 @@
+{
+  "schema": "cern.h170.torque-gate.v1",
+  "parent": "models/h169-flywheel.json",
+  "title": "H170 — The Torque Delivery Gate",
+  "chapter": "XXXII — The Cost of Turning",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "bodies": "p → o ← d; outlet p+ and d−",
+  "scale": "ell_P/(5*pi) hypothetical",
+  "energy_ledger": "E_supplied = E_fuel + K_rotor + K_housing + W_useful + Q_heat + E_exhaust",
+  "angular_ledger": "L_rotor+L_housing+L_external = 0",
+  "setup": {
+    "rotor_inertia": "2",
+    "housing_inertia": "2",
+    "impulse": "1/20",
+    "exhaust_loss": "1/4 of charged kinetic increment",
+    "load_fractions": [
+      "0",
+      "1/16",
+      "1/8",
+      "1/4"
+    ],
+    "drag_fractions": [
+      "0",
+      "1/32",
+      "1/16",
+      "1/8"
+    ],
+    "load_conversion": "3/4 delivered kinetic energy as useful work, 1/4 as heat",
+    "recharge": "optional external +1/4 at update 9",
+    "charge_window": "10 updates",
+    "total_updates": "16"
+  },
+  "tests": {
+    "states": 352,
+    "exact_updates": 5632,
+    "charge_impulses": 3212,
+    "work_events": 3936,
+    "drag_events": 3936,
+    "recharge_enabled_cases": 176,
+    "invariant_failures": 0
+  },
+  "best_case": {
+    "initial_fuel": "1",
+    "recharge": false,
+    "load": "1/8",
+    "drag": "0",
+    "net_efficiency_fraction": "590453783970679860848732277621/20282409603651670423947251286016",
+    "net_efficiency_approx": 0.029112
+  },
+  "limitations": [
+    "Synthetic normalized finite-energy scenario; not physical hardware",
+    "Rupturing Rupert head is not automatically a directed nozzle",
+    "Ejecta energy lost is explicit but particle trajectories not simulated",
+    "Energy recovered by external load assumed ideal 75 percent conversion",
+    "Angular momentum counterreaction included in housing and load",
+    "No proof of Planck-scale physics or cosmology"
+  ],
+  "next": "H171 dynamic impedance matching under variable load and exhaust energy constraints"
+}
