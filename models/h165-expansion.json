@@ -1,0 +1,38 @@
+{
+  "schema": "cern.h165.expanding-boundary.v1",
+  "parent": "models/h164-quench.json",
+  "title": "H165 — The Expanding Boundary",
+  "chapter": "XXIX — When Distance Changed",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": 13689,
+  "geometry": {
+    "bodies": "p/o/d",
+    "tails": "p→o←d",
+    "five_points": ".|.|.|",
+    "length": "ell_P/(5*pi), proposed sub-Planckian scale"
+  },
+  "comparison": {
+    "explosion": "stationary far-field positions in fixed background a=1; shell moves",
+    "metric": "comoving coordinates chi fixed, proper separation D=a(t)*chi"
+  },
+  "update": {
+    "quench": "U' = 3U/4; S' = S+U/4",
+    "rupture": "if enabled t=6 and S>=1/4, E' = E+S/2, S'=S/2",
+    "toy_scale_factor": "a'=a(1+E/8)",
+    "density_diagnostic": "rho=E/a^4",
+    "ledger": "U+S+E invariant"
+  },
+  "results": {
+    "initial_states": 462,
+    "exact_updates": 5544,
+    "triggered_releases": 211,
+    "failed_assertions": 0
+  },
+  "limitations": [
+    "Chosen a update rule is not derived from Friedman/Friedmann equations or general relativity",
+    "U+S+E is toy bookkeeping, not a general curved-spacetime energy-conservation law",
+    "No physical derivation of Planck bubble states or CMB temperature anisotropies",
+    "No proof early universe underwent a rupture"
+  ],
+  "next": "H166 Pressure Without a Shell: compare toy scale feedback with a radiation-dominated Friedmann reference and pressure"
+}
