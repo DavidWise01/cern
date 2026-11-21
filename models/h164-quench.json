@@ -1,0 +1,31 @@
+{
+  "schema": "cern.h164.cosmological-quench.v1",
+  "parent": "models/h163-pod.json",
+  "title": "H164 — The Cosmological Quench",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": 13689,
+  "geometry": "p ↓ o ↑ d",
+  "length_scale": "ell_P/(5*pi), hypothetical",
+  "quench_law": [
+    "U'=3U/4",
+    "S'=S+U/4"
+  ],
+  "fracture_law": [
+    "S'=S/2",
+    "R'=R+S/2"
+  ],
+  "invariant": "U+S+R",
+  "threshold": "fracture enabled at t=6 if S after quench >=1/4",
+  "test": {
+    "initial": 462,
+    "updates": 5544,
+    "triggers": 211,
+    "violations": 0
+  },
+  "limitations": [
+    "No physical cosmological stress or spacetime model",
+    "No prediction of CMB power spectrum",
+    "Prince Rupert's drop and Ice IX are analogies only",
+    "Big Bang is not a glass explosion"
+  ]
+}
