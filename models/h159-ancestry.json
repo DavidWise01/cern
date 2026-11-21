@@ -1,0 +1,50 @@
+{
+  "schema": "cern.h159.ancestry-audit.v1",
+  "parent": "models/h158-bridges.json",
+  "chapter": "XXIII — The Shared Ancestor",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "scale": "1x1.61658x10^{{n}}",
+  "points": ".|.|.|",
+  "bodies": "|||",
+  "alignment": "<-\\/->",
+  "root_partitions": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      1,
+      2
+    ]
+  ],
+  "model": "Any failed root disables all repair gates derived from it. For each of 11 rank-three cuts, three crossing gates of weight 2/5 undergo all distinct ancestry partitions and all failures of up to two distinct roots.",
+  "results": {
+    "fractures": 11,
+    "configurations": 55,
+    "source_failure_scenarios": 231,
+    "walsh_checks": 59136,
+    "passing": 11,
+    "failing": 44,
+    "independent_three_roots_required": true
+  },
+  "limitation": "Root ancestry is specified, not objectively attested. No real hardware fault testing or QCD proof.",
+  "next": "H160 evidence-carrying source lineage certificates and independent-root audit"
+}
