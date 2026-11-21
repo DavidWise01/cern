@@ -1,0 +1,48 @@
+{
+  "schema": "cern.h179.adaptive-correction.v1",
+  "parent": "models/h178-phase.json",
+  "title": "H179 — The Adaptive Correction Budget",
+  "chapter": "XLI — When Correction Becomes the Disturbance",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "body": "p+ → o ← d−; A↔B↔C",
+  "notation": "−K(CMB) → 0 → +K(CMD)",
+  "reference_model": "Unwrapped phase, fixed delays 0..3, common-mode and differential drifts",
+  "adaptive_rule": "c_n=min(1/4,max(1/64,1/64+abs(observed_delta)/(delay+1))); command=clip(raw_predictor,-c_n,c_n)",
+  "policies": [
+    "delayed",
+    "fixed_cap",
+    "adaptive",
+    "unbounded"
+  ],
+  "results": {
+    "cases": 192,
+    "updates": 4608,
+    "comparisons": 48,
+    "adaptive_vs_fixed": {
+      "win": 18,
+      "tie": 18,
+      "lose": 12
+    },
+    "adaptive_vs_delayed": {
+      "win": 6,
+      "tie": 12,
+      "lose": 30
+    },
+    "adaptive_vs_unbounded": {
+      "win": 27,
+      "tie": 18,
+      "lose": 3
+    },
+    "bounded_cases": 48,
+    "violations": 0
+  },
+  "limitations": [
+    "Chosen heuristic is not optimized",
+    "A correction cap guarantees action size only, not accuracy",
+    "The external reference is assumed independent and correct",
+    "No measured Rupert fuel, CMB work, or physical Planck engine",
+    "Lean supporting proof not compiled"
+  ],
+  "next": "H180 — Joint state observer: estimate latent common drift and delayed phase before adjusting the cap"
+}
