@@ -1,0 +1,63 @@
+{
+  "schema": "cern.h173.mesh.v1",
+  "parent": "models/h172-field.json",
+  "title": "H173 — The Coupled Toroid Mesh",
+  "chapter": "XXXV — Three Toroids, One Field",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "bodies": "p→o←d",
+  "outlets": "p+ and d−",
+  "symbolic_field": "−K(CMB) → 0K(CMB) → +K(CMD)",
+  "mesh": [
+    "A",
+    "B",
+    "C"
+  ],
+  "conservation": "One shared energy flux enters once; split fA+fB+fC=1; mixing t preserves sum; supplied=retained+work+heat+exhaust",
+  "algorithm": {
+    "rates": "0 to 7/8 in steps of 1/8",
+    "allocations": "10 ternary barycentric allocations of thirds",
+    "capture": [
+      "0",
+      "1/4",
+      "1/2",
+      "3/4"
+    ],
+    "transfer": [
+      "0",
+      "1/4",
+      "1/2",
+      "1"
+    ],
+    "loads": [
+      "1/2",
+      "1/4",
+      "0"
+    ],
+    "drag": "1/16",
+    "steps": 16,
+    "inputs": "every even step"
+  },
+  "results": {
+    "configurations": 1280,
+    "exact_updates": 20480,
+    "positive_input_updates": 8960,
+    "violations": 0,
+    "best_efficiency_approx": 0.68103525,
+    "best_allocation": [
+      "1",
+      "0",
+      "0"
+    ],
+    "best_capture": "3/4",
+    "best_transfer": "0"
+  },
+  "limitations": [
+    "Energy-only network; does not demonstrate torque production or momentum exchange between coupled physical rotors",
+    "Transfer is ideal lossless energy mixing, not an observed mechanism",
+    "Finite throughput despite symbolically unbounded Rupert population",
+    "No physical verification of energy extraction from cosmic microwave background",
+    "Illustration contains conceptual numerical figures not equal to test"
+  ],
+  "next": "H174 adaptive allocation when changing load makes routing valuable"
+}
