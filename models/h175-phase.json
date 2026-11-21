@@ -1,0 +1,58 @@
+{
+  "schema": "cern.h175.phase-gate.v1",
+  "parent": "models/h174-routing.json",
+  "title": "H175 — The Toroidal Phase Gate",
+  "chapter": "XXXVII — Timing the Rupert Release",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "geometry": "p+ and d- heads, p→o←d, three rotor A/B/C and one counterrotating housing",
+  "symbolic_field": "−K(CMB) → 0K(CMB) → +K(CMD)",
+  "phase_signs": {
+    "0": 1,
+    "90": 0,
+    "180": -1,
+    "270": 0
+  },
+  "policies": [
+    "aligned",
+    "opposed",
+    "staggered",
+    "alternating",
+    "feedback"
+  ],
+  "dynamics": {
+    "rotor_inertia": "2 each",
+    "housing_inertia": "6",
+    "impulse": "1/20",
+    "exhaust_energy_per_ejection": "1/100",
+    "load_fractions": [
+      "0",
+      "1/8"
+    ],
+    "conversion_fraction": "3/4",
+    "input": "finite recharge at even steps",
+    "angular_ledger": "sum(rotor angular momentum)+housing+external=0",
+    "energy_ledger": "supplied=fuel+kinetic+work+heat+ejecta"
+  },
+  "results": {
+    "configurations": 450,
+    "exact_updates": 7200,
+    "powered_ejections": 4197,
+    "rejected_events": 303,
+    "neutral_events": 2700,
+    "conservation_failures": 0,
+    "aligned_opposed_ties": 90,
+    "feedback_beats_staggered": 42,
+    "matched_comparisons": 90,
+    "best_efficiency_approx": "6.66775%"
+  },
+  "limitations": [
+    "Phase projection prescribed in synthetic discrete model",
+    "No CMB-to-work physical conversion demonstrated",
+    "No physical Planck Rupert drop demonstrated",
+    "Exact test tracks energy and angular momentum only; not full 3D linear momentum",
+    "Finite supplied energy required",
+    "Lean not compiled"
+  ],
+  "next": "H176 phase synchronization under jitter, missed pulses and load drift"
+}
