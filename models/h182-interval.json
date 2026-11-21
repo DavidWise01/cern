@@ -1,0 +1,51 @@
+{
+  "schema": "cern.h182.informative-interval.v1",
+  "parent": "models/h181-observation.json",
+  "title": "H182 — The Informative Interval",
+  "chapter": "XLIV — The Past Narrows the Present",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "geometry": "p⁺→o←d⁻; A⇄B⇄C",
+  "symbolic_field": "−K(CMB)→0→+K(CMD)",
+  "phase_update": "theta[t+1]=theta[t]+drift[t]−u[t]",
+  "observation": "y[t]=theta[max(0,t-delay)]+noise",
+  "candidate_delays": [
+    0,
+    1,
+    2
+  ],
+  "noise_bound": "1/64",
+  "drift_bound": "1/32",
+  "saved_history": "all previous measurements and actual commands",
+  "interval_at_t": "I_t = intersection over k<=t of union of delay-conditioned propagated sensor intervals",
+  "policy": "correct safely toward zero if interval has one sign, else coast",
+  "results": {
+    "configurations": 648,
+    "exact_updates": 15552,
+    "matched_scenarios": 162,
+    "history_narrower": 132,
+    "history_equal_width": 30,
+    "history_coverage_checks": 3888,
+    "unsafe_history_corrections": 0,
+    "history_coasts": 1366,
+    "single_coasts": 1382,
+    "history_vs_single": {
+      "wins": 48,
+      "ties": 92,
+      "losses": 22
+    },
+    "history_vs_naive": {
+      "wins": 12,
+      "ties": 6,
+      "losses": 144
+    }
+  },
+  "limitations": [
+    "Exact bounds assumed contain actual drift and noise",
+    "Full history intersection is conservative, not an optimized Bayesian estimator",
+    "No instrument calibration, noise statistics or measurement independence established",
+    "Sub-Planckian Rupert POD and CMB/CMD fuel remain hypotheses",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H183 — Delay identification: infer the most plausible observation age without losing envelope coverage"
+}
