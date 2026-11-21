@@ -1,0 +1,51 @@
+{
+  "schema": "cern.h169.kinetic-flywheel.v1",
+  "parent": "models/h168-vacuum.json",
+  "title": "H169 — The Kinetic Flywheel",
+  "chapter": "XXXI — What Remains After the Rupture",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "body": "p→o←d; p+ / d− kinetic ejecta in vacuum",
+  "center": "{{i}}",
+  "conserved": [
+    "E_fuel+K_rotor+K_housing+W_output+Q_heat=E_initial",
+    "L_rotor+L_housing+L_external=0"
+  ],
+  "state": [
+    "fuel",
+    "L_rotor",
+    "L_housing",
+    "L_external",
+    "work",
+    "heat",
+    "shots"
+  ],
+  "normalizations": {
+    "rotor_inertia": "2",
+    "housing_inertia": "2",
+    "charging_impulse": "1/20",
+    "extraction_fraction": "1/8 of rotor angular momentum per step",
+    "drag_fraction": "1/16 of remaining rotor angular momentum transferred to housing per step"
+  },
+  "mechanics": {
+    "charge": "an equal/opposite impulse increments L_rotor by J and L_housing by -J, funded by stored energy",
+    "extract": "angular impulse removed from rotor goes to an external idealized receiver; lost kinetic booked as useful work",
+    "drag": "rotor transfers angular momentum to housing; net kinetic decrease booked to heat"
+  },
+  "results": {
+    "initial_states": 104,
+    "exact_updates": 1248,
+    "fuel_impulses": 564,
+    "work_events": 288,
+    "heat_events": 288,
+    "conservation_failures": 0
+  },
+  "limitations": [
+    "Finite stored Rupert fuel, no perpetual motion",
+    "Housing counterrotation retained and included in energy ledger",
+    "External receiver idealized; not full engineering design",
+    "Friction/extraction ratios illustrative, not measured",
+    "Not established Planck-scale engine or general-relativistic cosmology"
+  ],
+  "next": "H170 torque delivery and flywheel efficiency; test net useful work after recharge and mechanical coupling"
+}
