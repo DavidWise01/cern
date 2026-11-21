@@ -1,0 +1,50 @@
+{
+  "schema": "cern.h181.uncertain-observation.v1",
+  "title": "H181 — The Uncertain Observation",
+  "chapter": "XLIII — Knowing When Not to Correct",
+  "parent": "models/h180-estimator.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "field": "−K(CMB) → 0 → +K(CMD)",
+  "pod": "p⁺ → o ← d⁻; A⇄B⇄C",
+  "latent_phase": "theta[t+1]=theta[t]+drift[t]-u[t]",
+  "measurement": "y[t]=theta[max(0,t-d)]+noise; d ∈{0,1,2}; |noise|≤1/64",
+  "drift": "v[t]∈[-1/32,+1/32]; optional reversal at step 12",
+  "assumed_uncertainty": "No knowledge of exact delay or noise sign. Union all candidate-delay intervals propagated using bounded drift and actual prior commands.",
+  "action": "if lower>0, u=clip(lower/2); if upper<0, u=clip(upper/2); else u=0. cap=1/16",
+  "immediate_safety": "For theta∈[lower,upper], |theta-u|≤|theta| holds.",
+  "results": {
+    "configurations": 648,
+    "exact_updates": 15552,
+    "coverage_checks": 15552,
+    "interval_immediate_unsafe": 0,
+    "naive_immediate_unsafe": 658,
+    "interval_coasts": 1382,
+    "naive_coasts": 232,
+    "matched_scenarios": 162,
+    "interval_vs_naive": {
+      "wins": 12,
+      "ties": 6,
+      "losses": 144
+    },
+    "interval_vs_coast": {
+      "wins": 126,
+      "ties": 18,
+      "losses": 18
+    },
+    "interval_vs_oracle": {
+      "wins": 0,
+      "ties": 18,
+      "losses": 144
+    }
+  },
+  "limitations": [
+    "Noise and drift bounds and set of candidate delays must contain the true process",
+    "Unwrapped scalar phase, not actual three-rotor mechanics",
+    "Immediate non-worsening before drift does not imply long-horizon accuracy",
+    "Energy source and physical Rupert POD hypothetical; no CMB work extraction demonstrated",
+    "A plot label in concept image mistakenly says 658 unsafe interval corrections, but the correct label is naive corrections",
+    "Lean arithmetic lemmas uncompiled"
+  ],
+  "next": "H182 — Informative Intervals: reduce delay ambiguity using repeated sensor observations while preserving true-state coverage"
+}
