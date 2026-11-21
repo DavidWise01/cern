@@ -1,0 +1,33 @@
+{
+  "schema": "cern.h171.continuous-rupert-field.v1",
+  "parent": "models/h170-torque.json",
+  "title": "H171 — The Continuous Rupert Field",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": 13689,
+  "stated_formula": "−K(CMB) → 0K(CMB) → +K(CMD)",
+  "three_states": {
+    "negative": "signed input branch (-), not negative thermodynamic kelvin",
+    "neutral": "mediation state (0), not literal reachable absolute zero",
+    "positive": "signed output branch (+), CMD preserved exactly as user wrote"
+  },
+  "infinity": "countably unbounded model population; realized power bounded by finite usable energy flux",
+  "engine": "p→o←d with kinetic p+/d− outlets and toroidal counterrotation",
+  "energy_rule": "E_input=E_work+E_heat+E_ejecta+E_storage",
+  "rates_tested": 9,
+  "work_allocations": 4,
+  "heat_allocations": 3,
+  "updates_per_case": 64,
+  "results": {
+    "configurations": 108,
+    "exact_updates": 6912,
+    "failures": 0
+  },
+  "caveats": [
+    "The CMB is a measured ~2.725 K thermal radiation field, not a proven source of unlimited extractable work",
+    "No negative absolute temperature in kelvin implied by symbol -K",
+    "Absolute zero is not a traversable barrier",
+    "No demonstration of Planck-scale Rupert heads or vacuum power generation",
+    "Infinite event count alone does not imply nonzero energy or power"
+  ],
+  "next": "H172 — finite event flux, coupling efficiency and real source thermodynamics"
+}
