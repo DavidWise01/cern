@@ -1,0 +1,73 @@
+{
+  "schema": "cern.h185.probe-cost-gate.v1",
+  "parent": "models/h184-pulse.json",
+  "title": "H185 — The Cost of Asking Again",
+  "chapter": "XLVII — Probe Only When the Information Is Worth the Disturbance",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "field": "−K(CMB) → 0 → +K(CMD)",
+  "body": "p⁺ → o ← d⁻",
+  "mesh": "A ⇄ B ⇄ C",
+  "tested": {
+    "sensor_conditions": 81,
+    "wrong_delay_penalties": 4,
+    "policies": 4,
+    "decision_cases": 1296,
+    "passive_identified": 12,
+    "active_identified": 81,
+    "incorrect_delay_exclusions": 0
+  },
+  "probe": {
+    "amplitude": "3/64",
+    "cost_proxy": "9/4096",
+    "noise_bound": "1/64",
+    "candidate_delay_set": [
+      0,
+      1,
+      2
+    ]
+  },
+  "policy": {
+    "assumption": "uniform prior on remaining delay candidates",
+    "expected_loss_without_probe": "q*(1-1/k)",
+    "adaptive": "probe once iff q*(1-1/k)>9/4096",
+    "always": "probe once in all scenarios",
+    "never": "do not probe",
+    "repeat": "probe twice, although the second observation is redundant under the model"
+  },
+  "results": {
+    "matched_cases_per_policy": 324,
+    "adaptive_pulses": 183,
+    "always_pulses": 324,
+    "repeat_pulses": 648,
+    "adaptive_probe_energy": "1647/4096",
+    "always_probe_energy": "729/1024",
+    "adaptive_total_expected_cost": "1839/4096",
+    "always_total_expected_cost": "729/1024",
+    "adaptive_beats_never": {
+      "wins": 183,
+      "ties": 141,
+      "losses": 0
+    },
+    "adaptive_beats_always": {
+      "wins": 141,
+      "ties": 183,
+      "losses": 0
+    },
+    "adaptive_beats_repeat": {
+      "wins": 324,
+      "ties": 0,
+      "losses": 0
+    }
+  },
+  "limitations": [
+    "This is a synthetic one-decision optimization; expected loss and uniform prior are not measured",
+    "Probe cost A² is dimensionless, not joules",
+    "No multi-step information-value or re-identification from changing delay",
+    "Assumes successful diagnostic pulse identifies delay without false exclusion",
+    "No observed CMB-to-kinetic conversion or Planck-scale Rupert structure",
+    "Concept image has illustrative figures that do not match executed model; downloadable results are authoritative",
+    "Lean algebraic lemma file not compiled"
+  ],
+  "next": "H186 — The Changing Delay: detect when a previously identified delay becomes stale and decide whether another pulse is worth its cost"
+}
