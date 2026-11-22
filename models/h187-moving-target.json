@@ -1,0 +1,108 @@
+{
+  "schema": "cern.h187.moving-target.v1",
+  "parent": "models/h186-changing-delay.json",
+  "title": "H187 — The Moving Target",
+  "chapter": "XLIX — When the Answer Arrives Late",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "bodies": "p⁺→o←d⁻",
+  "mesh": "A↔B↔C",
+  "symbolic_field": "−K(CMB)→0→+K(CMD)",
+  "probe_amplitude": "3/64",
+  "probe_cost": "9/4096",
+  "trajectories": [
+    [
+      0,
+      1,
+      2,
+      0
+    ],
+    [
+      2,
+      1,
+      0,
+      2
+    ],
+    [
+      1,
+      2,
+      1,
+      0
+    ]
+  ],
+  "switches": [
+    [
+      6,
+      12,
+      18
+    ],
+    [
+      5,
+      13,
+      19
+    ],
+    [
+      4,
+      9,
+      16
+    ]
+  ],
+  "probe_latencies": [
+    1,
+    2,
+    3
+  ],
+  "stale_penalties": [
+    "0",
+    "1/1024",
+    "1/256",
+    "1/64"
+  ],
+  "decision_policies": [
+    "never",
+    "always",
+    "every3",
+    "risk",
+    "timestamp"
+  ],
+  "response_rule": "Probe sampled at request time and returned after specified latency.",
+  "timestamp_gate": "Discard reply if a trustworthy change event has timestamp strictly after sample and at or before arrival.",
+  "result": {
+    "configurations": 540,
+    "updates": 12960,
+    "policy_comparisons": 108,
+    "timestamp": {
+      "pulses": 735,
+      "stale_steps": 725,
+      "rejected_stale_answers": 126,
+      "accepted_stale_answers": 0,
+      "total_cost": "23183/4096"
+    },
+    "risk": {
+      "pulses": 558,
+      "stale_steps": 1196,
+      "total_cost": "12115/2048"
+    },
+    "timestamp_vs_risk": {
+      "wins": 36,
+      "ties": 31,
+      "losses": 41
+    },
+    "aggregate_costs": {
+      "never": "3591/512",
+      "always": "4617/512",
+      "every3": "7047/1024",
+      "risk": "12115/2048",
+      "timestamp": "23183/4096"
+    }
+  },
+  "limitations": [
+    "Perfect externally supplied change-event timestamps are assumed only for the timestamp policy",
+    "Unannounced changes cannot be detected with timestamps alone",
+    "No sensor noise or probabilistic change detection is modeled",
+    "Synthetic cost penalty is not joules",
+    "The H187 poster contains invented conceptual figures 2,592 and 99.2% inconsistent with executed sweep; verified results supersede it",
+    "No physical demonstration of Rupert/CMB/CMD energy mechanism"
+  ],
+  "next": "H188 — Detect an Unannounced Delay Switch From Residuals With Calibrated False Alarm Rates"
+}
