@@ -1,0 +1,44 @@
+{
+  "schema": "cern.h184.minimum-diagnostic-pulse.v1",
+  "parent": "models/h183-delay.json",
+  "title": "H184 — The Minimum Diagnostic Pulse",
+  "chapter": "XLVI — The Smallest Disturbance That Speaks",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "field": "−K(CMB) → 0 → +K(CMD)",
+  "pod": "p⁺ → o ← d⁻; A↔B↔C",
+  "sensor": {
+    "delay_candidates": [
+      0,
+      1,
+      2
+    ],
+    "noise_bound": "1/64",
+    "test_pulse_step": 3,
+    "trajectory": "theta[t+1]=theta[t]+drift−(A if t=3 else 0)",
+    "identification": "A delay candidate remains if max observation residual <=1/64"
+  },
+  "minimax_result": {
+    "separation": "delta_min=A",
+    "necessary_sufficient_robust_condition": "A>2*epsilon=1/32",
+    "on_tested_grid": "A=3/64",
+    "pulse_cost_proxy": "A²=9/4096",
+    "equality_counterexample": "At A=1/32 choose midpoint of delay 0 and delay 1 predicted observations; both match within ε"
+  },
+  "tests": {
+    "amplitudes": 9,
+    "configurations": 729,
+    "exact_residual_checks": 52488,
+    "identified_at_3_over_64": "81/81",
+    "true_delays_excluded": 0
+  },
+  "limitations": [
+    "Robust condition is for arbitrary independent bounded noise, different from constant-noise sweep",
+    "Exact trajectories require known initial phase, drift and control history",
+    "No energy units or physical noise calibration",
+    "No experimentally validated Rupert engine or CMB power extraction",
+    "The research JPEG includes illustrative diagrams; executable results are authoritative",
+    "Lean supporting lemmas uncompiled"
+  ],
+  "next": "H185 — Diagnostic Probing Under Unknown Drift and Probe Latency"
+}
