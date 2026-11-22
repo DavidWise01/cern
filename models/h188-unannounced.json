@@ -1,0 +1,99 @@
+{
+  "schema": "cern.h188.unannounced-switch.v1",
+  "title": "H188 — The Unannounced Switch",
+  "chapter": "L — Detecting Change Without Being Told",
+  "parent": "models/h187-moving-target.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "geometry": "p⁺→o←d⁻; A⇄B⇄C",
+  "symbolic_field": "−K(CMB) → 0 → +K(CMD)",
+  "candidate_delays": [
+    0,
+    1,
+    2
+  ],
+  "changes": [
+    [
+      9,
+      19
+    ],
+    [
+      7,
+      16,
+      24
+    ],
+    [
+      12
+    ]
+  ],
+  "excitation_classes": [
+    "five known pulses",
+    "varying ramps",
+    "weak constant drift"
+  ],
+  "noise_sequences": [
+    "zero",
+    "−1/64,0,+1/64",
+    "+1/64,−1/64"
+  ],
+  "residual": "r[t]=abs(y[t]−known_trajectory[t−stored_delay])",
+  "alarm": "r[t]>1/64",
+  "pulse_amplitude": "3/64",
+  "pulse_cost": "9/4096",
+  "probe_latency": 2,
+  "stale_timing_cost": "1/128 per update",
+  "policies": [
+    "never",
+    "periodic every six",
+    "always every two",
+    "residual triggered"
+  ],
+  "tests": {
+    "configurations": 324,
+    "exact_updates": 9720,
+    "matched_scenarios_per_policy": 81,
+    "delay_changes_per_policy": 162,
+    "residual_detected": 144,
+    "residual_missed": 18,
+    "false_alarms": 0,
+    "probes": {
+      "never": 0,
+      "periodic": 405,
+      "always": 1134,
+      "residual": 143
+    },
+    "stale_steps": {
+      "never": 1512,
+      "periodic": 729,
+      "always": 405,
+      "residual": 600
+    },
+    "modeled_costs": {
+      "never": "189/16",
+      "periodic": "26973/4096",
+      "always": "11583/2048",
+      "residual": "20487/4096"
+    },
+    "residual_vs_periodic": {
+      "wins": 64,
+      "ties": 0,
+      "losses": 17
+    },
+    "residual_vs_always": {
+      "wins": 63,
+      "ties": 0,
+      "losses": 18
+    }
+  },
+  "limitations": [
+    "Known accurate excitation and phase trajectory required to compute residual",
+    "Zero false alarms conditional on exact model and noise within 1/64 bound",
+    "18 of 162 changes were not detected",
+    "The diagnostic reply is two steps late; may have become obsolete",
+    "Energy costs are dimensionless illustrative, not joules",
+    "No physical evidence for extracting power from CMB or for Planck-scale Rupert structures",
+    "No real toroid inertia, stress fracture, or kinetic rotor is simulated",
+    "Lean supporting algebra uncompiled"
+  ],
+  "next": "H189 — Self-Exciting Delay Detection: active distinguishability when passive residual is uninformative"
+}
