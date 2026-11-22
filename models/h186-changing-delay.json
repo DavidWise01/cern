@@ -1,0 +1,54 @@
+{
+  "schema": "cern.h186.changing-delay.v1",
+  "title": "H186 — The Changing Delay",
+  "chapter": "XLVIII — When Yesterday's Timing Stops Working",
+  "parent": "models/h185-probe.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "symbolic_field": "−K(CMB)→0→+K(CMD)",
+  "geometry": "p⁺→o←d⁻; toroids A⇄B⇄C",
+  "diagnostic_amplitude": "3/64",
+  "diagnostic_cost": "9/4096",
+  "true_delay_states": [
+    0,
+    1,
+    2
+  ],
+  "change_model": "exactly one switch from d0 to a distinct d1 at one of twelve steps",
+  "policies": [
+    "never",
+    "always",
+    "every3",
+    "risk"
+  ],
+  "risk_gate": "q*min(age/6,1)>9/4096",
+  "cost_ledger": "total=probe_cost+per_step_stale_delay_penalty",
+  "test": {
+    "configurations": 1440,
+    "exact_updates": 17280,
+    "scenarios_per_policy": 360,
+    "violations": 0,
+    "aggregate_modeled_cost": {
+      "never": "9945/256",
+      "always": "1215/128",
+      "every3": "585/64",
+      "risk": "2637/512"
+    },
+    "risk_gate_pulses": 1944,
+    "always_pulses": 4320,
+    "risk_vs_every3": {
+      "wins": 228,
+      "ties": 18,
+      "losses": 114
+    }
+  },
+  "limitations": [
+    "The risk gate uses an illustrative age/hazard heuristic, not learned failure statistics",
+    "Diagnostic pulses are assumed to identify the new delay immediately and perfectly",
+    "Probe and stale costs are dimensionless and do not simulate physical kinetic energy",
+    "Only one delay switch per 12-step trajectory",
+    "No physical evidence for Rupert-driven CMB/CMD engine",
+    "Lean lemmas supporting algebra only; not compiled"
+  ],
+  "next": "H187 — Multiple changes and delayed probe completion"
+}
