@@ -1,0 +1,71 @@
+{
+  "schema": "cern.h189.self-exciting.v1",
+  "title": "H189 — The Self-Exciting Detector",
+  "chapter": "LI — When Silence Hides a Change",
+  "parent": "models/h188-unannounced.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "bodies": "p⁺ → o ← d⁻; A⇄B⇄C",
+  "field": "−K(CMB)→0→+K(CMD)",
+  "sensor_delays": [
+    0,
+    1,
+    2
+  ],
+  "noise_bound": "1/64",
+  "probe_amplitude": "3/64",
+  "probe_cost": "9/4096",
+  "stale_step_cost": "1/128",
+  "detection_rule": "Residual > ε; update only when exactly one candidate delay remains feasible.",
+  "observability_rule": "All pairs of candidate delayed predictions must differ by >2ε.",
+  "self_excitation_rule": "If not observable, inject diagnostic pulse, at most one every five updates.",
+  "patterns": [
+    "flat",
+    "slow_ramp",
+    "natural_pulses"
+  ],
+  "switch_times": [
+    8,
+    15,
+    22
+  ],
+  "results": {
+    "cases": 486,
+    "updates": 14580,
+    "detected": {
+      "passive": 48,
+      "periodic6": 132,
+      "self_exciting": 138
+    },
+    "pulses": {
+      "passive": 0,
+      "periodic6": 810,
+      "self_exciting": 972
+    },
+    "stale_steps": {
+      "passive": 1908,
+      "periodic6": 888,
+      "self_exciting": 756
+    },
+    "aggregate_cost": {
+      "passive": "477/32",
+      "periodic6": "17853/2048",
+      "self_exciting": "8235/1024"
+    },
+    "self_vs_periodic": {
+      "wins": 78,
+      "ties": 0,
+      "losses": 84
+    },
+    "false_alarms": 0
+  },
+  "limitations": [
+    "Assumes exact known input waveform and disturbance bounds",
+    "One unannounced delay change per trial",
+    "No physically demonstrated Planck-scale Rupert engine",
+    "No extractable CMB/CMD kinetic power demonstrated",
+    "Finite-energy, dimensionless synthetic model",
+    "Supporting Lean lemmas not independently compiled"
+  ],
+  "next": "H190 — Budget-Aware Excitation: Can the controller choose whether ambiguity is costly enough to merit another pulse?"
+}
