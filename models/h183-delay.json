@@ -1,0 +1,50 @@
+{
+  "schema": "cern.h183.delay-identification.v1",
+  "title": "H183 — The Age of an Observation",
+  "chapter": "XLV — The Pulse That Revealed the Delay",
+  "parent": "models/h182-interval.json",
+  "primitive": "{10x10[5x5(3x3)]}",
+  "seed": "13689",
+  "field": "−K(CMB) → 0 → +K(CMD)",
+  "geometry": "p⁺→o←d⁻; A⇄B⇄C",
+  "synthetic_phase": "theta[t+1]=theta[t]+drift-u[t]",
+  "measurement": "y[t]=theta[max(0,t-d)]+noise; d∈{0,1,2}",
+  "candidate_residual": "R(d)=max_t|y[t]-theta[max(0,t-d)]|",
+  "validity": "R(d)<=1/64",
+  "pulses": {
+    "positive": {
+      "times": [
+        3,
+        10,
+        17
+      ],
+      "value": "1/8"
+    },
+    "negative": {
+      "times": [
+        6,
+        14,
+        20
+      ],
+      "value": "-1/16"
+    }
+  },
+  "results": {
+    "cases": 162,
+    "residual_checks": 11664,
+    "pulses_unique": 81,
+    "pulses_total": 81,
+    "no_pulses_unique": 12,
+    "no_pulses_total": 81,
+    "false_exclusions": 0
+  },
+  "limitations": [
+    "Known initial phase, drift, and control history assumed exact",
+    "Noise is constant per trial and bounded by 1/64",
+    "Only three discrete delay candidates",
+    "Probe energy cost and hardware dynamics not simulated",
+    "No demonstrated CMB work or sub-Planckian Rupert motor",
+    "Lean lemmas uncompiled"
+  ],
+  "next": "H184 — Minimum Diagnostic Pulse: distinguish delays with lowest disturbance and energy cost"
+}
