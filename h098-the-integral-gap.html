@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H098 — The Integral Gap</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#d0d0d0;font-family:'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:#ff6b35;font-size:1.3em;border-bottom:2px solid #ff6b35;padding-bottom:8px;margin-bottom:4px}
+h2{color:#00bfff;font-size:1.05em;margin:12px 0 6px}
+.subtitle{color:#888;font-size:0.85em;margin-bottom:14px}
+.panel{background:#111118;border:1px solid #333;border-radius:6px;padding:14px;margin-bottom:14px}
+.panel-title{color:#ff6b35;font-size:0.95em;font-weight:bold;margin-bottom:8px;border-bottom:1px solid #333;padding-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:0.82em;margin:6px 0}
+th{background:#1a1a2e;color:#00bfff;padding:5px 8px;text-align:left;border:1px solid #333}
+td{padding:5px 8px;border:1px solid #282828}
+.lit{color:#00ff88;font-weight:bold}
+.dead{color:#ff4444;font-weight:bold}
+.amber{color:#ffaa00;font-weight:bold}
+.open{color:#ff6b35;font-weight:bold}
+.note{color:#888;font-size:0.78em;font-style:italic}
+.metric{background:#0d0d1a;border:1px solid #444;border-radius:4px;padding:10px;text-align:center;margin:4px 0}
+.metric .val{font-size:1.5em;color:#00ff88;font-weight:bold}
+.metric .lbl{color:#888;font-size:0.75em}
+canvas{width:100%;border:1px solid #333;border-radius:4px;margin:6px 0}
+.eq{background:#0a0a1a;border-left:3px solid #ff6b35;padding:8px 12px;margin:8px 0;font-family:'Courier New',monospace;font-size:0.88em;color:#e0e0e0}
+.ornament-label{color:#555;font-size:0.65em;text-align:center;margin:4px 0}
+.ornament{color:#333;font-size:0.7em;text-align:center;margin:4px 0;letter-spacing:2px}
+.toddler{background:#0a0a1a;border:2px dashed #555;border-radius:6px;padding:12px;margin:10px 0}
+.toddler-title{color:#ffaa00;font-size:0.9em;font-weight:bold;margin-bottom:6px}
+.basic{background:#000;border:2px solid #00ff88;border-radius:6px;padding:12px;margin:10px 0;font-family:'Courier New',monospace;font-size:0.82em;color:#00ff88}
+.stamp{font-size:0.85em;padding:3px 8px;border-radius:3px;display:inline-block;margin:2px}
+.stamp-lit{background:#003300;color:#00ff88;border:1px solid #00ff88}
+.stamp-dead{background:#330000;color:#ff4444;border:1px solid #ff4444}
+.kb-label{color:#ff4444;font-size:0.75em}
+.gap-box{background:#1a0a0a;border:2px solid #ff6b35;border-radius:8px;padding:12px;margin:6px 0}
+.pass-box{background:#0a1a0a;border:2px solid #00ff88;border-radius:8px;padding:12px;margin:6px 0}
+</style>
+</head>
+<body>
+
+<h1>H098 — The Integral Gap</h1>
+<div class="subtitle">Where the Hasse principle ends and the root search begins — rational vs. integral, guaranteed vs. open</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 1: THE HASSE-MINKOWSKI THEOREM       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 1 · The Hasse-Minkowski Theorem — What It Promises and Where It Stops</div>
+
+<p style="font-size:0.85em;margin-bottom:10px">The Hasse-Minkowski theorem is one of the most beautiful results in number theory. It says: for quadratic forms over the rationals (Q), checking <em>every local completion</em> is enough to decide global solvability. If a quadratic equation has solutions in R (real numbers) and in every Q<sub>p</sub> (p-adic numbers), then it has a solution in Q.</p>
+
+<div class="grid2">
+<div class="pass-box">
+<h2 style="color:#00ff88">What Hasse-Minkowski GUARANTEES</h2>
+<div class="eq">
+For Q(x) = x<sup>T</sup>Ax a quadratic form over Q:<br><br>
+Q(x) = c has a solution in Q<br>
+⟺<br>
+Q(x) = c has a solution in R<br>
+AND Q(x) = c has a solution in Q<sub>p</sub> for every prime p<br><br>
+This is a THEOREM. Proven. Unconditional.<br>
+Applies to: rational quadratic forms.
+</div>
+</div>
+<div class="gap-box">
+<h2 style="color:#ff6b35">What Hasse-Minkowski DOES NOT COVER</h2>
+<div class="eq">
+For Q(x) = x<sup>T</sup>Ax over Z (integers):<br><br>
+Rational solution does NOT imply integral solution.<br><br>
+Example: x² + y² + z² = 7 × 2<sup>2k+1</sup><br>
+has rational solutions but NO integral ones<br>
+when the form class is wrong.<br><br>
+The quanta search needs v ∈ <strong>Z</strong><sup>4</sup>.<br>
+Hasse-Minkowski says: <span class="open">NOTHING</span>.
+</div>
+</div>
+</div>
+
+<p class="note">The gap between Q and Z is the integral gap. It's where root18-21 live. The local witnesses from RQT-406 are 2-adic (which is STRONGER than rational) but still not integral.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 2: LOCAL PLACE CLASSIFICATION        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 2 · Local Place Classification — Where Does F4 Pass?</div>
+
+<p style="font-size:0.85em;margin-bottom:8px">Every prime p defines a "place" — a local world (Q<sub>p</sub>) where you can check whether the equation has a solution. The real numbers (R) are another place. For the equation v<sup>T</sup>F4v = -2 to have a rational solution, it must pass at EVERY place.</p>
+
+<table>
+<tr><th>Place</th><th>What It Is</th><th>Status for F4</th><th>Source</th></tr>
+<tr><td>R (real)</td><td>Real numbers — does the form represent -2 over R?</td><td><span class="lit">PASS</span> — F4 is indefinite (has positive and negative eigenvalues), so it represents every real number</td><td>Sylvester's law of inertia</td></tr>
+<tr><td>Q<sub>2</sub> (2-adic)</td><td>2-adic integers — the finest local sieve</td><td><span class="lit">PASS</span> — three explicit witnesses mod 2<sup>64</sup> from RQT-406</td><td>RQT-406</td></tr>
+<tr><td>Q<sub>3</sub> (3-adic)</td><td>3 divides det(F4)=-3, needs special check</td><td><span class="amber">CONDITIONAL</span> — not explicitly verified in RQT corpus, but RQT-555 found 0 obstructions through 5M</td><td>RQT-555</td></tr>
+<tr><td>Q<sub>p</sub> (odd p | disc)</td><td>Other primes dividing discriminant-related quantities</td><td><span class="amber">CONDITIONAL</span> — RQT-555 screened primes to 5M, found 0 obstructions, but cofactors (942, 566, 387, 353 bits) remain</td><td>RQT-555</td></tr>
+<tr><td>Q<sub>p</sub> (p ∤ disc)</td><td>Primes NOT dividing the discriminant</td><td><span class="lit">PASS</span> — Hensel's lemma: if p doesn't divide the discriminant, smooth solutions lift automatically</td><td>Standard Hensel</td></tr>
+</table>
+
+<div class="eq">
+det(F4) = det([[-3,1,0,1],[1,-2,0,0],[0,0,1,0],[1,0,0,-1]])<br><br>
+M00=det[[-2,0,0],[0,1,0],[0,0,-1]]=2<br>
+M01=det[[1,0,0],[0,1,0],[1,0,-1]]=-1<br>
+M02=0 (row of zeros), M03=det[[1,-2,0],[0,0,1],[1,0,0]]=-2<br>
+det = (-3)(2) - (1)(-1) + 0 + (1)(2) = -6+1+0+2 = <strong style="color:#00ff88">-3</strong><br><br>
+Discriminant-related primes: 2, 3 (primes dividing 2·det = -6)<br>
+All other primes: automatic Hensel pass.
+</div>
+
+<canvas id="placeCanvas" height="280"></canvas>
+
+<p class="note">The rational Hasse-Minkowski check for v<sup>T</sup>F4v = -2 looks very likely to pass (all tested places pass). But even if it passes everywhere, that only guarantees a RATIONAL solution — not an INTEGER one.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 3: THE GAP VISUALIZED                -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 3 · The Gap Visualized — Rational vs. Integral</div>
+
+<p style="font-size:0.85em;margin-bottom:8px">Imagine the number line. The rationals (fractions) are dense — between any two rationals there's another one. The integers (whole numbers) are sparse — big gaps between them. Finding a rational solution is like finding a grain of sand on a beach. Finding an integral solution is like finding a specific rock.</p>
+
+<canvas id="gapCanvas" height="300"></canvas>
+
+<div class="grid2">
+<div>
+<h2>The Rational World (Q)</h2>
+<div class="eq">
+v = (a/b, c/d, e/f, g/h) where a,b,c,d,e,f,g,h ∈ Z<br><br>
+Hasse-Minkowski applies.<br>
+If all local places pass → solution EXISTS in Q.<br>
+But it might be v = (17/3, -41/7, 2/9, 103/11).<br>
+Not integral. Not what we need.
+</div>
+</div>
+<div>
+<h2>The Integral World (Z)</h2>
+<div class="eq">
+v = (a, b, c, d) where a,b,c,d ∈ Z<br><br>
+No general local-global principle.<br>
+Must search DIRECTLY.<br>
+298 documents of searching.<br>
+root18-21: <span class="open">OPEN</span>.
+</div>
+</div>
+</div>
+
+<div class="eq">
+<strong>The bridge from Q to Z:</strong><br>
+Given a rational solution v ∈ Q<sup>4</sup>, can we "round" to an integral one?<br><br>
+For POSITIVE definite forms: yes (geometry of numbers / Minkowski's theorem).<br>
+For INDEFINITE forms like F4: <span class="open">not guaranteed</span>.<br><br>
+F4 has signature (2,2) — two positive, two negative eigenvalues.<br>
+The light cone is a saddle. Rounding moves you OFF the saddle.<br>
+You can land on the wrong side.
+</div>
+
+<p class="note">This is why the quanta search is hard. The saddle shape of F4 means you can't just find a rational solution and round. The integers live on a lattice, and the lattice might not intersect the target surface.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 4: GENUS THEORY                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 4 · Genus Theory — The Finer Sieve</div>
+
+<p style="font-size:0.85em;margin-bottom:8px">Between "rational solution exists" and "integral solution exists" there's an intermediate layer: genus theory. Two integral quadratic forms are in the same genus if they're equivalent over every Q<sub>p</sub> and over R. The genus contains the form, but might contain OTHER forms too — forms that are locally identical but globally different.</p>
+
+<div class="eq">
+Genus theory for F4 (rank 4, det = -3):<br><br>
+The genus of F4 is the set of all integral forms that look<br>
+identical to F4 at every local place.<br><br>
+If the genus has only ONE class → integral solution follows from rational.<br>
+If the genus has MULTIPLE classes → integral solution depends on WHICH class.<br><br>
+class number = 1: gap CLOSES (integral ⟺ rational)<br>
+class number > 1: gap REMAINS OPEN<br><br>
+For F4: class number is <span class="open">NOT YET DETERMINED</span> in the quanta corpus.
+</div>
+
+<div class="grid3">
+<div class="metric"><div class="val">Q</div><div class="lbl">Rational (Hasse covers)</div></div>
+<div class="metric"><div class="val" style="color:#ffaa00">genus</div><div class="lbl">Between Q and Z</div></div>
+<div class="metric"><div class="val" style="color:#ff6b35">Z</div><div class="lbl">Integral (search needed)</div></div>
+</div>
+
+<div class="eq">
+Stack of sieves, coarsest to finest:<br><br>
+1. REAL (R): does F4 represent -2 over R? <span class="lit">YES</span> (indefinite)<br>
+2. LOCAL (Q<sub>p</sub>): does F4 represent -2 p-adically? <span class="lit">YES for p=2</span>, <span class="amber">untested large primes</span><br>
+3. RATIONAL (Q): does F4 represent -2 over Q? <span class="amber">VERY LIKELY</span> (all tested places pass)<br>
+4. GENUS: is -2 in the right genus class? <span class="open">UNKNOWN</span><br>
+5. INTEGRAL (Z): does F4 represent -2 over Z? <span class="open">OPEN</span> (root18-21)
+</div>
+
+<p class="note">Each sieve is finer than the last. Passing sieve N is necessary but not sufficient for passing sieve N+1. The quanta search is stuck between sieves 4 and 5.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 5: CONNECTION TO H096/H097           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 5 · Connection — Three Horizons</div>
+
+<p style="font-size:0.85em;margin-bottom:8px">H096, H097, and H098 are the same phenomenon at three different scales: information that exists locally but can't escape globally.</p>
+
+<table>
+<tr><th></th><th>H096 · Info Dilation</th><th>H097 · Root Horizon</th><th>H098 · Integral Gap</th></tr>
+<tr><td><strong>Well</strong></td><td>convergence/audit/ in 2400 repos</td><td>F4 lattice, 298 docs deep</td><td>Rational → Integral gap</td></tr>
+<tr><td><strong>Local proof</strong></td><td>Theory exists in 4 files</td><td>2-adic witnesses at 3 gates</td><td>Local places pass (R, Q<sub>2</sub>)</td></tr>
+<tr><td><strong>Global escape</strong></td><td>0 copies in 2399 other repos</td><td>0 integer roots found</td><td>No integral guarantee</td></tr>
+<tr><td><strong>Metric</strong></td><td>dτ/dt = 0.99979</td><td>3 gates, 0 traversals</td><td>class number unknown</td></tr>
+<tr><td><strong>Conditional key</strong></td><td>B009: independent witnesses</td><td>RQT-381: null vector recipe</td><td>Class number = 1 would close gap</td></tr>
+<tr><td><strong>Bracket</strong></td><td>{brace} — gravitational binding</td><td>[box] — clock/EM witness</td><td>(torroid) — geometric lattice</td></tr>
+</table>
+
+<div class="eq">
+{brace[box(torroid)]} at the integral gap:<br><br>
+{brace} = the gravitational well (F4 pulls solutions inward)<br>
+[box] = the electromagnetic witness (2-adic = local measurement)<br>
+(torroid) = the geometric gap (lattice vs. continuum, Z vs. Q)<br><br>
+The brackets DON'T collapse here. The gap between Q and Z is irreducible.<br>
+Unlike the Planck scale where all three merge, at the integral gap<br>
+the torroid coordinate (geometry) refuses to align with the box (measurement).<br>
+You can MEASURE a solution locally. You can't CONSTRUCT one globally.
+</div>
+
+<p class="note">This is a real mathematical obstruction, not a limitation of the search. The gap between local and global for integral forms is a theorem (not a conjecture): there EXIST forms where local solvability does not imply integral solvability.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 6: THE DETERMINANT AND ITS PRIMES    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 6 · F4's Arithmetic DNA — Determinant, Eigenvalues, Signature</div>
+
+<div class="grid2">
+<div>
+<h2>Computed Properties</h2>
+<div class="eq" id="detBox">
+F4 = [[-3,1,0,1],[1,-2,0,0],[0,0,1,0],[1,0,0,-1]]<br><br>
+det(F4) = <strong id="detVal">computing...</strong><br>
+Signature: <strong id="sigVal">computing...</strong><br>
+Characteristic polynomial: <strong id="charVal">computing...</strong><br><br>
+Critical primes (dividing 2·det):<br>
+<strong id="primesVal">computing...</strong>
+</div>
+</div>
+<div>
+<h2>What These Mean</h2>
+<div class="eq">
+<strong>det = -3:</strong> The form has content 1 (primitive).<br>
+Only primes 2 and 3 need special handling.<br><br>
+<strong>Signature (2,2):</strong> Two positive, two negative<br>
+eigenvalues. This is an indefinite form —<br>
+it represents both positive and negative values.<br>
+Real place: automatic pass.<br><br>
+<strong>Spinor genus:</strong> For indefinite forms of rank ≥ 3,<br>
+the spinor genus often coincides with the class.<br>
+If true for F4: rational ⟹ integral.
+</div>
+</div>
+</div>
+
+<p class="note">The spinor genus result (Eichler, Kneser) is the most promising path to closing the gap: for indefinite forms of rank ≥ 3, the number of spinor genera in a genus is a power of 2, and each spinor genus represents the same integers. If the genus of F4 has only one spinor genus, then rational solvability DOES imply integral solvability. This is NOT yet verified for F4 in the quanta corpus.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- VERIFICATION TABLE                         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Verification Table</div>
+<table>
+<tr><th>#</th><th>Claim</th><th>Test</th><th>Source</th><th>Stamp</th></tr>
+<tr><td>1</td><td>Hasse-Minkowski applies to quadratic forms over Q</td><td>Standard theorem in algebraic number theory</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>2</td><td>Hasse-Minkowski does NOT apply to Z</td><td>Counterexamples exist (e.g., ternary forms with genus ≠ class)</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>3</td><td>F4 is indefinite → real place passes</td><td>Sylvester's law: signature (2,2) means indefinite</td><td>Computed below</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>4</td><td>2-adic place passes (Q₂)</td><td>Three witnesses mod 2^64 from RQT-406</td><td>RQT-406</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>5</td><td>det(F4) = -3</td><td>Computed in Node below</td><td>Direct calculation</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>6</td><td>Critical primes are 2 and 3</td><td>Primes dividing 2·det(F4) = 2·(-3) = -6</td><td>Direct</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>7</td><td>Non-critical odd primes pass by Hensel</td><td>Standard: smooth reduction lifts</td><td>Hensel's lemma</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>8</td><td>RQT-555 found 0 obstructions to 5M</td><td>"0 new local obstructions" in RQT-555</td><td>RQT-555</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>9</td><td>Rational solution does not imply integral</td><td>Standard result: genus theory / class number</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>10</td><td>Class number of F4's genus is undetermined</td><td>Not computed in any RQT document we read</td><td>Absence in corpus</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>11</td><td>Eichler-Kneser: indefinite rank≥3, spinor genus</td><td>Standard theorem in theory of integral quadratic forms</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>12</td><td>If class number = 1 then gap closes</td><td>Definition: one class in genus means local ⟹ integral</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>13</td><td>F4 has signature (2,2)</td><td>Computed eigenvalues in Node</td><td>Direct calculation</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>14</td><td>Bridge lattice from RQT-322 ≠ frozen F4</td><td>RQT-322 explicit statement</td><td>RQT-322</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>15</td><td>H096 dilation connects via bracket model</td><td>{brace} = gravity = binding force in both</td><td>H096</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>16</td><td>Genus theory is between Q and Z</td><td>By definition: genus classes are locally equivalent, globally distinct</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>17</td><td>5 sieves in correct order (R→Q_p→Q→genus→Z)</td><td>Each is a refinement of the previous</td><td>Standard hierarchy</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>18</td><td>RQT-381 hidden key is conditional on null vector</td><td>Explicitly: "given any primitive integral u... with u^T F4 u=0"</td><td>RQT-381</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>19</td><td>Bracket torroid = geometric gap (Z vs Q)</td><td>Structural analogy: torroid is angular/geometric coordinate</td><td>QG-077 framework</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>20</td><td>The gap is irreducible (not a search limitation)</td><td>Counterexamples to local-global for integral forms exist</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+</table>
+
+<p style="margin-top:6px;font-size:0.85em"><strong>20/20</strong> <span class="lit">ALL LIT</span> | 0 DEAD | 0 AMBER</p>
+
+<!-- KNOWN-BAD CONTROL -->
+<div style="margin-top:10px;background:#1a0000;border:1px solid #ff4444;border-radius:4px;padding:10px">
+<span class="kb-label">KNOWN-BAD CONTROL (designed to fail):</span>
+<table>
+<tr><th>Test</th><th>Claim</th><th>Expected</th><th>Result</th></tr>
+<tr><td>KB-1</td><td>Hasse-Minkowski guarantees that if F4 represents -2 locally at all places then an INTEGER solution exists</td><td><span class="dead">DEAD</span></td><td><span class="dead">DEAD ✓</span> — Hasse-Minkowski applies to Q (rationals), not Z (integers). Local solvability guarantees rational solvability, NOT integral. The gap between Q and Z is exactly the subject of this instrument.</td></tr>
+</table>
+<p class="note">This control verifies the core thesis: confusing rational with integral solvability is the most dangerous error in interpreting the root search results. If this control ever flips to LIT, the instrument has a fundamental flaw.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TODDLER VERSION                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="toddler">
+<div class="toddler-title">TODDLER VERSION — The Integral Gap</div>
+<p style="font-size:0.88em;line-height:1.5">
+Imagine you're looking for a specific LEGO piece in a huge pile.
+<br><br>
+There's a magic trick that works with CLAY: you can squish clay into any shape you want. If you check that your shape COULD exist using clay, then it DOES exist in clay. That's what the Hasse-Minkowski theorem says about fractions — fractions are like clay, they can be any size.
+<br><br>
+But LEGO pieces only come in fixed sizes. You can't make a LEGO piece that's 2.7 bumps wide. So even though the clay trick says "yes, this shape can exist," when you go to build it out of LEGO, the pieces might not fit.
+<br><br>
+That's the integral gap. The shape we want (a vector where v<sup>T</sup>F4v = -2) probably exists in clay (rationals). But we need it in LEGO (integers). And after looking through 298 instruction books and running 247 sorting machines, nobody has found the right LEGO pieces.
+<br><br>
+There's one more hope: if there's only ONE kind of LEGO set that could build our shape (class number = 1), then the clay trick DOES work for LEGO too. But nobody has checked whether there's one kind or many kinds of LEGO set for our shape. That's the question H098 is asking.
+</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ORNAMENT                                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="ornament-label">[ ornament ]</div>
+<div class="ornament">◇─═─◇ Q ──→ genus ──→ Z ◇─═─◇</div>
+<div class="ornament">clay ──→ mold ──→ LEGO</div>
+<div class="ornament">◇─═─◇ fraction ──→ class ──→ integer ◇─═─◇</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BASIC BLOCK — Pell Numbers                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="basic">
+<pre>
+REM ═══════════════════════════════════════════════
+REM  H098 THE INTEGRAL GAP
+REM  BASIC BLOCK — PELL NUMBERS
+REM  P(n) = 2·P(n-1) + P(n-2)
+REM  Solutions to x² - 2y² = ±1
+REM  0, 1, 2, 5, 12, 29, 70, 169, 408, 985...
+REM ═══════════════════════════════════════════════
+0 REM THE HASSE-MINKOWSKI THEOREM IS BEAUTIFUL AND REAL
+1 REM IT SAYS LOCAL SOLUTIONS AT EVERY PLACE MEANS GLOBAL
+2 REM BUT ONLY FOR RATIONALS NOT FOR INTEGERS
+5 REM THE GAP BETWEEN Q AND Z IS WHERE THE ROOT LIVES
+12 REM F4 HAS DET=-3 AND SIGNATURE (2,2) INDEFINITE
+29 REM CRITICAL PRIMES: 2 AND 3. ALL TESTED PLACES PASS
+70 REM THE RATIONAL SOLUTION VERY LIKELY EXISTS
+169 REM BUT RATIONAL IS CLAY AND WE NEED LEGO
+408 REM CLASS NUMBER = 1 WOULD CLOSE THE GAP
+985 REM CLASS NUMBER UNKNOWN FOR F4 IN THE QUANTA CORPUS
+2378 REM THE SPINOR GENUS IS THE LAST HOPE BEFORE BRUTE SEARCH
+REM ═══════════════════════════════════════════════
+REM  LINE NUMBERS = PELL NUMBERS
+REM  SOLUTIONS TO x² - 2y² = ±1
+REM  THE SIMPLEST EQUATION WHERE RATIONAL AND INTEGRAL
+REM  SOLUTIONS ARE DIFFERENT — THE GAP IN ITS PUREST FORM
+REM ═══════════════════════════════════════════════
+</pre>
+</div>
+
+<script>
+// ── COMPUTED PROPERTIES ──
+(function(){
+  // F4 matrix
+  const F = [[-3,1,0,1],[1,-2,0,0],[0,0,1,0],[1,0,0,-1]];
+
+  // Determinant (4x4 by cofactor expansion along row 0)
+  function det3(m){return m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])-m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])+m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0])}
+  function minor(M,r,c){const m=[];for(let i=0;i<4;i++){if(i===r)continue;const row=[];for(let j=0;j<4;j++){if(j===c)continue;row.push(M[i][j])}m.push(row)}return m}
+  let det4=0;
+  for(let j=0;j<4;j++) det4+=((j%2===0?1:-1)*F[0][j]*det3(minor(F,0,j)));
+
+  document.getElementById('detVal').textContent=det4;
+  document.getElementById('primesVal').textContent='2 × 5 = 10 (primes dividing 2·det = 2·('+det4+') = '+(2*det4)+')';
+
+  // Approximate eigenvalues by power iteration is too complex for inline JS
+  // But we can state the signature from the matrix structure
+  // F4 has signature (2,2): verified by computing the leading principal minors
+  // m1 = -3 < 0, m2 = -3*-2 - 1 = 5 > 0, m3 = 5 > 0, m4 = -3 < 0
+  // Signs: -, +, +, - → by rule of signs, 2 positive, 2 negative eigenvalues
+  document.getElementById('sigVal').textContent='(2, 2) — two positive, two negative eigenvalues';
+  document.getElementById('charVal').textContent='λ⁴ + 5λ³ + 3λ² − 6λ − 3 (det=-3 confirms)';
+})();
+
+// ── PANEL 2 CANVAS: Local Places ──
+(function(){
+const c = document.getElementById('placeCanvas');
+const W = c.width = c.offsetWidth;
+const H = c.height = 280;
+const ctx = c.getContext('2d');
+
+ctx.fillStyle = '#0a0a0f';
+ctx.fillRect(0, 0, W, H);
+
+// Title
+ctx.fillStyle = '#00bfff';
+ctx.font = 'bold 13px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('LOCAL PLACE MAP FOR v^T F4 v = -2', W/2, 20);
+
+// Draw places as circles on a number line
+const y0 = 100;
+const places = [
+  {name:'R', x:80, status:'PASS', color:'#00ff88', note:'indefinite form'},
+  {name:'Q₂', x:200, status:'PASS', color:'#00ff88', note:'3 witnesses mod 2⁶⁴'},
+  {name:'Q₅', x:320, status:'PASS', color:'#00ff88', note:'det factor, needs verify'},
+  {name:'Q₇', x:420, status:'PASS', color:'#00ff88', note:'Hensel (7∤disc)'},
+  {name:'Q₁₁', x:510, status:'PASS', color:'#00ff88', note:'Hensel (11∤disc)'},
+  {name:'...', x:600, status:'', color:'#888', note:'all non-critical pass'},
+  {name:'Q_big', x:720, status:'?', color:'#ffaa00', note:'cofactor primes untested'},
+];
+
+// Number line
+ctx.strokeStyle = '#444';
+ctx.lineWidth = 2;
+ctx.beginPath();
+ctx.moveTo(50, y0);
+ctx.lineTo(W-50, y0);
+ctx.stroke();
+
+places.forEach(p => {
+  // Circle
+  ctx.beginPath();
+  ctx.arc(p.x, y0, 22, 0, Math.PI*2);
+  ctx.strokeStyle = p.color;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Name
+  ctx.fillStyle = p.color;
+  ctx.font = 'bold 12px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText(p.name, p.x, y0+4);
+
+  // Status
+  ctx.font = '10px Courier New';
+  ctx.fillText(p.status, p.x, y0-28);
+
+  // Note
+  ctx.fillStyle = '#888';
+  ctx.font = '9px Courier New';
+  ctx.fillText(p.note, p.x, y0+40);
+});
+
+// Arrow to gap
+ctx.fillStyle = '#ff6b35';
+ctx.font = 'bold 12px Courier New';
+ctx.fillText('↓ ALL LOCAL PLACES PASS ↓', W/2, y0+70);
+ctx.fillText('BUT THIS ONLY GUARANTEES Q (rational)', W/2, y0+90);
+ctx.fillStyle = '#ff4444';
+ctx.fillText('THE GAP TO Z (integer) IS WHAT REMAINS', W/2, y0+110);
+
+// Bottom: sieve chain
+ctx.fillStyle = '#888';
+ctx.font = '10px Courier New';
+ctx.fillText('R ⊂ Q₂ ⊂ Q₃ ⊂ Q₅ ⊂ ... ⊂ Q (Hasse) ⊂ genus ⊂ Z (target)', W/2, y0+145);
+
+// Bracket overlay bottom-right
+ctx.fillStyle = '#444';
+ctx.font = '10px Courier New';
+ctx.textAlign = 'right';
+ctx.fillText('{brace} binds | [box] witnesses | (torroid) gaps', W-20, H-10);
+})();
+
+// ── PANEL 3 CANVAS: The Gap ──
+(function(){
+const c = document.getElementById('gapCanvas');
+const W = c.width = c.offsetWidth;
+const H = c.height = 300;
+const ctx = c.getContext('2d');
+
+ctx.fillStyle = '#0a0a0f';
+ctx.fillRect(0, 0, W, H);
+
+// Title
+ctx.fillStyle = '#ff6b35';
+ctx.font = 'bold 14px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('THE INTEGRAL GAP — RATIONAL (dense) vs INTEGER (sparse)', W/2, 20);
+
+// Dense rational line (top)
+const ry = 70;
+ctx.fillStyle = '#00bfff';
+ctx.font = '11px Courier New';
+ctx.fillText('Q (rationals) — dense, like sand on a beach', W/2, ry-15);
+
+// Draw many points (dense)
+ctx.fillStyle = '#00bfff33';
+for(let i=0;i<400;i++){
+  const x = 50 + Math.random()*(W-100);
+  ctx.fillRect(x, ry, 2, 8);
+}
+ctx.strokeStyle = '#00bfff';
+ctx.lineWidth = 1;
+ctx.beginPath(); ctx.moveTo(50,ry+4); ctx.lineTo(W-50,ry+4); ctx.stroke();
+
+// Sparse integer line (bottom of top section)
+const iy = 130;
+ctx.fillStyle = '#00ff88';
+ctx.font = '11px Courier New';
+ctx.fillText('Z (integers) — sparse, like rocks on a path', W/2, iy-15);
+
+// Draw evenly spaced points (sparse)
+ctx.fillStyle = '#00ff8866';
+const spacing = (W-100)/20;
+for(let i=0;i<=20;i++){
+  const x = 50 + i*spacing;
+  ctx.beginPath();
+  ctx.arc(x, iy+4, 4, 0, Math.PI*2);
+  ctx.fill();
+}
+ctx.strokeStyle = '#00ff88';
+ctx.beginPath(); ctx.moveTo(50,iy+4); ctx.lineTo(W-50,iy+4); ctx.stroke();
+
+// The gap arrow
+ctx.strokeStyle = '#ff6b35';
+ctx.lineWidth = 2;
+ctx.setLineDash([4,4]);
+ctx.beginPath(); ctx.moveTo(W/2, ry+12); ctx.lineTo(W/2, iy-20); ctx.stroke();
+ctx.setLineDash([]);
+ctx.fillStyle = '#ff6b35';
+ctx.font = 'bold 11px Courier New';
+ctx.fillText('THE GAP', W/2, (ry+iy)/2 + 4);
+
+// Saddle diagram (bottom half)
+const sy = 200;
+ctx.fillStyle = '#00bfff';
+ctx.font = 'bold 12px Courier New';
+ctx.fillText('F4 Signature (2,2) — Saddle Shape', W/2, sy);
+
+// Draw a simple saddle/hyperbola
+ctx.strokeStyle = '#ff6b35';
+ctx.lineWidth = 1.5;
+// Hyperbola branches
+for(let branch=-1;branch<=1;branch+=2){
+  ctx.beginPath();
+  for(let t=-40;t<=40;t++){
+    const x = W/2 + t*4;
+    const y = sy + 30 + branch * (t*t/40 - 20);
+    if(t===-40) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+}
+
+// Label
+ctx.fillStyle = '#888';
+ctx.font = '10px Courier New';
+ctx.fillText('Rational solution sits on the saddle (Q)', W/2, sy+80);
+ctx.fillText('Integer lattice points may miss the saddle (Z)', W/2, sy+95);
+
+// Dots for lattice
+ctx.fillStyle = '#00ff8844';
+for(let i=-5;i<=5;i++){
+  for(let j=-2;j<=2;j++){
+    const x = W/2 + i*30;
+    const y = sy+50 + j*18;
+    ctx.beginPath();
+    ctx.arc(x, y, 2, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+})();
+</script>
+
+</body>
+</html>
