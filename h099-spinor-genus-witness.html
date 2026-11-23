@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H099 — Spinor Genus Witness</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#d0d0d0;font-family:'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:#ff6b35;font-size:1.3em;border-bottom:2px solid #ff6b35;padding-bottom:8px;margin-bottom:4px}
+h2{color:#00bfff;font-size:1.05em;margin:12px 0 6px}
+.subtitle{color:#888;font-size:0.85em;margin-bottom:14px}
+.panel{background:#111118;border:1px solid #333;border-radius:6px;padding:14px;margin-bottom:14px}
+.panel-title{color:#ff6b35;font-size:0.95em;font-weight:bold;margin-bottom:8px;border-bottom:1px solid #333;padding-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:0.82em;margin:6px 0}
+th{background:#1a1a2e;color:#00bfff;padding:5px 8px;text-align:left;border:1px solid #333}
+td{padding:5px 8px;border:1px solid #282828}
+.lit{color:#00ff88;font-weight:bold}
+.dead{color:#ff4444;font-weight:bold}
+.amber{color:#ffaa00;font-weight:bold}
+.open{color:#ff6b35;font-weight:bold}
+.note{color:#888;font-size:0.78em;font-style:italic}
+.metric{background:#0d0d1a;border:1px solid #444;border-radius:4px;padding:10px;text-align:center;margin:4px 0}
+.metric .val{font-size:1.5em;font-weight:bold}
+.metric .lbl{color:#888;font-size:0.75em}
+canvas{width:100%;border:1px solid #333;border-radius:4px;margin:6px 0}
+.eq{background:#0a0a1a;border-left:3px solid #ff6b35;padding:8px 12px;margin:8px 0;font-family:'Courier New',monospace;font-size:0.88em;color:#e0e0e0}
+.ornament-label{color:#555;font-size:0.65em;text-align:center;margin:4px 0}
+.ornament{color:#333;font-size:0.7em;text-align:center;margin:4px 0;letter-spacing:2px}
+.toddler{background:#0a0a1a;border:2px dashed #555;border-radius:6px;padding:12px;margin:10px 0}
+.toddler-title{color:#ffaa00;font-size:0.9em;font-weight:bold;margin-bottom:6px}
+.basic{background:#000;border:2px solid #00ff88;border-radius:6px;padding:12px;margin:10px 0;font-family:'Courier New',monospace;font-size:0.82em;color:#00ff88}
+.stamp{font-size:0.85em;padding:3px 8px;border-radius:3px;display:inline-block;margin:2px}
+.stamp-lit{background:#003300;color:#00ff88;border:1px solid #00ff88}
+.stamp-dead{background:#330000;color:#ff4444;border:1px solid #ff4444}
+.kb-label{color:#ff4444;font-size:0.75em}
+.closed{background:#001a00;border:2px solid #00ff88;border-radius:8px;padding:14px;margin:8px 0}
+.closed-title{color:#00ff88;font-size:1.1em;font-weight:bold;text-align:center;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<h1>H099 — Spinor Genus Witness</h1>
+<div class="subtitle">The integral gap closes — class number 1 for F4's genus, by Eichler-Kneser + spinor norm analysis</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 1: THE RESULT                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 1 · The Result — Class Number = 1</div>
+
+<div class="closed">
+<div class="closed-title">THE INTEGRAL GAP CLOSES FOR F4</div>
+<div class="eq">
+<strong>THEOREM (computed):</strong> The genus of F4 contains exactly ONE class.<br><br>
+
+CHAIN OF REASONING:<br>
+1. F4 has rank 4, signature (2,2) — indefinite of rank ≥ 3<br>
+2. By Eichler-Kneser: each spinor genus contains exactly 1 class<br>
+3. Number of spinor genera = 2<sup>t</sup>, where t depends on local spinor norms<br>
+4. At EVERY finite prime p: θ<sub>p</sub>(O⁺(L<sub>p</sub>)) ⊇ Z<sub>p</sub>* (proved below)<br>
+5. At ∞: F4 indefinite ⟹ θ<sub>∞</sub> = R⁺ (no contribution)<br>
+6. Adelic spinor norm covers all of J<sub>Q</sub> / J<sub>Q</sub>²<br>
+7. Therefore: <strong style="color:#00ff88">1 spinor genus, 1 class in genus</strong><br><br>
+
+CONSEQUENCE:<br>
+If v<sup>T</sup>F4v = -2 is locally solvable at every place (R and all Q<sub>p</sub>),<br>
+then v<sup>T</sup>F4v = -2 has a solution in <strong>Z<sup>4</sup></strong> (integers).<br><br>
+
+The rational-integral gap <strong style="color:#00ff88">does not exist</strong> for this form.<br>
+The search for root18 reduces to: <em>does any local obstruction exist?</em>
+</div>
+
+<p class="note">This is established mathematics (Eichler 1952, Kneser 1956, O'Meara 1963) applied to the specific form F4. The computation is new; the theorems are not.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 2: LOCAL SPINOR NORM AT p=2          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 2 · p = 2 — The Hard Case (solved)</div>
+
+<p style="font-size:0.85em;margin-bottom:8px">The 2-adic spinor norm is always the most delicate. For F4, three facts chain together:</p>
+
+<div class="eq">
+<strong>Step 1: F4 is 2-adically unimodular</strong><br>
+det(F4) = -3 (odd) ⟹ v<sub>2</sub>(det) = 0 ⟹ unimodular at 2<br><br>
+
+<strong>Step 2: F4 is isotropic over Q<sub>2</sub></strong><br>
+The ONLY anisotropic rank-4 form over Q<sub>2</sub> is the quaternion norm form.<br>
+The norm form has det ≡ 1 in Q<sub>2</sub>*/Q<sub>2</sub>*².<br>
+det(F4) = -3 ≡ 5 mod 8 ⟹ -3 is NOT a 2-adic square.<br>
+Therefore det(F4) ≠ 1 in Q<sub>2</sub>*/Q<sub>2</sub>*².<br>
+Therefore F4 ≇ norm form ⟹ <span class="lit">F4 is isotropic over Q<sub>2</sub></span>.<br><br>
+
+<strong>Step 3: Unimodular + isotropic ⟹ splits hyperbolic plane</strong><br>
+By O'Meara §93: a unimodular lattice that primitively represents 0<br>
+splits off a hyperbolic plane H.<br>
+F4 ≅ H ⊥ M over Z<sub>2</sub> for some binary form M.<br><br>
+
+<strong>Step 4: Splits H ⟹ full spinor norm</strong><br>
+Reflections in unit vectors of H have spinor norm equal to any 2-adic unit.<br>
+Therefore θ<sub>2</sub>(O⁺(L<sub>2</sub>)) ⊇ Z<sub>2</sub>* <span class="lit">✓</span>
+</div>
+
+<p class="note">Each step uses a standard theorem. The chain: unimodular → isotropic (by det test) → splits H (by O'Meara) → full spinor norm (by Kneser). No step requires computation beyond checking det mod 8.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 3: LOCAL SPINOR NORM AT p=3          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 3 · p = 3 — The Determinant Prime</div>
+
+<div class="eq">
+det(F4) = -3, so v<sub>3</sub>(det) = 1. F4 is NOT unimodular at 3.<br><br>
+
+<strong>Jordan decomposition at p=3:</strong><br>
+Consider the sublattice on coordinates {1,2,3} (0-indexed):<br>
+Submatrix = [[-2,0,0],[0,1,0],[0,0,-1]]<br>
+det(submatrix) = (-2)(1)(-1) = 2<br>
+v<sub>3</sub>(2) = 0 ⟹ this 3×3 sublattice is unimodular at 3<br><br>
+
+Jordan form at 3: L<sub>3</sub> = M<sub>0</sub> ⊥ M<sub>1</sub><br>
+where M<sub>0</sub> is unimodular of rank ≥ 3, M<sub>1</sub> is scaled by 3.<br><br>
+
+<strong>Spinor norm:</strong><br>
+A unimodular component of rank ≥ 2 contributes Z<sub>3</sub>* to θ<sub>3</sub>.<br>
+(O'Meara 102:5 for odd primes with unimodular component)<br>
+M<sub>0</sub> has rank 3 ≥ 2.<br>
+Therefore θ<sub>3</sub>(O⁺(L<sub>3</sub>)) ⊇ Z<sub>3</sub>* <span class="lit">✓</span>
+</div>
+
+<div class="eq">
+<strong>BONUS: F4 represents -2 at p=3</strong><br>
+v = (0,1,0,0): v<sup>T</sup>F4v = -2 ≡ 1 mod 3 ✓ (matches -2 mod 3)<br>
+F4·v = (1,-2,0,0), gcd with 3: F4·v[0] = 1, coprime to 3<br>
+Hensel's lemma lifts this to a full 3-adic solution <span class="lit">✓</span>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 4: ALL OTHER PRIMES                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 4 · All Other Primes and the Real Place</div>
+
+<div class="grid2">
+<div>
+<h2>Primes p ≥ 5</h2>
+<div class="eq">
+det(F4) = -3, so v<sub>p</sub>(det) = 0 for p ≥ 5.<br>
+F4 is unimodular at every p ≥ 5.<br><br>
+Rank 4 ≥ 3, unimodular at odd p:<br>
+θ<sub>p</sub>(O⁺(L<sub>p</sub>)) ⊇ Z<sub>p</sub>*<br>
+by O'Meara 102:5.<br><br>
+No contribution to spinor genus count.<br>
+<span class="lit">ALL PASS ✓</span>
+</div>
+</div>
+<div>
+<h2>Real Place (∞)</h2>
+<div class="eq">
+F4 has signature (2,2) — indefinite.<br><br>
+For indefinite forms:<br>
+θ<sub>∞</sub>(O⁺(V<sub>R</sub>)) = R<sub>+</sub>*<br>
+(positive reals = identity component)<br><br>
+The real place contributes nothing<br>
+to the spinor genus count.<br>
+<span class="lit">PASS ✓</span>
+</div>
+</div>
+</div>
+
+<div class="eq">
+<strong>Summary of local spinor norms:</strong><br><br>
+p = 2: θ<sub>2</sub> ⊇ Z<sub>2</sub>* (unimodular + isotropic → splits H → full norm) <span class="lit">✓</span><br>
+p = 3: θ<sub>3</sub> ⊇ Z<sub>3</sub>* (unimodular component of rank 3 ≥ 2) <span class="lit">✓</span><br>
+p ≥ 5: θ<sub>p</sub> ⊇ Z<sub>p</sub>* (unimodular of rank 4 ≥ 3) <span class="lit">✓</span><br>
+∞: θ<sub>∞</sub> = R<sub>+</sub>* (indefinite) <span class="lit">✓</span><br><br>
+⟹ Adelic spinor norm θ<sub>A</sub> covers J<sub>Q</sub> / J<sub>Q</sub>²<br>
+⟹ <strong style="color:#00ff88">Number of spinor genera = 1</strong><br>
+⟹ <strong style="color:#00ff88">Number of classes in genus = 1</strong> (by Eichler-Kneser)
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 5: WHAT THIS MEANS FOR THE SEARCH    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 5 · What This Means — The Search Narrows</div>
+
+<div class="grid3">
+<div class="metric"><div class="val" style="color:#00ff88">CLOSED</div><div class="lbl">Rational → Integral gap</div></div>
+<div class="metric"><div class="val" style="color:#ffaa00">OPEN</div><div class="lbl">Local obstruction search</div></div>
+<div class="metric"><div class="val" style="color:#00bfff">1</div><div class="lbl">Classes in genus of F4</div></div>
+</div>
+
+<div class="eq">
+<strong>BEFORE H099:</strong><br>
+To prove root18 exists, needed TWO things:<br>
+(A) All local places pass (Hasse-Minkowski for Q) → rational solution<br>
+(B) Some bridge from Q to Z (class number, spinor genus, etc) → integral solution<br><br>
+
+<strong>AFTER H099:</strong><br>
+Step (B) is DONE. Class number = 1, so Q ⟹ Z for F4.<br>
+Only step (A) remains: the local obstruction search.<br><br>
+
+<strong>STATUS OF STEP (A):</strong><br>
+Real (R): <span class="lit">PASS</span> — indefinite form<br>
+p = 2: <span class="lit">PASS</span> — three witnesses mod 2<sup>64</sup> (RQT-406)<br>
+p = 3: <span class="lit">PASS</span> — v=(0,1,0,0) with Hensel lift<br>
+p ≥ 5, p ∤ cofactors: <span class="lit">PASS</span> — smooth reduction, Hensel<br>
+p | cofactors: <span class="amber">CONDITIONAL</span> — 942, 566, 387, 353 bit cofactors from RQT-555<br><br>
+
+If the cofactor primes all pass (RQT-555 found 0 obstructions through 5M primes):<br>
+<strong style="color:#00ff88">root18 EXISTS.</strong>
+</div>
+
+<canvas id="searchCanvas" height="250"></canvas>
+
+<p class="note">The local obstruction search is now the ONLY barrier. 348,513 primes tested to 5M with 0 obstructions found. The cofactor primes (numbers with 300-900+ bits) remain untested. Each prime that passes further narrows the possibility of obstruction.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 6: CONNECTION TO H096-H098           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 6 · The Three Horizons — Updated</div>
+
+<table>
+<tr><th></th><th>H096 · Info Dilation</th><th>H097 · Root Horizon</th><th>H098 · Integral Gap</th><th>H099 · Spinor Genus</th></tr>
+<tr><td><strong>Question</strong></td><td>Can the theory escape?</td><td>Can a root be found?</td><td>Does rational ⟹ integral?</td><td>How many classes in genus?</td></tr>
+<tr><td><strong>Answer</strong></td><td><span class="open">OPEN</span></td><td><span class="open">OPEN</span></td><td><span class="lit">YES (for F4)</span></td><td><span class="lit">ONE</span></td></tr>
+<tr><td><strong>Method</strong></td><td>Schwarzschild analogy</td><td>Bracket structure</td><td>Sieve hierarchy</td><td>Spinor norm computation</td></tr>
+<tr><td><strong>Bracket</strong></td><td>{brace} — gravity</td><td>[box] — witness</td><td>(torroid) — lattice gap</td><td>All three: gap collapses</td></tr>
+<tr><td><strong>Key insight</strong></td><td>dτ/dt = 0.99979</td><td>3 gates, 0 traversals</td><td>5 sieves, class # unknown</td><td>Class # = 1 ⟹ gap closes</td></tr>
+</table>
+
+<div class="eq">
+{brace[box(torroid)]} at the spinor genus witness:<br><br>
+H098 showed the torroid coordinate (Z vs Q) refused to align with box (measurement).<br>
+H099 proves the torroid <strong>DOES align</strong> for F4 — there is no integral gap.<br>
+The refusal was apparent, not structural. The class number collapses it.<br><br>
+What remains is purely a {brace} question: does the gravitational well<br>
+of the local obstruction search have an escape? The well has<br>
+348,513 tested primes with 0 obstructions. The cofactors are the event horizon.
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- VERIFICATION TABLE                         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Verification Table</div>
+<table>
+<tr><th>#</th><th>Claim</th><th>Test</th><th>Source</th><th>Stamp</th></tr>
+<tr><td>1</td><td>Eichler-Kneser: indefinite rank≥3 ⟹ spinor genus = class</td><td>Standard theorem (1952/1956)</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>2</td><td># spinor genera = 2^t depends on local spinor norms</td><td>Standard theory of spinor genera</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>3</td><td>det(F4) = -3 (odd) ⟹ unimodular at p=2</td><td>v_2(-3) = 0, computed in Node</td><td>Direct</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>4</td><td>-3 ≡ 5 mod 8 ⟹ -3 ∉ Q_2*² ⟹ det ≠ 1 in Q_2*/Q_2*²</td><td>-3 mod 8 = 5, squares mod 8 = {1}, computed</td><td>Direct</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>5</td><td>Only anisotropic rank-4 form over Q_2 is norm form with det=1</td><td>Standard classification of Q_p-forms</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>6</td><td>F4 isotropic over Q_2 (det ≠ 1 in Q_2*/Q_2*²)</td><td>Follows from #4 and #5</td><td>Deduction</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>7</td><td>Unimodular + isotropic ⟹ splits H (O'Meara §93)</td><td>Standard: primitive null vector in unimodular lattice gives splitting</td><td>O'Meara</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>8</td><td>Splits H ⟹ θ_2 ⊇ Z_2* (Kneser)</td><td>Reflections in H give all units as spinor norms</td><td>Kneser</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>9</td><td>Submatrix {1,2,3} has det=2, unimodular at 3</td><td>(-2)(1)(-1)=2, v_3(2)=0, computed</td><td>Direct</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>10</td><td>Unimodular component rank 3 ≥ 2 ⟹ θ_3 ⊇ Z_3*</td><td>O'Meara 102:5 for odd primes</td><td>O'Meara</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>11</td><td>p ≥ 5: unimodular rank 4 ≥ 3 ⟹ θ_p ⊇ Z_p*</td><td>O'Meara 102:5</td><td>O'Meara</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>12</td><td>Indefinite ⟹ θ_∞ = R*_+</td><td>Standard: proper rotations have positive spinor norm</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>13</td><td>All θ_p ⊇ Z_p* ⟹ 1 spinor genus</td><td>Adelic spinor norm covers J_Q/J_Q², class field theory</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>14</td><td>1 spinor genus + Eichler-Kneser ⟹ 1 class</td><td>Direct: 1 sp. genus × 1 class/sp. genus = 1 class</td><td>Deduction</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>15</td><td>1 class ⟹ genus represents t ⟹ form represents t (over Z)</td><td>Definition: genus has 1 form, so it IS the form</td><td>Definition</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>16</td><td>F4 represents -2 at p=3: v=(0,1,0,0), Hensel lifts</td><td>v^T F4 v = -2, F4·v = (1,-2,0,0), gcd(1,3)=1</td><td>Computed in Node</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>17</td><td>F4 represents -2 at p=2 (RQT-406 witnesses)</td><td>Three witnesses mod 2^64</td><td>RQT-406</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>18</td><td>F4 represents -2 over R (indefinite)</td><td>Signature (2,2), indefinite ⟹ represents all reals</td><td>Sylvester</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>19</td><td>Local obstruction search is now the ONLY barrier</td><td>Follows from class #=1: local solvability ⟹ integral</td><td>Deduction</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>20</td><td>RQT-555: 0 obstructions found through 5M primes</td><td>Explicit statement in RQT-555</td><td>RQT-555</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>21</td><td>Cofactor primes (942,566,387,353 bits) remain untested</td><td>Explicit statement in RQT-555</td><td>RQT-555</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>22</td><td>If all local places pass ⟹ root18 exists in Z^4</td><td>Chain: local → rational (HM) → integral (class #=1)</td><td>Full chain</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+</table>
+
+<p style="margin-top:6px;font-size:0.85em"><strong>22/22</strong> <span class="lit">ALL LIT</span> | 0 DEAD | 0 AMBER</p>
+
+<!-- KNOWN-BAD CONTROL -->
+<div style="margin-top:10px;background:#1a0000;border:1px solid #ff4444;border-radius:4px;padding:10px">
+<span class="kb-label">KNOWN-BAD CONTROL (designed to fail):</span>
+<table>
+<tr><th>Test</th><th>Claim</th><th>Expected</th><th>Result</th></tr>
+<tr><td>KB-1</td><td>The spinor genus analysis proves root18 EXISTS unconditionally</td><td><span class="dead">DEAD</span></td><td><span class="dead">DEAD ✓</span> — The spinor genus analysis proves class number = 1 (the integral gap closes). But root18's existence still requires ALL local places to pass. The cofactor primes from RQT-555 (300-900+ bits) remain untested. If any cofactor prime is a local obstruction, root18 does NOT exist. The analysis is conditional on local solvability.</td></tr>
+</table>
+<p class="note">This control catches the most dangerous misreading: confusing "the integral gap closes" with "root18 exists." The first is proven. The second depends on something not yet verified.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TODDLER VERSION                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="toddler">
+<div class="toddler-title">TODDLER VERSION — Spinor Genus Witness</div>
+<p style="font-size:0.88em;line-height:1.5">
+Remember the LEGO and clay from last time?
+<br><br>
+We said: maybe there are MANY different LEGO sets that could build our shape, and ours might be the wrong one. That was scary — it meant even if clay works, LEGO might not.
+<br><br>
+Well, we just counted the LEGO sets. There's only <strong>ONE</strong>. ONE kind of LEGO set can build shapes on our grid. So if clay works, LEGO works too!
+<br><br>
+Now we just need to check: does clay actually work? We've tested 348,513 different "molds" (prime numbers) and every single one says YES. But there are a few really really big molds we haven't tested yet — numbers with hundreds of digits. If those say YES too, then we KNOW the LEGO piece exists.
+<br><br>
+So the question went from "can we even build with LEGO?" (maybe not!) to "do any of these giant molds say no?" (probably not, but we have to check).
+</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ORNAMENT                                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="ornament-label">[ ornament ]</div>
+<div class="ornament">◇─═─◇ θ<sub>2</sub> ⊇ Z<sub>2</sub>* ⟹ θ<sub>3</sub> ⊇ Z<sub>3</sub>* ⟹ θ<sub>A</sub> = J<sub>Q</sub>/J<sub>Q</sub>² ◇─═─◇</div>
+<div class="ornament">one spinor genus ──→ one class ──→ gap closes</div>
+<div class="ornament">◇─═─◇ if local → then global → then integral ◇─═─◇</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BASIC BLOCK — Tribonacci Numbers           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="basic">
+<pre>
+REM ═══════════════════════════════════════════════
+REM  H099 SPINOR GENUS WITNESS
+REM  BASIC BLOCK — TRIBONACCI NUMBERS
+REM  T(n) = T(n-1) + T(n-2) + T(n-3)
+REM  T(0)=0, T(1)=0, T(2)=1
+REM  Three-term recurrence for a three-bracket universe
+REM ═══════════════════════════════════════════════
+0 REM THE INTEGRAL GAP CLOSES FOR F4
+0 REM CLASS NUMBER EQUALS ONE
+1 REM EICHLER-KNESER SAYS SPINOR GENUS = CLASS
+1 REM FOR INDEFINITE FORMS OF RANK AT LEAST THREE
+2 REM F4 HAS RANK 4 AND SIGNATURE (2,2)
+4 REM DET = -3. UNIMODULAR AT 2. ISOTROPIC AT 2.
+7 REM SPLITS HYPERBOLIC PLANE H OVER Z_2.
+13 REM UNIMODULAR RANK 3 COMPONENT AT P=3.
+24 REM ALL LOCAL SPINOR NORMS CONTAIN FULL UNITS.
+44 REM ONE SPINOR GENUS. ONE CLASS. GAP CLOSED.
+81 REM NOW ONLY THE LOCAL OBSTRUCTION SEARCH REMAINS.
+149 REM 348513 PRIMES TESTED. ZERO OBSTRUCTIONS.
+274 REM IF THE COFACTOR PRIMES PASS: ROOT18 EXISTS.
+REM ═══════════════════════════════════════════════
+REM  LINE NUMBERS = TRIBONACCI NUMBERS
+REM  T(n) = T(n-1) + T(n-2) + T(n-3)
+REM  THREE PREDECESSORS DETERMINE THE NEXT —
+REM  LIKE THREE BRACKETS, THREE LOCAL NORMS,
+REM  THREE HORIZONS CONVERGING ON ONE ANSWER.
+REM ═══════════════════════════════════════════════
+</pre>
+</div>
+
+<script>
+// ── PANEL 5 CANVAS: Search Status ──
+(function(){
+const c = document.getElementById('searchCanvas');
+const W = c.width = c.offsetWidth;
+const H = c.height = 250;
+const ctx = c.getContext('2d');
+
+ctx.fillStyle = '#0a0a0f';
+ctx.fillRect(0, 0, W, H);
+
+ctx.fillStyle = '#00bfff';
+ctx.font = 'bold 13px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('THE REMAINING BARRIER: LOCAL OBSTRUCTION SEARCH', W/2, 20);
+
+// Progress bar: 348513 primes tested to 5M
+const barX = 60, barY = 50, barW = W-120, barH = 30;
+ctx.strokeStyle = '#444';
+ctx.lineWidth = 2;
+ctx.strokeRect(barX, barY, barW, barH);
+
+// Fill: 5M out of... cofactor primes are hundreds of digits
+// Show as "tested" vs "untested"
+const tested = 0.95; // visual representation
+ctx.fillStyle = '#00ff8844';
+ctx.fillRect(barX+1, barY+1, (barW-2)*tested, barH-2);
+ctx.fillStyle = '#ff6b3544';
+ctx.fillRect(barX+1+(barW-2)*tested, barY+1, (barW-2)*(1-tested), barH-2);
+
+ctx.fillStyle = '#00ff88';
+ctx.font = '11px Courier New';
+ctx.textAlign = 'left';
+ctx.fillText('348,513 primes tested (to 5M)', barX, barY+barH+18);
+ctx.fillStyle = '#ff6b35';
+ctx.textAlign = 'right';
+ctx.fillText('cofactor primes (300-900+ bits)', barX+barW, barY+barH+18);
+
+// The chain
+const cy = 120;
+const steps = [
+  {x: 80, label: 'LOCAL\n(all p)', status: '0 obs', color: '#00ff88'},
+  {x: 240, label: 'RATIONAL\n(Hasse-Minkowski)', status: 'implied', color: '#00bfff'},
+  {x: 440, label: 'GENUS\n(class #=1)', status: 'PROVEN', color: '#00ff88'},
+  {x: 640, label: 'INTEGRAL\n(Z^4)', status: 'implied', color: '#00ff88'},
+  {x: 820, label: 'root18\nEXISTS', status: 'conditional', color: '#ffaa00'},
+];
+
+steps.forEach((s,i) => {
+  ctx.strokeStyle = s.color;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(s.x-50, cy, 100, 50);
+
+  ctx.fillStyle = s.color;
+  ctx.font = 'bold 10px Courier New';
+  ctx.textAlign = 'center';
+  const lines = s.label.split('\n');
+  lines.forEach((l,j) => ctx.fillText(l, s.x, cy+15+j*12));
+
+  ctx.font = '9px Courier New';
+  ctx.fillText(s.status, s.x, cy+45);
+
+  if(i < steps.length-1) {
+    ctx.strokeStyle = '#444';
+    ctx.beginPath();
+    ctx.moveTo(s.x+52, cy+25);
+    ctx.lineTo(steps[i+1].x-52, cy+25);
+    ctx.stroke();
+    ctx.fillStyle = '#888';
+    ctx.fillText('⟹', (s.x+steps[i+1].x)/2, cy+22);
+  }
+});
+
+// Bottom note
+ctx.fillStyle = '#888';
+ctx.font = '10px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('H099 proved the GENUS→INTEGRAL link (class #=1). The only remaining link is LOCAL→RATIONAL.', W/2, cy+80);
+ctx.fillText('{brace} binds the well | [box] measures the place | (torroid) gap = CLOSED', W/2, cy+100);
+})();
+</script>
+
+</body>
+</html>
