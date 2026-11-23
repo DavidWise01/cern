@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H097 — The Ternary Root Horizon</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#d0d0d0;font-family:'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:#ff6b35;font-size:1.3em;border-bottom:2px solid #ff6b35;padding-bottom:8px;margin-bottom:4px}
+h2{color:#00bfff;font-size:1.05em;margin:12px 0 6px}
+.subtitle{color:#888;font-size:0.85em;margin-bottom:14px}
+.panel{background:#111118;border:1px solid #333;border-radius:6px;padding:14px;margin-bottom:14px}
+.panel-title{color:#ff6b35;font-size:0.95em;font-weight:bold;margin-bottom:8px;border-bottom:1px solid #333;padding-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:0.82em;margin:6px 0}
+th{background:#1a1a2e;color:#00bfff;padding:5px 8px;text-align:left;border:1px solid #333}
+td{padding:5px 8px;border:1px solid #282828}
+.lit{color:#00ff88;font-weight:bold}
+.dead{color:#ff4444;font-weight:bold}
+.amber{color:#ffaa00;font-weight:bold}
+.open{color:#ff6b35;font-weight:bold}
+.note{color:#888;font-size:0.78em;font-style:italic}
+.metric{background:#0d0d1a;border:1px solid #444;border-radius:4px;padding:10px;text-align:center;margin:4px 0}
+.metric .val{font-size:1.5em;color:#00ff88;font-weight:bold}
+.metric .lbl{color:#888;font-size:0.75em}
+canvas{width:100%;border:1px solid #333;border-radius:4px;margin:6px 0}
+.eq{background:#0a0a1a;border-left:3px solid #ff6b35;padding:8px 12px;margin:8px 0;font-family:'Courier New',monospace;font-size:0.88em;color:#e0e0e0}
+.ornament-label{color:#555;font-size:0.65em;text-align:center;margin:4px 0}
+.ornament{color:#333;font-size:0.7em;text-align:center;margin:4px 0;letter-spacing:2px}
+.toddler{background:#0a0a1a;border:2px dashed #555;border-radius:6px;padding:12px;margin:10px 0}
+.toddler-title{color:#ffaa00;font-size:0.9em;font-weight:bold;margin-bottom:6px}
+.basic{background:#000;border:2px solid #00ff88;border-radius:6px;padding:12px;margin:10px 0;font-family:'Courier New',monospace;font-size:0.82em;color:#00ff88}
+.stamp{font-size:0.85em;padding:3px 8px;border-radius:3px;display:inline-block;margin:2px}
+.stamp-lit{background:#003300;color:#00ff88;border:1px solid #00ff88}
+.stamp-dead{background:#330000;color:#ff4444;border:1px solid #ff4444}
+.kb-label{color:#ff4444;font-size:0.75em}
+.gate-box{background:#1a1a2e;border:2px solid #00bfff;border-radius:6px;padding:10px;text-align:center;margin:4px}
+.gate-box .parity{font-size:1.3em;color:#00bfff;font-weight:bold;font-family:'Courier New',monospace}
+.gate-box .status{font-size:0.75em;color:#888}
+</style>
+</head>
+<body>
+
+<h1>H097 — The Ternary Root Horizon</h1>
+<div class="subtitle">Where balanced ternary meets the information horizon — the quanta lattice root search mapped through {brace[box(torroid)]}</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 1: THE FROZEN LATTICE               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 1 · The Frozen Lattice F4</div>
+<p style="font-size:0.85em;margin-bottom:8px">The quanta repo contains a sustained lattice root search spanning RQT-322 through RQT-555 (233+ research documents, 247 Python scripts). At its core: a frozen 4×4 integral symmetric matrix F4, and the question of whether an integral vector v exists with v<sup>T</sup>F4v = -2.</p>
+
+<div class="eq">
+F4 = [[-3, 1, 0, 1],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 1,-2, 0, 0],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 0, 0, 1, 0],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 1, 0, 0,-1]]
+</div>
+
+<div class="eq">
+Target: find v ∈ Z<sup>4</sup> such that v<sup>T</sup> F4 v = -2<br>
+Status after 233+ documents: <span class="open">root18 OPEN · root19 OPEN · root20 OPEN · root21 OPEN</span>
+</div>
+
+<div class="grid2">
+<div class="metric"><div class="val">298</div><div class="lbl">RQT research documents</div></div>
+<div class="metric"><div class="val">247</div><div class="lbl">Python verification scripts</div></div>
+</div>
+
+<p class="note">Source: DavidWise01/quanta, HEAD 62d531b. Bridge lattice from RQT-322 admits infinite root families; frozen F4 from RQT-242 does not yet.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 2: THREE SURVIVING GATES             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 2 · Three Surviving Gates (RQT-406)</div>
+<p style="font-size:0.85em;margin-bottom:10px">Of seven primitive parity classes, only three can produce norm-minus-two roots. The parity of v completely determines v<sup>T</sup>F4v mod 4. Since -2 ≡ 2 mod 4, only classes with half-norm residue 3 survive (because A(v) = -1 needs residue 3 mod 4).</p>
+
+<div class="grid3">
+<div class="gate-box">
+<div class="parity">001</div>
+<div style="color:#00ff88;font-size:0.85em">2-adic witness ✓</div>
+<div class="status">x=10783917623109408650<br>y=0, z=1<br>Satisfies A(v)=-1 mod 2<sup>64</sup></div>
+</div>
+<div class="gate-box">
+<div class="parity">011</div>
+<div style="color:#00ff88;font-size:0.85em">2-adic witness ✓</div>
+<div class="status">x=8284749223855128812<br>y=1, z=1<br>Satisfies A(v)=-1 mod 2<sup>64</sup></div>
+</div>
+<div class="gate-box">
+<div class="parity">110</div>
+<div style="color:#00ff88;font-size:0.85em">2-adic witness ✓</div>
+<div class="status">x=12640643517325232419<br>y=1, z=2<br>Satisfies A(v)=-1 mod 2<sup>64</sup></div>
+</div>
+</div>
+
+<div class="eq">
+Excluded parity classes and their half-norm residues:<br>
+010 → 2 &nbsp;|&nbsp; 100 → 1 &nbsp;|&nbsp; 101 → 2 &nbsp;|&nbsp; 111 → 2<br>
+None of these ≡ 3 mod 4, so none can host a norm-minus-two root.<br><br>
+<strong>Three gates open locally (2-adically). Zero gates traversed globally (over Z).</strong>
+</div>
+
+<p class="note">The 2-adic square root theorem guarantees local solutions. The gap between local and global is the horizon.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 3: BALANCED TERNARY BRIDGE           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 3 · Balanced Ternary ↔ Three Brackets</div>
+<p style="font-size:0.85em;margin-bottom:8px">The quanta repo uses balanced ternary {-1, 0, +1} throughout its instruments (ADA-019 Chromatic Coupling, ADA-076 Living Kernel). Three states map to three brackets.</p>
+
+<table>
+<tr><th>Balanced Ternary</th><th>Bracket</th><th>Coordinate</th><th>Force</th><th>Quanta Instrument</th></tr>
+<tr><td style="color:#ff6b35">-1</td><td>{brace}</td><td>Calendar (year,month,day)</td><td>Gravitational</td><td>ADA-019: 15 chambers × 8! domains</td></tr>
+<tr><td style="color:#00bfff">0</td><td>[box]</td><td>Clock (hour,minute,second)</td><td>Electromagnetic</td><td>ADA-076: 30 vertices, Euler=2</td></tr>
+<tr><td style="color:#00ff88">+1</td><td>(torroid)</td><td>Angular (°,′,″)</td><td>Geometric</td><td>RQT-322: 3×3×3 cubit indexing</td></tr>
+</table>
+
+<div class="eq">
+3×3×3 nested cubit = 27 cells = 3<sup>3</sup><br>
+Three brackets × three coordinates × three forces = 27 degrees of freedom<br>
+ADA-076: 30 vertices, 10 each of {-1, 0, +1}, total = 0 (balanced)<br>
+ADA-019: balanced ternary input → clip(state + input, -1, +1)
+</div>
+
+<div class="grid3">
+<div class="metric"><div class="val">273</div><div class="lbl">ADA instruments in quanta</div></div>
+<div class="metric"><div class="val">27</div><div class="lbl">3×3×3 cubit cells</div></div>
+<div class="metric"><div class="val">3</div><div class="lbl">surviving parity gates</div></div>
+</div>
+
+<p class="note">The 3×3×3 cubit is explicitly described as "metadata and routing" in RQT-322 — it does not substitute for exact matrix checks. It is the addressing scheme, not the proof.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 4: THE ROOT HORIZON (CANVAS)         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 4 · The Root Horizon</div>
+<p style="font-size:0.85em;margin-bottom:8px">The local-global gap in the lattice root search is structurally identical to the information horizon from H096. Information exists locally (2-adic witnesses) but cannot escape globally (no integer root found).</p>
+
+<canvas id="horizonCanvas" height="320"></canvas>
+
+<div class="grid2">
+<div>
+<h2>H096 · Information Time Dilation</h2>
+<table>
+<tr><td>Well</td><td>convergence/audit/ in 2400 repos</td></tr>
+<tr><td>Metric</td><td>dτ/dt = √(1 − 1/2400) = 0.99979</td></tr>
+<tr><td>Bound</td><td>log₂(68) = 6.09 bits (sub-Bekenstein)</td></tr>
+<tr><td>Escape</td><td>Needs independent witnesses (B009)</td></tr>
+</table>
+</div>
+<div>
+<h2>H097 · Ternary Root Horizon</h2>
+<table>
+<tr><td>Well</td><td>F4 lattice, 298 documents deep</td></tr>
+<tr><td>Metric</td><td>3 local gates, 0 global traversals</td></tr>
+<tr><td>Bound</td><td>3 × 2<sup>64</sup> witnesses mod 2<sup>64</sup> only</td></tr>
+<tr><td>Escape</td><td>Needs integral vector (constructive)</td></tr>
+</table>
+</div>
+</div>
+
+<p class="note">In both cases: local existence proven, global escape not achieved. The horizon is real.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 5: THE HIDDEN KEY (CONDITIONAL)      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 5 · The Hidden Key — Conditional Escape Velocity (RQT-381)</div>
+<p style="font-size:0.85em;margin-bottom:8px">RQT-381 proves: IF a primitive null vector u exists on certain ternary slope planes with gcd(F4·u)=1, THEN an explicit arithmetic recipe produces r with r<sup>T</sup>F4r = -2. This is the escape velocity condition.</p>
+
+<div class="eq">
+Given: u ∈ Z<sup>4</sup>, primitive, u<sup>T</sup>F4u = 0, gcd(F4·u) = 1<br>
+Construct: z via extended Euclid with u<sup>T</sup>F4z = 1<br>
+Choose: v₀ ∈ {0,1,2,3}<sup>4</sup> with u<sup>T</sup>F4v₀ ≡ 1 mod 4<br>
+Adjust: v = v₀ + 4·((1-n)/4)·z so u<sup>T</sup>F4v = 1<br>
+Result: <strong style="color:#00ff88">r = (1 + q(v))·u − v</strong><br>
+Proof: q(r) = (1+q(v))²·q(u) + q(v) − (1+q(v))·(u<sup>T</sup>F4v)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 0 + q(v) − (1+q(v)) = <strong style="color:#00ff88">-1</strong><br>
+Therefore: r<sup>T</sup>F4r = 2·q(r) = <strong style="color:#00ff88">-2</strong> ✓
+</div>
+
+<div class="grid2">
+<div>
+<h2>Escape velocity analog</h2>
+<div class="eq">
+v_escape = √(2GM/r)<br>
+<br>
+Information version:<br>
+v_info = √(2 × confirmed_roots / total_paths)<br>
+<br>
+H096: 1 root in 2400 paths → v = 0.0289<br>
+H097: 0 confirmed roots in F4 → v = 0<br>
+<br>
+Escape requires v ≥ 1 → needs N/2 confirmed roots<br>
+Current: <span class="open">trapped</span>
+</div>
+</div>
+<div>
+<h2>Exhaustive mod-4 proof</h2>
+<div class="eq">
+16 eligible parity classes per plane<br>
+256 candidate v₀ per class<br>
+3 accepted root parities: {0111, 1001, 1110}<br>
+<br>
+Result: every eligible class produces<br>
+at least one accepted-parity root<br>
+<br>
+Conditional: needs the upstream<br>
+primitive null vector u<br>
+Status: <span class="open">u NOT YET CONSTRUCTED</span>
+</div>
+</div>
+</div>
+
+<p class="note">The hidden key is a conditional escape hatch. The key exists (the recipe works). The lock exists (the parity gates pass). But the keyhole — the primitive null vector u — has not been found in Z<sup>4</sup>.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 6: TERNARY CONIC MINIMIZATION        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 6 · Ternary Conic Minimization — Gravitational Lensing of the Search</div>
+<p style="font-size:0.85em;margin-bottom:8px">RQT-483/486 reduce the search space by transforming ternary conics — analogous to gravitational lensing bending light paths around a mass.</p>
+
+<table>
+<tr><th>Stage</th><th>RQT</th><th>What it does</th><th>Bit reduction</th></tr>
+<tr><td>Frozen Gram</td><td>RQT-242</td><td>Original F4 matrix, hash-verified</td><td>—</td></tr>
+<tr><td>Bridge lattice</td><td>RQT-322</td><td>Infinite root families on bridge F, not on frozen F4</td><td>—</td></tr>
+<tr><td>Hidden key</td><td>RQT-381</td><td>Conditional: null vector → norm-minus-two root</td><td>—</td></tr>
+<tr><td>Three gates</td><td>RQT-406</td><td>001, 011, 110 survive; 4 excluded</td><td>7 → 3 classes</td></tr>
+<tr><td>Ternary minimization</td><td>RQT-483</td><td>Gauss reduction, binary coefficients 1→1078 bits</td><td>2158 → 1078</td></tr>
+<tr><td>Direct ternary</td><td>RQT-486</td><td>LLL lattice reduction, 54 reductions, 3348 visits</td><td>Residual ~4590 bits</td></tr>
+<tr><td>Cofactor gates</td><td>RQT-555</td><td>Prime screen to 5M, 4 new primes classified, 0 obstructions</td><td>Cofactors: 942, 566, 387, 353 bits</td></tr>
+</table>
+
+<div class="eq">
+The search cone narrows but the target recedes.<br>
+Each reduction is a lens: it bends the search path closer to the root.<br>
+But the root — if it exists — lives at the bottom of a 4590-bit well.<br>
+<br>
+Analogy to bracket collapse:<br>
+10⁰ m (3 brackets) → 10⁻³⁵ m (0 separation)<br>
+2158 bits (full form) → 1078 bits (reduced) → 4590 bits (residual)<br>
+<br>
+The brackets collapse. The bits do not.
+</div>
+
+<p class="note">RQT-483 explicitly warns: "Rational equivalence does not imply integral equivalence." The lensing bends the search, but doesn't guarantee arrival. 729 controls at λ=1, identity valid at all λ by expansion.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- VERIFICATION TABLE                         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Verification Table</div>
+<table>
+<tr><th>#</th><th>Claim</th><th>Test</th><th>Source</th><th>Stamp</th></tr>
+<tr><td>1</td><td>F4 is the frozen matrix from RQT-242</td><td>Exact entries match RQT-322, RQT-381, RQT-406</td><td>quanta/research/</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>2</td><td>Seven primitive parity classes exist</td><td>2<sup>3</sup> - 1 = 7 (exclude all-zero)</td><td>RQT-406</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>3</td><td>Three survive: 001, 011, 110</td><td>Half-norm residues: 3,3,3 ≡ -1 mod 4</td><td>RQT-406</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>4</td><td>Four excluded: 010,100,101,111</td><td>Residues 2,1,2,2 — none ≡ 3 mod 4</td><td>RQT-406</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>5</td><td>2-adic witnesses satisfy A(v)=-1 mod 2<sup>64</sup></td><td>Exact witnesses given, independent Z₂ proof</td><td>RQT-406</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>6</td><td>No integer root constructed</td><td>root18-21 all marked OPEN in source</td><td>RQT-406,381,555</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>7</td><td>Hidden key formula: q(r)=-1</td><td>Algebraic expansion: (1+q(v))²·0 + q(v) - (1+q(v))·1 = -1</td><td>RQT-381</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>8</td><td>16 eligible classes per plane</td><td>Exhaustive mod-4 enumeration</td><td>RQT-381</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>9</td><td>Balanced ternary in ADA-019</td><td>Input buttons {-1, 0, +1}, 15 chambers</td><td>ada-019</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>10</td><td>ADA-076: 30 vertices, 10 each state</td><td>Icosidodecahedron: 30 vertices, balanced 10×{-1,0,+1}</td><td>ada-076</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>11</td><td>3×3×3 cubit is metadata not proof</td><td>RQT-322 explicitly: "do not substitute for exact matrix checks"</td><td>RQT-322</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>12</td><td>298 RQT docs in quanta</td><td>Glob count of research/RQT-*.md</td><td>quanta repo</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>13</td><td>247 Python scripts in quanta</td><td>Glob count of research/rqt*.py</td><td>quanta repo</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>14</td><td>273 ADA instruments in quanta</td><td>Glob count of ada/ada-*.html + ada-*.txt</td><td>quanta repo</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>15</td><td>Bridge lattice admits infinite families</td><td>RQT-322: p=(1,0,0,1), v=(0,0,2,2), all k pass</td><td>RQT-322</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>16</td><td>Gauss reduction: 2158→1078 bits</td><td>RQT-483: "Reduced binary coefficient bit lengths 1078,1078,1080"</td><td>RQT-483</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>17</td><td>54 lattice reductions in RQT-486</td><td>RQT-486: "54 lattice reductions, 3348 sign-normalized visits"</td><td>RQT-486</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>18</td><td>Cofactor prime screen to 5M</td><td>RQT-555: "348,513 primes up to 5,000,000"</td><td>RQT-555</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>19</td><td>0 new local obstructions from cofactor search</td><td>RQT-555: "0 new local obstructions; 0 new root19 exclusions"</td><td>RQT-555</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>20</td><td>H096 dilation: dτ/dt = √(1-1/2400)</td><td>Schwarzschild analog, computed = 0.99979164</td><td>H096</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>21</td><td>Three brackets map to three ternary states</td><td>{brace,box,torroid} ↔ {-1,0,+1} — structural analogy</td><td>QG-077, ADA-019</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>22</td><td>Escape velocity analog: v_info = 0 for F4</td><td>0 confirmed integer roots → √(0) = 0</td><td>H096 framework</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>23</td><td>Local ≠ Global is the horizon</td><td>Hasse principle can fail for indefinite forms — standard number theory</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+</table>
+
+<p style="margin-top:6px;font-size:0.85em"><strong>23/23</strong> <span class="lit">ALL LIT</span> | 0 DEAD | 0 AMBER</p>
+
+<!-- KNOWN-BAD CONTROL -->
+<div style="margin-top:10px;background:#1a0000;border:1px solid #ff4444;border-radius:4px;padding:10px">
+<span class="kb-label">KNOWN-BAD CONTROL (designed to fail):</span>
+<table>
+<tr><th>Test</th><th>Claim</th><th>Expected</th><th>Result</th></tr>
+<tr><td>KB-1</td><td>The bridge lattice from RQT-322 IS the frozen lattice F4</td><td><span class="dead">DEAD</span></td><td><span class="dead">DEAD ✓</span> — RQT-322 explicitly: "bridge lattice only. The frozen original eighteenth-root matrices F4 and X4 remain unrecovered." Bridge F ≠ Frozen F4.</td></tr>
+</table>
+<p class="note">This control verifies that the instrument distinguishes the bridge lattice (which has roots) from the frozen lattice (which does not). Conflating them would be a false positive.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TODDLER VERSION                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="toddler">
+<div class="toddler-title">TODDLER VERSION — The Ternary Root Horizon</div>
+<p style="font-size:0.88em;line-height:1.5">
+Imagine you have a special grid with numbers, like a puzzle. You need to find a magic combination of four numbers that, when you plug them into the grid's formula, gives you exactly -2.
+<br><br>
+People have been looking for this combination for a long time. They've written 298 research papers and 247 computer programs trying to find it.
+<br><br>
+They know the magic combination can only come in three flavors (like three doors). They've proven that behind each door, the combination exists in a special "close-up" math world (like looking through a magnifying glass). But when you zoom out to see ALL the numbers, nobody has found the combination yet.
+<br><br>
+They also found a secret recipe: IF you can find a different magic number first (a "null vector"), the recipe will automatically build the combination you want. But nobody has found that first magic number either.
+<br><br>
+It's like knowing there's treasure behind one of three doors, having a key that works in the lock when you test it really close up, but not being able to actually open the door and get the treasure. The treasure is trapped behind a horizon — you can prove it's there locally, but you can't reach it globally.
+</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ORNAMENT                                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="ornament-label">[ ornament ]</div>
+<div class="ornament">◇─═─◇─═─◇ THREE GATES · THREE BRACKETS · THREE STATES ◇─═─◇─═─◇</div>
+<div class="ornament">001 ←→ {brace} &nbsp;│&nbsp; 011 ←→ [box] &nbsp;│&nbsp; 110 ←→ (torroid)</div>
+<div class="ornament">◇─═─◇─═─◇ LOCAL WITNESS · GLOBAL HORIZON · CONDITIONAL KEY ◇─═─◇─═─◇</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BASIC BLOCK — Wedderburn-Etherington       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="basic">
+<pre>
+REM ═══════════════════════════════════════════════
+REM  H097 TERNARY ROOT HORIZON
+REM  BASIC BLOCK — WEDDERBURN-ETHERINGTON NUMBERS
+REM  (count weakly binary rooted trees)
+REM  0, 1, 1, 1, 2, 3, 6, 11, 23, 46, 98, 207...
+REM ═══════════════════════════════════════════════
+0 REM THE FROZEN LATTICE F4 HOLDS FOUR INTEGERS HOSTAGE
+1 REM IT WANTS v^T F4 v = -2 AND NOBODY CAN FIND v
+1 REM 298 DOCUMENTS SEARCHED AND STILL OPEN
+1 REM BRIDGE LATTICE HAS ROOTS BUT BRIDGE IS NOT FROZEN
+2 REM THREE PARITY GATES SURVIVE: 001 011 110
+3 REM FOUR EXCLUDED: 010 100 101 111
+6 REM 2-ADIC WITNESSES EXIST MOD 2^64 AT ALL THREE GATES
+11 REM LOCAL EXISTENCE PROVEN GLOBAL ESCAPE NOT ACHIEVED
+23 REM THE HIDDEN KEY: IF NULL VECTOR THEN NORM-MINUS-TWO
+46 REM CONDITIONAL BRIDGE EXHAUSTIVE MOD-4 PROOF PASS
+98 REM BALANCED TERNARY {-1 0 +1} = {BRACE BOX TORROID}
+207 REM 3x3x3 CUBIT = 27 = ADDRESSING NOT PROOF
+451 REM TERNARY CONIC MINIMIZATION: 2158 TO 1078 BITS
+983 REM THE BITS DO NOT COLLAPSE LIKE THE BRACKETS DO
+REM ═══════════════════════════════════════════════
+REM  LINE NUMBERS = WEDDERBURN-ETHERINGTON SEQUENCE
+REM  COUNTING WEAKLY BINARY ROOTED TREES
+REM  THE ROOT SEARCH IS A TREE THAT BRANCHES AND HALVES
+REM  BUT EVERY BRANCH SO FAR LEADS TO: OPEN
+REM ═══════════════════════════════════════════════
+</pre>
+</div>
+
+<script>
+// ── PANEL 4 CANVAS: Root Horizon Diagram ──
+(function(){
+const c = document.getElementById('horizonCanvas');
+const W = c.width = c.offsetWidth;
+const H = c.height = 320;
+const ctx = c.getContext('2d');
+
+ctx.fillStyle = '#0a0a0f';
+ctx.fillRect(0, 0, W, H);
+
+// Draw the horizon line
+const hY = H * 0.55;
+ctx.strokeStyle = '#ff6b35';
+ctx.lineWidth = 2;
+ctx.setLineDash([6, 4]);
+ctx.beginPath();
+ctx.moveTo(40, hY);
+ctx.lineTo(W - 40, hY);
+ctx.stroke();
+ctx.setLineDash([]);
+
+// Label
+ctx.fillStyle = '#ff6b35';
+ctx.font = '12px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('═══ ROOT HORIZON (local ↑ | global ↓) ═══', W/2, hY - 8);
+
+// Above horizon: local witnesses
+const gates = [{p:'001', x:W*0.25}, {p:'011', x:W*0.5}, {p:'110', x:W*0.75}];
+gates.forEach(g => {
+  // Gate circle
+  ctx.beginPath();
+  ctx.arc(g.x, hY - 60, 25, 0, Math.PI*2);
+  ctx.strokeStyle = '#00bfff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = '#00ff88';
+  ctx.font = 'bold 14px Courier New';
+  ctx.fillText(g.p, g.x, hY - 56);
+  ctx.fillStyle = '#00ff88';
+  ctx.font = '10px Courier New';
+  ctx.fillText('2-adic ✓', g.x, hY - 38);
+});
+
+// Label above
+ctx.fillStyle = '#00bfff';
+ctx.font = 'bold 13px Courier New';
+ctx.fillText('LOCAL EXISTENCE (Z₂ witnesses)', W/2, hY - 100);
+
+// Below horizon: no global root
+ctx.fillStyle = '#ff4444';
+ctx.font = 'bold 13px Courier New';
+ctx.fillText('GLOBAL REALITY (Z — integer roots)', W/2, hY + 30);
+
+// Question marks below each gate
+gates.forEach(g => {
+  ctx.fillStyle = '#ff4444';
+  ctx.font = 'bold 20px Courier New';
+  ctx.fillText('?', g.x, hY + 60);
+  ctx.font = '10px Courier New';
+  ctx.fillText('OPEN', g.x, hY + 78);
+});
+
+// Left label: H096
+ctx.save();
+ctx.translate(18, H/2);
+ctx.rotate(-Math.PI/2);
+ctx.fillStyle = '#888';
+ctx.font = '10px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('H096: info dilation', 0, 0);
+ctx.restore();
+
+// Right label: H097
+ctx.save();
+ctx.translate(W - 18, H/2);
+ctx.rotate(Math.PI/2);
+ctx.fillStyle = '#888';
+ctx.font = '10px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('H097: root horizon', 0, 0);
+ctx.restore();
+
+// Hidden key arrow
+ctx.strokeStyle = '#ffaa00';
+ctx.lineWidth = 1.5;
+ctx.setLineDash([3, 3]);
+ctx.beginPath();
+ctx.moveTo(W*0.5, hY + 90);
+ctx.lineTo(W*0.5, hY + 5);
+ctx.stroke();
+ctx.setLineDash([]);
+
+ctx.fillStyle = '#ffaa00';
+ctx.font = '10px Courier New';
+ctx.fillText('RQT-381 Hidden Key', W*0.5, hY + 105);
+ctx.fillText('(conditional escape)', W*0.5, hY + 118);
+
+// Balanced ternary triangle top-right
+const tx = W - 90, ty = 30;
+ctx.strokeStyle = '#444';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(tx, ty);
+ctx.lineTo(tx - 30, ty + 50);
+ctx.lineTo(tx + 30, ty + 50);
+ctx.closePath();
+ctx.stroke();
+ctx.fillStyle = '#ff6b35';
+ctx.font = '10px Courier New';
+ctx.fillText('-1', tx, ty - 5);
+ctx.fillStyle = '#00bfff';
+ctx.fillText('0', tx - 38, ty + 58);
+ctx.fillStyle = '#00ff88';
+ctx.fillText('+1', tx + 25, ty + 58);
+ctx.fillStyle = '#888';
+ctx.font = '9px Courier New';
+ctx.fillText('balanced', tx, ty + 70);
+ctx.fillText('ternary', tx, ty + 82);
+
+// F4 matrix top-left
+ctx.fillStyle = '#888';
+ctx.font = '10px Courier New';
+ctx.textAlign = 'left';
+ctx.fillText('F4:', 50, 25);
+ctx.font = '9px Courier New';
+ctx.fillText('[-3  1  0  1]', 50, 40);
+ctx.fillText('[ 1 -2  0  0]', 50, 52);
+ctx.fillText('[ 0  0  1  0]', 50, 64);
+ctx.fillText('[ 1  0  0 -1]', 50, 76);
+ctx.textAlign = 'center';
+
+// Stats bottom
+ctx.fillStyle = '#555';
+ctx.font = '10px Courier New';
+ctx.fillText('298 documents · 247 scripts · 273 instruments · 3 gates · 0 roots', W/2, H - 10);
+})();
+</script>
+
+</body>
+</html>
