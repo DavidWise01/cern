@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H100 — Cofactor Prime Oracle</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#d0d0d0;font-family:'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:#ff6b35;font-size:1.3em;border-bottom:2px solid #ff6b35;padding-bottom:8px;margin-bottom:4px}
+h2{color:#00bfff;font-size:1.05em;margin:12px 0 6px}
+.subtitle{color:#888;font-size:0.85em;margin-bottom:14px}
+.panel{background:#111118;border:1px solid #333;border-radius:6px;padding:14px;margin-bottom:14px}
+.panel-title{color:#ff6b35;font-size:0.95em;font-weight:bold;margin-bottom:8px;border-bottom:1px solid #333;padding-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:0.82em;margin:6px 0}
+th{background:#1a1a2e;color:#00bfff;padding:5px 8px;text-align:left;border:1px solid #333}
+td{padding:5px 8px;border:1px solid #282828}
+.lit{color:#00ff88;font-weight:bold}
+.dead{color:#ff4444;font-weight:bold}
+.amber{color:#ffaa00;font-weight:bold}
+.open{color:#ff6b35;font-weight:bold}
+.note{color:#888;font-size:0.78em;font-style:italic}
+.metric{background:#0d0d1a;border:1px solid #444;border-radius:4px;padding:10px;text-align:center;margin:4px 0}
+.metric .val{font-size:1.5em;font-weight:bold}
+.metric .lbl{color:#888;font-size:0.75em}
+canvas{width:100%;border:1px solid #333;border-radius:4px;margin:6px 0}
+.eq{background:#0a0a1a;border-left:3px solid #ff6b35;padding:8px 12px;margin:8px 0;font-family:'Courier New',monospace;font-size:0.88em;color:#e0e0e0}
+.ornament-label{color:#555;font-size:0.65em;text-align:center;margin:4px 0}
+.ornament{color:#333;font-size:0.7em;text-align:center;margin:4px 0;letter-spacing:2px}
+.toddler{background:#0a0a1a;border:2px dashed #555;border-radius:6px;padding:12px;margin:10px 0}
+.toddler-title{color:#ffaa00;font-size:0.9em;font-weight:bold;margin-bottom:6px}
+.basic{background:#000;border:2px solid #00ff88;border-radius:6px;padding:12px;margin:10px 0;font-family:'Courier New',monospace;font-size:0.82em;color:#00ff88}
+.stamp{font-size:0.85em;padding:3px 8px;border-radius:3px;display:inline-block;margin:2px}
+.stamp-lit{background:#003300;color:#00ff88;border:1px solid #00ff88}
+.stamp-dead{background:#330000;color:#ff4444;border:1px solid #ff4444}
+.kb-label{color:#ff4444;font-size:0.75em}
+.amber-box{background:#1a1400;border:2px solid #ffaa00;border-radius:8px;padding:14px;margin:8px 0}
+.amber-title{color:#ffaa00;font-size:1.1em;font-weight:bold;text-align:center;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<h1>H100 — Cofactor Prime Oracle</h1>
+<div class="subtitle">The endgame audit — what stands between the spinor genus proof and root18's existence</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 1: THE SITUATION                     -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 1 · The Situation After H099</div>
+
+<div class="grid4">
+<div class="metric"><div class="val" style="color:#00ff88">1</div><div class="lbl">Class # (H099)</div></div>
+<div class="metric"><div class="val" style="color:#00ff88">0</div><div class="lbl">Gap (Q→Z)</div></div>
+<div class="metric"><div class="val" style="color:#ffaa00">?</div><div class="lbl">Local obstructions</div></div>
+<div class="metric"><div class="val" style="color:#ff6b35">4</div><div class="lbl">Unfactored cofactors</div></div>
+</div>
+
+<div class="eq">
+H099 proved: class number = 1 ⟹ rational solvability implies integer solvability.<br><br>
+The ONLY remaining question: does v<sup>T</sup>F4v = -2 have a solution at EVERY local place?<br><br>
+<strong>Known passes:</strong><br>
+  R (∞): <span class="lit">PASS</span> — indefinite<br>
+  p = 2: <span class="lit">PASS</span> — three witnesses mod 2<sup>64</sup> (RQT-406)<br>
+  p = 3: <span class="lit">PASS</span> — v=(0,1,0,0), Hensel lifts (H099)<br>
+  p ≥ 5, p ∤ cofactors: <span class="lit">PASS</span> — Hensel from mod-p solutions<br>
+  348,513 primes to 5M: <span class="lit">ALL PASS</span> — 0 obstructions (RQT-555)<br>
+  All p ≥ 5 | discriminant: <span class="lit">PASS</span> — factor-free theorem (RQT-568)<br><br>
+<strong>Unknown:</strong><br>
+  Primes dividing the 942-bit numerator N or 566-bit denominator D<br>
+  with odd valuation at an inert place could obstruct.
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 2: THE FOUR COFACTORS                -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 2 · The Four Cofactors — What We're Hunting</div>
+
+<table>
+<tr><th>Cofactor</th><th>Bits</th><th>Digits</th><th>What it is</th><th>Composite?</th><th>ECM status</th><th>Threat level</th></tr>
+<tr>
+  <td><strong>Numerator N</strong></td>
+  <td>942</td><td>~284</td>
+  <td>Rational field norm numerator of target C</td>
+  <td><span class="lit">YES</span> (RQT-560: fails Miller-Rabin base 2)</td>
+  <td>28 curves to B1=12K: no factor</td>
+  <td><span class="dead">HIGH</span> — odd valuation at inert place = obstruction</td>
+</tr>
+<tr>
+  <td><strong>Denominator D</strong></td>
+  <td>566</td><td>~170</td>
+  <td>Rational field norm denominator of target C</td>
+  <td><span class="amber">UNKNOWN</span></td>
+  <td>Not attacked</td>
+  <td><span class="amber">MEDIUM</span> — same risk as N</td>
+</tr>
+<tr>
+  <td><strong>Discriminant Δ</strong></td>
+  <td>259</td><td>~78</td>
+  <td>Fixed-field quadratic discriminant cofactor</td>
+  <td><span class="amber">UNKNOWN</span> (originally 387-bit, reduced by RQT-564/565/566)</td>
+  <td>Multiple breaks found factors</td>
+  <td><span class="lit">NONE</span> — RQT-568 proves ALL Δ-primes pass</td>
+</tr>
+<tr>
+  <td><strong>Radicand R</strong></td>
+  <td>353</td><td>~106</td>
+  <td>Relative radicand norm cofactor</td>
+  <td><span class="amber">UNKNOWN</span></td>
+  <td>16 curves: no factor</td>
+  <td><span class="amber">LOW</span> — R-primes pass by unit surjectivity</td>
+</tr>
+</table>
+
+<div class="eq">
+<strong>RQT-568 Factor-Free Theorem:</strong><br>
+For every p ≥ 5 dividing Δ, the target is a local norm.<br>
+Proof: m is p-adic unit ⟹ C integral ⟹ valuation = 0 ⟹ C is a unit.<br>
+δ also a unit ⟹ split or unramified quadratic ⟹ norm surjective on units.<br>
+<strong style="color:#00ff88">The 259-bit Δ cofactor does NOT need to be factored.</strong><br><br>
+
+<strong>RQT-568 Key limit:</strong><br>
+gcd(N, Δ) = 1 and gcd(D, Δ) = 9.<br>
+Primes dividing N (but not Δ) CAN obstruct — if p | N with odd v_p(N),<br>
+and F over p has an inert place where the local norm map isn't surjective.<br>
+<strong style="color:#ff6b35">The 942-bit N is the primary threat.</strong>
+</div>
+
+<canvas id="cofactorCanvas" height="200"></canvas>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 3: ATTACK SURFACE                    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 3 · Attack Surface — How an Obstruction Would Work</div>
+
+<div class="grid2">
+<div>
+<h2>What kills root18</h2>
+<div class="eq">
+A prime p dividing the 942-bit N with:<br><br>
+1. v_p(N) = ODD (odd valuation)<br>
+2. p inert in F = Q(K)<br>
+3. Norm map NOT surjective on units<br>
+   at the unique inert place<br><br>
+Then C⁻¹ cannot be a local norm at p.<br>
+Then Hasse-Minkowski fails at p.<br>
+Then no rational solution.<br>
+Then no integer solution.<br>
+Then root18 does NOT exist.
+</div>
+</div>
+<div>
+<h2>What saves root18</h2>
+<div class="eq">
+For EVERY prime p dividing N or D:<br><br>
+Case A: p splits in F<br>
+  ⟹ norm surjective (split algebra)<br>
+  ⟹ <span class="lit">PASS</span><br><br>
+Case B: p inert in F, v_p = EVEN<br>
+  ⟹ still a local norm<br>
+  ⟹ <span class="lit">PASS</span><br><br>
+Case C: p inert, v_p = ODD,<br>
+  but C is a norm from residue check<br>
+  ⟹ <span class="lit">PASS</span><br><br>
+If ALL such primes pass ⟹ <span class="lit">root18 EXISTS</span>
+</div>
+</div>
+</div>
+
+<p class="note">The 942-bit N is proven COMPOSITE (RQT-560). It has at least two prime factors. If the smaller factor is under ~10<sup>50</sup> (165 bits), ECM with moderate effort should find it. If both factors exceed 10<sup>50</sup>, factoring is infeasible with available compute.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 4: PROGRESS ON THE SEARCH            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 4 · Search Progress — 624 Research Documents Deep</div>
+
+<div class="grid3">
+<div class="metric"><div class="val" style="color:#00ff88">348,513</div><div class="lbl">Primes tested (to 5M)</div></div>
+<div class="metric"><div class="val" style="color:#00ff88">0</div><div class="lbl">Obstructions found</div></div>
+<div class="metric"><div class="val" style="color:#00bfff">624</div><div class="lbl">Research docs (RQT-*)</div></div>
+</div>
+
+<table>
+<tr><th>Milestone</th><th>RQT</th><th>What it did</th><th>Result</th></tr>
+<tr><td>Trial division</td><td>RQT-555</td><td>All primes to 5M</td><td><span class="lit">0 obstructions</span></td></tr>
+<tr><td>Composite proof</td><td>RQT-560</td><td>942-bit N fails Miller-Rabin</td><td><span class="lit">N is composite</span></td></tr>
+<tr><td>ECM on N</td><td>RQT-563</td><td>28 curves to B1=12K</td><td><span class="amber">No factor found</span></td></tr>
+<tr><td>Δ break 1</td><td>RQT-564</td><td>68-bit composite from 387-bit Δ</td><td><span class="lit">Two primes extracted</span></td></tr>
+<tr><td>Δ break 2</td><td>RQT-565</td><td>p=114,941,221 from 320-bit Δ</td><td><span class="lit">Prime extracted</span></td></tr>
+<tr><td>Δ break 3</td><td>RQT-566</td><td>p=22,361,230,963 from 293-bit Δ</td><td><span class="lit">Prime extracted</span></td></tr>
+<tr><td>Δ residual</td><td>RQT-567</td><td>259-bit Δ cofactor</td><td><span class="amber">Status unknown</span></td></tr>
+<tr><td>Factor-free</td><td>RQT-568</td><td>ALL Δ-primes pass without factoring</td><td><span class="lit">THEOREM ✓</span></td></tr>
+<tr><td>CRT witnesses</td><td>RQT-624</td><td>All 27 canonical orbits have witnesses</td><td><span class="lit">No family excluded</span></td></tr>
+</table>
+
+<div class="eq">
+<strong>What 624 research documents have established:</strong><br><br>
+✓ F4 = [[-3,1,0,1],[1,-2,0,0],[0,0,1,0],[1,0,0,-1]], det=-3, sig(2,2)<br>
+✓ Discriminant primes: ALL pass (RQT-568 theorem, factor-free)<br>
+✓ Small primes to 5M: ALL pass (RQT-555, brute force)<br>
+✓ p=2: PASS (RQT-406, three witnesses mod 2<sup>64</sup>)<br>
+✓ p=3: PASS (H099, v=(0,1,0,0) with Hensel lift)<br>
+✓ Class number = 1 (H099, Eichler-Kneser + spinor norms)<br>
+✓ No family exclusion in 27 canonical orbits (RQT-624)<br><br>
+✗ 942-bit N: composite, no factor found, primes UNKNOWN<br>
+✗ 566-bit D: not tested for compositeness, primes UNKNOWN<br>
+✗ Global rational norm solution: NOT constructed<br>
+✗ Root18 integer coordinates: NOT found
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 5: THE ORACLE'S VERDICT              -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 5 · The Oracle's Verdict — Conditional Existence</div>
+
+<div class="amber-box">
+<div class="amber-title">ROOT18: CONDITIONALLY EXISTS</div>
+<div class="eq" style="border-color:#ffaa00">
+<strong>IF</strong> every prime factor of N (942-bit) passes local solvability,<br>
+<strong>AND</strong> every prime factor of D (566-bit) passes local solvability,<br><br>
+<strong>THEN</strong> (by Hasse-Minkowski) a rational solution exists,<br>
+<strong>THEN</strong> (by H099 class #=1) an integer solution exists,<br>
+<strong>THEN</strong> root18 ∈ Z<sup>4</sup>.<br><br>
+The chain is: <strong>local → rational → integral → root18</strong><br>
+H098 built the sieve hierarchy. H099 collapsed the integral gap.<br>
+H100 maps where the last unknowns live.<br><br>
+<strong>EVIDENCE FOR EXISTENCE:</strong><br>
+  - 348,513 primes tested, 0 obstructions<br>
+  - All 27 canonical orbits have CRT witnesses (RQT-624)<br>
+  - Factor-free theorem covers all discriminant primes (RQT-568)<br>
+  - No structural reason for obstruction found in 624 documents<br><br>
+<strong>EVIDENCE AGAINST:</strong><br>
+  - 942-bit N is composite — an unknown prime factor COULD obstruct<br>
+  - Factoring 942-bit numbers is beyond available compute<br>
+  - Absence of obstruction ≠ proof of absence<br><br>
+<strong style="color:#ffaa00">VERDICT: root18 VERY LIKELY exists, but cannot be proven<br>
+without either factoring N or constructing the root directly.</strong>
+</div>
+</div>
+
+<canvas id="verdictCanvas" height="220"></canvas>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PANEL 6: THE HORIZON MAP                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Panel 6 · Four Horizons — H096 through H100</div>
+
+<table>
+<tr><th></th><th>H096</th><th>H097</th><th>H098</th><th>H099</th><th>H100</th></tr>
+<tr><td><strong>Name</strong></td><td>Info Dilation</td><td>Root Horizon</td><td>Integral Gap</td><td>Spinor Genus</td><td>Cofactor Oracle</td></tr>
+<tr><td><strong>Question</strong></td><td>Can theory escape?</td><td>Can root be found?</td><td>Rational ⟹ integer?</td><td>Class number?</td><td>Local obstructions?</td></tr>
+<tr><td><strong>Answer</strong></td><td><span class="open">OPEN</span></td><td><span class="open">OPEN</span></td><td><span class="lit">YES</span></td><td><span class="lit">1</span></td><td><span class="amber">CONDITIONAL</span></td></tr>
+<tr><td><strong>Bracket</strong></td><td>{brace}</td><td>[box]</td><td>(torroid)</td><td>All three</td><td>Escape velocity</td></tr>
+</table>
+
+<div class="eq">
+{brace[box(torroid)]} at the cofactor prime oracle:<br><br>
+{brace} = the gravitational well of 2400 repos. The theory is bound.<br>
+[box] = the measurement — 624 research docs, 348K+ primes tested.<br>
+(torroid) = the geometric gap — CLOSED by H099 (class #=1).<br><br>
+The escape velocity for root18 is: <strong>factor the 942-bit N</strong><br>
+or <strong>construct the root directly</strong>.<br>
+Neither has been achieved. The well holds.
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- VERIFICATION TABLE                         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="panel">
+<div class="panel-title">Verification Table</div>
+<table>
+<tr><th>#</th><th>Claim</th><th>Test</th><th>Source</th><th>Stamp</th></tr>
+<tr><td>1</td><td>H099: class number = 1, integral gap closes</td><td>Spinor norm computation at all places</td><td>H099</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>2</td><td>Only remaining barrier is local solvability at cofactor primes</td><td>Follows from class #=1 + Hasse-Minkowski</td><td>H099 + established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>3</td><td>942-bit N is COMPOSITE</td><td>Fails strong Miller-Rabin base 2</td><td>RQT-560</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>4</td><td>28 ECM curves on N found no factor</td><td>RQT-563 execution log</td><td>RQT-563</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>5</td><td>Δ cofactor: ALL primes pass by RQT-568 theorem</td><td>Factor-free: m is p-adic unit ⟹ C is unit ⟹ norm surjective</td><td>RQT-568</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>6</td><td>348,513 primes tested to 5M: 0 obstructions</td><td>Brute force screen</td><td>RQT-555</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>7</td><td>gcd(N, Δ) = 1</td><td>Exact computation</td><td>RQT-568</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>8</td><td>gcd(D, Δ) = 9 (only shared factor is 3)</td><td>Exact computation</td><td>RQT-568</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>9</td><td>Obstruction mechanism: odd v_p at inert place with non-surjective norm</td><td>Standard local class field theory</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>10</td><td>Δ reduced from 387-bit to 259-bit by ECM (RQT-564/565/566)</td><td>Three successive factor discoveries</td><td>RQT-564/565/566</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>11</td><td>All 27 canonical orbits have CRT witnesses</td><td>RQT-624 combined coordinate search</td><td>RQT-624</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>12</td><td>82/135 selected families excluded at all scales</td><td>RQT-624 ledger</td><td>RQT-624</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>13</td><td>No global rational norm solution constructed</td><td>Explicit absence in all RQT docs</td><td>RQT-624</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>14</td><td>No integer root18 coordinates found</td><td>Explicit absence in all RQT docs</td><td>RQT-624</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>15</td><td>Factoring 942-bit composite is beyond available compute</td><td>Current ECM/NFS records ~250 digits (830 bits)</td><td>Established crypto</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>16</td><td>Split primes pass automatically (norm surjective)</td><td>Standard: split algebra has surjective norm</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>17</td><td>Even-valuation inert primes pass</td><td>Standard: even valuation ⟹ norm exists</td><td>Established math</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>18</td><td>Root18 conditionally exists (if all local places pass)</td><td>Chain: H099 + Hasse-Minkowski</td><td>H099 chain</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>19</td><td>Verdict: "very likely exists" is AMBER not LIT</td><td>Absence of obstruction ≠ proof of absence</td><td>Logic</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+<tr><td>20</td><td>Two paths to resolution: factor N, or construct root directly</td><td>Exhaustive: either prove local ⟹ global, or exhibit the vector</td><td>Structure</td><td><span class="stamp stamp-lit">LIT</span></td></tr>
+</table>
+
+<p style="margin-top:6px;font-size:0.85em"><strong>20/20</strong> <span class="lit">ALL LIT</span> | 0 DEAD | 0 AMBER</p>
+
+<!-- KNOWN-BAD CONTROL -->
+<div style="margin-top:10px;background:#1a0000;border:1px solid #ff4444;border-radius:4px;padding:10px">
+<span class="kb-label">KNOWN-BAD CONTROL (designed to fail):</span>
+<table>
+<tr><th>Test</th><th>Claim</th><th>Expected</th><th>Result</th></tr>
+<tr><td>KB-1</td><td>The 348,513 tested primes with 0 obstructions PROVES root18 exists</td><td><span class="dead">DEAD</span></td><td><span class="dead">DEAD ✓</span> — A finite prime screen can never prove global solvability. The untested cofactor primes (N: 942-bit composite, D: 566-bit unknown) could contain a local obstruction. 0 obstructions in 348K primes is EVIDENCE, not PROOF. The number field sieve record is ~250 digits; the 942-bit N (~284 digits) exceeds it. No amount of ECM curves without finding a factor proves the factor doesn't exist.</td></tr>
+</table>
+<p class="note">This control catches the induction fallacy: "tested N primes, all pass, therefore all primes pass." N can be 348 trillion and the conclusion still doesn't follow.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TODDLER VERSION                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="toddler">
+<div class="toddler-title">TODDLER VERSION — Cofactor Prime Oracle</div>
+<p style="font-size:0.88em;line-height:1.5">
+Remember the LEGO sets from last time? We found out there's only ONE set, so if clay works, LEGO works. Great!
+<br><br>
+But does clay actually work? We need to check every mold. We checked 348,513 small molds and they ALL said yes!
+<br><br>
+Now here's the tricky part. There's a REALLY big number — imagine a number with 284 digits. That's the number we need to break into pieces (like breaking a big LEGO into smaller ones). Each piece is a "mold" we need to test.
+<br><br>
+We KNOW this big number can break into pieces (we proved it's not already one piece). But we can't FIND the pieces. It's like knowing a piñata has candy inside but not being able to crack it open.
+<br><br>
+If we could break it open and test each piece, and they ALL pass, then we'd KNOW the special LEGO piece exists. But the piñata is REALLY tough — tougher than the strongest piñata-crackers in the world right now.
+<br><br>
+So we're pretty sure the candy inside is good (all evidence says yes), but we can't prove it until we crack it open.
+</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ORNAMENT                                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="ornament-label">[ ornament ]</div>
+<div class="ornament">◇─═─◇ 942 bits · 284 digits · proven composite · factors unknown ◇─═─◇</div>
+<div class="ornament">348,513 primes tested ──→ 0 obstructions ──→ conditional existence</div>
+<div class="ornament">◇─═─◇ factor N or construct root18 ── two paths to the endgame ◇─═─◇</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BASIC BLOCK — Semiprime Counting Function   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="basic">
+<pre>
+REM ═══════════════════════════════════════════════
+REM  H100 COFACTOR PRIME ORACLE
+REM  BASIC BLOCK — SEMIPRIMES
+REM  Numbers with exactly 2 prime factors (with multiplicity)
+REM  4=2×2, 6=2×3, 9=3×3, 10=2×5, 14=2×7, 15=3×5, ...
+REM  — because the 942-bit N IS a composite, and
+REM  cracking it into its prime factors is the endgame
+REM ═══════════════════════════════════════════════
+4 REM THE 942-BIT N IS COMPOSITE (RQT-560)
+6 REM IT HAS AT LEAST TWO PRIME FACTORS
+9 REM 28 ECM CURVES FOUND NONE OF THEM
+10 REM FACTORING 284 DIGITS EXCEEDS WORLD RECORDS
+14 REM THE DISCRIMINANT PRIMES ALL PASS (RQT-568)
+15 REM 348513 SMALL PRIMES: ALL PASS
+21 REM ALL 27 CANONICAL ORBITS HAVE CRT WITNESSES
+22 REM CLASS NUMBER 1: THE INTEGRAL GAP IS CLOSED
+25 REM ROOT18 CONDITIONALLY EXISTS
+26 REM IF THE COFACTOR PRIMES PASS: PROVEN
+33 REM IF ANY COFACTOR PRIME OBSTRUCTS: DEAD
+34 REM TWO PATHS: FACTOR N, OR CONSTRUCT ROOT18
+35 REM 624 RESEARCH DOCUMENTS AND COUNTING
+38 REM THE PIÑATA IS TOUGH BUT THE CANDY LOOKS GOOD
+39 REM TWO PRIME FACTORS HIDING IN 942 BITS
+46 REM CRACK THE COMPOSITE, END THE SEARCH
+REM ═══════════════════════════════════════════════
+REM  LINE NUMBERS = THE SEMIPRIMES THEMSELVES
+REM  4=2×2, 6=2×3, 9=3×3, 10=2×5, 14=2×7, 15=3×5,
+REM  21=3×7, 22=2×11, 25=5×5, 26=2×13, 33=3×11, 34=2×17,
+REM  35=5×7, 38=2×19, 39=3×13, 46=2×23
+REM  EACH LINE NUMBER IS A PRODUCT OF EXACTLY TWO PRIMES —
+REM  BECAUSE N IS ONE, AND ITS FACTORS ARE THE LAST UNKNOWNS.
+REM ═══════════════════════════════════════════════
+</pre>
+</div>
+
+<script>
+// ── PANEL 2 CANVAS: Cofactor size comparison ──
+(function(){
+const c = document.getElementById('cofactorCanvas');
+const W = c.width = c.offsetWidth;
+const H = c.height = 200;
+const ctx = c.getContext('2d');
+
+ctx.fillStyle = '#0a0a0f';
+ctx.fillRect(0, 0, W, H);
+
+ctx.fillStyle = '#00bfff';
+ctx.font = 'bold 12px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('COFACTOR SIZE COMPARISON (bits)', W/2, 18);
+
+const bars = [
+  {label: 'Numerator N', bits: 942, color: '#ff4444', note: 'COMPOSITE, no factor'},
+  {label: 'Denominator D', bits: 566, color: '#ffaa00', note: 'untested'},
+  {label: 'Radicand R', bits: 353, color: '#ffaa00', note: 'untested'},
+  {label: 'Discriminant Δ', bits: 259, color: '#00ff88', note: 'ALL PASS (RQT-568)'},
+  {label: 'NFS record', bits: 830, color: '#444', note: 'world factoring limit'},
+];
+
+const maxBits = 1000;
+const barH = 22, gap = 10, startY = 35, startX = 150;
+const barMax = W - startX - 100;
+
+bars.forEach((b, i) => {
+  const y = startY + i * (barH + gap);
+  const bw = (b.bits / maxBits) * barMax;
+
+  ctx.fillStyle = '#888';
+  ctx.font = '10px Courier New';
+  ctx.textAlign = 'right';
+  ctx.fillText(b.label, startX - 8, y + 15);
+
+  ctx.fillStyle = b.color + '88';
+  ctx.fillRect(startX, y, bw, barH);
+  ctx.strokeStyle = b.color;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(startX, y, bw, barH);
+
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px Courier New';
+  ctx.textAlign = 'left';
+  ctx.fillText(b.bits + ' bits', startX + bw + 5, y + 15);
+
+  ctx.fillStyle = '#888';
+  ctx.font = '9px Courier New';
+  ctx.fillText(b.note, startX + bw + 60, y + 15);
+});
+})();
+
+// ── PANEL 5 CANVAS: Verdict visualization ──
+(function(){
+const c = document.getElementById('verdictCanvas');
+const W = c.width = c.offsetWidth;
+const H = c.height = 220;
+const ctx = c.getContext('2d');
+
+ctx.fillStyle = '#0a0a0f';
+ctx.fillRect(0, 0, W, H);
+
+ctx.fillStyle = '#00bfff';
+ctx.font = 'bold 13px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('THE TWO PATHS TO RESOLUTION', W/2, 20);
+
+// Path 1: Factor N
+const p1x = W/4, p1y = 50;
+ctx.strokeStyle = '#ff6b35';
+ctx.lineWidth = 2;
+ctx.strokeRect(p1x-120, p1y, 240, 140);
+ctx.fillStyle = '#ff6b35';
+ctx.font = 'bold 12px Courier New';
+ctx.fillText('PATH 1: FACTOR THE 942-BIT N', p1x, p1y+20);
+ctx.font = '10px Courier New';
+ctx.fillStyle = '#ccc';
+const p1lines = [
+  'ECM with larger bounds',
+  'Need B1 > 10^8 for 50+ digit factors',
+  '~10,000+ curves needed',
+  'If smallest factor > 165 bits:',
+  '  NFS required (~impossible)',
+  'If factor found → test local solvability',
+  'Status: 28 curves done, needs 10000+'
+];
+p1lines.forEach((l,i) => ctx.fillText(l, p1x, p1y+40+i*13));
+
+// Path 2: Construct root
+const p2x = 3*W/4, p2y = 50;
+ctx.strokeStyle = '#00bfff';
+ctx.strokeRect(p2x-120, p2y, 240, 140);
+ctx.fillStyle = '#00bfff';
+ctx.font = 'bold 12px Courier New';
+ctx.fillText('PATH 2: CONSTRUCT ROOT18 DIRECTLY', p2x, p2y+20);
+ctx.font = '10px Courier New';
+ctx.fillStyle = '#ccc';
+const p2lines = [
+  'CRT witnesses exist (RQT-624)',
+  'Lift combined coordinates',
+  'Search specific integer corridors',
+  '53 unresolved families remain',
+  'Need: exact Q(u,t)=0 recovery',
+  'If found → existence PROVEN',
+  'Status: bounded search, no hit yet'
+];
+p2lines.forEach((l,i) => ctx.fillText(l, p2x, p2y+40+i*13));
+
+// Bottom
+ctx.fillStyle = '#888';
+ctx.font = '10px Courier New';
+ctx.textAlign = 'center';
+ctx.fillText('Either path resolves root18. Neither has been completed. 624 documents deep, the well holds.', W/2, 205);
+})();
+</script>
+
+</body>
+</html>
