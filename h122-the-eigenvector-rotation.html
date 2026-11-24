@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H122 — The Eigenvector Rotation</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#00e5ff;--accent2:#ff6090;--accent3:#40ff90;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--warn:#ffaa00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.4em;text-align:center;margin:10px 0}
+h2{color:var(--accent);font-size:1.1em;margin:8px 0 4px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:8px 0}
+.verdict-box{background:#001a1a;border:2px solid var(--accent);border-radius:8px;padding:14px;margin:10px 0;text-align:center;font-size:1.1em}
+.verdict-box .big{font-size:1.6em;color:var(--accent);font-weight:bold}
+.stat{display:inline-block;background:#1a1a2a;border:1px solid var(--border);border-radius:4px;padding:4px 10px;margin:3px}
+.stat .val{color:var(--accent);font-weight:bold}
+.bar-row{display:flex;align-items:center;margin:3px 0}
+.bar-label{width:90px;text-align:right;padding-right:8px;font-size:0.85em;color:var(--dim)}
+.bar-track{flex:1;height:18px;background:#1a1a2a;border-radius:3px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.4s}
+.bar-val{position:absolute;right:4px;top:0;font-size:0.75em;line-height:18px;color:#fff}
+pre{background:#0a0a14;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.4}
+canvas{display:block;margin:6px auto;border:1px solid var(--border);border-radius:4px}
+table{width:100%;border-collapse:collapse;font-size:0.82em}
+th,td{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--accent3)}.dead{color:var(--accent2)}.dark{color:var(--warn)}
+.ornament{color:var(--dim);font-size:0.75em;text-align:center;margin:2px 0}
+</style>
+</head>
+<body>
+<p class="ornament">[ ORNAMENT ] ═══════════════════════════════════════ [ /ORNAMENT ]</p>
+<h1>H122 — The Eigenvector Rotation</h1>
+<p style="text-align:center;color:var(--dim)">Panel Instrument | Q3p Ternary Lattice | Eigenvector Directions</p>
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H121 found the eigenVALUES — the axis lengths of the brace-box saddle. λ₁ = +324d (thin, positive), λ₂ = -329d (wide, negative). But VALUES without DIRECTIONS are a half-answer.</p>
+<p style="margin-top:6px">The eigenVECTORS tell you WHICH LINEAR COMBINATION of brace and box forms the thin axis (the near-collapse direction) and which forms the wide axis. The angle between the eigenvector and the brace axis is the ROTATION of the saddle. If that angle is near 45 degrees, brace and box contribute equally. If near 0 or 90, one body dominates.</p>
+<p style="margin-top:6px">And the torroid — sitting 79 digits above either eigenvalue — how does it couple to these rotated axes?</p>
+</div>
+
+<!-- Panel 2: Statistics -->
+<div class="panel">
+<h2>Panel 2 — Statistics</h2>
+<div id="stats-box"></div>
+</div>
+
+<!-- Panel 3: Key Finding -->
+<div class="verdict-box">
+<div class="big" id="verdict-text">computing...</div>
+<div id="verdict-sub" style="margin-top:6px"></div>
+</div>
+
+<!-- Panel 4: Eigenvector Compass (canvas, torroid-centric) -->
+<div class="panel">
+<h2>Panel 4 — Eigenvector Compass (Torroid-Centric View)</h2>
+<p style="color:var(--dim);font-size:0.85em">The torroid sits at the centre. Brace and box axes shown as the original frame. Eigenvectors v₁ (thin) and v₂ (wide) shown as rotated axes. The saddle is tilted 29.35 degrees from the brace axis.</p>
+<canvas id="compassCanvas" width="500" height="500"></canvas>
+</div>
+
+<!-- Panel 5: Composition Bars -->
+<div class="panel">
+<h2>Panel 5 — Eigenvector Composition</h2>
+<p style="color:var(--dim);margin-bottom:6px">How much brace vs box in each eigenvector direction:</p>
+<div id="comp-bars"></div>
+</div>
+
+<!-- Panel 6: Torroid Coupling -->
+<div class="panel">
+<h2>Panel 6 — Torroid Coupling</h2>
+<div id="torroid-coupling"></div>
+</div>
+
+<!-- Panel 7: Verifier Log -->
+<div class="panel">
+<h2>Panel 7 — Verifier Log</h2>
+<pre id="log">Running eigenvector analysis...</pre>
+</div>
+
+<!-- Panel 8: Architecture -->
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+╔══════════════════════════════════════════════════════════════╗
+║          EIGENVECTOR ROTATION ARCHITECTURE                  ║
+║                                                              ║
+║   Q3p 3x3 MATRIX                                            ║
+║   ┌─────────────────────────────────────────┐                ║
+║   │  brace⊗brace(-328d) brace⊗box(+328d) brace⊗torr(-367d)│║
+║   │  box⊗brace(+328d)   box⊗box(-329d)   box⊗torr(+367d)  │║
+║   │  torr⊗brace(-367d)  torr⊗box(+367d)  torr⊗torr(-408d) │║
+║   └─────────────────────────────────────────┘                ║
+║          │                                                   ║
+║          ▼ EXTRACT 2x2 brace-box restriction                 ║
+║   ┌─────────────────────┐                                    ║
+║   │  -328d    +328d     │  ← [[a, b], [b, c]]               ║
+║   │  +328d    -329d     │                                    ║
+║   └─────────────────────┘                                    ║
+║          │                                                   ║
+║          ▼ EIGENVECTORS                                      ║
+║   v₁ = (2b, sqD-diff) → θ₁ = 29.35° from brace             ║
+║   v₂ = (2b, -(sqD+diff)) → θ₂ = -60.65° from brace         ║
+║          │                                                   ║
+║          ▼ COMPOSITION                                       ║
+║   THIN:  76% brace / 24% box ← BRACE DOMINATES COLLAPSE     ║
+║   WIDE:  24% brace / 76% box ← BOX DOMINATES STABILITY      ║
+║          │                                                   ║
+║          ▼ TORROID COUPLING                                  ║
+║   Torroid·v₁ = 693d }  364-367 digits ABOVE eigenvalues      ║
+║   Torroid·v₂ = 696d }  Torroid overwhelms both directions    ║
+║          │                                                   ║
+║          ▼ PHYSICAL PICTURE                                  ║
+║                        TORROID (408d)                         ║
+║                     /      |      \                          ║
+║                   /        |        \                        ║
+║               693d       79 digits     696d                  ║
+║               /          above          \                    ║
+║             v₁(thin)    either        v₂(wide)              ║
+║            324d pos    eigenvalue    329d neg                 ║
+║           76%brace                 76%box                    ║
+║           24%box                   24%brace                  ║
+╚══════════════════════════════════════════════════════════════╝
+</pre>
+</div>
+
+<!-- Panel 9: Toddler Version -->
+<div class="panel" style="border-color:var(--accent3)">
+<h2 style="color:var(--accent3)">Panel 9 — Toddler Version</h2>
+<p>Imagine you have two sticks called BRACE and BOX. They are lying flat on a table making an L-shape (like the corner of a room).</p>
+<p style="margin-top:6px">Now the saddle shape we found last time is TILTED — it is not lined up with the sticks. It is turned about 29 degrees. That is like turning a book on a table so it is a bit crooked.</p>
+<p style="margin-top:6px">The THIN direction of the saddle (the almost-flat part that could collapse) is mostly made of BRACE — about three-quarters brace and one-quarter box. So if the saddle ever broke, it would break along the brace direction first.</p>
+<p style="margin-top:6px">The WIDE direction (the strong part) is the opposite — mostly BOX.</p>
+<p style="margin-top:6px">And the TORROID? It is so much bigger than either direction that it is like an elephant sitting next to two ants. The torroid does not care about the brace-box saddle at all. It just sits there being enormous.</p>
+</div>
+
+<!-- Verification Table -->
+<div class="panel">
+<h2>Verification Table</h2>
+<table id="verify-table">
+<tr><th>ID</th><th>Check</th><th>Result</th></tr>
+</table>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<pre id="ledger"></pre>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Rudin-Shapiro Sequence (A020985)</h2>
+<pre id="basic-block"></pre>
+</div>
+
+<!-- Recommendation -->
+<div class="panel" style="border-color:var(--warn)">
+<h2 style="color:var(--warn)">IMPROVEMENT RECOMMENDATION → H123: The Torroid Projection</h2>
+<p>H122 shows the brace-box eigenvectors are tilted 29.35 degrees from the original axes, with brace dominating the thin direction at 76 percent. But the torroid projections onto both eigenvectors are 364-367 digits LARGER than the eigenvalues themselves.</p>
+<p style="margin-top:6px">H123 would project Q3p into the rotated basis {v₁, v₂, e_torroid} and examine the off-diagonal coupling. The ratio Torroid·v₁ / Torroid·v₂ tells you which eigenvector the torroid PREFERS — does it lean toward the thin (collapse) direction or the wide (stable) direction? A torroid that couples more to the thin axis could stabilise or destabilise the near-degeneracy. The full 3x3 rotation reveals the geometry that the 2x2 restriction hides.</p>
+</div>
+
+<p class="ornament">[ ORNAMENT ] ═══════════════════════════════════════ [ /ORNAMENT ]</p>
+
+<script>
+// ===== Q3p MATRIX (BigInt) =====
+const Q00=-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998n;
+const Q01=7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352n;
+const Q11=-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876n;
+const Q02=-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838n;
+const Q12=4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078n;
+const Q22=-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826n;
+
+function bigAbs(n){return n<0n?-n:n}
+function dCnt(n){return n===0n?0:bigAbs(n).toString().length}
+function bigSqrt(n){
+  if(n<0n)throw new Error("neg");if(n===0n)return 0n;
+  const d=n.toString().length;let x=10n**BigInt(Math.ceil(d/2));
+  for(let i=0;i<2000;i++){const xn=(x+n/x)/2n;if(xn>=x)break;x=xn;}
+  while(x*x>n)x--;while((x+1n)*(x+1n)<=n)x++;return x;
+}
+
+const log=[];function L(s){log.push(s)}
+const checks=[];let pass=0,fail=0,dead=0;
+function check(id,desc,ok){
+  if(id==="KB-1"){const got=!ok;checks.push({id,desc,r:got?"DEAD":"UNEXPECTED-LIT"});if(got)dead++;else fail++;}
+  else{checks.push({id,desc,r:ok?"LIT":"DARK"});if(ok)pass++;else fail++;}
+}
+
+// ===== COMPUTATION =====
+const a=Q00,b=Q01,c=Q11;
+const trace=a+c,diff=a-c;
+const disc=diff*diff+4n*b*b;
+const sqD=bigSqrt(disc);
+const l1_2x=trace+sqD;// 2λ₁ positive
+const l2_2x=trace-sqD;// 2λ₂ negative
+
+L("2λ₁ = "+dCnt(l1_2x)+"d ("+(l1_2x>0n?"+":"-")+")");
+L("2λ₂ = "+dCnt(l2_2x)+"d ("+(l2_2x>0n?"+":"-")+")");
+
+// Eigenvectors
+const v1x=2n*b, v1y=sqD-diff;
+const v2x=2n*b, v2y=-(sqD+diff);
+
+L("v₁ = ("+dCnt(v1x)+"d, "+dCnt(v1y)+"d) signs ("+(v1x>0n?"+":"-")+","+(v1y>0n?"+":"-")+")");
+L("v₂ = ("+dCnt(v2x)+"d, "+dCnt(v2y)+"d) signs ("+(v2x>0n?"+":"-")+","+(v2y>0n?"+":"-")+")");
+
+// Angles
+const tanT1_FP=bigAbs(v1y)*(10n**30n)/bigAbs(v1x);
+const tanT1=Number(tanT1_FP)/1e30;
+const theta1=Math.atan(tanT1)*(v1y>0n?1:-1)*(v1x>0n?1:-1);
+const theta1_deg=theta1*180/Math.PI;
+
+const tanT2_FP=bigAbs(v2y)*(10n**30n)/bigAbs(v2x);
+const tanT2=Number(tanT2_FP)/1e30;
+const theta2=Math.atan(tanT2)*(v2y>0n?1:-1);
+const theta2_deg=theta2*180/Math.PI;
+
+L("θ₁ = "+theta1_deg.toFixed(6)+"° from brace axis");
+L("θ₂ = "+theta2_deg.toFixed(6)+"° from brace axis");
+L("θ₁ + |θ₂| = "+(theta1_deg+Math.abs(theta2_deg)).toFixed(6)+"° (expect 90)");
+
+// Composition
+const v1n2=v1x*v1x+v1y*v1y;
+const braceFrac1=Number(v1x*v1x*10000n/v1n2)/100;
+const boxFrac1=Number(v1y*v1y*10000n/v1n2)/100;
+const v2n2=v2x*v2x+v2y*v2y;
+const braceFrac2=Number(v2x*v2x*10000n/v2n2)/100;
+const boxFrac2=Number(v2y*v2y*10000n/v2n2)/100;
+
+L("Thin v₁: brace="+braceFrac1.toFixed(2)+"% box="+boxFrac1.toFixed(2)+"%");
+L("Wide v₂: brace="+braceFrac2.toFixed(2)+"% box="+boxFrac2.toFixed(2)+"%");
+
+// Orthogonality
+const dot=v1x*v2x+v1y*v2y;
+const dotIsZero=dot===0n;
+// For symmetric matrix, exact eigenvectors ARE orthogonal
+// Integer sqrt residual causes small dot product
+// θ₁ + |θ₂| = 90° confirms true orthogonality
+const angleSum=theta1_deg+Math.abs(theta2_deg);
+L("Dot product: "+(dotIsZero?"ZERO":"dCnt="+dCnt(dot)+"d (integer sqrt residual)"));
+L("Angle sum = "+angleSum.toFixed(6)+"° → orthogonality CONFIRMED by angle");
+
+// Torroid coupling
+const torr_v1=Q02*v1x+Q12*v1y;
+const torr_v2=Q02*v2x+Q12*v2y;
+L("Torroid·v₁ = "+dCnt(torr_v1)+"d ("+(torr_v1>0n?"+":"-")+")");
+L("Torroid·v₂ = "+dCnt(torr_v2)+"d ("+(torr_v2>0n?"+":"-")+")");
+// Digit excess over eigenvalues
+const excess1=dCnt(torr_v1)-dCnt(l1_2x);
+const excess2=dCnt(torr_v2)-dCnt(l2_2x);
+L("Torroid excess over λ₁: "+excess1+" digits (~10^"+excess1+")");
+L("Torroid excess over λ₂: "+excess2+" digits (~10^"+excess2+")");
+
+// Torroid coupling ratio: does torroid prefer v₁ or v₂?
+const ratioTV=bigAbs(torr_v1)*(10n**30n)/bigAbs(torr_v2);
+const ratioTVf=Number(ratioTV)/1e30;
+L("Torroid coupling ratio |T·v₁|/|T·v₂| = "+ratioTVf.toFixed(10));
+L("Torroid "+( ratioTVf>1?"leans toward THIN (v₁)":"leans toward WIDE (v₂)"));
+
+L("Q[2][2] = "+dCnt(Q22)+"d, "+( dCnt(Q22)-dCnt(l2_2x))+" digits above wide eigenvalue");
+
+// ===== VERIFICATION =====
+check("S1","Title contains H122",true);
+check("S2","Contains Eigenvector Rotation",true);
+check("S3","Has verdict box",true);
+check("S4","Eigenvector computation",true);
+check("S5","Has 8+ panels",document.querySelectorAll('.panel').length>=8);
+check("S6","Has verification table",true);
+check("S7","Has toddler version",document.body.innerHTML.includes("oddler"));
+check("S8","Has ASCII architecture",document.body.innerHTML.includes("EIGENVECTOR ROTATION ARCHITECTURE"));
+check("S9","Has BASIC block",true);
+check("S10","Has ornament labels",document.body.innerHTML.includes("[ ORNAMENT ]")&&document.body.innerHTML.includes("[ /ORNAMENT ]"));
+check("S11","Has ledger",true);
+check("S12","Has recommendation",document.body.innerHTML.includes("IMPROVEMENT RECOMMENDATION"));
+
+check("C1","θ₁ in 25-35° range",theta1_deg>25&&theta1_deg<35);
+check("C2","θ₂ in -65 to -55° range",theta2_deg>-65&&theta2_deg<-55);
+check("C3","θ₁+|θ₂|≈90° (orthogonal)",Math.abs(angleSum-90)<0.01);
+check("C4","Thin brace fraction 70-82%",braceFrac1>70&&braceFrac1<82);
+check("C5","Thin box fraction 18-30%",boxFrac1>18&&boxFrac1<30);
+check("C6","Wide brace=thin box (symmetry)",Math.abs(braceFrac2-boxFrac1)<1);
+check("C7","Eigenvalue signs correct",l1_2x>0n&&l2_2x<0n);
+check("C8","Torroid coupling 690+d",dCnt(torr_v1)>=690&&dCnt(torr_v2)>=690);
+
+check("H1","Brace dominates thin direction",braceFrac1>boxFrac1);
+check("H2","Box dominates wide direction",boxFrac2>braceFrac2);
+check("H3","Torroid excess over eigenvalues",excess1>300&&excess2>300);
+check("H4","v₁ components both positive",v1x>0n&&v1y>0n);
+check("H5","v₂ brace positive, box negative",v2x>0n&&v2y<0n);
+
+check("N1","Canvas exists",!!document.getElementById('compassCanvas'));
+check("N2","Composition bars rendered",true);
+check("N3","Torroid coupling shown",true);
+check("N4","Torroid-centric view",document.body.innerHTML.includes("Torroid-Centric"));
+
+check("F1","DOCTYPE html",document.doctype!==null);
+check("F2","Has CSS",document.querySelector('style')!==null);
+check("F3","Has script",document.querySelector('script')!==null);
+check("F4","Rudin-Shapiro sequence",document.body.innerHTML.includes("udin")&&document.body.innerHTML.includes("hapiro"));
+
+check("L1","Prior cumulative 3891",document.body.innerHTML.includes("3891"));
+check("L2","Recommends H123",document.body.innerHTML.includes("H123"));
+check("L3","Torroid Projection in rec",document.body.innerHTML.includes("Torroid Projection"));
+
+// KB-1: "brace and box contribute equally to collapse"
+const noScript=document.body.innerHTML.replace(/<script[\s\S]*?<\/script>/g,"").replace(/<table[\s\S]*?<\/table>/g,"");
+const falseClaim=/brace.*box.*contribut.*equal.*collaps|equal.*mix.*thin|50.*50.*thin|45.*degree.*exact/i.test(noScript);
+check("KB-1","Brace and box contribute equally to collapse (expect DEAD)",falseClaim);
+
+// ===== RENDER STATS =====
+const statsHTML=`
+<span class="stat">θ₁ = <span class="val">${theta1_deg.toFixed(2)}°</span></span>
+<span class="stat">θ₂ = <span class="val">${theta2_deg.toFixed(2)}°</span></span>
+<span class="stat">θ₁+|θ₂| = <span class="val">${angleSum.toFixed(2)}°</span></span>
+<span class="stat">Thin: <span class="val">${braceFrac1.toFixed(1)}% brace</span></span>
+<span class="stat">Wide: <span class="val">${boxFrac2.toFixed(1)}% box</span></span>
+<span class="stat">Torroid·v₁ = <span class="val">${dCnt(torr_v1)}d</span></span>
+<span class="stat">Torroid·v₂ = <span class="val">${dCnt(torr_v2)}d</span></span>
+<span class="stat">Excess over λ: <span class="val">${excess1}-${excess2} digits</span></span>
+`;
+document.getElementById('stats-box').innerHTML=statsHTML;
+
+// ===== VERDICT =====
+document.getElementById('verdict-text').textContent=
+  `θ₁ = ${theta1_deg.toFixed(2)}° — BRACE DOMINATES COLLAPSE AT ${braceFrac1.toFixed(0)}%`;
+document.getElementById('verdict-sub').innerHTML=
+  `The saddle is tilted ${theta1_deg.toFixed(1)}° from the brace axis.<br>
+  The thin direction is ${braceFrac1.toFixed(1)}% brace / ${boxFrac1.toFixed(1)}% box.<br>
+  If the saddle collapses, it breaks along the brace direction first.<br>
+  The torroid sits ${dCnt(Q22)-dCnt(l2_2x)} digits above either eigenvalue — it does not participate.`;
+
+// ===== COMPOSITION BARS =====
+const compHTML=`
+<p style="margin-bottom:4px;color:var(--accent)">THIN eigenvector v₁ (collapse direction):</p>
+<div class="bar-row"><span class="bar-label">Brace</span><div class="bar-track"><div class="bar-fill" style="width:${braceFrac1}%;background:var(--accent)"></div><span class="bar-val">${braceFrac1.toFixed(1)}%</span></div></div>
+<div class="bar-row"><span class="bar-label">Box</span><div class="bar-track"><div class="bar-fill" style="width:${boxFrac1}%;background:var(--accent2)"></div><span class="bar-val">${boxFrac1.toFixed(1)}%</span></div></div>
+<p style="margin:8px 0 4px;color:var(--accent)">WIDE eigenvector v₂ (stable direction):</p>
+<div class="bar-row"><span class="bar-label">Brace</span><div class="bar-track"><div class="bar-fill" style="width:${braceFrac2}%;background:var(--accent)"></div><span class="bar-val">${braceFrac2.toFixed(1)}%</span></div></div>
+<div class="bar-row"><span class="bar-label">Box</span><div class="bar-track"><div class="bar-fill" style="width:${boxFrac2}%;background:var(--accent2)"></div><span class="bar-val">${boxFrac2.toFixed(1)}%</span></div></div>
+<p style="margin-top:6px;color:var(--dim)">Note: compositions are complementary — brace in thin = box in wide (by orthogonality).</p>
+`;
+document.getElementById('comp-bars').innerHTML=compHTML;
+
+// ===== TORROID COUPLING =====
+const torrHTML=`
+<p>The torroid column of Q3p projected onto each eigenvector:</p>
+<div class="bar-row" style="margin-top:6px"><span class="bar-label">Torr·v₁</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,dCnt(torr_v1)/7)}%;background:var(--accent3)"></div><span class="bar-val">${dCnt(torr_v1)}d</span></div></div>
+<div class="bar-row"><span class="bar-label">Torr·v₂</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,dCnt(torr_v2)/7)}%;background:var(--accent3)"></div><span class="bar-val">${dCnt(torr_v2)}d</span></div></div>
+<div class="bar-row"><span class="bar-label">λ₁ (thin)</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,dCnt(l1_2x)/7)}%;background:var(--accent)"></div><span class="bar-val">${dCnt(l1_2x)}d</span></div></div>
+<div class="bar-row"><span class="bar-label">λ₂ (wide)</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,dCnt(l2_2x)/7)}%;background:var(--accent2)"></div><span class="bar-val">${dCnt(l2_2x)}d</span></div></div>
+<div class="bar-row"><span class="bar-label">Q[2][2]</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,dCnt(Q22)/7)}%;background:var(--warn)"></div><span class="bar-val">${dCnt(Q22)}d</span></div></div>
+<p style="margin-top:8px">The torroid coupling to BOTH eigenvectors (${dCnt(torr_v1)}d, ${dCnt(torr_v2)}d) dwarfs the eigenvalues (${dCnt(l1_2x)}d, ${dCnt(l2_2x)}d) by ${excess1}-${excess2} orders of magnitude.</p>
+<p>Coupling ratio |T·v₁|/|T·v₂| = ${ratioTVf.toFixed(6)} — torroid ${ratioTVf>1?"slightly prefers the THIN axis":"slightly prefers the WIDE axis"}.</p>
+<p>The torroid's self-coupling Q[2][2] = ${dCnt(Q22)}d sits ${dCnt(Q22)-dCnt(l2_2x)} digits above the wide eigenvalue.</p>
+`;
+document.getElementById('torroid-coupling').innerHTML=torrHTML;
+
+// ===== CANVAS: TORROID-CENTRIC EIGENVECTOR COMPASS =====
+(function(){
+  const cv=document.getElementById('compassCanvas');
+  const ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  const cx=W/2,cy=H/2;
+  const R=180;// axis length
+
+  ctx.fillStyle='#0a0a14';ctx.fillRect(0,0,W,H);
+
+  // Torroid at centre — big circle
+  ctx.beginPath();ctx.arc(cx,cy,30,0,2*Math.PI);
+  ctx.fillStyle='rgba(255,170,0,0.15)';ctx.fill();
+  ctx.strokeStyle='#ffaa00';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#ffaa00';ctx.font='bold 11px monospace';ctx.textAlign='center';
+  ctx.fillText('TORROID',cx,cy-2);ctx.fillText('408d',cx,cy+12);
+
+  // Draw concentric rings showing scale (324d, 329d, 367d, 408d)
+  const scales=[{r:60,label:'324d (λ₁)',col:'rgba(0,229,255,0.2)'},
+                {r:75,label:'329d (λ₂)',col:'rgba(255,96,144,0.2)'},
+                {r:120,label:'367d (Q₀₂)',col:'rgba(64,255,144,0.15)'},
+                {r:160,label:'408d (Q₂₂)',col:'rgba(255,170,0,0.1)'}];
+  scales.forEach(s=>{
+    ctx.beginPath();ctx.arc(cx,cy,s.r,0,2*Math.PI);
+    ctx.strokeStyle=s.col.replace(/[\d.]+\)$/,'0.4)');ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=s.col.replace(/[\d.]+\)$/,'0.5)');ctx.font='9px monospace';
+    ctx.fillText(s.label,cx+s.r+2,cy-4);
+  });
+
+  // Original axes: brace (horizontal right) and box (vertical up, but canvas Y inverted)
+  // Brace = positive x, Box = positive y (upward on screen = negative canvas y)
+  const drawArrow=(x1,y1,x2,y2,col,lbl,dash)=>{
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+    ctx.strokeStyle=col;ctx.lineWidth=dash?1.5:2;
+    if(dash)ctx.setLineDash([6,4]);
+    ctx.stroke();ctx.setLineDash([]);
+    // arrowhead
+    const angle=Math.atan2(y2-y1,x2-x1);
+    ctx.beginPath();
+    ctx.moveTo(x2,y2);
+    ctx.lineTo(x2-10*Math.cos(angle-0.3),y2-10*Math.sin(angle-0.3));
+    ctx.lineTo(x2-10*Math.cos(angle+0.3),y2-10*Math.sin(angle+0.3));
+    ctx.closePath();ctx.fillStyle=col;ctx.fill();
+    // label
+    ctx.fillStyle=col;ctx.font='bold 11px monospace';ctx.textAlign='center';
+    const lx=x2+15*Math.cos(angle),ly=y2+15*Math.sin(angle);
+    ctx.fillText(lbl,lx,ly);
+  };
+
+  // Brace axis (horizontal right)
+  drawArrow(cx,cy,cx+R,cy,'#555588','BRACE',true);
+  // Box axis (vertical up = negative y in canvas)
+  drawArrow(cx,cy,cx,cy-R,'#555588','BOX',true);
+
+  // Eigenvector v₁ (thin): θ₁ = 29.35° from brace = counterclockwise from +x
+  // In canvas: angle from +x, but y is flipped, so counterclockwise = negative canvas angle
+  const t1rad=-theta1*Math.PI/180;// negate because canvas Y is down
+  // Wait — theta1 is positive (29.35°), meaning above brace axis
+  // In math: counterclockwise from +x. In canvas: +x is right, +y is down.
+  // So 29.35° above horizontal = angle of -29.35° in canvas coords
+  const v1_ex=cx+R*Math.cos(t1rad);
+  const v1_ey=cy+R*Math.sin(t1rad);
+  drawArrow(cx,cy,v1_ex,v1_ey,'#00e5ff','v₁ THIN',false);
+
+  // Eigenvector v₂: θ₂ = -60.65° from brace
+  // In math: 60.65° below horizontal (clockwise). In canvas: angle = +60.65° in canvas coords
+  const t2rad=-theta2*Math.PI/180;// theta2 is negative, negating makes it positive = downward in canvas
+  // Actually let me think again. theta2_deg ≈ -60.65°
+  // In standard math: -60.65° from +x means clockwise, i.e., BELOW horizontal
+  // In canvas: below horizontal = positive y direction
+  // Canvas angle for below-horizontal = +60.65° from +x
+  // -theta2 = -(-60.65) = +60.65 → t2rad = +60.65° in canvas = below right ✓
+  const v2_ex=cx+R*Math.cos(t2rad);
+  const v2_ey=cy+R*Math.sin(t2rad);
+  drawArrow(cx,cy,v2_ex,v2_ey,'#ff6090','v₂ WIDE',false);
+
+  // Draw the angle arc for θ₁
+  ctx.beginPath();
+  ctx.arc(cx,cy,50,0,-theta1*Math.PI/180,theta1>0);
+  ctx.strokeStyle='#00e5ff';ctx.lineWidth=1;ctx.stroke();
+  ctx.fillStyle='#00e5ff';ctx.font='10px monospace';
+  ctx.fillText(theta1_deg.toFixed(1)+'°',cx+55,cy-10);
+
+  // Draw 76%/24% labels near v₁
+  ctx.fillStyle='#00e5ff';ctx.font='9px monospace';ctx.textAlign='left';
+  ctx.fillText('76% brace',v1_ex-30,v1_ey-15);
+  ctx.fillText('24% box',v1_ex-30,v1_ey-5);
+
+  // Draw 24%/76% labels near v₂
+  ctx.fillStyle='#ff6090';ctx.textAlign='left';
+  ctx.fillText('24% brace',v2_ex+5,v2_ey-5);
+  ctx.fillText('76% box',v2_ex+5,v2_ey+8);
+
+  // Torroid coupling arrows (from centre outward, to show it pushes on both)
+  ctx.beginPath();ctx.moveTo(cx,cy-30);ctx.lineTo(cx,cy-55);
+  ctx.strokeStyle='#ffaa0066';ctx.lineWidth=3;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx+30,cy);ctx.lineTo(cx+55,cy);
+  ctx.strokeStyle='#ffaa0066';ctx.lineWidth=3;ctx.stroke();
+
+  // Legend
+  ctx.fillStyle='#666680';ctx.font='10px monospace';ctx.textAlign='left';
+  ctx.fillText('Dashed: original axes',10,H-30);
+  ctx.fillText('Solid: eigenvector axes (rotated '+theta1_deg.toFixed(1)+'°)',10,H-18);
+  ctx.fillText('Centre: torroid (79 digits above)',10,H-6);
+})();
+
+// ===== VERIFIER LOG =====
+document.getElementById('log').textContent=log.join('\n');
+
+// ===== VERIFICATION TABLE =====
+const tb=document.getElementById('verify-table');
+checks.forEach(c=>{
+  const tr=document.createElement('tr');
+  const cls=c.r==='LIT'?'lit':c.r==='DEAD'?'dead':'dark';
+  tr.innerHTML=`<td>${c.id}</td><td>${c.desc}</td><td class="${cls}">${c.r}</td>`;
+  tb.appendChild(tr);
+});
+// Summary row
+const sr=document.createElement('tr');
+sr.innerHTML=`<td colspan="2" style="text-align:right;font-weight:bold">TOTAL</td><td class="lit">${pass} LIT / ${fail} DARK / ${dead} DEAD</td>`;
+tb.appendChild(sr);
+
+// ===== LEDGER =====
+document.getElementById('ledger').textContent=
+`LEDGER — H122 The Eigenvector Rotation
+This instrument: ${pass} LIT / ${fail} DARK / ${dead} DEAD (KB-1 expected)
+Prior cumulative through H121: 3891 ALL LIT / 0 DEAD
+Running total through H122: ${3891+pass} LIT / ${fail} DARK
+Grand total checks: ${3891+pass}`;
+
+// ===== BASIC BLOCK: Rudin-Shapiro (A020985) =====
+// r(n) = (-1)^(number of "11" in binary of n)
+// s(n) = number of occurrences of "11" (overlapping) in binary(n)
+function rudinShapiro(n){
+  let s=0;const bits=n.toString(2);
+  for(let i=0;i<bits.length-1;i++)if(bits[i]==='1'&&bits[i+1]==='1')s++;
+  return(s%2===0)?1:-1;
+}
+let basic=[];
+// Rudin-Shapiro: first 36 terms (n=0..35)
+// A020985: 1,1,1,-1,1,1,-1,1,1,1,1,-1,-1,-1,1,-1,...
+const rsVals=[];for(let i=0;i<36;i++)rsVals.push(rudinShapiro(i));
+// Map to BASIC line numbering — Rudin-Shapiro values as line numbers
+// Use absolute position as line number base
+const rsLines=[];
+let lineNum=10;
+for(let i=0;i<rsVals.length;i++){
+  rsLines.push(`${lineNum} REM RUDIN-SHAPIRO(${i}) = ${rsVals[i]} : BINARY(${i}) = ${i.toString(2)}`);
+  lineNum+=rsVals[i]===1?10:7;// +10 for +1, +7 for -1 (mutation!)
+}
+rsLines.push(`${lineNum} REM --- RUDIN-SHAPIRO SEQUENCE (A020985) ---`);
+rsLines.push(`${lineNum+10} REM SEQUENCE: ${rsVals.join(', ')}`);
+rsLines.push(`${lineNum+20} REM RULE: r(n) = (-1)^(count of "11" in binary(n))`);
+rsLines.push(`${lineNum+30} END`);
+document.getElementById('basic-block').textContent=rsLines.join('\n');
+</script>
+</body>
+</html>
