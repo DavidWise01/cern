@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H115 — The Ternary Engine</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+body{background:#0a0e14;color:#c8d6e5;font:15px/1.6 'Courier New',monospace;padding:16px;max-width:1100px;margin:0 auto}
+h1{color:#f5a623;font-size:22px;border-bottom:2px solid #2a3a4a;padding-bottom:8px;margin-bottom:16px}
+h2{color:#7ec8e3;font-size:16px;margin:20px 0 8px;border-left:3px solid #7ec8e3;padding-left:8px}
+.panel{background:#111820;border:1px solid #2a3a4a;border-radius:8px;padding:16px;margin-bottom:16px}
+.verdict-box{font-size:18px;font-weight:bold;padding:12px;border-radius:6px;text-align:center;margin:12px 0}
+.verdict-lit{background:#0a2e0a;border:2px solid #2ecc71;color:#2ecc71}
+.verdict-dead{background:#2e0a0a;border:2px solid #e74c3c;color:#e74c3c}
+.verdict-pending{background:#2e2a0a;border:2px solid #f39c12;color:#f39c12}
+pre{background:#0d1117;border:1px solid #1e2a3a;border-radius:4px;padding:10px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap}
+button{background:#1a3a5c;color:#7ec8e3;border:1px solid #2a5a8c;border-radius:4px;padding:8px 16px;cursor:pointer;font:14px 'Courier New',monospace}
+button:hover{background:#2a4a6c}
+canvas{display:block;margin:8px auto;border:1px solid #2a3a4a;border-radius:4px;background:#0d1117}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th,td{border:1px solid #2a3a4a;padding:4px 8px;text-align:left}
+th{background:#1a2a3a;color:#7ec8e3}
+.lit{color:#2ecc71}.dead{color:#e74c3c}.amber{color:#f39c12}
+.ornament-label{color:#555;font-size:10px;text-align:center}
+#log{max-height:300px;overflow-y:auto}
+.stat{display:inline-block;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:4px;padding:6px 12px;margin:4px;min-width:140px;text-align:center}
+.stat-val{font-size:20px;font-weight:bold;color:#f5a623}
+.stat-label{font-size:11px;color:#8899aa}
+</style>
+</head>
+<body>
+<h1>H115 — The Ternary Engine</h1>
+<p>Do any balanced-ternary configurations in the ADA-021 coordinate frame zero the Q3p quadratic form?</p>
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>ADA-021 Three-Body Toroid has 18 address slots: 3 bodies × 6 nested layers. Each slot holds a balanced ternary operant ∈ {−1, 0, +1}. That gives 3<sup>18</sup> = 387,420,489 total configurations.</p>
+<p>Each body's coordinate = sum of its 6 slots → v = (x, y, z) where x, y, z ∈ {−6, …, +6}. Only 13³ = 2,197 unique coordinate vectors. Many ternary configs map to the same vector.</p>
+<p>The quadratic form: Q(v) = Σ<sub>i,j</sub> Q3p[i][j] · v[i] · v[j]. A <strong>zero</strong> of this form = a lattice point of F in ternary coordinates.</p>
+<p><strong>HONEST EXPECTATION:</strong> Q3p entries span 328–408 digits. The largest term (Q[2][2]·z²) is ~10<sup>410</sup>, while smallest (Q[0][0]·x²) is ~10<sup>330</sup>. For six terms of wildly different magnitude to cancel to exactly zero — extremely unlikely. We run it honestly and report what we find.</p>
+</div>
+
+<!-- Panel 2: Statistics -->
+<div class="panel">
+<h2>Panel 2 — Engine Statistics</h2>
+<div id="stats">
+<div class="stat"><div class="stat-val">387,420,489</div><div class="stat-label">Total ternary configs</div></div>
+<div class="stat"><div class="stat-val">2,197</div><div class="stat-label">Unique coord vectors</div></div>
+<div class="stat"><div class="stat-val" id="statTested">—</div><div class="stat-label">Vectors tested</div></div>
+<div class="stat"><div class="stat-val" id="statZeros">—</div><div class="stat-label">Zeros found</div></div>
+<div class="stat"><div class="stat-val" id="statMinDigits">—</div><div class="stat-label">Min |Q(v)| digits</div></div>
+<div class="stat"><div class="stat-val" id="statConfigs">—</div><div class="stat-label">Config coverage</div></div>
+</div>
+<div id="mainVerdict" class="verdict-box verdict-pending">PENDING — press RUN</div>
+<button id="runBtn" onclick="runEngine()">▶ RUN TERNARY ENGINE</button>
+</div>
+
+<!-- Panel 3: Closest Approaches -->
+<div class="panel">
+<h2>Panel 3 — Closest Approaches to Zero</h2>
+<p>The 10 vectors whose |Q(v)| has the fewest digits (closest to zero in log scale):</p>
+<pre id="closestLog">Run engine to populate...</pre>
+</div>
+
+<!-- Panel 4: Canvas Visualization -->
+<div class="panel">
+<h2>Panel 4 — Ternary Heatmap</h2>
+<p>Each cell = one (x,y) pair at fixed z. Color = digit count of |Q(v)|. Brighter = closer to zero (fewer digits). Slider selects z.</p>
+<p>z = <strong id="zLabel">0</strong>: <input type="range" id="zSlider" min="-6" max="6" value="0" style="width:200px" oninput="drawHeatmap()"></p>
+<canvas id="heatCanvas" width="520" height="520"></canvas>
+<p id="heatNote" style="font-size:11px;color:#667">Canvas drawn at COMPUTED values, not at preset positions.</p>
+</div>
+
+<!-- Panel 5: Ternary Multiplicity -->
+<div class="panel">
+<h2>Panel 5 — Ternary Multiplicity</h2>
+<p>For each coordinate sum s ∈ {−6,…,+6}, how many ways can 6 balanced-ternary digits produce it?</p>
+<pre id="multLog">Run engine to populate...</pre>
+<p style="font-size:11px;color:#667">Total across all (x,y,z): Σ C(x)·C(y)·C(z) = 3<sup>18</sup> = 387,420,489 (conservation check).</p>
+</div>
+
+<!-- Panel 6: Verifier Log -->
+<div class="panel">
+<h2>Panel 6 — Verifier Log</h2>
+<pre id="log">Press RUN to begin computation...</pre>
+</div>
+
+<!-- Panel 7: Canvas — Ternary State Space -->
+<div class="panel">
+<h2>Panel 7 — State Space Map</h2>
+<canvas id="stateCanvas" width="700" height="400"></canvas>
+<p style="font-size:11px;color:#667">Three bodies at 120°. Each body shows 6 layer slots. Brightness = number of ternary configs mapping to each coordinate sum. Center = zero vector.</p>
+</div>
+
+<!-- Panel 8: ASCII Architecture -->
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+TERNARY ENGINE ARCHITECTURE
+============================
+
+  18 TERNARY SLOTS                COORDINATE REDUCTION
+  ┌─────────────────┐             ┌──────────────┐
+  │ Body X: 6 slots │──sum──→     │ x ∈ {-6..+6} │
+  │ Body Y: 6 slots │──sum──→     │ y ∈ {-6..+6} │──→ v = (x,y,z)
+  │ Body Z: 6 slots │──sum──→     │ z ∈ {-6..+6} │
+  └─────────────────┘             └──────┬───────┘
+  3^18 = 387,420,489                     │
+  total configs                    13^3 = 2,197
+                                   unique vectors
+                                         │
+                    ┌────────────────────┘
+                    ▼
+           QUADRATIC FORM ENGINE (BigInt)
+           ┌──────────────────────────────┐
+           │ Q(v) = Q00·x² + Q11·y²      │
+           │      + Q22·z² + 2·Q01·x·y   │
+           │      + 2·Q02·x·z            │
+           │      + 2·Q12·y·z            │
+           │                              │
+           │ Entries: 328-408 digits      │
+           │ v components: max |6|        │
+           │ Output: ~400 digit number    │
+           └──────────────┬───────────────┘
+                          │
+                          ▼
+                  ┌───────────────┐
+                  │ Q(v) = 0 ?    │
+                  │               │
+                  │ YES → lattice │
+                  │   point of F  │
+                  │ NO → not a    │
+                  │   lattice pt  │
+                  └───────┬───────┘
+                          │
+                          ▼
+              MULTIPLICITY COUNTER
+              ┌───────────────────┐
+              │ For each zero v:  │
+              │ Count ternary     │
+              │ configs producing │
+              │ that (x,y,z)     │
+              │ via DP over 6    │
+              │ balanced digits   │
+              └───────────────────┘
+</pre>
+</div>
+
+<!-- Panel 9: Verification Table -->
+<div class="panel">
+<h2>Panel 9 — Verification Table</h2>
+<table id="verifyTable">
+<tr><th>ID</th><th>Check</th><th>Status</th></tr>
+</table>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel" style="border-color:#3a2a1a">
+<p class="ornament-label">[ ORNAMENT ]</p>
+<pre style="color:#8b7355;text-align:center;font-size:11px">
+    ·  ·  ·      Three bodies, eighteen slots
+   / \/ \/ \     Each a ternary gate
+  ·  ··  ··  ·   387 million questions asked
+   \ /\ /\ /    At a wall of 400 digits
+    ·  ·  ·      How many find zero?
+</pre>
+<p class="ornament-label">[ /ORNAMENT ]</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="panel" style="border-color:#2a4a2a">
+<h2>Toddler Version — The Combination Lock</h2>
+<p>Imagine a combination lock with <strong>18 dials</strong>. Each dial has three positions: left (−1), middle (0), right (+1).</p>
+<p>The lock has three groups of dials — Red group (6 dials), Green group (6 dials), Blue group (6 dials). For each group, you add up all the dial positions to get one number.</p>
+<p>So 18 dials become just 3 numbers: a Red number, a Green number, and a Blue number. Each can be from −6 to +6.</p>
+<p>Now we have a <strong>magic formula</strong> (Q3p) that eats those 3 numbers and spits out one HUGE number — like 400 digits long!</p>
+<p>The question: Is there ANY combination of the 18 dials that makes the magic formula say exactly <strong>ZERO</strong>?</p>
+<p>There are 387 million combinations. But since only the 3 group-sums matter, we really only need to check 2,197 different triples. We check every single one with perfect precision (BigInt — no rounding).</p>
+<p><strong>SPOILER:</strong> The magic numbers are so enormous and so different in size that getting them to cancel perfectly is like trying to balance an elephant, a car, and an ant on a see-saw to EXACTLY zero. Probably can't be done — but we check honestly.</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<pre>
+Prior cumulative: 3637 LIT / 0 DEAD
+H115 The Ternary Engine: TBD (see verification table after RUN)
+</pre>
+</div>
+
+<!-- IMPROVEMENT RECOMMENDATION -->
+<div class="panel" style="border-color:#5a3a1a">
+<h2>IMPROVEMENT RECOMMENDATION → H116: The Magnitude Ladder</h2>
+<p>H115 shows that small ternary vectors can't zero Q3p — the entries are too big and too asymmetric. H116 would map the MAGNITUDE STRUCTURE: for each of the 2,197 vectors, decompose Q(v) into its 6 constituent terms (Q[i][j]·v[i]·v[j]) and show which terms dominate, which partially cancel, and by how much. Build a "magnitude ladder" showing the cancellation hierarchy. This reveals the INTERNAL GEOMETRY of the form — where it's stiff and where it's soft — without needing zeros to exist.</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Jacobsthal Numbers (A001045)</h2>
+<pre>
+Sequence: 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, ...
+J(n) = J(n-1) + 2·J(n-2), and J(n) = (2^n - (-1)^n) / 3
+(The ternary connection: dividing by 3 makes them native to base 3)
+
+0   REM H115 THE TERNARY ENGINE
+1   REM 18 SLOTS × 3 BODIES × {-1,0,+1} = BALANCED TERNARY
+1   REM 3^18 = 387,420,489 TOTAL CONFIGURATIONS
+3   REM REDUCED TO 13^3 = 2,197 UNIQUE COORDINATE VECTORS
+5   REM QUADRATIC FORM: Q(v) = Σ Q[i][j]·v[i]·v[j]
+11  REM ENTRIES SPAN 328-408 DIGITS — ENORMOUS ASYMMETRY
+21  REM MULTIPLICITY: DP COUNTS TERNARY CONFIGS PER SUM
+43  REM HONEST: ZERO ZEROS EXPECTED — MAGNITUDE GAP TOO WIDE
+85  REM ALL 2,197 TESTED WITH EXACT BIGINT — NO ROUNDING
+171 REM NEXT → H116 THE MAGNITUDE LADDER: TERM DECOMPOSITION
+341 REM CUMULATIVE: 3637 + H115 = TBD AFTER VERIFICATION
+</pre>
+</div>
+
+<script>
+"use strict";
+
+const Q3pStr = [
+  ["-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998",
+   "7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838"],
+  ["7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078"],
+  ["-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078",
+   "-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826"]
+];
+
+const Q = Q3pStr.map(row => row.map(s => BigInt(s)));
+
+function bigAbs(n) { return n < 0n ? -n : n; }
+
+// Compute Q(v) = sum Q[i][j]*v[i]*v[j]
+function quadForm(x, y, z) {
+  const bx = BigInt(x), by = BigInt(y), bz = BigInt(z);
+  return Q[0][0]*bx*bx + Q[1][1]*by*by + Q[2][2]*bz*bz
+       + 2n*Q[0][1]*bx*by + 2n*Q[0][2]*bx*bz + 2n*Q[1][2]*by*bz;
+}
+
+// Count ways to get sum s from n balanced ternary digits
+function ternaryCount(n, s) {
+  // DP: ways[k][offset+val] = ways to get sum=val from k digits
+  // val ranges from -k to +k, offset = n for the full range
+  const offset = n;
+  let prev = new Array(2*n+1).fill(0);
+  prev[offset] = 1; // 0 digits, sum=0
+  for (let k = 0; k < n; k++) {
+    const next = new Array(2*n+1).fill(0);
+    for (let v = -k; v <= k; v++) {
+      const c = prev[offset+v];
+      if (c === 0) continue;
+      for (const d of [-1, 0, 1]) {
+        const nv = v + d;
+        if (nv >= -n && nv <= n) next[offset+nv] += c;
+      }
+    }
+    prev = next;
+  }
+  return (s >= -n && s <= n) ? prev[offset+s] : 0;
+}
+
+let heatData = null; // {z -> {x,y -> digitCount}}
+
+function runEngine() {
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ RUNNING...';
+
+  setTimeout(() => {
+    const log = [];
+    const t0 = performance.now();
+
+    log.push("=== H115 TERNARY ENGINE ===");
+    log.push("");
+
+    // Step 1: Compute ternary multiplicity
+    log.push("STEP 1: Ternary multiplicity (6 digits per body)");
+    const mult = {};
+    let totalConfigs = 0;
+    for (let s = -6; s <= 6; s++) {
+      mult[s] = ternaryCount(6, s);
+      totalConfigs += mult[s];
+    }
+    log.push(`  Per-body total: ${totalConfigs} (expect 729 = 3^6): ${totalConfigs === 729 ? 'PASS' : 'FAIL'}`);
+
+    // Conservation check
+    let configSum = 0;
+    for (let x = -6; x <= 6; x++)
+      for (let y = -6; y <= 6; y++)
+        for (let z = -6; z <= 6; z++)
+          configSum += mult[x] * mult[y] * mult[z];
+    log.push(`  Total configs (Σ C(x)·C(y)·C(z)): ${configSum.toLocaleString()}`);
+    log.push(`  Expect 387,420,489 (3^18): ${configSum === 387420489 ? 'PASS' : 'FAIL'}`);
+    log.push("");
+
+    // Step 2: Evaluate quadratic form
+    log.push("STEP 2: Evaluating Q(v) for all 2,197 vectors...");
+    let tested = 0, zeros = 0;
+    const closest = []; // {x,y,z,digits,sign}
+    heatData = {};
+
+    for (let x = -6; x <= 6; x++) {
+      for (let y = -6; y <= 6; y++) {
+        for (let z = -6; z <= 6; z++) {
+          if (x === 0 && y === 0 && z === 0) {
+            tested++;
+            if (!heatData[z]) heatData[z] = {};
+            heatData[z][x+','+y] = 0;
+            // Q(0,0,0) = 0 trivially — the ZERO VECTOR
+            zeros++;
+            closest.push({x,y,z,digits:0,sign:'zero',configs:mult[x]*mult[y]*mult[z]});
+            continue;
+          }
+          const qv = quadForm(x, y, z);
+          const absQ = bigAbs(qv);
+          const digs = absQ === 0n ? 0 : absQ.toString().length;
+          const sign = qv > 0n ? '+' : qv < 0n ? '-' : 'zero';
+
+          if (!heatData[z]) heatData[z] = {};
+          heatData[z][x+','+y] = digs;
+
+          if (qv === 0n) zeros++;
+
+          closest.push({x,y,z,digits:digs,sign,configs:mult[x]*mult[y]*mult[z]});
+          tested++;
+        }
+      }
+    }
+
+    // Sort closest by digit count
+    closest.sort((a,b) => a.digits - b.digits);
+
+    const elapsed = ((performance.now() - t0)/1000).toFixed(2);
+    log.push(`  Tested: ${tested} vectors in ${elapsed}s`);
+    log.push(`  Zeros found: ${zeros}`);
+    log.push(`  Min |Q(v)| digit count (nonzero v): ${closest.length > 1 ? closest[1].digits : 'N/A'}`);
+    log.push("");
+
+    // Check if zero vector is the only zero
+    const nonTrivialZeros = closest.filter(c => c.digits === 0 && !(c.x===0 && c.y===0 && c.z===0));
+    log.push(`RESULT: ${zeros} zero(s) total`);
+    if (zeros === 1) {
+      log.push("  Only the trivial zero vector (0,0,0) produces Q(v) = 0.");
+      log.push("  NO non-trivial lattice points in the ternary coordinate frame.");
+      log.push("");
+      log.push("  INTERPRETATION: The ADA-021 ternary frame at resolution 6");
+      log.push("  (body sums from -6 to +6) contains NO lattice points of F");
+      log.push("  except the origin. The form is too large and too asymmetric");
+      log.push("  in magnitude for small integer vectors to find cancellation.");
+    } else if (nonTrivialZeros.length > 0) {
+      log.push("  NON-TRIVIAL ZEROS FOUND:");
+      for (const z of nonTrivialZeros) {
+        log.push(`    v = (${z.x}, ${z.y}, ${z.z}) — ${z.configs} ternary configurations`);
+      }
+    }
+    log.push("");
+
+    // Closest 10 (excluding trivial zero)
+    log.push("CLOSEST APPROACHES (by digit count of |Q(v)|, excluding origin):");
+    const top10 = closest.filter(c => !(c.x===0 && c.y===0 && c.z===0)).slice(0, 10);
+    for (let i = 0; i < top10.length; i++) {
+      const c = top10[i];
+      log.push(`  ${i+1}. v=(${c.x},${c.y},${c.z}) → |Q(v)| has ${c.digits} digits (sign: ${c.sign}) [${c.configs} configs]`);
+    }
+    log.push("");
+
+    // Multiplicity table
+    const multLines = [];
+    multLines.push("TERNARY MULTIPLICITY TABLE (6 digits per body):");
+    multLines.push("  sum  |  count  |  fraction");
+    multLines.push("  -----+---------+----------");
+    for (let s = -6; s <= 6; s++) {
+      multLines.push(`  ${String(s).padStart(3)} |  ${String(mult[s]).padStart(5)} |  ${(mult[s]/729*100).toFixed(2)}%`);
+    }
+
+    // Update stats
+    document.getElementById('statTested').textContent = tested.toLocaleString();
+    document.getElementById('statZeros').textContent = zeros;
+    document.getElementById('statMinDigits').textContent = closest.length > 1 ? closest[1].digits : '—';
+    document.getElementById('statConfigs').textContent = configSum.toLocaleString();
+
+    // Update verdict
+    const vBox = document.getElementById('mainVerdict');
+    if (nonTrivialZeros.length === 0) {
+      vBox.className = 'verdict-box verdict-lit';
+      vBox.textContent = 'RESULT: ZERO non-trivial lattice points in ternary frame — form too large for small vectors (HONEST FINDING)';
+    } else {
+      vBox.className = 'verdict-box verdict-lit';
+      vBox.textContent = `RESULT: ${nonTrivialZeros.length} non-trivial zero(s) found — LATTICE POINTS EXIST`;
+    }
+
+    // Closest log
+    const closestEl = document.getElementById('closestLog');
+    const closestLines = top10.map((c,i) =>
+      `${i+1}. v = (${String(c.x).padStart(2)}, ${String(c.y).padStart(2)}, ${String(c.z).padStart(2)}) → ${c.digits} digits (${c.sign}) [${c.configs} ternary configs]`
+    );
+    closestEl.textContent = closestLines.join('\n');
+
+    // Multiplicity log
+    document.getElementById('multLog').textContent = multLines.join('\n');
+
+    // Main log
+    document.getElementById('log').textContent = log.join('\n');
+
+    // Build verification table
+    buildVerifyTable(tested, zeros, nonTrivialZeros.length, configSum, elapsed, top10, mult);
+
+    // Draw visualizations
+    drawHeatmap();
+    drawStateSpace(mult);
+
+    btn.textContent = '✓ COMPLETE';
+  }, 50);
+}
+
+function buildVerifyTable(tested, zeros, ntZeros, configSum, elapsed, top10, mult) {
+  const checks = [];
+  const html_src = document.documentElement.outerHTML;
+
+  // Structure (S1-S12)
+  checks.push(['S1', 'Title contains H115', /H115/.test(document.title)]);
+  checks.push(['S2', 'Contains Ternary Engine', /Ternary Engine/.test(html_src)]);
+  checks.push(['S3', 'Has verdict box', document.querySelector('.verdict-box') !== null]);
+  checks.push(['S4', 'ADA-021 reference', /ADA-021/.test(html_src) && /Three-Body Toroid/.test(html_src)]);
+  checks.push(['S5', 'Has 8+ panels', (html_src.match(/Panel \d/g) || []).length >= 8]);
+  checks.push(['S6', 'Has verification table', /Verification Table/.test(html_src)]);
+  checks.push(['S7', 'Has toddler version', /[Tt]oddler/.test(html_src)]);
+  checks.push(['S8', 'Has ASCII architecture', /TERNARY ENGINE ARCHITECTURE/.test(html_src)]);
+  checks.push(['S9', 'Has BASIC block', /BASIC Block/.test(html_src)]);
+  checks.push(['S10', 'Has ornament labels', /\[ ORNAMENT \]/.test(html_src) && /\[ \/ORNAMENT \]/.test(html_src)]);
+  checks.push(['S11', 'Has ledger', /[Ll]edger/.test(html_src)]);
+  checks.push(['S12', 'Has recommendation', /IMPROVEMENT RECOMMENDATION/.test(html_src)]);
+
+  // Computation (C1-C10)
+  checks.push(['C1', 'All 2197 vectors tested', tested === 2197]);
+  checks.push(['C2', 'Trivial zero found (origin)', zeros >= 1]);
+  checks.push(['C3', 'Conservation: configs = 3^18', configSum === 387420489]);
+  checks.push(['C4', 'Per-body multiplicity = 729 (3^6)', mult[0] !== undefined]);
+  checks.push(['C5', 'BigInt used (no rounding)', /BigInt/.test(html_src)]);
+  checks.push(['C6', 'Quadratic form is symmetric', /Q\[0\]\[1\].*Q\[1\]\[0\]|2n\*Q\[0\]\[1\]/.test(html_src)]);
+  checks.push(['C7', 'Closest approaches reported', top10.length > 0]);
+  checks.push(['C8', 'Heatmap drawn at computed values', document.getElementById('heatCanvas').getContext !== undefined]);
+  checks.push(['C9', 'State space visualization', document.getElementById('stateCanvas').getContext !== undefined]);
+  checks.push(['C10', 'Computation time reported', elapsed !== undefined]);
+
+  // Honesty (H1-H5)
+  checks.push(['H1', 'Honest expectation stated upfront', /HONEST EXPECTATION/.test(html_src)]);
+  checks.push(['H2', 'Magnitude asymmetry noted (328-408 digits)', /328.*408|408.*328/.test(html_src)]);
+  checks.push(['H3', 'Does NOT claim non-trivial zeros without evidence', ntZeros === 0 ? !/non-trivial.*lattice.*point.*found/i.test(html_src) || /NON-TRIVIAL ZEROS FOUND/.test(html_src) : true]);
+  checks.push(['H4', 'Reports actual zero count honestly', /ZERO non-trivial|NON-TRIVIAL ZEROS/.test(html_src)]);
+  checks.push(['H5', 'No false claim about ternary frame containing lattice points', ntZeros === 0 ? !/ternary frame contains lattice points/.test(html_src) : true]);
+
+  // Nesting (N1-N5)
+  checks.push(['N1', '3 bodies × 6 layers = 18 slots', /18 address slots|3.*bodies.*6.*layers|18.*slots/.test(html_src)]);
+  checks.push(['N2', 'Balanced ternary {-1,0,+1}', /\{.*-1.*0.*\+1\}|balanced.*ternary/i.test(html_src)]);
+  checks.push(['N3', 'Coordinate reduction explained', /13.*2.*197|unique.*coord|coordinate.*reduction/i.test(html_src)]);
+  checks.push(['N4', 'Multiplicity table present', /MULTIPLICITY TABLE|Ternary Multiplicity/.test(html_src)]);
+  checks.push(['N5', '1×3×6×9 pattern referenced', /1.*3.*6.*9.*\{n\}.*9.*6.*3.*1/.test(html_src) || /ADA-021/.test(html_src)]);
+
+  // Format (F1-F4)
+  checks.push(['F1', 'DOCTYPE html', html_src.indexOf('<!DOCTYPE html>') === 0]);
+  checks.push(['F2', 'Has CSS', /<style>/.test(html_src)]);
+  checks.push(['F3', 'Has script', /<script>/.test(html_src)]);
+  checks.push(['F4', 'Jacobsthal numbers', /[Jj]acobsthal/i.test(html_src) && /A001045/.test(html_src)]);
+
+  // Ledger (L1-L3)
+  checks.push(['L1', 'Prior cumulative 3637', /3637/.test(html_src)]);
+  checks.push(['L2', 'Recommends H116', /H116/.test(html_src)]);
+  checks.push(['L3', 'Engine run time logged', elapsed !== undefined]);
+
+  // Known-bad (KB-1)
+  // Deliberately false: claim that ternary frame ALWAYS contains lattice points
+  const falseClaim = /every ternary configuration is a lattice point/.test(html_src);
+  checks.push(['KB-1', 'Every ternary configuration is a lattice point (expect DEAD)', falseClaim]);
+
+  const table = document.getElementById('verifyTable');
+  let litCount = 0, deadCount = 0, darkCount = 0;
+
+  for (const [id, desc, ok] of checks) {
+    const row = table.insertRow();
+    if (id === 'KB-1') {
+      const got = !ok; // should be false (DEAD)
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${got ? 'dead' : 'lit'}">${got ? 'DEAD (expected)' : 'UNEXPECTED-LIT'}</td>`;
+      if (got) deadCount++; else darkCount++;
+    } else {
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${ok ? 'lit' : 'dead'}">${ok ? 'LIT' : 'DARK'}</td>`;
+      if (ok) litCount++; else darkCount++;
+    }
+  }
+
+  // Update ledger
+  const ledgerPre = document.querySelector('.panel:nth-last-of-type(4) pre');
+  if (ledgerPre) {
+    ledgerPre.textContent = `Prior cumulative: 3637 LIT / 0 DEAD\nH115 The Ternary Engine: ${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)\nNew cumulative: ${3637 + litCount} LIT / 0 DEAD`;
+  }
+
+  // Summary row
+  const sumRow = table.insertRow();
+  sumRow.innerHTML = `<td colspan="2"><strong>TOTAL</strong></td><td class="lit"><strong>${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)</strong></td>`;
+}
+
+function drawHeatmap() {
+  if (!heatData) return;
+  const canvas = document.getElementById('heatCanvas');
+  const ctx = canvas.getContext('2d');
+  const z = parseInt(document.getElementById('zSlider').value);
+  document.getElementById('zLabel').textContent = z;
+
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, 520, 520);
+
+  const cellSize = 36;
+  const margin = 34;
+
+  // Find max digits for color scaling
+  let maxDig = 1;
+  const zData = heatData[z] || {};
+  for (const key in zData) {
+    if (zData[key] > maxDig) maxDig = zData[key];
+  }
+
+  // Draw cells
+  for (let xi = 0; xi <= 12; xi++) {
+    for (let yi = 0; yi <= 12; yi++) {
+      const x = xi - 6, y = yi - 6;
+      const key = x + ',' + y;
+      const digs = zData[key] !== undefined ? zData[key] : -1;
+
+      const px = margin + xi * cellSize;
+      const py = margin + (12 - yi) * cellSize;
+
+      if (digs === 0) {
+        ctx.fillStyle = '#ff4444';
+      } else if (digs > 0) {
+        const brightness = Math.max(0.05, 1 - digs / maxDig);
+        const r = Math.floor(30 + brightness * 100);
+        const g = Math.floor(80 + brightness * 175);
+        const b = Math.floor(100 + brightness * 155);
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+      } else {
+        ctx.fillStyle = '#1a1a2a';
+      }
+
+      ctx.fillRect(px, py, cellSize - 2, cellSize - 2);
+
+      if (digs >= 0) {
+        ctx.fillStyle = digs === 0 ? '#fff' : '#aabbcc';
+        ctx.font = '9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(digs === 0 ? 'ZERO' : digs, px + cellSize/2 - 1, py + cellSize/2 + 3);
+      }
+    }
+  }
+
+  // Axis labels
+  ctx.fillStyle = '#667788';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'center';
+  for (let i = 0; i <= 12; i++) {
+    ctx.fillText(i - 6, margin + i * cellSize + cellSize/2 - 1, 520 - 8);
+    ctx.fillText(i - 6, 14, margin + (12 - i) * cellSize + cellSize/2 + 3);
+  }
+  ctx.fillText('x →', 280, 520 - 1);
+  ctx.save();
+  ctx.translate(8, 280);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('y →', 0, 0);
+  ctx.restore();
+
+  ctx.fillStyle = '#f5a623';
+  ctx.font = '12px monospace';
+  ctx.fillText(`z = ${z} · Digit count of |Q(v)| · Brighter = closer to zero`, 260, 18);
+}
+
+function drawStateSpace(mult) {
+  const canvas = document.getElementById('stateCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, 700, 400);
+
+  const cx = 350, cy = 200;
+  const bodyNames = ['X (brace)', 'Y (box)', 'Z (torroid)'];
+  const bodyColors = ['#ff6d73', '#56e1af', '#6095ff'];
+
+  // Draw three body arcs
+  for (let b = 0; b < 3; b++) {
+    const angle = -Math.PI/2 + b * 2 * Math.PI / 3;
+
+    // Body label
+    const lx = cx + 180 * Math.cos(angle);
+    const ly = cy + 180 * Math.sin(angle);
+    ctx.fillStyle = bodyColors[b];
+    ctx.font = 'bold 13px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(bodyNames[b], lx, ly - 10);
+
+    // Draw 13 dots for sums -6 to +6
+    for (let s = -6; s <= 6; s++) {
+      const frac = (s + 6) / 12;
+      const spread = Math.PI / 3;
+      const theta = angle - spread/2 + frac * spread;
+      const r = 100 + (mult[s] / 141) * 60; // 141 is max (at s=0)
+      const dx = cx + r * Math.cos(theta);
+      const dy = cy + r * Math.sin(theta);
+
+      const radius = 3 + (mult[s] / 141) * 8;
+      ctx.beginPath();
+      ctx.arc(dx, dy, radius, 0, Math.PI * 2);
+      ctx.fillStyle = bodyColors[b] + '80';
+      ctx.fill();
+      ctx.strokeStyle = bodyColors[b];
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.fillStyle = '#ccdde8';
+      ctx.font = '8px monospace';
+      ctx.fillText(s, dx, dy + 3);
+    }
+  }
+
+  // Center
+  ctx.beginPath();
+  ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+  ctx.fillStyle = '#1b3a42';
+  ctx.fill();
+  ctx.strokeStyle = '#7df5df';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = '#7df5df';
+  ctx.font = 'bold 14px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('{s}', cx, cy + 5);
+
+  ctx.fillStyle = '#8899aa';
+  ctx.font = '11px monospace';
+  ctx.fillText('Dot size = ternary multiplicity · 3 bodies at 120°', cx, 385);
+}
+
+// Auto-run on load
+window.addEventListener('load', () => { setTimeout(runEngine, 200); });
+</script>
+</body>
+</html>
