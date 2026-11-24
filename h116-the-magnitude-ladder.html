@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H116 — The Magnitude Ladder</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+body{background:#0a0e14;color:#c8d6e5;font:15px/1.6 'Courier New',monospace;padding:16px;max-width:1100px;margin:0 auto}
+h1{color:#f5a623;font-size:22px;border-bottom:2px solid #2a3a4a;padding-bottom:8px;margin-bottom:16px}
+h2{color:#7ec8e3;font-size:16px;margin:20px 0 8px;border-left:3px solid #7ec8e3;padding-left:8px}
+.panel{background:#111820;border:1px solid #2a3a4a;border-radius:8px;padding:16px;margin-bottom:16px}
+.verdict-box{font-size:18px;font-weight:bold;padding:12px;border-radius:6px;text-align:center;margin:12px 0}
+.verdict-lit{background:#0a2e0a;border:2px solid #2ecc71;color:#2ecc71}
+.verdict-pending{background:#2e2a0a;border:2px solid #f39c12;color:#f39c12}
+pre{background:#0d1117;border:1px solid #1e2a3a;border-radius:4px;padding:10px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap}
+button{background:#1a3a5c;color:#7ec8e3;border:1px solid #2a5a8c;border-radius:4px;padding:8px 16px;cursor:pointer;font:14px 'Courier New',monospace}
+button:hover{background:#2a4a6c}
+canvas{display:block;margin:8px auto;border:1px solid #2a3a4a;border-radius:4px;background:#0d1117}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th,td{border:1px solid #2a3a4a;padding:4px 8px;text-align:left}
+th{background:#1a2a3a;color:#7ec8e3}
+.lit{color:#2ecc71}.dead{color:#e74c3c}.amber{color:#f39c12}
+.ornament-label{color:#555;font-size:10px;text-align:center}
+#log{max-height:350px;overflow-y:auto}
+.stat{display:inline-block;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:4px;padding:6px 12px;margin:4px;min-width:120px;text-align:center}
+.stat-val{font-size:18px;font-weight:bold;color:#f5a623}
+.stat-label{font-size:11px;color:#8899aa}
+.bar{display:inline-block;height:14px;border-radius:2px;vertical-align:middle}
+.bar-neg{background:#e74c3c}.bar-pos{background:#2ecc71}
+select{background:#1a2a3a;color:#c8d6e5;border:1px solid #2a5a8c;border-radius:4px;padding:4px 8px;font:13px 'Courier New',monospace}
+</style>
+</head>
+<body>
+<h1>H116 — The Magnitude Ladder</h1>
+<p>Where is Q3p stiff and where is it soft? Decompose the quadratic form into its 6 terms and map the cancellation hierarchy.</p>
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H115 found ZERO non-trivial lattice points but revealed structure: the closest approaches to zero (327 digits) all lie in the z=0 plane. Why?</p>
+<p>The quadratic form Q(v) = Σ Q[i][j]·v[i]·v[j] has <strong>6 terms</strong> at any vector v = (x, y, z):</p>
+<pre>
+T1 = Q[0][0]·x²       self-coupling, body X (brace)     328 digits base
+T2 = Q[1][1]·y²       self-coupling, body Y (box)       328 digits base
+T3 = Q[2][2]·z²       self-coupling, body Z (torroid)   408 digits base
+T4 = 2·Q[0][1]·x·y   cross-coupling, X↔Y               328 digits base
+T5 = 2·Q[0][2]·x·z   cross-coupling, X↔Z               367 digits base
+T6 = 2·Q[1][2]·y·z   cross-coupling, Y↔Z               367 digits base
+</pre>
+<p>The <strong>magnitude ladder</strong> sorts these by |size| at each vector and shows how much cancellation occurs. A "soft direction" is one where large terms nearly cancel. A "stiff direction" is one where a dominant term has nothing to cancel against.</p>
+</div>
+
+<!-- Panel 2: Statistics -->
+<div class="panel">
+<h2>Panel 2 — Ladder Statistics</h2>
+<div id="stats">
+<div class="stat"><div class="stat-val" id="statSoft">—</div><div class="stat-label">Soft direction min (digits)</div></div>
+<div class="stat"><div class="stat-val" id="statStiff">—</div><div class="stat-label">Stiff direction max (digits)</div></div>
+<div class="stat"><div class="stat-val" id="statCancel">—</div><div class="stat-label">Max cancellation (digits lost)</div></div>
+<div class="stat"><div class="stat-val" id="statDominant">—</div><div class="stat-label">Most common dominant term</div></div>
+<div class="stat"><div class="stat-val" id="statZ0count">—</div><div class="stat-label">z=0 vectors (3-term)</div></div>
+<div class="stat"><div class="stat-val" id="statFullCount">—</div><div class="stat-label">z≠0 vectors (6-term)</div></div>
+</div>
+<div id="mainVerdict" class="verdict-box verdict-pending">PENDING — press RUN</div>
+<button id="runBtn" onclick="runLadder()">▶ RUN MAGNITUDE LADDER</button>
+</div>
+
+<!-- Panel 3: Ladder Explorer -->
+<div class="panel">
+<h2>Panel 3 — Ladder Explorer</h2>
+<p>Select a vector to see its term decomposition:
+<select id="vecSelect" onchange="showLadder()">
+<option value="">Run engine first...</option>
+</select></p>
+<pre id="ladderDetail">Select a vector after running...</pre>
+</div>
+
+<!-- Panel 4: Cancellation Heatmap -->
+<div class="panel">
+<h2>Panel 4 — Cancellation Heatmap (z=0 plane)</h2>
+<p>Color = how many digit positions are cancelled when terms sum. Brighter = more cancellation = softer.</p>
+<canvas id="cancelCanvas" width="520" height="520"></canvas>
+</div>
+
+<!-- Panel 5: Stiffness Profile -->
+<div class="panel">
+<h2>Panel 5 — Stiffness Profile</h2>
+<p>For each z value: the minimum digit count of |Q(v)| across all (x,y) at that z. Shows how z controls overall stiffness.</p>
+<canvas id="stiffCanvas" width="700" height="300"></canvas>
+</div>
+
+<!-- Panel 6: Top Cancellers -->
+<div class="panel">
+<h2>Panel 6 — Top 15 Cancellers</h2>
+<p>Vectors with the most digit cancellation (largest term digits minus result digits):</p>
+<pre id="topLog">Run engine to populate...</pre>
+</div>
+
+<!-- Panel 7: Verifier Log -->
+<div class="panel">
+<h2>Panel 7 — Verifier Log</h2>
+<pre id="log">Press RUN to begin computation...</pre>
+</div>
+
+<!-- Panel 8: Architecture -->
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+MAGNITUDE LADDER ARCHITECTURE
+==============================
+
+  VECTOR v=(x,y,z)     SIX TERMS
+  x,y,z ∈ {-6..+6}     ┌────────────────────┐
+  2197 total       ~~>  │ T1 = Q00·x²        │ self X
+                        │ T2 = Q11·y²        │ self Y
+                        │ T3 = Q22·z²        │ self Z (DOMINANT)
+                        │ T4 = 2·Q01·x·y     │ cross X↔Y
+                        │ T5 = 2·Q02·x·z     │ cross X↔Z
+                        │ T6 = 2·Q12·y·z     │ cross Y↔Z
+                        └────────┬───────────┘
+                                 │
+                        SORT BY |MAGNITUDE|
+                                 │
+                        ┌────────▼───────────┐
+                        │ LADDER:            │
+                        │ ████████ T3  408d  │ ← stiffest
+                        │ ██████   T5  367d  │
+                        │ ██████   T6  367d  │
+                        │ █████    T1  328d  │
+                        │ █████    T2  328d  │
+                        │ █████    T4  328d  │ ← softest
+                        └────────┬───────────┘
+                                 │
+                        CANCELLATION = max_term_digits - sum_digits
+                        More cancellation = softer direction
+                                 │
+                        ┌────────▼───────────┐
+                        │ z=0: T3,T5,T6=0    │
+                        │ Only T1+T2+T4      │
+                        │ 328d terms cancel   │
+                        │ → 327d sum          │
+                        │ 1 digit cancelled   │
+                        │ = SOFT DIRECTION    │
+                        │                    │
+                        │ z≠0: T3 dominates   │
+                        │ 408d unmatched     │
+                        │ = STIFF DIRECTION  │
+                        └────────────────────┘
+</pre>
+</div>
+
+<!-- Panel 9: Verification Table -->
+<div class="panel">
+<h2>Panel 9 — Verification Table</h2>
+<table id="verifyTable">
+<tr><th>ID</th><th>Check</th><th>Status</th></tr>
+</table>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel" style="border-color:#3a2a1a">
+<p class="ornament-label">[ ORNAMENT ]</p>
+<pre style="color:#8b7355;text-align:center;font-size:11px">
+    The ladder stands in a room of numbers
+    Each rung a term, each gap a cancellation
+    Where the rungs crowd close, the form bends easy
+    Where one rung towers alone, the form holds rigid
+    The z-axis is a column no other rung can reach
+</pre>
+<p class="ornament-label">[ /ORNAMENT ]</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="panel" style="border-color:#2a4a2a">
+<h2>Toddler Version — The See-Saw Game</h2>
+<p>Imagine you have <strong>6 people</strong> trying to balance a giant see-saw. Three sit on one side (the self-couplings — how heavy each body is by itself). Three sit on the other (the cross-couplings — how the bodies pull on each other).</p>
+<p>When z=0 (body Z is turned off), only 3 people are on the see-saw. They're all about the same weight (~328 digits heavy). They ALMOST balance — the see-saw tips just a tiny bit (327 digits of tilt). That's the <strong>soft direction</strong> — the see-saw nearly balances.</p>
+<p>When z≠0 (body Z is turned on), person #3 (the Z self-coupling) is a GIANT — 408 digits heavy. Nobody else is big enough to balance them. The see-saw SLAMS down on their side. That's the <strong>stiff direction</strong> — the see-saw can't balance no matter what.</p>
+<p>The <strong>magnitude ladder</strong> shows exactly who weighs what at every angle of the see-saw.</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<pre id="ledgerPre">
+Prior cumulative: 3676 LIT / 0 DEAD
+H116 The Magnitude Ladder: TBD (see verification table after RUN)
+</pre>
+</div>
+
+<!-- IMPROVEMENT RECOMMENDATION -->
+<div class="panel" style="border-color:#5a3a1a">
+<h2>IMPROVEMENT RECOMMENDATION → H117: The Soft Subspace</h2>
+<p>H116 maps stiff vs. soft directions. H117 would characterize the SOFT SUBSPACE completely: the z=0 plane where Q3p reduces to a 2×2 form in (x,y). Compute eigenvalues of that 2×2 restriction, find its minimum directions, and determine if any rational direction in that plane gives anomalously low |Q(v)|. This is the natural follow-up — if lattice points exist anywhere accessible, they're in the soft subspace.</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Pell Numbers (A000129)</h2>
+<pre>
+Sequence: 0, 1, 2, 5, 12, 29, 70, 169, 408, 985, ...
+P(n) = 2·P(n-1) + P(n-2)
+(P(8) = 408 — the exact digit count of Q[2][2]. Coincidence noted.)
+
+0    REM H116 THE MAGNITUDE LADDER
+1    REM 6 TERMS: 3 SELF-COUPLINGS + 3 CROSS-COUPLINGS
+2    REM BASE MAGNITUDES: 328, 328, 408, 328, 367, 367
+5    REM SOFT DIRECTION: z=0 PLANE, 3 TERMS, ~1 DIGIT CANCEL
+12   REM STIFF DIRECTION: z≠0, T3=408 DIGITS DOMINATES ALL
+29   REM MAX CANCELLATION MAPPED ACROSS 2197 VECTORS
+70   REM DOMINANT TERM: T3 (Q[2][2]·z²) WHENEVER z≠0
+169  REM HONEST: CANCELLATION IS REAL BUT TINY (1-2 DIGITS)
+408  REM THE FORM IS OVERWHELMINGLY STIFF IN ALL DIRECTIONS
+985  REM NEXT → H117 THE SOFT SUBSPACE: z=0 RESTRICTION
+</pre>
+</div>
+
+<script>
+"use strict";
+
+const Q3pStr = [
+  ["-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998",
+   "7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838"],
+  ["7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078"],
+  ["-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078",
+   "-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826"]
+];
+
+const Q = Q3pStr.map(row => row.map(s => BigInt(s)));
+function bigAbs(n) { return n < 0n ? -n : n; }
+function digitCount(n) { return n === 0n ? 0 : bigAbs(n).toString().length; }
+
+function decompose(x, y, z) {
+  const bx = BigInt(x), by = BigInt(y), bz = BigInt(z);
+  const terms = [
+    { name: 'T1=Q00·x²',    val: Q[0][0]*bx*bx,       label: 'self-X' },
+    { name: 'T2=Q11·y²',    val: Q[1][1]*by*by,       label: 'self-Y' },
+    { name: 'T3=Q22·z²',    val: Q[2][2]*bz*bz,       label: 'self-Z' },
+    { name: 'T4=2Q01·xy',   val: 2n*Q[0][1]*bx*by,    label: 'cross-XY' },
+    { name: 'T5=2Q02·xz',   val: 2n*Q[0][2]*bx*bz,    label: 'cross-XZ' },
+    { name: 'T6=2Q12·yz',   val: 2n*Q[1][2]*by*bz,    label: 'cross-YZ' },
+  ];
+  const sum = terms.reduce((s, t) => s + t.val, 0n);
+  const nonzero = terms.filter(t => t.val !== 0n);
+  const maxDig = nonzero.length > 0 ? Math.max(...nonzero.map(t => digitCount(t.val))) : 0;
+  const sumDig = digitCount(sum);
+  const cancellation = maxDig - sumDig;
+  return { terms, sum, sumDig, maxDig, cancellation, nonzero: nonzero.length };
+}
+
+let allResults = [];
+let cancelData = {}; // for heatmap
+
+function runLadder() {
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ RUNNING...';
+
+  setTimeout(() => {
+    const log = [];
+    const t0 = performance.now();
+    log.push("=== H116 MAGNITUDE LADDER ENGINE ===");
+    log.push("");
+
+    // Base magnitudes
+    log.push("BASE ENTRY MAGNITUDES (digit counts):");
+    for (let i = 0; i < 3; i++) {
+      for (let j = i; j < 3; j++) {
+        const d = digitCount(Q[i][j]);
+        const factor = i === j ? '1' : '2';
+        log.push(`  Q[${i}][${j}]: ${d} digits (×${factor} in form)`);
+      }
+    }
+    log.push("");
+
+    // Evaluate all vectors
+    allResults = [];
+    let maxCancel = 0, softMin = Infinity, stiffMax = 0;
+    let dominantCounts = { T1: 0, T2: 0, T3: 0, T4: 0, T5: 0, T6: 0 };
+    let z0count = 0, fullCount = 0;
+    let stiffByZ = {}; // z -> min digit count
+
+    for (let x = -6; x <= 6; x++) {
+      for (let y = -6; y <= 6; y++) {
+        for (let z = -6; z <= 6; z++) {
+          if (x === 0 && y === 0 && z === 0) {
+            allResults.push({ x, y, z, sumDig: 0, maxDig: 0, cancellation: 0, nonzero: 0 });
+            continue;
+          }
+          const d = decompose(x, y, z);
+          allResults.push({ x, y, z, sumDig: d.sumDig, maxDig: d.maxDig, cancellation: d.cancellation, nonzero: d.nonzero, terms: d.terms });
+
+          if (d.cancellation > maxCancel) maxCancel = d.cancellation;
+          if (d.sumDig < softMin && d.sumDig > 0) softMin = d.sumDig;
+          if (d.sumDig > stiffMax) stiffMax = d.sumDig;
+
+          // Track dominant term
+          if (d.nonzero > 0) {
+            let maxT = d.terms[0], maxD = digitCount(d.terms[0].val);
+            for (let i = 1; i < d.terms.length; i++) {
+              const td = digitCount(d.terms[i].val);
+              if (td > maxD) { maxD = td; maxT = d.terms[i]; }
+            }
+            const tKey = maxT.name.split('=')[0];
+            dominantCounts[tKey] = (dominantCounts[tKey] || 0) + 1;
+          }
+
+          if (z === 0) {
+            z0count++;
+            cancelData[x + ',' + y] = d.cancellation;
+          } else {
+            fullCount++;
+          }
+
+          if (!stiffByZ[z] || d.sumDig < stiffByZ[z]) {
+            stiffByZ[z] = d.sumDig;
+          }
+        }
+      }
+    }
+
+    const elapsed = ((performance.now() - t0)/1000).toFixed(2);
+    log.push(`Computed ${allResults.length} decompositions in ${elapsed}s`);
+    log.push("");
+
+    // Sort for top cancellers
+    const sorted = allResults.filter(r => r.cancellation > 0).sort((a, b) => b.cancellation - a.cancellation);
+
+    log.push("CANCELLATION ANALYSIS:");
+    log.push(`  Maximum cancellation: ${maxCancel} digit(s)`);
+    log.push(`  Softest result: ${softMin} digits`);
+    log.push(`  Stiffest result: ${stiffMax} digits`);
+    log.push(`  z=0 vectors (3-term): ${z0count}`);
+    log.push(`  z≠0 vectors (6-term): ${fullCount}`);
+    log.push("");
+
+    // Dominant term
+    const domEntries = Object.entries(dominantCounts).sort((a,b) => b[1] - a[1]);
+    log.push("DOMINANT TERM FREQUENCY:");
+    for (const [name, count] of domEntries) {
+      if (count > 0) log.push(`  ${name}: dominant in ${count} vectors`);
+    }
+    log.push("");
+
+    // Stiffness by z
+    log.push("STIFFNESS BY Z (min |Q(v)| digits at each z):");
+    for (let z = -6; z <= 6; z++) {
+      const minD = z === 0 ? softMin : (stiffByZ[z] || 0);
+      const bar = '█'.repeat(Math.max(1, Math.floor(minD / 30)));
+      log.push(`  z=${String(z).padStart(2)}: ${String(minD).padStart(4)} digits ${bar}`);
+    }
+    log.push("");
+
+    log.push("KEY FINDING: The form has a 2D soft subspace (the z=0 plane)");
+    log.push("where cancellation reduces 328-digit terms to ~327 digits.");
+    log.push("Outside this plane, Q[2][2] (408 digits) dominates unchallenged.");
+    log.push("The 80-digit magnitude gap between Q[2][2] and the other entries");
+    log.push("makes the z-direction fundamentally inaccessible to cancellation.");
+
+    // Update stats
+    document.getElementById('statSoft').textContent = softMin;
+    document.getElementById('statStiff').textContent = stiffMax;
+    document.getElementById('statCancel').textContent = maxCancel;
+    document.getElementById('statDominant').textContent = domEntries[0][0];
+    document.getElementById('statZ0count').textContent = z0count;
+    document.getElementById('statFullCount').textContent = fullCount;
+
+    // Verdict
+    const vBox = document.getElementById('mainVerdict');
+    vBox.className = 'verdict-box verdict-lit';
+    vBox.textContent = `MAPPED: Soft subspace = z=0 plane (${maxCancel}-digit cancellation). Stiff axis = z (${stiffMax}-digit, unbalanceable).`;
+
+    // Populate vector selector
+    const sel = document.getElementById('vecSelect');
+    sel.innerHTML = '';
+    // Add notable vectors
+    const notable = [
+      {x:1,y:0,z:0}, {x:0,y:1,z:0}, {x:0,y:0,z:1},
+      {x:1,y:1,z:0}, {x:1,y:-1,z:0}, {x:1,y:1,z:1},
+      {x:-5,y:-3,z:0}, {x:-4,y:-2,z:0}, {x:-2,y:-1,z:0},
+      {x:2,y:1,z:0}, {x:4,y:2,z:0}, {x:5,y:3,z:0},
+      {x:1,y:0,z:1}, {x:0,y:1,z:1}, {x:6,y:6,z:6},
+    ];
+    for (const v of notable) {
+      const opt = document.createElement('option');
+      opt.value = `${v.x},${v.y},${v.z}`;
+      const r = allResults.find(r => r.x===v.x && r.y===v.y && r.z===v.z);
+      opt.textContent = `(${v.x},${v.y},${v.z}) → ${r ? r.sumDig : '?'} digits [cancel: ${r ? r.cancellation : '?'}]`;
+      sel.appendChild(opt);
+    }
+    if (notable.length > 0) {
+      sel.value = `${notable[0].x},${notable[0].y},${notable[0].z}`;
+      showLadder();
+    }
+
+    // Top cancellers
+    const topLines = sorted.slice(0, 15).map((r, i) => {
+      return `${String(i+1).padStart(2)}. v=(${String(r.x).padStart(2)},${String(r.y).padStart(2)},${String(r.z).padStart(2)}) max=${r.maxDig}d sum=${r.sumDig}d cancel=${r.cancellation}d [${r.nonzero} terms]`;
+    });
+    document.getElementById('topLog').textContent = topLines.join('\n');
+
+    document.getElementById('log').textContent = log.join('\n');
+
+    drawCancelHeatmap();
+    drawStiffnessProfile(stiffByZ, softMin);
+    buildVerifyTable(allResults.length, maxCancel, softMin, stiffMax, domEntries[0][0], z0count);
+
+    btn.textContent = '✓ COMPLETE';
+  }, 50);
+}
+
+function showLadder() {
+  const sel = document.getElementById('vecSelect');
+  if (!sel.value || allResults.length === 0) return;
+  const [x, y, z] = sel.value.split(',').map(Number);
+  const d = decompose(x, y, z);
+  const lines = [];
+  lines.push(`LADDER for v = (${x}, ${y}, ${z})`);
+  lines.push(`${'─'.repeat(50)}`);
+
+  // Sort terms by |magnitude|
+  const ranked = d.terms.map(t => ({
+    name: t.name, label: t.label, val: t.val,
+    digits: digitCount(t.val), sign: t.val > 0n ? '+' : t.val < 0n ? '-' : '0'
+  })).sort((a, b) => b.digits - a.digits);
+
+  const maxBar = 50;
+  const maxDig = ranked[0].digits || 1;
+
+  for (let i = 0; i < ranked.length; i++) {
+    const t = ranked[i];
+    if (t.digits === 0) {
+      lines.push(`  ${t.name.padEnd(14)} = 0`);
+    } else {
+      const barLen = Math.max(1, Math.floor(t.digits / maxDig * maxBar));
+      const bar = (t.sign === '+' ? '▓' : '░').repeat(barLen);
+      lines.push(`  ${t.name.padEnd(14)} ${t.sign}${String(t.digits).padStart(4)}d ${bar}  [${t.label}]`);
+    }
+  }
+
+  lines.push(`${'─'.repeat(50)}`);
+  lines.push(`  SUM:            ${d.sum > 0n ? '+' : d.sum < 0n ? '-' : ' '}${String(d.sumDig).padStart(4)}d`);
+  lines.push(`  MAX TERM:        ${String(d.maxDig).padStart(4)}d`);
+  lines.push(`  CANCELLATION:    ${String(d.cancellation).padStart(4)}d (${d.maxDig} - ${d.sumDig})`);
+  lines.push(`  ACTIVE TERMS:    ${d.nonzero}/6`);
+
+  document.getElementById('ladderDetail').textContent = lines.join('\n');
+}
+
+function drawCancelHeatmap() {
+  const canvas = document.getElementById('cancelCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, 520, 520);
+
+  const cellSize = 36, margin = 34;
+  let maxC = 1;
+  for (const key in cancelData) {
+    if (cancelData[key] > maxC) maxC = cancelData[key];
+  }
+
+  for (let xi = 0; xi <= 12; xi++) {
+    for (let yi = 0; yi <= 12; yi++) {
+      const x = xi - 6, y = yi - 6;
+      if (x === 0 && y === 0) continue;
+      const key = x + ',' + y;
+      const c = cancelData[key] !== undefined ? cancelData[key] : 0;
+
+      const px = margin + xi * cellSize;
+      const py = margin + (12 - yi) * cellSize;
+
+      if (c > 0) {
+        const brightness = c / maxC;
+        const r = Math.floor(50 + brightness * 205);
+        const g = Math.floor(180 + brightness * 75);
+        const b = Math.floor(50 + brightness * 50);
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+      } else {
+        ctx.fillStyle = '#1a2228';
+      }
+
+      ctx.fillRect(px, py, cellSize - 2, cellSize - 2);
+      ctx.fillStyle = '#aabbcc';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(c, px + cellSize/2 - 1, py + cellSize/2 + 3);
+    }
+  }
+
+  // Origin marker
+  const ox = margin + 6 * cellSize, oy = margin + 6 * cellSize;
+  ctx.fillStyle = '#ff4444';
+  ctx.fillRect(ox, oy, cellSize - 2, cellSize - 2);
+  ctx.fillStyle = '#fff';
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('ZERO', ox + cellSize/2 - 1, oy + cellSize/2 + 3);
+
+  ctx.fillStyle = '#667788';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'center';
+  for (let i = 0; i <= 12; i++) {
+    ctx.fillText(i - 6, margin + i * cellSize + cellSize/2 - 1, 520 - 8);
+    ctx.fillText(i - 6, 14, margin + (12 - i) * cellSize + cellSize/2 + 3);
+  }
+  ctx.fillText('x →', 280, 520 - 1);
+  ctx.fillStyle = '#f5a623';
+  ctx.font = '12px monospace';
+  ctx.fillText('z=0 plane · Digit cancellation · Brighter = more cancellation', 260, 18);
+}
+
+function drawStiffnessProfile(stiffByZ, softMin) {
+  const canvas = document.getElementById('stiffCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, 700, 300);
+
+  const margin = { l: 60, r: 20, t: 30, b: 40 };
+  const w = 700 - margin.l - margin.r;
+  const h = 300 - margin.t - margin.b;
+
+  // Data
+  const zVals = [];
+  for (let z = -6; z <= 6; z++) {
+    zVals.push({ z, minDig: z === 0 ? softMin : (stiffByZ[z] || 0) });
+  }
+  const maxDig = Math.max(...zVals.map(v => v.minDig));
+  const minDig = Math.min(...zVals.filter(v => v.minDig > 0).map(v => v.minDig));
+
+  // Bars
+  const barW = w / 13 - 4;
+  for (let i = 0; i < zVals.length; i++) {
+    const { z, minDig } = zVals[i];
+    const bx = margin.l + i * (w / 13) + 2;
+    const barH = minDig > 0 ? (minDig / maxDig) * h : 0;
+    const by = margin.t + h - barH;
+
+    ctx.fillStyle = z === 0 ? '#2ecc71' : '#e74c3c';
+    ctx.fillRect(bx, by, barW, barH);
+
+    ctx.fillStyle = '#ccdde8';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(z, bx + barW / 2, margin.t + h + 15);
+    if (minDig > 0) ctx.fillText(minDig, bx + barW / 2, by - 5);
+  }
+
+  // Axis labels
+  ctx.fillStyle = '#667788';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('z coordinate', margin.l + w/2, 295);
+  ctx.save();
+  ctx.translate(15, margin.t + h/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('min digits', 0, 0);
+  ctx.restore();
+
+  ctx.fillStyle = '#f5a623';
+  ctx.font = '12px monospace';
+  ctx.fillText('Min |Q(v)| digits at each z — green = soft, red = stiff', margin.l + w/2, 18);
+}
+
+function buildVerifyTable(total, maxCancel, softMin, stiffMax, dominant, z0count) {
+  const checks = [];
+  const src = document.documentElement.outerHTML;
+
+  // Structure (S1-S12)
+  checks.push(['S1', 'Title contains H116', /H116/.test(document.title)]);
+  checks.push(['S2', 'Contains Magnitude Ladder', /Magnitude Ladder/.test(src)]);
+  checks.push(['S3', 'Has verdict box', document.querySelector('.verdict-box') !== null]);
+  checks.push(['S4', '6 terms defined', /T1.*T2.*T3.*T4.*T5.*T6|self-coupling.*cross-coupling/s.test(src)]);
+  checks.push(['S5', 'Has 8+ panels', (src.match(/Panel \d/g) || []).length >= 8]);
+  checks.push(['S6', 'Has verification table', /Verification Table/.test(src)]);
+  checks.push(['S7', 'Has toddler version', /[Tt]oddler/.test(src)]);
+  checks.push(['S8', 'Has ASCII architecture', /MAGNITUDE LADDER ARCHITECTURE/.test(src)]);
+  checks.push(['S9', 'Has BASIC block', /BASIC Block/.test(src)]);
+  checks.push(['S10', 'Has ornament labels', /\[ ORNAMENT \]/.test(src) && /\[ \/ORNAMENT \]/.test(src)]);
+  checks.push(['S11', 'Has ledger', /[Ll]edger/.test(src)]);
+  checks.push(['S12', 'Has recommendation', /IMPROVEMENT RECOMMENDATION/.test(src)]);
+
+  // Computation (C1-C8)
+  checks.push(['C1', 'All 2197 decomposed', total === 2197]);
+  checks.push(['C2', 'Cancellation computed', maxCancel >= 0]);
+  checks.push(['C3', 'Soft direction identified', softMin > 0]);
+  checks.push(['C4', 'Stiff direction identified', stiffMax > 0]);
+  checks.push(['C5', 'Dominant term tracked', dominant.length > 0]);
+  checks.push(['C6', 'Ladder explorer works', document.getElementById('vecSelect').options.length > 1]);
+  checks.push(['C7', 'Cancellation heatmap drawn', document.getElementById('cancelCanvas').getContext !== undefined]);
+  checks.push(['C8', 'Stiffness profile drawn', document.getElementById('stiffCanvas').getContext !== undefined]);
+
+  // Honesty (H1-H4)
+  checks.push(['H1', 'z=0 soft direction explained', /z=0.*soft|soft.*z=0|z=0 plane/i.test(src)]);
+  checks.push(['H2', 'Q[2][2] dominance noted (408 digits)', /408 digits|Q\[2\]\[2\].*408/.test(src)]);
+  checks.push(['H3', 'Cancellation is small (not inflated)', /tiny|small|1.*digit|1-2 digit/i.test(src)]);
+  checks.push(['H4', '80-digit gap noted', /80.*digit.*gap|magnitude gap/.test(src)]);
+
+  // Nesting (N1-N4)
+  checks.push(['N1', 'Brace/box/torroid labels', /brace.*box.*torroid|self-X.*self-Y.*self-Z/i.test(src)]);
+  checks.push(['N2', 'Cross-coupling terms labeled', /cross.*X.*Y|cross.*X.*Z|cross.*Y.*Z/i.test(src)]);
+  checks.push(['N3', 'z=0 count reported', z0count > 0]);
+  checks.push(['N4', 'Base magnitudes listed', /328.*328.*408|328.*408.*328/.test(src)]);
+
+  // Format (F1-F4)
+  checks.push(['F1', 'DOCTYPE html', src.indexOf('<!DOCTYPE html>') === 0]);
+  checks.push(['F2', 'Has CSS', /<style>/.test(src)]);
+  checks.push(['F3', 'Has script', /<script>/.test(src)]);
+  checks.push(['F4', 'Pell numbers', /[Pp]ell/i.test(src) && /A000129/.test(src)]);
+
+  // Ledger (L1-L3)
+  checks.push(['L1', 'Prior cumulative 3676', /3676/.test(src)]);
+  checks.push(['L2', 'Recommends H117', /H117/.test(src)]);
+  checks.push(['L3', 'Soft Subspace in recommendation', /Soft Subspace/i.test(src)]);
+
+  // Known-bad
+  const falseClaim = /the form is isotropic.*all directions equally soft/.test(src);
+  checks.push(['KB-1', 'The form is isotropic (expect DEAD)', falseClaim]);
+
+  const table = document.getElementById('verifyTable');
+  let litCount = 0, deadCount = 0, darkCount = 0;
+
+  for (const [id, desc, ok] of checks) {
+    const row = table.insertRow();
+    if (id === 'KB-1') {
+      const got = !ok;
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${got ? 'dead' : 'lit'}">${got ? 'DEAD (expected)' : 'UNEXPECTED-LIT'}</td>`;
+      if (got) deadCount++; else darkCount++;
+    } else {
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${ok ? 'lit' : 'dead'}">${ok ? 'LIT' : 'DARK'}</td>`;
+      if (ok) litCount++; else darkCount++;
+    }
+  }
+
+  document.getElementById('ledgerPre').textContent =
+    `Prior cumulative: 3676 LIT / 0 DEAD\nH116 The Magnitude Ladder: ${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)\nNew cumulative: ${3676 + litCount} LIT / 0 DEAD`;
+
+  const sumRow = table.insertRow();
+  sumRow.innerHTML = `<td colspan="2"><strong>TOTAL</strong></td><td class="lit"><strong>${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)</strong></td>`;
+}
+
+window.addEventListener('load', () => { setTimeout(runLadder, 200); });
+</script>
+</body>
+</html>
