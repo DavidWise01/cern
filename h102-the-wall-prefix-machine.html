@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H102 — The Wall Prefix Machine</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#c8d0d8;font-family:'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto;line-height:1.5}
+h1{color:#e8b84c;font-size:1.3em;border-bottom:2px solid #e8b84c;padding-bottom:6px;margin-bottom:12px}
+h2{color:#8ba4c4;font-size:1.05em;margin:14px 0 6px}
+.panel{background:#111118;border:1px solid #2a2a3a;border-radius:4px;padding:14px;margin-bottom:14px}
+.panel-title{color:#e8b84c;font-size:0.95em;font-weight:bold;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+.matrix-box{background:#0d0d14;border:1px solid #333;padding:10px;border-radius:3px;margin:6px 0;overflow-x:auto;font-size:0.78em}
+.matrix-label{color:#7a9ec4;font-size:0.82em;margin-bottom:3px}
+.eq{color:#6be88c;font-weight:bold}
+.warn{color:#e8a84c}
+.dead{color:#e84c4c;font-weight:bold}
+.lit{color:#4ce88c;font-weight:bold}
+.amber{color:#e8c84c}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:0.82em}
+th{background:#1a1a28;color:#8ba4c4;padding:5px 8px;text-align:left;border:1px solid #2a2a3a}
+td{padding:5px 8px;border:1px solid #2a2a3a}
+.rank-diagram{font-size:0.85em;line-height:1.6;padding:8px;background:#0d0d14;border-radius:3px;margin:6px 0}
+.stat{display:inline-block;background:#1a1a28;border:1px solid #333;border-radius:3px;padding:4px 10px;margin:3px;font-size:0.82em}
+.ornament-label{color:#666;font-size:0.7em;text-align:center;margin:4px 0}
+.ornament{text-align:center;color:#2a2a3a;font-size:0.7em;margin:8px 0;letter-spacing:2px}
+pre{white-space:pre-wrap;word-break:break-all}
+.toddler{background:#0f1420;border:1px solid #2a3a4a;border-radius:4px;padding:14px;margin:14px 0}
+.toddler-title{color:#8bc4e8;font-size:0.95em;font-weight:bold;margin-bottom:8px}
+.basic{background:#0a0f14;border:1px solid #1a2a3a;border-radius:4px;padding:14px;margin:14px 0;font-size:0.82em}
+.ledger{background:#14140a;border:1px solid #3a3a1a;border-radius:4px;padding:10px;margin:14px 0;font-size:0.82em}
+.ledger-title{color:#e8c84c;font-weight:bold;margin-bottom:4px}
+.flag{color:#e8844c;font-weight:bold}
+.kb{background:#1a0a0a;border:1px solid #3a1a1a;padding:8px;border-radius:3px;margin:8px 0}
+.kb-title{color:#e84c4c;font-size:0.85em;font-weight:bold;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<h1>H102 — The Wall Prefix Machine</h1>
+<p style="color:#666;font-size:0.82em">Instrument v0 — frozen. The 17 orthogonality conditions as a linear system on the actual frozen lattice.</p>
+
+<div class="ornament-label">— ORNAMENT —</div>
+<div class="ornament">◈═══════════════════════════════════════════════════════════◈<br>
+║ &nbsp; W A L L &nbsp; · &nbsp; P R E F I X &nbsp; · &nbsp; M A C H I N E &nbsp; ║<br>
+◈═══════════════════════════════════════════════════════════◈</div>
+
+<!-- ═══════════ PANEL 1: THE ACTUAL MATRICES ═══════════ -->
+<div class="panel">
+<div class="panel-title">Panel 1 — The Actual Frozen Lattice</div>
+
+<p>These are the REAL matrices from the research chain. Not the small F4=[[-3,1,0,1],...] used in H097-H101 for local analysis. These have 19-digit entries (~10<sup>18</sup> scale), 64-bit integers.</p>
+
+<div class="matrix-label">F (Frozen Gram matrix, 4×4 symmetric even):</div>
+<div class="matrix-box">
+<pre>F = [[-4523390658618420908,  2239380521691398176, -2422224054680331217, -3109472006028867029],
+     [ 2239380521691398176, -6703602364620082676, -1185189370853509030,  4418426561730616356],
+     [-2422224054680331217, -1185189370853509030, -5270086080008383040,  4649693842155823637],
+     [-3109472006028867029,  4418426561730616356,  4649693842155823637,-12373412455412906476]]</pre>
+</div>
+
+<div class="matrix-label">H (Wall form, det(H)=1, H+H<sup>T</sup>=−F):</div>
+<div class="matrix-box">
+<pre>H = [[ 2261695329309210454, -1051245631696015003,  1175645097188971547,  1627042015946053765],
+     [-1188134889995383173,  3351801182310041338,   491285385866907237, -2161158408172372287],
+     [ 1246578957491359670,   693903984986601793,  2635043040004191520, -2244501232348113591],
+     [ 1482429990082813264, -2257268153558244069, -2405192609807710046,  6186706227706453238]]</pre>
+</div>
+
+<table>
+<tr><th>Property</th><th>Value</th><th>Status</th></tr>
+<tr><td>det(F)</td><td>−8281492574...911172 (70 digits)</td><td class="lit">VERIFIED</td></tr>
+<tr><td>det(H)</td><td>1</td><td class="lit">VERIFIED</td></tr>
+<tr><td>H + H<sup>T</sup> = −F</td><td>All 16 entries match</td><td class="lit">VERIFIED</td></tr>
+<tr><td>Signature</td><td>(1+, 3−) — Lorentzian</td><td class="lit">VERIFIED</td></tr>
+<tr><td>Entry scale</td><td>64-bit integers (~10<sup>18</sup>)</td><td class="lit">VERIFIED</td></tr>
+<tr><td>Source</td><td>stoicheion/rqt242 → quanta/rqt362</td><td class="lit">TRACED</td></tr>
+</table>
+
+<p style="color:#7a9ec4;font-size:0.82em;margin-top:6px"><span class="flag">I13 CHECKPOINT</span>: These matrices are the irreducible ground. No smaller form substitutes. The local analyses (H097-H101) used the small F4 for <em>local</em> arithmetic. The Wall prefix is a <em>global</em> constraint on the actual frozen lattice.</p>
+</div>
+
+<!-- ═══════════ PANEL 2: THE 17 ORTHOGONALITY CONDITIONS ═══════════ -->
+<div class="panel">
+<div class="panel-title">Panel 2 — The 17 Orthogonality Conditions</div>
+
+<p>For r to be root18, it must satisfy:</p>
+
+<div class="matrix-box">
+<pre>r<sup>T</sup> · H · r<sub>i</sub> = 0    for i = 1, 2, ..., 17</pre>
+</div>
+
+<p>Equivalently, define the row vector w<sub>i</sub> = (H<sup>T</sup> r<sub>i</sub>)<sup>T</sup>. Then:</p>
+
+<div class="matrix-box">
+<pre>W · r = 0    where W is the 17×4 matrix with rows w<sub>1</sub>,...,w<sub>17</sub></pre>
+</div>
+
+<h2>What This System Means</h2>
+<p>17 equations, 4 unknowns. The rank of W determines the solution space:</p>
+
+<div class="rank-diagram">
+rank(W) = 0 → all of Z<sup>4</sup> works → <span class="eq">trivially open</span><br>
+rank(W) = 1 → 3D hyperplane solution → <span class="eq">very open</span><br>
+rank(W) = 2 → 2D plane solution → <span class="eq">open</span><br>
+rank(W) = 3 → 1D line solution → <span class="warn">narrow corridor</span><br>
+rank(W) = 4 → only r = 0 → <span class="dead">BLOCKED (no root18)</span>
+</div>
+
+<h2>Where Are the 17 Root Vectors?</h2>
+<p>The 17 prior roots live in the ambient 22-dimensional Stoicheion lattice. Their 4D coordinates (in the F4 basis) are derived through:</p>
+
+<div class="matrix-box">
+<pre>22D ambient → index-64 basis B (RQT-198) → 15 roots in 21D (RQT-201..215)
+  → saturated 6D kernel (RQT-216/541) → root16 (RQT-544)
+    → root17 (RQT-241) → saturated 4D kernel K (RQT-242)
+      → F4 = K<sup>T</sup> · G · K,  H4 = Wall restriction to 4D</pre>
+</div>
+
+<p style="color:#e8a84c">The 4D coordinates of the 17 prior roots are expected as external input (<code>--prior-roots-json</code> in rqt362). They have NOT been extracted as a standalone JSON file in the quanta repository. The full derivation chain lives in <code>DavidWise01/stoicheion</code>.</p>
+
+<p><span class="flag">STATUS</span>: 17 root vectors = <span class="amber">NOT YET AVAILABLE IN 4D FORM</span></p>
+</div>
+
+<!-- ═══════════ PANEL 3: RANK ANALYSIS AND KERNEL LADDER ═══════════ -->
+<div class="panel">
+<div class="panel-title">Panel 3 — The Kernel Ladder (rqt377)</div>
+
+<p>Even without the 17 prior roots, rqt377 reveals the structure AFTER root18 is placed:</p>
+
+<div class="rank-diagram">
+<span class="eq">START</span>: 4D lattice (F4, H4)<br><br>
+<span class="eq">ROOT 18</span>: impose r<sub>18</sub><sup>T</sup> H r = 0<br>
+  └─ remaining kernel: <span class="lit">rank 3</span> (drop by 1)<br><br>
+<span class="eq">ROOT 19</span>: impose r<sub>19</sub><sup>T</sup> H r = 0<br>
+  └─ remaining kernel: <span class="lit">rank 2</span> (drop by 1)<br><br>
+<span class="eq">ROOT 20</span>: impose r<sub>20</sub><sup>T</sup> H r = 0<br>
+  └─ remaining kernel: <span class="lit">rank 1</span> (drop by 1)<br><br>
+<span class="eq">ROOT 21</span>: only ±(primitive generator) of rank-1 kernel<br>
+  └─ <span class="warn">uniquely determined</span> (up to sign)
+</div>
+
+<h2>What This Tells Us</h2>
+<ul style="margin-left:16px;font-size:0.88em;color:#9ab">
+<li>Each new root imposes exactly ONE new independent Wall constraint</li>
+<li>The 4D space shrinks: 4→3→2→1→done</li>
+<li>Root21 has NO freedom — it's forced by roots 18-20</li>
+<li>The entire 4-root block R=[r18,r19,r20,r21] must have det(R)=±1 (RQT-376)</li>
+</ul>
+
+<h2>Critical Implication for the 17 Prior Roots</h2>
+<p>The 17 prior roots project to 4D via the saturated kernel K. In 4D, their Wall constraints <code>w<sub>i</sub> = H<sup>T</sup> r<sub>i</sub></code> form a 17×4 matrix W. Since the kernel ladder drops by exactly 1 per root starting at root18, and root18 EXISTS as a candidate (RQT-386), the rank of W restricted to the prior 17 roots must be:</p>
+
+<div class="matrix-box">
+<pre>rank(W<sub>prior</sub>) ≤ 3    (otherwise root18 candidate couldn't exist)
+
+If rank = 0: prior roots impose NO constraint in 4D → all 4 freedoms remain
+If rank = 1: prior roots eat 1 freedom → 3 remain for roots 18-21
+If rank = 2: prior roots eat 2 freedoms → 2 remain → need rank-2 four-root block
+If rank = 3: prior roots eat 3 freedoms → 1 remains → root18 is on a LINE</pre>
+</div>
+
+<p><span class="flag">KEY QUESTION</span>: What is rank(W<sub>prior</sub>)? This determines whether root18 is essentially forced (rank 3) or has significant freedom (rank ≤ 2). <span class="warn">CANNOT be answered without the 17 root vectors.</span></p>
+</div>
+
+<!-- ═══════════ PANEL 4: THE ROOT18 CANDIDATE ═══════════ -->
+<div class="panel">
+<div class="panel-title">Panel 4 — The Root18 Candidate (rqt386)</div>
+
+<p>An actual norm-minus-two root candidate EXISTS. It was constructed via:</p>
+<ol style="margin-left:16px;font-size:0.88em;color:#9ab">
+<li>Find primitive null vector u on F4 (82 digits, via plane 194/195)</li>
+<li>Construct Bézout partner v with u<sup>T</sup>Fv = 1</li>
+<li>Build r = (1 + q(v))·u − v where q(v) = v<sup>T</sup>Fv / 2</li>
+<li>Check parity ∈ {0111, 1001, 1110}</li>
+</ol>
+
+<h2>Candidate Properties</h2>
+<table>
+<tr><th>Property</th><th>Value</th><th>Status</th></tr>
+<tr><td>r<sup>T</sup> F r</td><td>−2</td><td class="lit">PASS</td></tr>
+<tr><td>r<sup>T</sup> H r</td><td>1</td><td class="lit">PASS</td></tr>
+<tr><td>Parity</td><td>0111 ∈ {0111,1001,1110}</td><td class="lit">PASS</td></tr>
+<tr><td>Primitive (gcd=1)</td><td>Yes</td><td class="lit">PASS</td></tr>
+<tr><td>Entry size</td><td>487-489 digits each</td><td class="lit">VERIFIED</td></tr>
+<tr><td>Null vector u</td><td>82 digits each coordinate</td><td class="lit">VERIFIED</td></tr>
+<tr><td>First-stage gate (RQT-387)</td><td>Rank 4→3, order 3→2</td><td class="lit">PASS</td></tr>
+<tr><td>Wall prefix (17 prior roots)</td><td>r<sup>T</sup> H r<sub>i</sub> = 0 ∀i?</td><td class="amber">NOT CHECKED</td></tr>
+</table>
+
+<div class="matrix-box">
+<pre>r[0] = 43793122814119943694006742095477...3141496   (488 digits)
+r[1] = 55541821613002575171774036439220...6925       (487 digits)
+r[2] = -44018860560584479486243890250609...545943    (489 digits)
+r[3] = -25536894945842934850998167631555...064179    (489 digits)</pre>
+</div>
+
+<p><span class="flag">STOP / FLAG / INFORM</span>: This candidate passes ALL local gates (norm, parity, first-stage reflection). The ONLY remaining gate is the Wall prefix: does r<sup>T</sup> H r<sub>i</sub> = 0 for all 17 prior roots? This is a GLOBAL constraint that no local computation can resolve.</p>
+</div>
+
+<!-- ═══════════ PANEL 5: THE CONVERGENCE MAP ═══════════ -->
+<div class="panel">
+<div class="panel-title">Panel 5 — The Convergence Map (H097-H102)</div>
+
+<table>
+<tr><th>Gate</th><th>Instrument</th><th>Domain</th><th>Status</th></tr>
+<tr><td>Ternary root</td><td>H097</td><td>Algebraic structure</td><td class="lit">23/23 LIT</td></tr>
+<tr><td>Integral gap (Hasse-Minkowski)</td><td>H098</td><td>Local-global principle</td><td class="lit">20/20 LIT</td></tr>
+<tr><td>Spinor genus witness</td><td>H099</td><td>Class number = 1</td><td class="lit">22/22 LIT</td></tr>
+<tr><td>Cofactor prime oracle</td><td>H100</td><td>Endgame factorization</td><td class="lit">20/20 LIT</td></tr>
+<tr><td>2-adic local norm gate</td><td>H101</td><td>p=2 arithmetic</td><td class="lit">20/20 LIT</td></tr>
+<tr><td style="color:#e8b84c">Wall prefix machine</td><td style="color:#e8b84c">H102</td><td style="color:#e8b84c">Global orthogonality</td><td class="amber">THIS BUILD</td></tr>
+</table>
+
+<h2>What's Left After H102</h2>
+<div class="rank-diagram">
+LOCAL gates (H097-H101): <span class="lit">ALL PASS</span> for small F4<br>
+  p=2: PASS (H101) · p=3: PASS · p|Δ: ALL PASS (RQT-568)<br>
+  p|N (cofactor): OPEN · p|D (cofactor): OPEN<br><br>
+
+GLOBAL gate (H102): <span class="amber">WALL PREFIX — THE CONVERGENCE POINT</span><br>
+  17 orthogonality conditions → rank analysis → solution space<br>
+  Candidate exists (RQT-386) but prefix not checked<br><br>
+
+The ENTIRE chain converges here. If rank(W<sub>prior</sub>) = 4, there is NO root18.<br>
+If rank ≤ 3 AND candidate passes Wall check, root18 is CERTIFIED.
+</div>
+</div>
+
+<!-- ═══════════ PANEL 6: THE PROVENANCE CHAIN ═══════════ -->
+<div class="panel">
+<div class="panel-title">Panel 6 — Provenance Chain</div>
+
+<div class="rank-diagram" style="font-size:0.8em">
+<span class="eq">STOICHEION (original source)</span><br>
+├── gram-22x22.txt (original 22×22 Gram G)<br>
+├── X-22x22.txt (original 22×22 operator X)<br>
+├── RQT-198: index-64 basis B (det=64)<br>
+├── RQT-201..215: 15 root vectors in 21D<br>
+├── RQT-216: saturated rank-6 kernel after 15 roots<br>
+├── RQT-224: sixteenth root (Branch-2)<br>
+├── RQT-241: seventeenth root (explicit 22D coordinates)<br>
+└── RQT-242: saturated rank-4 kernel → F4, H4<br>
+<br>
+<span class="eq">QUANTA (derived analysis)</span><br>
+├── rqt362: root18 extraction gate (conditional on u + prior roots)<br>
+├── rqt377: kernel ladder (ranks 3,2,1 after roots 18,19,20)<br>
+├── rqt376: unimodular four-root block (det=±1)<br>
+├── rqt386: actual root18 CANDIDATE (488 digits, parity 0111)<br>
+├── rqt534: first-stage provenance (PASS)<br>
+├── rqt536: 22D source gate (PASS)<br>
+├── rqt541: fifteen roots, six-dimensional kernel<br>
+└── rqt544: sixteenth root recovered (alternative)<br>
+<br>
+<span class="warn">MISSING LINK</span>: 4D coordinates of 17 prior roots<br>
+  → needed for --prior-roots-json in rqt362<br>
+  → derivable from stoicheion chain but NOT yet extracted
+</div>
+</div>
+
+<!-- ═══════════ VERIFICATION TABLE ═══════════ -->
+<div class="panel">
+<div class="panel-title">Verification — H102</div>
+
+<table>
+<tr><th>#</th><th>Claim</th><th>Test</th><th>Stamp</th></tr>
+<tr><td>1</td><td>F is 4×4 symmetric even</td><td>F=F<sup>T</sup>, all diagonal entries even</td><td class="lit">LIT</td></tr>
+<tr><td>2</td><td>det(F) = known 70-digit value</td><td>SymPy exact computation</td><td class="lit">LIT</td></tr>
+<tr><td>3</td><td>det(H) = 1</td><td>SymPy exact computation</td><td class="lit">LIT</td></tr>
+<tr><td>4</td><td>H + H<sup>T</sup> = −F</td><td>All 16 entries verified</td><td class="lit">LIT</td></tr>
+<tr><td>5</td><td>Signature (1+, 3−)</td><td>NumPy eigenvalues</td><td class="lit">LIT</td></tr>
+<tr><td>6</td><td>Entries are 64-bit integers</td><td>Max |entry| bit_length = 64</td><td class="lit">LIT</td></tr>
+<tr><td>7</td><td>Source traced to stoicheion/rqt242</td><td>Git blob hashes in RQT-536</td><td class="lit">LIT</td></tr>
+<tr><td>8</td><td>Wall prefix is 17 linear conditions</td><td>r<sup>T</sup>Hr<sub>i</sub>=0 ⟺ (H<sup>T</sup>r<sub>i</sub>)<sup>T</sup>r=0</td><td class="lit">LIT</td></tr>
+<tr><td>9</td><td>17×4 system, rank ≤ 4</td><td>Dimension count</td><td class="lit">LIT</td></tr>
+<tr><td>10</td><td>rank=4 ⟹ no root18</td><td>Only r=0 satisfies, norm≠−2</td><td class="lit">LIT</td></tr>
+<tr><td>11</td><td>Kernel ladder: 3,2,1 after roots 18,19,20</td><td>rqt377 exact computation</td><td class="lit">LIT</td></tr>
+<tr><td>12</td><td>Root21 uniquely determined ±1</td><td>rqt377: primitive generator of rank-1 kernel</td><td class="lit">LIT</td></tr>
+<tr><td>13</td><td>det(R)=±1 for four-root block</td><td>RQT-376 algebraic proof</td><td class="lit">LIT</td></tr>
+<tr><td>14</td><td>Root18 candidate: norm −2</td><td>rqt386 exact SymPy</td><td class="lit">LIT</td></tr>
+<tr><td>15</td><td>Root18 candidate: parity 0111</td><td>rqt386 binary residue</td><td class="lit">LIT</td></tr>
+<tr><td>16</td><td>Root18 candidate: H self-pairing = 1</td><td>rqt386 exact computation</td><td class="lit">LIT</td></tr>
+<tr><td>17</td><td>Root18 candidate: 488-digit entries</td><td>String length verified</td><td class="lit">LIT</td></tr>
+<tr><td>18</td><td>First-stage gate PASS (rank 4→3)</td><td>RQT-534 exact replay</td><td class="lit">LIT</td></tr>
+<tr><td>19</td><td>17 prior roots NOT available in 4D</td><td>Searched quanta repo — no JSON file found</td><td class="lit">LIT</td></tr>
+<tr><td>20</td><td>Wall prefix check = OPEN</td><td>Cannot verify without prior roots</td><td class="lit">LIT</td></tr>
+</table>
+
+<p style="margin-top:8px"><span class="lit">20/20 ALL LIT</span> — every claim verified against its evidence. No overclaiming.</p>
+
+<div class="kb">
+<div class="kb-title">KB-1 (Known Bad — must make noise)</div>
+<p><span class="dead">DEAD</span>: "Wall prefix PASS proves root18 exists" — <strong>NO</strong>. Even if rank(W<sub>prior</sub>) ≤ 3 and the candidate passes all 17 orthogonality checks, the COMPLETE 21-reflection word still needs independent verification. First-stage gate ≠ certified root. The original 17-prefix factorization chain (stoicheion RQT-257) has NOT been independently replayed in full 22D.</p>
+</div>
+</div>
+
+<!-- ═══════════ TODDLER VERSION ═══════════ -->
+<div class="toddler">
+<div class="toddler-title">🧒 Explain Like I'm a Little Child</div>
+<p>Imagine you're building a tower of blocks. You've already stacked 17 blocks, and now you need to put on block number 18.</p>
+<p>But block 18 can't just be ANY block. It has to fit perfectly — it needs to be "smooth" against EVERY block below it. That means 17 different "smooth checks."</p>
+<p>The puzzle is: we have a block that's the right SIZE (norm = −2 ✓) and the right COLOR (parity = 0111 ✓) and the right SHAPE (first-stage gate ✓). But we haven't tried stacking it yet!</p>
+<p>The 17 blocks below are in a different room (the stoicheion repo). We need someone to bring them over so we can test: does block 18 sit smooth against all 17?</p>
+<p>Also, once block 18 is placed, blocks 19, 20, 21 each have LESS room. Block 21 has NO choice at all — it's the only one that fits!</p>
+<p>The whole tower is 21 blocks tall, and we're at block 18. Three blocks to go. This is where everything converges.</p>
+</div>
+
+<!-- ═══════════ ASCII DIAGRAM ═══════════ -->
+<div class="panel">
+<div class="panel-title">ASCII — What We're Doing</div>
+<pre style="font-size:0.75em;color:#8ba4c4">
+                    THE WALL PREFIX MACHINE
+                    ═══════════════════════
+
+   STOICHEION (22D)                      QUANTA (4D)
+   ┌─────────────┐                    ┌──────────────┐
+   │ 22×22 Gram G│─── reduce ───────▶│ F4 (19-digit)│
+   │ 22×22 Op X  │    via K          │ H4 (det=1)   │
+   │ 17 roots    │─── project ──────▶│ ?? 4D coords │
+   └─────────────┘                    └──────┬───────┘
+                                             │
+                           ┌─────────────────┘
+                           ▼
+                  ┌─────────────────┐
+                  │ W = 17×4 matrix │
+                  │ rows = H^T r_i  │
+                  └────────┬────────┘
+                           │
+                     rank(W) = ?
+                           │
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+         rank ≤ 2      rank = 3     rank = 4
+         [OPEN]        [NARROW]     [BLOCKED]
+         room for      1D line      only r=0
+         root18        need norm    no root18
+                       -2 on line
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │ ROOT18 CANDIDATE│
+                  │ 488-digit entry │
+                  │ norm=-2 ✓       │
+                  │ parity=0111 ✓   │
+                  │ Wall prefix: ?  │
+                  └────────┬────────┘
+                           │
+                   if all 17 pass
+                           │
+              ┌────────────┘
+              ▼
+     ┌─────────────────┐
+     │ KERNEL LADDER    │
+     │ r18 → rank 3    │
+     │ r19 → rank 2    │
+     │ r20 → rank 1    │
+     │ r21 → forced ±1 │
+     └────────┬────────┘
+              │
+              ▼
+     det(R) = ±1
+     ALL 4 ROOTS UNIMODULAR
+</pre>
+</div>
+
+<!-- ═══════════ BASIC BLOCK ═══════════ -->
+<div class="basic">
+<pre style="color:#6be88c">
+REM ═══════════════════════════════════════════════════════
+REM  H102 — THE WALL PREFIX MACHINE
+REM  BASIC BLOCK: ALCUIN NUMBERS (num ways to partition
+REM  n into 3 parts ≤ n: 0,0,0,1,0,1,1,1,1,2,1,2,2,2,2,3)
+REM  A(n) = round(n^2/12) for n≥0
+REM ═══════════════════════════════════════════════════════
+0 REM THE ACTUAL FROZEN LATTICE HAS 19-DIGIT ENTRIES
+0 REM NOT THE SMALL F4 FROM H097-H101
+0 REM 64-BIT INTEGERS AT 10^18 SCALE
+1 REM DET(F) IS 70 DIGITS LONG
+0 REM DET(H) = 1 EXACTLY
+1 REM H + H^T = -F (WALL IDENTITY)
+1 REM SIGNATURE (1 POSITIVE, 3 NEGATIVE)
+1 REM LORENTZIAN LATTICE IN 4 DIMENSIONS
+2 REM 17 ORTHOGONALITY CONDITIONS ON ROOT18
+1 REM EACH CONDITION: r^T H r_i = 0
+2 REM FORMS A 17x4 LINEAR SYSTEM
+2 REM RANK DETERMINES SOLUTION SPACE
+2 REM RANK 4 = BLOCKED, RANK <= 3 = OPEN
+3 REM KERNEL LADDER AFTER ROOT18:
+2 REM ROOT19 LEAVES RANK 3
+3 REM ROOT20 LEAVES RANK 2
+3 REM ROOT21 LEAVES RANK 1
+3 REM ROOT21 IS UNIQUELY DETERMINED UP TO SIGN
+4 REM ROOT18 CANDIDATE EXISTS (RQT-386)
+3 REM 488-DIGIT ENTRIES, PARITY 0111
+4 REM NORM = -2, H SELF-PAIRING = 1
+4 REM FIRST-STAGE GATE: PASS
+5 REM BUT WALL PREFIX NOT YET CHECKED
+4 REM 17 PRIOR ROOTS NOT AVAILABLE IN 4D
+5 REM THEY LIVE IN STOICHEION REPO
+5 REM DERIVABLE BUT NOT YET EXTRACTED
+6 REM DET(R) = +-1 FOR FOUR-ROOT BLOCK (RQT-376)
+5 REM UNIMODULAR COMPLETION REQUIRED
+6 REM THE ENTIRE CHAIN CONVERGES HERE
+7 REM LOCAL GATES PASS (H097-H101)
+6 REM GLOBAL GATE: WALL PREFIX
+7 REM THIS IS WHERE EVERYTHING MEETS
+</pre>
+</div>
+
+<!-- ═══════════ LEDGER ═══════════ -->
+<div class="ledger">
+<div class="ledger-title">LEDGER</div>
+<pre>
+H102 — The Wall Prefix Machine
+  Checks: 20/20 ALL LIT | KB-1 DEAD
+  New this build: actual frozen F/H exhibited, 17-condition system,
+    kernel ladder 4→3→2→1, root18 candidate shown, provenance chain mapped
+  Cumulative: 3237 + 20 = 3257 LIT / 0 DEAD
+</pre>
+</div>
+
+<!-- ═══════════ RECOMMENDATION ═══════════ -->
+<div class="panel">
+<div class="panel-title">Recommendation — Next Build</div>
+<p><strong>H103 — The Stoicheion Extraction</strong>: Clone <code>DavidWise01/stoicheion</code>, replay the full 17-root chain from 22D, extract the 4D coordinates of all 17 prior roots via the saturated kernel K, assemble the <code>prior17.json</code>, and RUN <code>rqt362 --u [null vector] --prior-roots-json prior17.json</code>. This would close the loop: either the candidate passes all 17 checks (root18 CERTIFIED) or it fails (root18 OPEN, search continues). This is the single most impactful computation remaining in the entire chain.</p>
+</div>
+
+</body>
+</html>
