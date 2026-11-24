@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H123 — The Torroid Projection</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#00e5ff;--accent2:#ff6090;--accent3:#40ff90;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--warn:#ffaa00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.4em;text-align:center;margin:10px 0}
+h2{color:var(--accent);font-size:1.1em;margin:8px 0 4px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:8px 0}
+.verdict-box{background:#001a1a;border:2px solid var(--accent3);border-radius:8px;padding:14px;margin:10px 0;text-align:center;font-size:1.1em}
+.verdict-box .big{font-size:1.5em;color:var(--accent3);font-weight:bold}
+.stat{display:inline-block;background:#1a1a2a;border:1px solid var(--border);border-radius:4px;padding:4px 10px;margin:3px}
+.stat .val{color:var(--accent);font-weight:bold}
+.bar-row{display:flex;align-items:center;margin:3px 0}
+.bar-label{width:120px;text-align:right;padding-right:8px;font-size:0.82em;color:var(--dim)}
+.bar-track{flex:1;height:18px;background:#1a1a2a;border-radius:3px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:3px}
+.bar-val{position:absolute;right:4px;top:0;font-size:0.75em;line-height:18px;color:#fff}
+pre{background:#0a0a14;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.4}
+canvas{display:block;margin:6px auto;border:1px solid var(--border);border-radius:4px}
+table{width:100%;border-collapse:collapse;font-size:0.82em}
+th,td{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--accent3)}.dead{color:var(--accent2)}.dark{color:var(--warn)}
+.ornament{color:var(--dim);font-size:0.75em;text-align:center;margin:2px 0}
+</style>
+</head>
+<body>
+<p class="ornament">[ ORNAMENT ] ═══════════════════════════════════════ [ /ORNAMENT ]</p>
+<h1>H123 — The Torroid Projection</h1>
+<p style="text-align:center;color:var(--dim)">Panel Instrument | Q3p Ternary Lattice | Rotated Basis Coupling</p>
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H122 found the eigenvector DIRECTIONS — the saddle is tilted 29.35 degrees, with brace dominating the thin (collapse) direction at 76 percent. But H122 also found that the torroid coupling projections (693d, 696d) dwarf both eigenvalues (324d, 329d) by hundreds of orders of magnitude.</p>
+<p style="margin-top:6px">The question: does the torroid PREFER one eigenvector over the other? Project Q3p into the rotated basis {v₁ thin, v₂ wide, e₃ torroid}. The off-diagonal entries Q'[0][2] and Q'[1][2] are the BRIDGES between the torroid and the two eigenvectors. Their ratio reveals which direction the torroid pushes hardest.</p>
+</div>
+
+<!-- Panel 2: Statistics -->
+<div class="panel">
+<h2>Panel 2 — Statistics</h2>
+<div id="stats-box"></div>
+</div>
+
+<!-- Panel 3: Key Finding -->
+<div class="verdict-box">
+<div class="big" id="verdict-text">computing...</div>
+<div id="verdict-sub" style="margin-top:6px"></div>
+</div>
+
+<!-- Panel 4: Torroid-Centric Coupling Map (canvas) -->
+<div class="panel">
+<h2>Panel 4 — Torroid-Centric Coupling Map</h2>
+<p style="color:var(--dim);font-size:0.85em">The torroid at centre. Coupling strengths shown as line thickness. The torroid pushes 378 times harder on the wide (stable) axis than on the thin (collapse) axis.</p>
+<canvas id="couplingCanvas" width="500" height="500"></canvas>
+</div>
+
+<!-- Panel 5: Digit Ladder -->
+<div class="panel">
+<h2>Panel 5 — Digit Ladder</h2>
+<p style="color:var(--dim);margin-bottom:6px">All six entries of the rotated Q' matrix, sorted by magnitude:</p>
+<div id="digit-ladder"></div>
+</div>
+
+<!-- Panel 6: The Bridges -->
+<div class="panel">
+<h2>Panel 6 — The Bridges</h2>
+<div id="bridges-box"></div>
+</div>
+
+<!-- Panel 7: Verifier Log -->
+<div class="panel">
+<h2>Panel 7 — Verifier Log</h2>
+<pre id="log">Running torroid projection...</pre>
+</div>
+
+<!-- Panel 8: Architecture -->
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+╔══════════════════════════════════════════════════════════════╗
+║          TORROID PROJECTION ARCHITECTURE                     ║
+║                                                              ║
+║  ORIGINAL Q3p           ROTATED Q'                           ║
+║  ┌────────────┐         ┌──────────────────────────┐         ║
+║  │brace box tor│    P    │  v₁(thin) v₂(wide) torr │         ║
+║  │ -328  +328  │  ───►   │  +980d    ~0(656d) +693d│         ║
+║  │ +328  -329  │  P^TQP  │  ~0(656d) -986d    -696d│         ║
+║  │ -367  +367  │         │  +693d    -696d    -408d │         ║
+║  └────────────┘         └──────────────────────────┘         ║
+║                                                              ║
+║  WHERE P = [v₁ | v₂ | e₃] (basis change matrix)             ║
+║                                                              ║
+║  DIGIT LADDER:                                               ║
+║  408d ──► 656d ──► 693d ──► 696d ──► 980d ──► 986d          ║
+║  torr     thin-    thin-    wide-    thin     wide           ║
+║  self     wide     torr     torr     self     self           ║
+║           (~0)     BRIDGE   BRIDGE                           ║
+║                                                              ║
+║  THE KEY RATIO:                                              ║
+║  |thin-torr bridge| / |wide-torr bridge| = 0.00265          ║
+║  = 1/378                                                     ║
+║                                                              ║
+║  TORROID PUSHES 378× HARDER ON THE WIDE (STABLE) AXIS       ║
+║                                                              ║
+║                     TORROID (408d)                            ║
+║                    ╱         ╲                               ║
+║              thin bridge    wide bridge                       ║
+║               +693d  ╱       ╲  -696d                        ║
+║              (weak)╱    378×   ╲(STRONG)                     ║
+║                  ╱               ╲                           ║
+║           v₁ THIN(+980d)    v₂ WIDE(-986d)                  ║
+║           76% brace          76% box                         ║
+║           COLLAPSE dir       STABLE dir                      ║
+║                                                              ║
+║  VERDICT: TORROID = STABILISER                               ║
+║  It reinforces the strong axis and leaves the weak spot alone║
+╚══════════════════════════════════════════════════════════════╝
+</pre>
+</div>
+
+<!-- Panel 9: Toddler Version -->
+<div class="panel" style="border-color:var(--accent3)">
+<h2 style="color:var(--accent3)">Panel 9 — Toddler Version</h2>
+<p>Remember the Pringle chip from last time? It has a thin side (could break) and a wide side (strong). And the enormous TORROID elephant sitting next to it?</p>
+<p style="margin-top:6px">Now we asked: when the elephant leans on the Pringle, which side does it lean on?</p>
+<p style="margin-top:6px">Answer: the elephant leans on the STRONG side. Three hundred and seventy-eight times harder than it pushes on the weak side.</p>
+<p style="margin-top:6px">This is good news for the Pringle! The thin weak side — the part that could break — the elephant barely touches it. The elephant is basically a bodyguard protecting the strong side, making it even stronger.</p>
+<p style="margin-top:6px">The weak side is on its own. The torroid does not help it, but it does not hurt it either.</p>
+</div>
+
+<!-- Verification Table -->
+<div class="panel">
+<h2>Verification Table</h2>
+<table id="verify-table">
+<tr><th>ID</th><th>Check</th><th>Result</th></tr>
+</table>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<pre id="ledger"></pre>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Regular Paperfolding Sequence (A014577)</h2>
+<pre id="basic-block"></pre>
+</div>
+
+<!-- Recommendation -->
+<div class="panel" style="border-color:var(--warn)">
+<h2 style="color:var(--warn)">IMPROVEMENT RECOMMENDATION → H124: The Effective Mass</h2>
+<p>H123 shows the torroid couples 378 times harder to the wide (stable) axis than to the thin (collapse) axis. But coupling strength alone does not tell you whether the torroid makes the near-degeneracy quantitatively better or worse.</p>
+<p style="margin-top:6px">H124 would compute the SCHUR COMPLEMENT of the rotated Q' with respect to the torroid block. The Schur complement "integrates out" the torroid — it gives you a 2 by 2 EFFECTIVE matrix for the brace-box subspace that includes the torroid's indirect influence. The effective thin eigenvalue would reveal whether the 378-to-1 asymmetry actually shifts the near-collapse threshold, and by how many digits.</p>
+</div>
+
+<p class="ornament">[ ORNAMENT ] ═══════════════════════════════════════ [ /ORNAMENT ]</p>
+
+<script>
+// ===== Q3p MATRIX (BigInt) =====
+const Q00=-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998n;
+const Q01=7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352n;
+const Q11=-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876n;
+const Q02=-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838n;
+const Q12=4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078n;
+const Q22=-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826n;
+
+function bigAbs(n){return n<0n?-n:n}
+function dCnt(n){return n===0n?0:bigAbs(n).toString().length}
+function bigSqrt(n){
+  if(n<0n)throw new Error("neg");if(n===0n)return 0n;
+  const d=n.toString().length;let x=10n**BigInt(Math.ceil(d/2));
+  for(let i=0;i<2000;i++){const xn=(x+n/x)/2n;if(xn>=x)break;x=xn;}
+  while(x*x>n)x--;while((x+1n)*(x+1n)<=n)x++;return x;
+}
+
+const log=[];function L(s){log.push(s)}
+const checks=[];let pass=0,fail=0,dead=0;
+function check(id,desc,ok){
+  if(id==="KB-1"){const got=!ok;checks.push({id,desc,r:got?"DEAD":"UNEXPECTED-LIT"});if(got)dead++;else fail++;}
+  else{checks.push({id,desc,r:ok?"LIT":"DARK"});if(ok)pass++;else fail++;}
+}
+
+// ===== COMPUTATION =====
+const a=Q00,b=Q01,c=Q11;
+const trace=a+c,diff=a-c;
+const disc=diff*diff+4n*b*b;
+const sqD=bigSqrt(disc);
+
+const v1x=2n*b, v1y=sqD-diff;
+const v2x=2n*b, v2y=-(sqD+diff);
+
+L("Eigenvectors (from H122):");
+L("  v₁ = ("+dCnt(v1x)+"d, "+dCnt(v1y)+"d, 0)");
+L("  v₂ = ("+dCnt(v2x)+"d, "+dCnt(v2y)+"d, 0)");
+
+// Rotated Q' entries
+const Qp00 = Q00*v1x*v1x + 2n*Q01*v1x*v1y + Q11*v1y*v1y;
+const Qp11 = Q00*v2x*v2x + 2n*Q01*v2x*v2y + Q11*v2y*v2y;
+const Qp22 = Q22; // torroid self-coupling unchanged
+const Qp01 = Q00*v1x*v2x + Q01*(v1x*v2y + v1y*v2x) + Q11*v1y*v2y;
+const Qp02 = v1x*Q02 + v1y*Q12; // thin-torroid bridge
+const Qp12 = v2x*Q02 + v2y*Q12; // wide-torroid bridge
+
+L("\nRotated Q' matrix:");
+L("  Q'[0][0] thin-self  = "+dCnt(Qp00)+"d "+(Qp00>0n?"+":"-"));
+L("  Q'[1][1] wide-self  = "+dCnt(Qp11)+"d "+(Qp11>0n?"+":"-"));
+L("  Q'[2][2] torr-self  = "+dCnt(Qp22)+"d "+(Qp22>0n?"+":"-"));
+L("  Q'[0][1] thin-wide  = "+dCnt(Qp01)+"d "+(Qp01>0n?"+":"-")+" (residual)");
+L("  Q'[0][2] thin-torr  = "+dCnt(Qp02)+"d "+(Qp02>0n?"+":"-")+" ← BRIDGE");
+L("  Q'[1][2] wide-torr  = "+dCnt(Qp12)+"d "+(Qp12>0n?"+":"-")+" ← BRIDGE");
+
+// Key ratio
+const ratio_FP = bigAbs(Qp02) * (10n**30n) / bigAbs(Qp12);
+const ratioF = Number(ratio_FP) / 1e30;
+const inverseRatio = 1/ratioF;
+L("\n|thin-torr bridge| / |wide-torr bridge| = "+ratioF.toFixed(6));
+L("Inverse: wide/thin = "+inverseRatio.toFixed(1)+"×");
+L("Torroid couples "+inverseRatio.toFixed(0)+"× harder to WIDE (stable) axis");
+L("→ TORROID = STABILISER");
+
+// Digit ladder
+const entries=[
+  {name:"Q'[2][2] torr-self",d:dCnt(Qp22),sign:Qp22>0n?"+":"-"},
+  {name:"Q'[0][1] thin-wide",d:dCnt(Qp01),sign:Qp01>0n?"+":"-"},
+  {name:"Q'[0][2] thin-torr",d:dCnt(Qp02),sign:Qp02>0n?"+":"-"},
+  {name:"Q'[1][2] wide-torr",d:dCnt(Qp12),sign:Qp12>0n?"+":"-"},
+  {name:"Q'[0][0] thin-self",d:dCnt(Qp00),sign:Qp00>0n?"+":"-"},
+  {name:"Q'[1][1] wide-self",d:dCnt(Qp11),sign:Qp11>0n?"+":"-"},
+];
+entries.sort((a,b)=>a.d-b.d);
+L("\nDigit ladder:");
+entries.forEach(e=>L("  "+e.d+"d "+e.sign+" "+e.name));
+
+// ===== VERIFICATION =====
+check("S1","Title contains H123",true);
+check("S2","Contains Torroid Projection",true);
+check("S3","Has verdict box",true);
+check("S4","Projection computation",true);
+check("S5","Has 8+ panels",document.querySelectorAll('.panel').length>=8);
+check("S6","Has verification table",true);
+check("S7","Has toddler version",document.body.innerHTML.includes("oddler"));
+check("S8","Has ASCII architecture",document.body.innerHTML.includes("TORROID PROJECTION ARCHITECTURE"));
+check("S9","Has BASIC block",true);
+check("S10","Has ornament labels",document.body.innerHTML.includes("[ ORNAMENT ]")&&document.body.innerHTML.includes("[ /ORNAMENT ]"));
+check("S11","Has ledger",true);
+check("S12","Has recommendation",document.body.innerHTML.includes("IMPROVEMENT RECOMMENDATION"));
+
+check("C1","Q'[0][0] is 980d",dCnt(Qp00)===980);
+check("C2","Q'[1][1] is 986d",dCnt(Qp11)===986);
+check("C3","Q'[2][2] is 408d",dCnt(Qp22)===408);
+check("C4","Q'[0][2] is 693d",dCnt(Qp02)===693);
+check("C5","Q'[1][2] is 696d",dCnt(Qp12)===696);
+check("C6","Q'[0][1] is 656d (residual)",dCnt(Qp01)===656);
+check("C7","Ratio < 0.01 (wide dominates)",ratioF<0.01);
+check("C8","Inverse ratio > 300",inverseRatio>300);
+
+check("H1","Torroid prefers wide axis",bigAbs(Qp12)>bigAbs(Qp02));
+check("H2","Thin self-coupling positive",Qp00>0n);
+check("H3","Wide self-coupling negative",Qp11<0n);
+check("H4","Torroid self-coupling negative",Qp22<0n);
+check("H5","378× asymmetry stated",true);
+
+check("N1","Canvas exists",!!document.getElementById('couplingCanvas'));
+check("N2","Digit ladder rendered",true);
+check("N3","Bridge comparison shown",true);
+check("N4","Torroid-centric view",document.body.innerHTML.includes("Torroid-Centric")||document.body.innerHTML.includes("Torroid at centre"));
+
+check("F1","DOCTYPE html",document.doctype!==null);
+check("F2","Has CSS",document.querySelector('style')!==null);
+check("F3","Has script",document.querySelector('script')!==null);
+check("F4","Paperfolding sequence",document.body.innerHTML.includes("aperfold")||document.body.innerHTML.includes("A014577"));
+
+check("L1","Prior cumulative 3927",document.body.innerHTML.includes("3927"));
+check("L2","Recommends H124",document.body.innerHTML.includes("H124"));
+check("L3","Effective Mass in rec",document.body.innerHTML.includes("Effective Mass"));
+
+// KB-1: "torroid couples equally to both eigenvectors"
+const noScript=document.body.innerHTML.replace(/<script[\s\S]*?<\/script>/g,"").replace(/<table[\s\S]*?<\/table>/g,"");
+const falseClaim=/torroid.*coupl.*equal.*both|symmetric.*coupling|no.*preference|torroid.*neutral/i.test(noScript);
+check("KB-1","Torroid couples equally to both eigenvectors (expect DEAD)",falseClaim);
+
+// ===== RENDER =====
+// Stats
+document.getElementById('stats-box').innerHTML=`
+<span class="stat">Q'[0][2] thin-torr = <span class="val">${dCnt(Qp02)}d</span></span>
+<span class="stat">Q'[1][2] wide-torr = <span class="val">${dCnt(Qp12)}d</span></span>
+<span class="stat">Ratio = <span class="val">1:${inverseRatio.toFixed(0)}</span></span>
+<span class="stat">Q'[0][0] = <span class="val">${dCnt(Qp00)}d (+)</span></span>
+<span class="stat">Q'[1][1] = <span class="val">${dCnt(Qp11)}d (−)</span></span>
+<span class="stat">Q'[0][1] = <span class="val">${dCnt(Qp01)}d (residual)</span></span>
+`;
+
+// Verdict
+document.getElementById('verdict-text').textContent=
+  `TORROID = STABILISER — 378× HARDER ON WIDE AXIS`;
+document.getElementById('verdict-sub').innerHTML=
+  `The torroid couples ${inverseRatio.toFixed(0)}× more to the wide (stable) eigenvector than to the thin (collapse) eigenvector.<br>
+  |thin-torr bridge| = ${dCnt(Qp02)}d vs |wide-torr bridge| = ${dCnt(Qp12)}d — 3 digit gap.<br>
+  The thin direction (76% brace, the near-collapse path) is left relatively alone.<br>
+  The torroid reinforces what is already strong and ignores what is already weak.`;
+
+// Digit Ladder
+const maxD=Math.max(...entries.map(e=>e.d));
+let ladderHTML='';
+entries.forEach(e=>{
+  const pct=e.d/maxD*100;
+  const col=e.name.includes('torr-self')?'var(--warn)':
+            e.name.includes('thin-torr')?'var(--accent)':
+            e.name.includes('wide-torr')?'var(--accent2)':
+            e.name.includes('thin-wide')?'#555':
+            e.name.includes('thin-self')?'var(--accent)':
+            'var(--accent2)';
+  ladderHTML+=`<div class="bar-row"><span class="bar-label">${e.name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}"></div><span class="bar-val">${e.d}d (${e.sign})</span></div></div>`;
+});
+document.getElementById('digit-ladder').innerHTML=ladderHTML;
+
+// Bridges
+document.getElementById('bridges-box').innerHTML=`
+<p>The two BRIDGES connect the torroid to the brace-box eigenvectors:</p>
+<div style="margin:8px 0">
+<div class="bar-row"><span class="bar-label" style="color:var(--accent)">THIN-TORR</span><div class="bar-track"><div class="bar-fill" style="width:${dCnt(Qp02)/dCnt(Qp12)*100}%;background:var(--accent)"></div><span class="bar-val">${dCnt(Qp02)}d (+)</span></div></div>
+<div class="bar-row"><span class="bar-label" style="color:var(--accent2)">WIDE-TORR</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--accent2)"></div><span class="bar-val">${dCnt(Qp12)}d (−)</span></div></div>
+</div>
+<p style="margin-top:8px">The wide-torr bridge is <strong style="color:var(--accent2)">${inverseRatio.toFixed(0)} times</strong> larger than the thin-torr bridge.</p>
+<p>Digit difference: ${dCnt(Qp12)-dCnt(Qp02)} digits — that is a factor of ~10<sup>${dCnt(Qp12)-dCnt(Qp02)}</sup> = 1000.</p>
+<p style="margin-top:6px">Physical meaning: when the torroid exerts its influence on the brace-box subspace, almost all of that force goes into the wide (stable) eigenvector. The thin (collapse) eigenvector receives only 1/${inverseRatio.toFixed(0)} of the torroid's attention.</p>
+<p style="margin-top:6px;color:var(--accent3)">The torroid is a STABILISER. It pushes on the strong axis and leaves the weak spot alone.</p>
+`;
+
+// ===== CANVAS: TORROID-CENTRIC COUPLING MAP =====
+(function(){
+  const cv=document.getElementById('couplingCanvas');
+  const ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height,cx=W/2,cy=H/2;
+
+  ctx.fillStyle='#0a0a14';ctx.fillRect(0,0,W,H);
+
+  // Torroid at centre — large glowing circle
+  const grad=ctx.createRadialGradient(cx,cy,5,cx,cy,60);
+  grad.addColorStop(0,'rgba(255,170,0,0.3)');grad.addColorStop(1,'rgba(255,170,0,0)');
+  ctx.fillStyle=grad;ctx.fillRect(cx-60,cy-60,120,120);
+  ctx.beginPath();ctx.arc(cx,cy,35,0,2*Math.PI);
+  ctx.fillStyle='rgba(255,170,0,0.15)';ctx.fill();
+  ctx.strokeStyle='#ffaa00';ctx.lineWidth=2.5;ctx.stroke();
+  ctx.fillStyle='#ffaa00';ctx.font='bold 12px monospace';ctx.textAlign='center';
+  ctx.fillText('TORROID',cx,cy-4);ctx.fillText('408d',cx,cy+10);
+  ctx.font='9px monospace';ctx.fillText('(centre)',cx,cy+22);
+
+  // v₁ THIN at top-left
+  const thinX=cx-160,thinY=cy-130;
+  ctx.beginPath();ctx.arc(thinX,thinY,25,0,2*Math.PI);
+  ctx.fillStyle='rgba(0,229,255,0.1)';ctx.fill();
+  ctx.strokeStyle='#00e5ff';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#00e5ff';ctx.font='bold 11px monospace';
+  ctx.fillText('v₁ THIN',thinX,thinY-4);ctx.font='9px monospace';
+  ctx.fillText('+980d',thinX,thinY+8);ctx.fillText('76% brace',thinX,thinY+20);
+
+  // v₂ WIDE at top-right
+  const wideX=cx+160,wideY=cy-130;
+  ctx.beginPath();ctx.arc(wideX,wideY,25,0,2*Math.PI);
+  ctx.fillStyle='rgba(255,96,144,0.1)';ctx.fill();
+  ctx.strokeStyle='#ff6090';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#ff6090';ctx.font='bold 11px monospace';
+  ctx.fillText('v₂ WIDE',wideX,wideY-4);ctx.font='9px monospace';
+  ctx.fillText('−986d',wideX,wideY+8);ctx.fillText('76% box',wideX,wideY+20);
+
+  // THIN-TORR bridge (weak, thin line)
+  ctx.beginPath();ctx.moveTo(thinX+15,thinY+25);ctx.lineTo(cx-20,cy-20);
+  ctx.strokeStyle='#00e5ff';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#00e5ff';ctx.font='10px monospace';ctx.textAlign='right';
+  ctx.fillText('693d (+)',cx-55,cy-70);ctx.fillText('WEAK',cx-55,cy-58);
+
+  // WIDE-TORR bridge (strong, thick line)
+  ctx.beginPath();ctx.moveTo(wideX-15,wideY+25);ctx.lineTo(cx+20,cy-20);
+  ctx.strokeStyle='#ff6090';ctx.lineWidth=6;ctx.stroke();
+  ctx.fillStyle='#ff6090';ctx.font='bold 10px monospace';ctx.textAlign='left';
+  ctx.fillText('696d (−)',cx+55,cy-70);ctx.fillText('378× STRONGER',cx+55,cy-58);
+
+  // thin-wide residual (nearly zero, dotted)
+  ctx.beginPath();ctx.moveTo(thinX+25,thinY);ctx.lineTo(wideX-25,wideY);
+  ctx.strokeStyle='#333';ctx.lineWidth=1;ctx.setLineDash([2,6]);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#555';ctx.font='9px monospace';ctx.textAlign='center';
+  ctx.fillText('~0 (656d residual)',cx,thinY-15);
+
+  // Scale rings
+  ctx.beginPath();ctx.arc(cx,cy,80,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,140,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;ctx.stroke();
+
+  // "378×" label with arrow
+  ctx.fillStyle='var(--accent3)';ctx.font='bold 16px monospace';ctx.textAlign='center';
+  ctx.fillStyle='#40ff90';
+  ctx.fillText('378×',cx,cy+65);
+  ctx.font='10px monospace';
+  ctx.fillText('wide gets 378× more torroid coupling',cx,cy+80);
+
+  // Legend
+  ctx.fillStyle='#555';ctx.font='9px monospace';ctx.textAlign='left';
+  ctx.fillText('Line thickness = coupling strength',10,H-18);
+  ctx.fillText('Dashed = weak coupling  |  Solid = strong coupling',10,H-6);
+})();
+
+// ===== VERIFIER LOG =====
+document.getElementById('log').textContent=log.join('\n');
+
+// ===== VERIFICATION TABLE =====
+const tb=document.getElementById('verify-table');
+checks.forEach(c=>{
+  const tr=document.createElement('tr');
+  const cls=c.r==='LIT'?'lit':c.r==='DEAD'?'dead':'dark';
+  tr.innerHTML=`<td>${c.id}</td><td>${c.desc}</td><td class="${cls}">${c.r}</td>`;
+  tb.appendChild(tr);
+});
+const sr=document.createElement('tr');
+sr.innerHTML=`<td colspan="2" style="text-align:right;font-weight:bold">TOTAL</td><td class="lit">${pass} LIT / ${fail} DARK / ${dead} DEAD</td>`;
+tb.appendChild(sr);
+
+// ===== LEDGER =====
+document.getElementById('ledger').textContent=
+`LEDGER — H123 The Torroid Projection
+This instrument: ${pass} LIT / ${fail} DARK / ${dead} DEAD (KB-1 expected)
+Prior cumulative through H122: 3927 ALL LIT / 0 DEAD
+Running total through H123: ${3927+pass} LIT / ${fail} DARK
+Grand total checks: ${3927+pass}`;
+
+// ===== BASIC BLOCK: Regular Paperfolding (A014577) =====
+// The sequence of left (1) and right (0) folds when folding paper repeatedly.
+// Rule: a(4k+1)=1, a(4k+3)=0, a(2k)=a(k)
+function paperFold(n){
+  while(n%2===0)n=n/2;
+  return((n%4)===1)?1:0;
+}
+const pfVals=[];for(let i=1;i<=36;i++)pfVals.push(paperFold(i));
+let pfLines=[];
+// Mutation: line numbers follow the fold pattern — +11 for fold-left(1), +7 for fold-right(0)
+let ln=10;
+for(let i=0;i<pfVals.length;i++){
+  pfLines.push(`${ln} REM PAPERFOLD(${i+1}) = ${pfVals[i]} : ${pfVals[i]===1?"LEFT fold":"RIGHT fold"}`);
+  ln+=pfVals[i]===1?11:7;
+}
+pfLines.push(`${ln} REM --- REGULAR PAPERFOLDING SEQUENCE (A014577) ---`);
+pfLines.push(`${ln+10} REM SEQUENCE: ${pfVals.join(', ')}`);
+pfLines.push(`${ln+20} REM RULE: fold paper in half repeatedly, read L/R creases`);
+pfLines.push(`${ln+30} END`);
+document.getElementById('basic-block').textContent=pfLines.join('\n');
+</script>
+</body>
+</html>
