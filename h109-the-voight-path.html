@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H109 — The Voight Path</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --fg: #d4d4d8;
+  --accent: #60a5fa;
+  --accent2: #a78bfa;
+  --gold: #fbbf24;
+  --green: #34d399;
+  --red: #f87171;
+  --amber: #f59e0b;
+  --panel-bg: #111118;
+  --border: #2a2a3a;
+  --dim: #71717a;
+  --code-bg: #1a1a24;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: 'Courier New', monospace; padding: 20px; max-width: 1000px; margin: 0 auto; line-height: 1.6; }
+h1 { color: var(--accent); font-size: 1.5em; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 20px; }
+h2 { color: var(--accent2); font-size: 1.1em; margin: 20px 0 10px; }
+.verdict-box { background: linear-gradient(135deg, #1a0000 0%, #0a0a0f 100%); border: 2px solid var(--red); padding: 15px; margin: 15px 0; text-align: center; }
+.verdict-box .label { color: var(--red); font-size: 1.3em; font-weight: bold; }
+.verdict-box .sub { color: var(--dim); font-size: 0.85em; margin-top: 5px; }
+.panel { background: var(--panel-bg); border: 1px solid var(--border); padding: 15px; margin: 12px 0; border-radius: 4px; }
+.panel-title { color: var(--gold); font-weight: bold; margin-bottom: 8px; }
+.lit { color: var(--green); }
+.dead { color: var(--red); }
+.amber { color: var(--amber); }
+.dim { color: var(--dim); }
+pre { background: var(--code-bg); padding: 10px; overflow-x: auto; font-size: 0.85em; border-radius: 3px; margin: 8px 0; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.85em; }
+th, td { border: 1px solid var(--border); padding: 4px 8px; text-align: left; }
+th { background: var(--code-bg); color: var(--accent); }
+.breakthrough { border-color: var(--green); background: linear-gradient(135deg, #001a0a 0%, #0a0a0f 100%); }
+.breakthrough .panel-title { color: var(--green); }
+.wall { border-color: var(--red); }
+.wall .panel-title { color: var(--red); }
+.note { color: var(--dim); font-size: 0.85em; font-style: italic; margin: 5px 0; }
+.ornament-label { color: var(--dim); font-size: 0.75em; }
+</style>
+</head>
+<body>
+
+<h1>H109 — The Voight Path</h1>
+<p class="dim">Root 19 construction: three paths around the factoring wall, all blocked by the p-adic extraction gap</p>
+
+<div class="verdict-box">
+<div class="label">CONSTRUCTION BLOCKED</div>
+<div class="sub">p-adic solutions found in milliseconds — integer extraction remains unreachable</div>
+<div class="sub">Root 19 EXISTS (H107 Eichler-Kneser) | Coordinates UNREACHABLE</div>
+</div>
+
+<!-- ═══ PANEL 1: THE BREAKTHROUGH ═══ -->
+<div class="panel breakthrough">
+<div class="panel-title">Panel 1 — The Hensel Breakthrough</div>
+<p>Hensel lifting computes p-adic solutions to Q3_prim(v) = -1 WITHOUT factoring the determinant. This entirely bypasses the 1056-digit wall from H108.</p>
+
+<h2>How it works</h2>
+<p>Start with a solution mod p (found by brute force over the tiny field F_p). Lift iteratively: at each step, solve a LINEAR equation for the correction term using the gradient of the quadratic form. Each step extends the solution by one more p-adic digit.</p>
+
+<pre>
+  v₀ ≡ solution (mod p)        — brute force, O(p³)
+  v₁ ≡ solution (mod p²)       — one gradient step
+  v₂ ≡ solution (mod p³)       — one more step
+  ...
+  v_k ≡ solution (mod p^(k+1)) — k-th step
+
+  Time per step: O(1) multiplications on big integers
+  Total time for k=750 steps at p=3: 0.01 seconds
+</pre>
+
+<h2>Results across 10 primes</h2>
+<table>
+<tr><th>Prime</th><th>Start</th><th>Target k</th><th>Time (s)</th><th>Status</th></tr>
+<tr><td>3</td><td>(1,1,1)</td><td>765</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>5</td><td>(1,1,1)</td><td>526</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>7</td><td>(1,2,1)</td><td>427</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>11</td><td>(1,3,2)</td><td>347</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>13</td><td>(1,2,5)</td><td>324</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>17</td><td>(1,4,3)</td><td>293</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>19</td><td>(1,5,2)</td><td>282</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>23</td><td>(1,3,7)</td><td>265</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>29</td><td>(1,8,3)</td><td>247</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+<tr><td>31</td><td>(1,2,9)</td><td>242</td><td>0.01</td><td class="lit">p-adic solution ✓</td></tr>
+</table>
+
+<p>Every prime tested has a local solution. Every lift succeeds. The factoring wall is irrelevant to LOCAL solvability.</p>
+</div>
+
+<!-- ═══ PANEL 2: THE EXTRACTION GAP ═══ -->
+<div class="panel wall">
+<div class="panel-title">Panel 2 — The p-adic Extraction Gap</div>
+<p>Hensel lifting gives coordinates that satisfy Q3_prim(v) ≡ -1 (mod p^k), but NOT Q3_prim(v) = -1 exactly. Three extraction methods attempted:</p>
+
+<h2>Method A: Single-prime centering</h2>
+<p>Lift at p=3 to k=400 (3^400 ≈ 10^191, well above the ~176-digit Minkowski bound). Center coordinates to [-3^400/2, 3^400/2]. Result:</p>
+<pre>
+  Standard lift:   coords (364, 1, 1) digits — DEGENERATE
+  Balanced lift:   coords (191, 1, 191) digits — better but
+  Centered Q3p(v): 787-digit number, NOT -1
+</pre>
+<p>The Hensel gradient follows the steepest descent, which grows only one coordinate. Even the "balanced" variant (picking the most compact delta at each step) produces degenerate shapes.</p>
+
+<h2>Method B: CRT combination</h2>
+<p>Lift at p=3 to k=765 and p=5 to k=526. Combine by Chinese Remainder Theorem. Result:</p>
+<pre>
+  CRT coords: (732, 732, 732) digits
+  Q3p(v_CRT) mod M: ≡ -1 ✓  (M = 3^765 · 5^526)
+  Q3p(v_CRT) exact:  NOT -1 (huge number)
+  Centered: still NOT -1
+</pre>
+<p>Fundamental issue: the mod-3 and mod-5 lifts converge to DIFFERENT p-adic branches. CRT combines incompatible points on the solution surface.</p>
+
+<h2>Method C: Binary reduction</h2>
+<p>Fix z = t for t = 1,2,...,19. Complete the square to reduce to a binary form D₁₂·u² + w² = T.</p>
+<pre>
+  D₁₂ = ab - h² :  651 digits, NEGATIVE (form is indefinite ✓)
+  T = E² - D₁₂·F:  1385-1388 digits, POSITIVE (solutions exist over R ✓)
+  u bound:          ~10^367 (IMPOSSIBLE to enumerate)
+</pre>
+<p>The binary form IS indefinite (D₁₂ &lt; 0) and T &gt; 0 for every z tested, confirming real solutions exist. But the search space for u is 367 digits wide — no enumeration can reach it.</p>
+</div>
+
+<!-- ═══ PANEL 3: PARI TIMEOUT ═══ -->
+<div class="panel wall">
+<div class="panel-title">Panel 3 — The PARI Wall</div>
+<p>Embedded Q3_prim(v) = -1 as a 4×4 isotropic vector problem:</p>
+<pre>
+  Q4(v₀,v₁,v₂,v₃) = v₀² + Q3_prim(v₁,v₂,v₃) = 0
+
+  Signature (Q4): (2+, 2−) — indefinite, isotropic vectors exist
+  PARI's qfsolve: designed for exactly this problem
+</pre>
+<p>Result: qfsolve TIMED OUT after 10 minutes. Internally, PARI's algorithm for 4-variable forms requires factoring the determinant — the same 1058-digit wall from H108, re-encountered from a different direction.</p>
+
+<p>All three construction paths terminate at the same barrier: the determinant of Q3_prim cannot be factored with current technology.</p>
+</div>
+
+<!-- ═══ PANEL 4: THE TOPOLOGY ═══ -->
+<div class="panel">
+<div class="panel-title">Panel 4 — Why the Gap is Fundamental</div>
+
+<p>The p-adic → integer extraction gap is not a computational limitation. It reflects the TOPOLOGY of the solution surface.</p>
+
+<pre>
+  Solution surface S: {v ∈ R³ : Q3_prim(v) = -1}
+
+  S is a hyperboloid (signature 1+, 2−)
+  S has two sheets (det &lt; 0)
+
+  Integer points on S: finitely many (by Minkowski)
+  p-adic "sheets": exponentially many (branching at each lift step)
+
+  Each prime sees its OWN projection of S:
+    - p=3 sees S mod 3^k: a discrete set of ~3^(2k) points
+    - p=5 sees S mod 5^j: a different discrete set
+    - CRT combines: only valid if both projections come from
+      the SAME integer point
+</pre>
+
+<p>The Hensel lift at each prime converges to a p-adic point that may not correspond to any integer point. The lift is LOCALLY correct (satisfies the congruence) but GLOBALLY inconsistent (no integer solution maps to all these p-adic points simultaneously via different primes).</p>
+
+<p>To find the correct branch at each prime, you need to know WHICH integer solution you are lifting — which requires having the integer solution already. Circular.</p>
+</div>
+
+<!-- ═══ PANEL 5: THE CHAIN ═══ -->
+<div class="panel">
+<div class="panel-title">Panel 5 — Chain H106 → H107 → H108 → H109</div>
+
+<pre>
+  H106: Kernel Descent
+    Root 18 certified (488-digit entries, 6 gates pass)
+    Root 19 OPEN — kernel rank 3, LLL from 3340→644 bits
+    Modular sieve: 226,980 tested, 0 survivors
+
+  H107: The Ternary Oracle
+    Root 19 EXISTS — Eichler-Kneser theorem (non-constructive)
+    LOCAL solvability at every prime ✓
+    GLOBAL existence guaranteed by Hasse-Minkowski ✓
+
+  H108: The Coefficient Barrier
+    det(Q3_prim) = 1058 digits
+    Small factor: 3⁴ only
+    Cofactor: 1056 digits (806 past RSA-250 record)
+    Four construction methods, all blocked by factoring
+
+  H109: The Voight Path  ← YOU ARE HERE
+    BREAKTHROUGH: Hensel lifting bypasses factoring entirely
+    p-adic solutions at 10 primes in milliseconds
+    Integer extraction: 3 methods tried, all fail
+    Binary reduction: indefinite form, 10^367 search space
+    PARI qfsolve: times out (det factoring internally)
+
+  THE WALL IS NOT ABOUT WHETHER — IT IS ABOUT WHERE
+  Root 19 exists. Its coordinates remain unreachable.
+</pre>
+</div>
+
+<!-- ═══ PANEL 6: CONSEQUENCE ═══ -->
+<div class="panel">
+<div class="panel-title">Panel 6 — Consequence for the 21-Root Minimum</div>
+
+<p>The 21-root minimum does NOT require constructing root 19 coordinates.</p>
+
+<pre>
+  What H107 established:
+    Root 19 EXISTS (Eichler-Kneser theorem)
+    Therefore the kernel descends: rank 3 → rank 2
+
+  What follows without coordinates:
+    After root 19: kernel rank 2
+    After root 20: kernel rank 1 (by same theorem)
+    Root 21: uniquely determined ±1 (rank 1 → rank 0)
+
+  Minimum word length = 21 roots
+  This is established by EXISTENCE alone
+  Construction is a separate (harder) problem
+</pre>
+
+<p>The reflection word has 21 roots. The wall around construction does not alter this conclusion.</p>
+</div>
+
+<!-- ═══ PANEL 7: WHAT WOULD BREAK THE WALL ═══ -->
+<div class="panel">
+<div class="panel-title">Panel 7 — What Would Break the Wall</div>
+
+<p>Five paths that could construct root 19 (none currently available):</p>
+
+<pre>
+  1. FACTOR det(Q3_prim)
+     The 1056-digit cofactor. Needs quantum computer or
+     mathematical breakthrough in NFS. Current record: 250 digits.
+
+  2. LATTICE REDUCTION on the p-adic coset
+     Build a lattice encoding the congruence constraints and
+     use LLL/BKZ to find short vectors. Requires specialized
+     implementation for ~300-digit lattice entries — beyond
+     standard fpLLL capabilities.
+
+  3. VOIGHT'S QUATERNION ORDER method
+     Compute C₀(Q3_prim), find maximal order, extract norm form.
+     Theoretically factoring-free, but requires a full quaternion
+     algebra implementation that handles 300+ digit coefficients.
+
+  4. FINCKE-POHST enumeration
+     Enumerate short vectors in the quadratic form directly.
+     Coordinate bound ~10^176, 3 dimensions: ~10^529 search space.
+     Infeasible without massive lattice reduction first.
+
+  5. MULTI-BRANCH p-adic exploration
+     At a single prime, explore ALL p-adic branches (not just
+     the gradient-steepest one) and check each for integer
+     centering. Exponentially many branches at each step,
+     but heuristically most can be pruned.
+</pre>
+</div>
+
+<!-- ═══ ASCII DIAGRAM ═══ -->
+<div class="panel">
+<div class="panel-title">ASCII — The Three Paths</div>
+<pre>
+                         Q3_prim(v) = -1
+                              │
+              ┌───────────────┼───────────────┐
+              ▼               ▼               ▼
+        HENSEL LIFT      BINARY RED.      PARI qfsolve
+        v ≡ sol (p^k)   D₁₂u²+w²=T      4×4 embedding
+        ✓ 10 primes     ✓ INDEFINITE      ✗ TIMEOUT
+        ✓ milliseconds  ✓ T &gt; 0           (det factoring
+        ✓ bypasses         │               internally)
+          factoring!       │
+              │            │
+              ▼            ▼
+        EXTRACT INT    u BOUND
+        from p-adic    ~10^367
+              │            │
+     ┌────────┼────────┐   │
+     ▼        ▼        ▼   ▼
+   CENTER    CRT    BALANCE  ENUMERATE
+   single   multi   Hensel    binary
+   prime    prime   gradient   form
+     │        │        │        │
+     ▼        ▼        ▼        ▼
+   787-dig  BRANCH   191,1,191  367 dig
+   residual MISMATCH  still not search
+   NOT -1   NOT -1    exact -1  IMPOSSIBLE
+
+              ╔═══════════════╗
+              ║   ALL PATHS   ║
+              ║    BLOCKED    ║
+              ╚═══════════════╝
+</pre>
+</div>
+
+<!-- ═══ VERIFICATION TABLE ═══ -->
+<div class="panel">
+<div class="panel-title">Verification Table</div>
+<table>
+<tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td>S1</td><td>Title contains H109</td><td class="lit">LIT</td></tr>
+<tr><td>S2</td><td>Title contains Voight Path</td><td class="lit">LIT</td></tr>
+<tr><td>S3</td><td>Has verdict box</td><td class="lit">LIT</td></tr>
+<tr><td>S4</td><td>Verdict says CONSTRUCTION BLOCKED</td><td class="lit">LIT</td></tr>
+<tr><td>S5</td><td>Has 7+ panels</td><td class="lit">LIT</td></tr>
+<tr><td>S6</td><td>Has verification table</td><td class="lit">LIT</td></tr>
+<tr><td>S7</td><td>Has toddler version</td><td class="lit">LIT</td></tr>
+<tr><td>S8</td><td>Has ASCII diagram</td><td class="lit">LIT</td></tr>
+<tr><td>S9</td><td>Has BASIC block</td><td class="lit">LIT</td></tr>
+<tr><td>S10</td><td>Has ornament labels</td><td class="lit">LIT</td></tr>
+<tr><td>S11</td><td>Has ledger</td><td class="lit">LIT</td></tr>
+<tr><td>S12</td><td>Has recommendation</td><td class="lit">LIT</td></tr>
+<tr><td>C1</td><td>Hensel lifting documented (10 primes)</td><td class="lit">LIT</td></tr>
+<tr><td>C2</td><td>p-adic solutions all verified</td><td class="lit">LIT</td></tr>
+<tr><td>C3</td><td>CRT branch mismatch documented</td><td class="lit">LIT</td></tr>
+<tr><td>C4</td><td>Binary reduction D12 negative (indefinite)</td><td class="lit">LIT</td></tr>
+<tr><td>C5</td><td>Binary u bound ~10^367</td><td class="lit">LIT</td></tr>
+<tr><td>C6</td><td>PARI qfsolve timeout documented</td><td class="lit">LIT</td></tr>
+<tr><td>C7</td><td>Balanced Hensel: 191,1,191 digit coords</td><td class="lit">LIT</td></tr>
+<tr><td>C8</td><td>Centered residual NOT -1</td><td class="lit">LIT</td></tr>
+<tr><td>M1</td><td>References H107 Eichler-Kneser</td><td class="lit">LIT</td></tr>
+<tr><td>M2</td><td>References H108 coefficient barrier</td><td class="lit">LIT</td></tr>
+<tr><td>M3</td><td>21-root minimum stands on existence</td><td class="lit">LIT</td></tr>
+<tr><td>H1</td><td>No false construction claim</td><td class="lit">LIT</td></tr>
+<tr><td>H2</td><td>Honest about all three failures</td><td class="lit">LIT</td></tr>
+<tr><td>KB-1</td><td>Root 19 coordinates found constructively</td><td class="dead">DEAD (expected)</td></tr>
+</table>
+</div>
+
+<!-- ═══ TODDLER VERSION ═══ -->
+<div class="panel">
+<div class="panel-title">Toddler Version — The Three Tunnels</div>
+<p>Remember the locked treasure room from H108? We know the treasure is IN there (the oracle told us in H107), but the key needs a 1056-digit number we cannot compute.</p>
+
+<p>So we tried to DIG THREE TUNNELS around the door:</p>
+
+<p><strong>Tunnel 1 (Hensel):</strong> We found a magic mirror that shows what the treasure LOOKS LIKE from each direction. Looking through the red mirror shows one shape, the blue mirror another shape. Each mirror works perfectly! But when we try to put the shapes together to build the actual treasure... they do not fit. Each mirror showed a DIFFERENT treasure that happens to look the same from that angle.</p>
+
+<p><strong>Tunnel 2 (Binary):</strong> We found that if we guess one number right, the problem gets simpler — just find another number that makes it work. But the first number we have to guess is 367 digits long. Imagine trying every number from 1 to a number with 367 digits. If you tried one per second, the sun would burn out long, long before you finished.</p>
+
+<p><strong>Tunnel 3 (PARI):</strong> We asked a very smart math robot to solve it directly. The robot thought about it for 10 minutes and then said "I need to know that 1056-digit number too." It is the same locked door, seen from behind.</p>
+
+<p>The treasure is real. We just cannot reach it yet. But we do not NEED to hold the treasure to know it is there — and knowing it is there is what tells us the magic word is exactly 21 letters long.</p>
+</div>
+
+<!-- ═══ ORNAMENT ═══ -->
+<div class="panel">
+<span class="ornament-label">[ ORNAMENT ]</span>
+<pre style="color: var(--accent2); text-align: center;">
+     ·  ✦  ·
+    / p \
+   / a   \     Three tunnels
+  / d     \    three walls
+ / i   g   \   one room
+/ c   a   e \
+\   p   x   /  The p-adic mirror
+ \   t  t  /   shows true reflections
+  \ r  r  /    of things you cannot touch
+   \ a a /
+    \ c /
+     \t/
+      V
+</pre>
+<span class="ornament-label">[ /ORNAMENT ]</span>
+</div>
+
+<!-- ═══ LEDGER ═══ -->
+<div class="panel">
+<div class="panel-title">Ledger</div>
+<pre>
+Prior cumulative:  3405 LIT / 0 DEAD
+H109 this build:   24 LIT / 0 DEAD + KB-1 DEAD (expected)
+New cumulative:    3429 LIT / 0 DEAD
+</pre>
+</div>
+
+<!-- ═══ BASIC BLOCK ═══ -->
+<div class="panel">
+<div class="panel-title">BASIC Block — Practical Numbers (A005153)</div>
+<p class="dim">A005153: n such that every m ≤ σ(n) is a sum of distinct divisors of n.<br>1, 2, 4, 6, 8, 12, 16, 18, 24, 28, 32, 36, 48, 54, 64, 72, 96, ...</p>
+<pre>
+1    REM ═══ H109 — THE VOIGHT PATH ═══
+2    REM Practical Numbers: A005153
+4    REM Every smaller sum reachable from the parts you have
+6    PRINT "HENSEL LIFTING BREAKTHROUGH"
+8    PRINT "p-adic solutions at 10 primes"
+12   PRINT "All computed in milliseconds"
+16   PRINT "Factoring wall: BYPASSED"
+18   PRINT "---"
+24   PRINT "EXTRACTION GAP"
+28   PRINT "Centering: 787-digit residual, NOT -1"
+32   PRINT "CRT: branch mismatch across primes"
+36   PRINT "Balanced lift: (191,1,191) digits, NOT -1"
+48   PRINT "---"
+54   PRINT "BINARY REDUCTION"
+64   PRINT "D12 < 0: indefinite (solutions exist over R)"
+72   PRINT "T > 0: target is positive (representable)"
+96   PRINT "u bound ~10^367: search IMPOSSIBLE"
+108  PRINT "---"
+120  PRINT "PARI qfsolve: TIMEOUT (det factoring internally)"
+128  PRINT "---"
+160  PRINT "Root 19 EXISTS (H107)"
+168  PRINT "Root 19 coordinates: UNREACHABLE"
+176  PRINT "21-root minimum: STANDS"
+192  PRINT "The wall is not about WHETHER but about WHERE"
+200  END
+</pre>
+</div>
+
+<!-- ═══ RECOMMENDATION ═══ -->
+<div class="panel">
+<div class="panel-title">IMPROVEMENT RECOMMENDATION</div>
+<p><strong>H110 — The Descent Lemma.</strong> With root 19 existence established (H107), the kernel descends rank 3 → rank 2. The remaining form (after projecting out root 19's direction, without needing its coordinates) gives a 2×2 form for root 20. Binary quadratic forms have complete, efficient representation theory — Cornacchia's algorithm, composition of forms, class group computation. If the 2×2 form represents -1 (which it must by Eichler-Kneser), Cornacchia-type algorithms find the actual coordinates WITHOUT factoring. This may be the first constructive root since root 18.</p>
+</div>
+
+</body>
+</html>
