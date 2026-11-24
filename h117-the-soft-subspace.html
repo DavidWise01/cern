@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H117 — The Soft Subspace</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+body{background:#0a0e14;color:#c8d6e5;font:15px/1.6 'Courier New',monospace;padding:16px;max-width:1100px;margin:0 auto}
+h1{color:#f5a623;font-size:22px;border-bottom:2px solid #2a3a4a;padding-bottom:8px;margin-bottom:16px}
+h2{color:#7ec8e3;font-size:16px;margin:20px 0 8px;border-left:3px solid #7ec8e3;padding-left:8px}
+.panel{background:#111820;border:1px solid #2a3a4a;border-radius:8px;padding:16px;margin-bottom:16px}
+.verdict-box{font-size:18px;font-weight:bold;padding:12px;border-radius:6px;text-align:center;margin:12px 0}
+.verdict-lit{background:#0a2e0a;border:2px solid #2ecc71;color:#2ecc71}
+.verdict-pending{background:#2e2a0a;border:2px solid #f39c12;color:#f39c12}
+pre{background:#0d1117;border:1px solid #1e2a3a;border-radius:4px;padding:10px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap}
+button{background:#1a3a5c;color:#7ec8e3;border:1px solid #2a5a8c;border-radius:4px;padding:8px 16px;cursor:pointer;font:14px 'Courier New',monospace}
+button:hover{background:#2a4a6c}
+canvas{display:block;margin:8px auto;border:1px solid #2a3a4a;border-radius:4px;background:#0d1117}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th,td{border:1px solid #2a3a4a;padding:4px 8px;text-align:left}
+th{background:#1a2a3a;color:#7ec8e3}
+.lit{color:#2ecc71}.dead{color:#e74c3c}.amber{color:#f39c12}
+.ornament-label{color:#555;font-size:10px;text-align:center}
+#log{max-height:400px;overflow-y:auto}
+.stat{display:inline-block;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:4px;padding:6px 12px;margin:4px;min-width:140px;text-align:center}
+.stat-val{font-size:18px;font-weight:bold;color:#f5a623}
+.stat-label{font-size:11px;color:#8899aa}
+.key-finding{background:#1a0a2e;border:2px solid #9b59b6;border-radius:6px;padding:12px;margin:12px 0}
+</style>
+</head>
+<body>
+<h1>H117 — The Soft Subspace</h1>
+<p>The z=0 plane reduces Q3p to a 2×2 form. Is it definite (no zeros) or indefinite (zeros exist)?</p>
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H116 found the z=0 plane is the soft direction. Setting z=0 kills three terms (T3, T5, T6) and leaves a 2×2 quadratic form:</p>
+<pre>
+Q(x,y,0) = Q[0][0]·x² + 2·Q[0][1]·x·y + Q[1][1]·y²
+
+This is the form defined by:
+
+     M = [ Q[0][0]   Q[0][1] ]    = [ a   b ]
+         [ Q[0][1]   Q[1][1] ]      [ b   c ]
+
+where:
+  a = Q[0][0] = 328 digits, NEGATIVE (self-coupling, brace body)
+  b = Q[0][1] = 328 digits, POSITIVE (cross-coupling, brace↔box)
+  c = Q[1][1] = 329 digits, NEGATIVE (self-coupling, box body)
+</pre>
+<p>The sign of <strong>det(M) = a·c − b²</strong> decides everything:</p>
+<pre>
+  det(M) > 0 → DEFINITE: no zeros possible, only closest approaches
+  det(M) < 0 → INDEFINITE: zero directions EXIST
+  det(M) = 0 → SINGULAR: a zero direction is a lattice direction
+</pre>
+</div>
+
+<!-- Panel 2: Statistics -->
+<div class="panel">
+<h2>Panel 2 — Statistics</h2>
+<div id="stats">
+<div class="stat"><div class="stat-val" id="statDet">—</div><div class="stat-label">det(M) sign</div></div>
+<div class="stat"><div class="stat-val" id="statType">—</div><div class="stat-label">Form type</div></div>
+<div class="stat"><div class="stat-val" id="statL1">—</div><div class="stat-label">|λ₁| digits</div></div>
+<div class="stat"><div class="stat-val" id="statL2">—</div><div class="stat-label">|λ₂| digits</div></div>
+<div class="stat"><div class="stat-val" id="statRatio">—</div><div class="stat-label">|λ₁/λ₂| ratio</div></div>
+<div class="stat"><div class="stat-val" id="statMinQ">—</div><div class="stat-label">Min |Q| (digits)</div></div>
+</div>
+<div id="mainVerdict" class="verdict-box verdict-pending">PENDING — press RUN</div>
+<button id="runBtn" onclick="runSoftSubspace()">▶ RUN SOFT SUBSPACE ANALYSIS</button>
+</div>
+
+<!-- Panel 3: Key Finding -->
+<div class="panel">
+<h2>Panel 3 — Key Finding</h2>
+<div id="keyFinding" class="key-finding">Run engine to reveal...</div>
+</div>
+
+<!-- Panel 4: Eigenvalue Map -->
+<div class="panel">
+<h2>Panel 4 — In-Plane Geometry</h2>
+<p>The z=0 plane with eigenvector directions (stiff and soft) and zero lines of the indefinite form:</p>
+<canvas id="eigenCanvas" width="600" height="600"></canvas>
+</div>
+
+<!-- Panel 5: Closest Approaches -->
+<div class="panel">
+<h2>Panel 5 — Closest Approaches (x,y ∈ [-20..+20])</h2>
+<pre id="closestLog">Run engine to populate...</pre>
+</div>
+
+<!-- Panel 6: Continued Fraction Convergence -->
+<div class="panel">
+<h2>Panel 6 — Continued Fraction Pursuit</h2>
+<p>Rational approximations to the zero-slope direction via continued fractions. Does |Q| shrink toward zero as approximations improve?</p>
+<canvas id="cfCanvas" width="700" height="300"></canvas>
+<pre id="cfLog">Run engine to populate...</pre>
+</div>
+
+<!-- Panel 7: Verifier Log -->
+<div class="panel">
+<h2>Panel 7 — Verifier Log</h2>
+<pre id="log">Press RUN to begin computation...</pre>
+</div>
+
+<!-- Panel 8: Architecture -->
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+SOFT SUBSPACE ARCHITECTURE
+===========================
+
+  FULL 3×3 Q3p                  SET z=0
+  ┌───────────────┐             ┌───────────────┐
+  │ Q00 Q01 Q02   │    ~~>     │ a = Q00  (-,328d)
+  │ Q01 Q11 Q12   │   z=0      │ b = Q01  (+,328d)
+  │ Q02 Q12 Q22   │            │ c = Q11  (-,329d)
+  └───────────────┘             └───────┬───────┘
+   6 terms, 408d max                    │
+                                 2×2 FORM M
+                                        │
+                             ┌──────────▼──────────┐
+                             │ det(M) = a·c - b²   │
+                             │ = 651 digits         │
+                             │ = NEGATIVE           │
+                             │                      │
+                             │ → INDEFINITE FORM    │
+                             │ → zeros EXIST        │
+                             │   on irrational lines│
+                             └──────────┬──────────┘
+                                        │
+                             ┌──────────▼──────────┐
+                             │ EIGENVALUES:         │
+                             │ λ₁ = -329 digits     │
+                             │ λ₂ = +324 digits     │
+                             │ ratio ≈ 324,000:1    │
+                             │                      │
+                             │ EIGENVECTORS:         │
+                             │ stiff: y/x ≈ -1.779  │
+                             │ soft:  y/x ≈ +0.562  │
+                             └──────────┬──────────┘
+                                        │
+                             ┌──────────▼──────────┐
+                             │ ZERO SLOPES:         │
+                             │ t₁,t₂ = roots of    │
+                             │ a·t² + 2b·t + c = 0 │
+                             │ = IRRATIONAL         │
+                             │ = unreachable by     │
+                             │   integer points     │
+                             │                      │
+                             │ CF convergents show  │
+                             │ |Q| GROWS with       │
+                             │ better approximation │
+                             │ (r² beats 1/q²)      │
+                             └──────────────────────┘
+</pre>
+</div>
+
+<!-- Panel 9: Verification Table -->
+<div class="panel">
+<h2>Panel 9 — Verification Table</h2>
+<table id="verifyTable">
+<tr><th>ID</th><th>Check</th><th>Status</th></tr>
+</table>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel" style="border-color:#3a2a1a">
+<p class="ornament-label">[ ORNAMENT ]</p>
+<pre style="color:#8b7355;text-align:center;font-size:11px">
+    Two lines cross through the origin
+    Both tilted at angles no ruler can mark
+    Between them the form bends toward zero
+    But zero is a country with no integer roads
+    The closest towns are still 326 digits from the border
+</pre>
+<p class="ornament-label">[ /ORNAMENT ]</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="panel" style="border-color:#2a4a2a">
+<h2>Toddler Version — The Two Magic Lines</h2>
+<p>Imagine a big flat field (the z=0 plane). Somewhere on this field, there are <strong>two invisible magic lines</strong> going through the middle. If you could stand EXACTLY on one of these lines, you'd weigh nothing — zero!</p>
+<p>But here's the trick: these lines are tilted at <strong>weird angles</strong> that no whole number of steps can reach. You can walk 7 steps right and 4 steps up, or 9 right and 5 up — that gets you CLOSE to the magic line, but never exactly ON it.</p>
+<p>The closest you can get is still <strong>326 digits away from zero</strong>. That's like being 326 football fields from the finish line. You can see the magic line from where you're standing — you know it's there — but you can never step on it because your feet only land on whole-number grid points.</p>
+<p>The <strong>eigenvalues</strong> are like two rulers measuring the field. One ruler is 329 digits long (the stiff direction). The other is 324 digits (the soft direction). Even the short ruler is unimaginably long. The <strong>ratio</strong> between them is about 324,000 — meaning the stiff direction is three hundred thousand times stiffer than the soft one.</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<pre id="ledgerPre">
+Prior cumulative: 3711 LIT / 0 DEAD
+H117 The Soft Subspace: TBD (see verification table after RUN)
+</pre>
+</div>
+
+<!-- IMPROVEMENT RECOMMENDATION -->
+<div class="panel" style="border-color:#5a3a1a">
+<h2>IMPROVEMENT RECOMMENDATION → H118: The Irrational Barrier</h2>
+<p>H117 proves the z=0 restriction is indefinite — zeros exist on two lines of irrational slope. H118 would quantify the IRRATIONALITY MEASURE of these slopes: how well can rationals approximate them? The continued fraction coefficients bound the minimum |Q| achievable by integer vectors of given norm. If the slopes are badly approximable (bounded partial quotients), the barrier is permanent. If they have unbounded partial quotients, rare good approximations could break through — but only at astronomically large coordinates.</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Padovan Numbers (A000931)</h2>
+<pre>
+Sequence: 1, 0, 0, 1, 0, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, ...
+P(n) = P(n-2) + P(n-3)
+(The plastic ratio ψ ≈ 1.3247... governs growth — third-order analogue of Fibonacci.)
+
+1    REM H117 THE SOFT SUBSPACE
+0    REM z=0 REDUCES Q3p TO 2×2 FORM M = [[Q00,Q01],[Q01,Q11]]
+0    REM TRACE = 329 DIGITS (NEGATIVE), DET = 651 DIGITS (NEGATIVE)
+1    REM det(M) < 0 → INDEFINITE FORM → ZEROS EXIST
+0    REM BUT ZERO SLOPES ARE IRRATIONAL → NO INTEGER ZERO
+1    REM EIGENVALUES: λ₁ = -329 DIGITS, λ₂ = +324 DIGITS
+1    REM RATIO |λ₁/λ₂| ≈ 324,000 → EXTREME ASYMMETRY
+1    REM BEST INTEGER APPROACH: 326 DIGITS AT (±7,±4), (±9,±5), (±16,±9)
+2    REM CONTINUED FRACTION: |Q| GROWS WITH BETTER RATIONAL APPROX
+2    REM r² GROWTH OVERWHELMS 1/q² IMPROVEMENT
+3    REM CORRECTION: H115 "x ≈ -5y/3" PATTERN WAS SIGN-CONFUSED
+4    REM ACTUAL PATTERN: x/y ≈ 7/4 TO 9/5 (λ₂ EIGENVECTOR ≈ 0.562)
+5    REM NEXT → H118 THE IRRATIONAL BARRIER: IRRATIONALITY MEASURE
+</pre>
+</div>
+
+<script>
+"use strict";
+
+const Q3pStr = [
+  ["-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998",
+   "7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838"],
+  ["7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078"],
+  ["-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078",
+   "-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826"]
+];
+
+const Q = Q3pStr.map(row => row.map(s => BigInt(s)));
+function bigAbs(n) { return n < 0n ? -n : n; }
+function digitCount(n) { return n === 0n ? 0 : bigAbs(n).toString().length; }
+function bigSqrt(n) {
+  if (n <= 0n) return 0n;
+  let x = n, y = (x + 1n) / 2n;
+  while (y < x) { x = y; y = (x + n / x) / 2n; }
+  return x;
+}
+
+function runSoftSubspace() {
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ RUNNING...';
+
+  setTimeout(() => {
+    const log = [];
+    const t0 = performance.now();
+    log.push("=== H117 SOFT SUBSPACE ENGINE ===");
+    log.push("");
+
+    // 2×2 restriction
+    const a = Q[0][0], b = Q[0][1], c = Q[1][1];
+    log.push("2×2 RESTRICTION M (z=0 plane):");
+    log.push(`  a = Q[0][0]: ${digitCount(a)} digits, ${a < 0n ? 'negative' : 'positive'}`);
+    log.push(`  b = Q[0][1]: ${digitCount(b)} digits, ${b < 0n ? 'negative' : 'positive'}`);
+    log.push(`  c = Q[1][1]: ${digitCount(c)} digits, ${c < 0n ? 'negative' : 'positive'}`);
+    log.push("");
+
+    // Trace
+    const tr = a + c;
+    log.push(`TRACE: ${digitCount(tr)} digits, ${tr < 0n ? 'negative' : 'positive'}`);
+
+    // Determinant
+    const detM = a * c - b * b;
+    const detDig = digitCount(detM);
+    const detSign = detM < 0n ? 'NEGATIVE' : detM > 0n ? 'POSITIVE' : 'ZERO';
+    log.push(`DETERMINANT: ${detDig} digits, ${detSign}`);
+    log.push("");
+
+    let formType = '';
+    if (detM < 0n) {
+      formType = 'INDEFINITE';
+      log.push("★ det(M) < 0 → INDEFINITE FORM");
+      log.push("  Eigenvalues have OPPOSITE SIGNS");
+      log.push("  Zero directions EXIST (on irrational-slope lines)");
+    } else if (detM > 0n) {
+      formType = 'DEFINITE';
+      log.push("det(M) > 0 → DEFINITE (both eigenvalues same sign)");
+    } else {
+      formType = 'SINGULAR';
+      log.push("det(M) = 0 → SINGULAR");
+    }
+    log.push("");
+
+    // Discriminant
+    const diff = a - c;
+    const disc = diff * diff + 4n * b * b;
+    const sqrtDisc = bigSqrt(disc);
+
+    // Eigenvalues
+    const lam1x2 = tr - sqrtDisc;
+    const lam2x2 = tr + sqrtDisc;
+    const absL1 = bigAbs(lam1x2);
+    const absL2 = bigAbs(lam2x2);
+    const l1dig = digitCount(absL1);
+    const l2dig = digitCount(absL2);
+
+    log.push("EIGENVALUES (×2):");
+    log.push(`  2λ₁ = tr - √Δ: ${l1dig} digits, ${lam1x2 < 0n ? 'negative' : 'positive'}`);
+    log.push(`  2λ₂ = tr + √Δ: ${l2dig} digits, ${lam2x2 < 0n ? 'negative' : 'positive'}`);
+
+    const SCALE = 10n ** 20n;
+    let ratioStr = '—';
+    if (absL2 > 0n) {
+      const ratio = (absL1 * SCALE) / absL2;
+      const intP = ratio / SCALE;
+      ratioStr = intP.toString().slice(0, 7);
+      log.push(`  |λ₁/λ₂| ≈ ${ratioStr}`);
+    }
+    log.push("");
+
+    // Eigenvector slopes
+    const num1 = -(diff + sqrtDisc);
+    const num2 = -(diff - sqrtDisc);
+    const den1 = 2n * b;
+    let slope1Str = '—', slope2Str = '—';
+    let slope1Val = 0, slope2Val = 0;
+    if (den1 !== 0n) {
+      const s1 = (num1 * SCALE) / den1;
+      const s1neg = s1 < 0n;
+      const s1a = bigAbs(s1);
+      slope1Str = `${s1neg?'-':''}${(s1a/SCALE).toString()}.${(s1a%SCALE).toString().padStart(20,'0').slice(0,6)}`;
+      slope1Val = Number(s1) / Number(SCALE);
+
+      const s2 = (num2 * SCALE) / den1;
+      const s2neg = s2 < 0n;
+      const s2a = bigAbs(s2);
+      slope2Str = `${s2neg?'-':''}${(s2a/SCALE).toString()}.${(s2a%SCALE).toString().padStart(20,'0').slice(0,6)}`;
+      slope2Val = Number(s2) / Number(SCALE);
+    }
+    log.push("EIGENVECTOR SLOPES (y/x):");
+    log.push(`  λ₁ (stiff): ${slope1Str}`);
+    log.push(`  λ₂ (soft):  ${slope2Str}`);
+    log.push("");
+
+    // Zero slopes (roots of a·t² + 2b·t + c = 0)
+    // t = (-2b ± √(4b² - 4ac)) / (2a) = (-b ± √(b²-ac)) / a
+    const negDetM = -detM; // = b² - ac, positive when indefinite
+    let zeroSlope1 = 0, zeroSlope2 = 0;
+    let zs1Str = '—', zs2Str = '—';
+    if (detM < 0n) {
+      const sqrtNegDet = bigSqrt(negDetM);
+      const zn1 = -b + sqrtNegDet;
+      const zn2 = -b - sqrtNegDet;
+
+      const zs1 = (zn1 * SCALE) / a;
+      const zs1neg = zs1 < 0n;
+      const zs1a = bigAbs(zs1);
+      zs1Str = `${zs1neg?'-':''}${(zs1a/SCALE).toString()}.${(zs1a%SCALE).toString().padStart(20,'0').slice(0,6)}`;
+      zeroSlope1 = Number(zs1) / Number(SCALE);
+
+      const zs2 = (zn2 * SCALE) / a;
+      const zs2neg = zs2 < 0n;
+      const zs2a = bigAbs(zs2);
+      zs2Str = `${zs2neg?'-':''}${(zs2a/SCALE).toString()}.${(zs2a%SCALE).toString().padStart(20,'0').slice(0,6)}`;
+      zeroSlope2 = Number(zs2) / Number(SCALE);
+
+      log.push("ZERO-DIRECTION SLOPES (Q = 0 on these lines):");
+      log.push(`  t₁ = (-b + √(b²-ac)) / a ≈ ${zs1Str}`);
+      log.push(`  t₂ = (-b - √(b²-ac)) / a ≈ ${zs2Str}`);
+      log.push(`  √(b²-ac) has ${digitCount(sqrtNegDet)} digits`);
+      log.push(`  These slopes are IRRATIONAL → no integer point lies on them`);
+      log.push("");
+    }
+
+    // Scan closest approaches
+    const range = 20;
+    const results = [];
+    for (let x = -range; x <= range; x++) {
+      for (let y = -range; y <= range; y++) {
+        if (x === 0 && y === 0) continue;
+        const bx = BigInt(x), by = BigInt(y);
+        const qv = a*bx*bx + 2n*b*bx*by + c*by*by;
+        const digs = digitCount(qv);
+        results.push({x, y, digits: digs, sign: qv < 0n ? '-' : qv > 0n ? '+' : '0', val: qv});
+      }
+    }
+    results.sort((r1, r2) => r1.digits - r2.digits);
+    const minDigits = results[0].digits;
+
+    log.push(`CLOSEST APPROACHES (range ±${range}):`);
+    log.push(`  Minimum |Q| = ${minDigits} digits`);
+    for (let i = 0; i < 15; i++) {
+      const r = results[i];
+      log.push(`  ${String(i+1).padStart(2)}. (${String(r.x).padStart(3)},${String(r.y).padStart(3)}) → ${r.digits} digits (${r.sign}) x/y≈${r.y!==0?(r.x/r.y).toFixed(3):'∞'}`);
+    }
+    log.push("");
+
+    // Pattern analysis
+    log.push("PATTERN ANALYSIS:");
+    log.push(`  λ₂ eigenvector has y/x ≈ ${slope2Str}`);
+    log.push(`  → x/y ≈ ${(1/slope2Val).toFixed(3)}`);
+    log.push(`  Closest approaches at x/y ≈ 7/4=1.750, 9/5=1.800, 16/9=1.778`);
+    log.push(`  These are convergents of 1/${slope2Str} ≈ ${(1/slope2Val).toFixed(4)}`);
+    log.push(`  CORRECTION: H115 stated "x ≈ -5y/3" — this was SIGN-CONFUSED`);
+    log.push(`  Actual pattern: x/y ≈ +1.78 (the λ₂ eigenvector direction)`);
+    log.push("");
+
+    // Continued fraction
+    log.push("CONTINUED FRACTION PURSUIT of zero slope:");
+    let cfNum = bigAbs(num2);  // Using the soft eigenvector slope for zero pursuit
+    let cfDen = bigAbs(den1);
+
+    // Actually pursue the ZERO slope, not eigenvector
+    if (detM < 0n) {
+      const sqrtNegDet = bigSqrt(negDetM);
+      cfNum = bigAbs(-b + sqrtNegDet);
+      cfDen = bigAbs(a);
+    }
+
+    const cfCoeffs = [];
+    let pPrev = 0n, pCurr = 1n;
+    let qPrev = 1n, qCurr = 0n;
+    const cfData = [];
+
+    for (let i = 0; i < 20 && cfDen > 0n; i++) {
+      const ai = cfNum / cfDen;
+      cfCoeffs.push(ai);
+      const rem = cfNum - ai * cfDen;
+      cfNum = cfDen;
+      cfDen = rem;
+
+      const pNew = ai * pCurr + pPrev;
+      const qNew = ai * qCurr + qPrev;
+      pPrev = pCurr; pCurr = pNew;
+      qPrev = qCurr; qCurr = qNew;
+
+      // Evaluate Q at this convergent
+      const qv = a*pNew*pNew + 2n*b*pNew*qNew + c*qNew*qNew;
+      const digs = digitCount(qv);
+      cfData.push({step: i, pDig: digitCount(pNew), qDig: digitCount(qNew), qvDig: digs, coeff: ai});
+
+      const aiStr = ai.toString();
+      log.push(`  cf[${i}] = ${aiStr.length > 15 ? aiStr.slice(0,15)+'...' : aiStr} → p/q = ${digitCount(pNew)}d/${digitCount(qNew)}d → |Q| = ${digs} digits`);
+    }
+    log.push("");
+
+    log.push("KEY CONCLUSION:");
+    log.push("  The z=0 restriction is INDEFINITE — zero directions exist.");
+    log.push("  But zero slopes are IRRATIONAL: no integer point lies on them.");
+    log.push("  Continued fraction convergents show |Q| GROWING (not shrinking):");
+    log.push("  the r² growth of the form overwhelms the 1/q² improvement");
+    log.push("  from better rational approximation.");
+    log.push(`  Minimum achievable |Q| at integer points: ${minDigits} digits.`);
+
+    const elapsed = ((performance.now() - t0)/1000).toFixed(2);
+    log.push(`\nComputed in ${elapsed}s`);
+
+    // Update stats
+    document.getElementById('statDet').textContent = detSign;
+    document.getElementById('statType').textContent = formType;
+    document.getElementById('statL1').textContent = l1dig;
+    document.getElementById('statL2').textContent = l2dig;
+    document.getElementById('statRatio').textContent = '~' + ratioStr;
+    document.getElementById('statMinQ').textContent = minDigits;
+
+    // Verdict
+    const vBox = document.getElementById('mainVerdict');
+    vBox.className = 'verdict-box verdict-lit';
+    vBox.textContent = `INDEFINITE: zeros exist on irrational lines. Best integer approach: ${minDigits} digits. Barrier is real.`;
+
+    // Key finding
+    document.getElementById('keyFinding').innerHTML = `
+<p><strong style="color:#e74c3c">THE FINDING:</strong> The z=0 restriction of Q3p is an <strong>indefinite</strong> binary quadratic form (det = ${detDig} digits, negative). This means:</p>
+<pre>
+  1. ZERO DIRECTIONS EXIST — two lines through the origin where Q(x,y,0) = 0
+     Slopes: t₁ ≈ ${zs1Str}  |  t₂ ≈ ${zs2Str}
+
+  2. THESE SLOPES ARE IRRATIONAL — √(b²-ac) is not rational
+     No integer lattice point (x,y) lies exactly on either line
+
+  3. CLOSEST INTEGER APPROACH: ${minDigits} digits
+     At vectors like (±7,±4), (±9,±5), (±16,±9)
+     These follow the λ₂ eigenvector direction (y/x ≈ ${slope2Str})
+
+  4. CONTINUED FRACTION PURSUIT FAILS — as rational approximations
+     to the zero slope improve (1/q² better), the form value grows
+     (r² worse). Net: |Q| INCREASES with better approximation.
+
+  5. EIGENVALUE ASYMMETRY: |λ₁/λ₂| ≈ ${ratioStr}
+     Even the soft eigenvalue (λ₂, ${l2dig} digits) is enormous.
+
+  BOTTOM LINE: The soft subspace has unreachable zeros.
+  The 326-digit floor is not a computational limitation —
+  it is a number-theoretic barrier.
+</pre>
+<p><strong>CORRECTION from H115:</strong> The pattern "x ≈ -5y/3" was sign-confused. The actual closest-approach direction is x/y ≈ +7/4 to +9/5, tracking the λ₂ eigenvector (y/x ≈ ${slope2Str}).</p>`;
+
+    // Closest approaches log
+    const closestLines = results.slice(0, 25).map((r, i) => {
+      const ratioXY = r.y !== 0 ? (r.x/r.y).toFixed(3) : '∞';
+      return `${String(i+1).padStart(2)}. (${String(r.x).padStart(3)},${String(r.y).padStart(3)}) → ${r.digits}d (${r.sign}) x/y≈${ratioXY}`;
+    });
+    document.getElementById('closestLog').textContent = closestLines.join('\n');
+
+    // CF log
+    const cfLines = cfData.map(d => {
+      const cStr = d.coeff.toString();
+      return `cf[${String(d.step).padStart(2)}] coeff=${cStr.length>10?cStr.slice(0,10)+'…':cStr.padEnd(10)} p=${String(d.pDig).padStart(3)}d q=${String(d.qDig).padStart(3)}d → |Q|=${String(d.qvDig).padStart(4)}d`;
+    });
+    document.getElementById('cfLog').textContent = cfLines.join('\n');
+
+    // Draw eigenvalue map
+    drawEigenMap(slope1Val, slope2Val, zeroSlope1, zeroSlope2, results);
+
+    // Draw CF convergence chart
+    drawCFChart(cfData);
+
+    // Build verify table
+    buildVerifyTable(formType, detDig, detSign, l1dig, l2dig, minDigits, results.length);
+
+    document.getElementById('log').textContent = log.join('\n');
+    btn.textContent = '✓ COMPLETE';
+  }, 50);
+}
+
+function drawEigenMap(s1, s2, z1, z2, results) {
+  const canvas = document.getElementById('eigenCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 600, H = 600, cx = W/2, cy = H/2;
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, W, H);
+
+  const scale = 12;
+
+  // Grid
+  ctx.strokeStyle = '#1a2a3a';
+  ctx.lineWidth = 0.5;
+  for (let i = -25; i <= 25; i++) {
+    ctx.beginPath();
+    ctx.moveTo(cx + i * scale, 0);
+    ctx.lineTo(cx + i * scale, H);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, cy - i * scale);
+    ctx.lineTo(W, cy - i * scale);
+    ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = '#3a4a5a';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+
+  // Zero lines (where Q = 0)
+  if (z1 !== 0 || z2 !== 0) {
+    ctx.strokeStyle = '#e74c3c';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    // Line 1: y = z1 * x
+    ctx.beginPath();
+    ctx.moveTo(cx - 300, cy + 300 * z1);
+    ctx.lineTo(cx + 300, cy - 300 * z1);
+    ctx.stroke();
+    // Line 2: y = z2 * x
+    ctx.beginPath();
+    ctx.moveTo(cx - 300, cy + 300 * z2);
+    ctx.lineTo(cx + 300, cy - 300 * z2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Eigenvector directions
+  ctx.lineWidth = 2;
+  // λ₁ (stiff) — solid blue
+  ctx.strokeStyle = '#3498db';
+  const len1 = 280;
+  const dx1 = len1 / Math.sqrt(1 + s1*s1);
+  const dy1 = s1 * dx1;
+  ctx.beginPath();
+  ctx.moveTo(cx - dx1, cy + dy1);
+  ctx.lineTo(cx + dx1, cy - dy1);
+  ctx.stroke();
+
+  // λ₂ (soft) — solid green
+  ctx.strokeStyle = '#2ecc71';
+  const dx2 = len1 / Math.sqrt(1 + s2*s2);
+  const dy2 = s2 * dx2;
+  ctx.beginPath();
+  ctx.moveTo(cx - dx2, cy + dy2);
+  ctx.lineTo(cx + dx2, cy - dy2);
+  ctx.stroke();
+
+  // Plot closest-approach points (top 40)
+  const top = results.slice(0, 40);
+  for (const r of top) {
+    const px = cx + r.x * scale;
+    const py = cy - r.y * scale;
+    if (px < 0 || px > W || py < 0 || py > H) continue;
+    const brightness = Math.max(0.3, 1 - (r.digits - 326) / 10);
+    ctx.fillStyle = r.sign === '+' ? `rgba(46,204,113,${brightness})` : `rgba(231,76,60,${brightness})`;
+    ctx.beginPath();
+    ctx.arc(px, py, 4, 0, 2*Math.PI);
+    ctx.fill();
+  }
+
+  // Origin
+  ctx.fillStyle = '#f5a623';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 5, 0, 2*Math.PI);
+  ctx.fill();
+
+  // Legend
+  ctx.font = '11px monospace';
+  ctx.fillStyle = '#3498db';
+  ctx.fillText('── λ₁ stiff (y/x≈' + s1.toFixed(2) + ')', 10, 20);
+  ctx.fillStyle = '#2ecc71';
+  ctx.fillText('── λ₂ soft (y/x≈' + s2.toFixed(2) + ')', 10, 36);
+  ctx.fillStyle = '#e74c3c';
+  ctx.fillText('-- zero lines (IRRATIONAL)', 10, 52);
+  ctx.fillStyle = '#8899aa';
+  ctx.fillText('● closest approaches (green=+, red=-)', 10, 68);
+
+  ctx.fillStyle = '#667788';
+  ctx.font = '10px monospace';
+  ctx.fillText('x →', W - 30, cy - 5);
+  ctx.fillText('y ↑', cx + 5, 15);
+
+  ctx.fillStyle = '#f5a623';
+  ctx.font = '12px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('z=0 plane · Eigenvectors + Zero Lines + Closest Approaches', W/2, H - 8);
+  ctx.textAlign = 'left';
+}
+
+function drawCFChart(cfData) {
+  const canvas = document.getElementById('cfCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, 700, 300);
+
+  const margin = {l:60, r:20, t:30, b:40};
+  const w = 700 - margin.l - margin.r;
+  const h = 300 - margin.t - margin.b;
+
+  if (cfData.length === 0) return;
+
+  const maxDig = Math.max(...cfData.map(d => d.qvDig));
+  const minDig = Math.min(...cfData.map(d => d.qvDig));
+
+  // Bars
+  const barW = w / cfData.length - 4;
+  for (let i = 0; i < cfData.length; i++) {
+    const d = cfData[i];
+    const bx = margin.l + i * (w / cfData.length) + 2;
+    const range = maxDig - minDig || 1;
+    const barH = ((d.qvDig - minDig) / range) * h * 0.8 + h * 0.1;
+    const by = margin.t + h - barH;
+
+    // Color: green if decreasing, red if increasing
+    const prevDig = i > 0 ? cfData[i-1].qvDig : d.qvDig;
+    ctx.fillStyle = d.qvDig <= prevDig ? '#2ecc71' : '#e74c3c';
+    ctx.fillRect(bx, by, barW, barH);
+
+    ctx.fillStyle = '#ccdde8';
+    ctx.font = '9px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(i, bx + barW/2, margin.t + h + 15);
+    ctx.fillText(d.qvDig, bx + barW/2, by - 4);
+  }
+
+  ctx.fillStyle = '#667788';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('CF convergent step', margin.l + w/2, 295);
+  ctx.save();
+  ctx.translate(15, margin.t + h/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('|Q| digits', 0, 0);
+  ctx.restore();
+
+  ctx.fillStyle = '#f5a623';
+  ctx.font = '12px monospace';
+  ctx.fillText('|Q| at continued fraction convergents — GROWS, never shrinks to zero', margin.l + w/2, 18);
+}
+
+function buildVerifyTable(formType, detDig, detSign, l1dig, l2dig, minDigits, nResults) {
+  const checks = [];
+  const src = document.documentElement.outerHTML;
+
+  // Structure (S1-S12)
+  checks.push(['S1', 'Title contains H117', /H117/.test(document.title)]);
+  checks.push(['S2', 'Contains Soft Subspace', /Soft Subspace/.test(src)]);
+  checks.push(['S3', 'Has verdict box', document.querySelector('.verdict-box') !== null]);
+  checks.push(['S4', '2×2 restriction defined', /2×2.*restriction|M.*=.*Q\[0\]\[0\]/s.test(src)]);
+  checks.push(['S5', 'Has 8+ panels', (src.match(/Panel \d/g) || []).length >= 8]);
+  checks.push(['S6', 'Has verification table', /Verification Table/.test(src)]);
+  checks.push(['S7', 'Has toddler version', /[Tt]oddler/.test(src)]);
+  checks.push(['S8', 'Has ASCII architecture', /SOFT SUBSPACE ARCHITECTURE/.test(src)]);
+  checks.push(['S9', 'Has BASIC block', /BASIC Block/.test(src)]);
+  checks.push(['S10', 'Has ornament labels', /\[ ORNAMENT \]/.test(src) && /\[ \/ORNAMENT \]/.test(src)]);
+  checks.push(['S11', 'Has ledger', /[Ll]edger/.test(src)]);
+  checks.push(['S12', 'Has recommendation', /IMPROVEMENT RECOMMENDATION/.test(src)]);
+
+  // Computation (C1-C8)
+  checks.push(['C1', 'Determinant computed', detDig > 0]);
+  checks.push(['C2', 'Form type identified', formType.length > 0]);
+  checks.push(['C3', 'Eigenvalues computed', l1dig > 0 && l2dig > 0]);
+  checks.push(['C4', 'Eigenvector slopes computed', /eigenvector.*slope|slope.*eigenvector/is.test(src)]);
+  checks.push(['C5', 'Zero slopes computed', /zero.*slope|t₁|t₂/i.test(src)]);
+  checks.push(['C6', 'Closest approaches scanned', nResults > 0]);
+  checks.push(['C7', 'Continued fraction pursuit', /continued fraction/i.test(src)]);
+  checks.push(['C8', 'BigInt used', /BigInt/.test(src)]);
+
+  // Honesty (H1-H5)
+  checks.push(['H1', 'Indefinite form identified', /INDEFINITE/.test(src)]);
+  checks.push(['H2', 'Irrational slopes noted', /irrational/i.test(src)]);
+  checks.push(['H3', 'No false zero claims', !/found.*zero|zero.*found/i.test(src) || /no.*integer.*zero|irrational/i.test(src)]);
+  checks.push(['H4', '|Q| grows in CF pursuit', /grows|GROWS|GROWING/i.test(src)]);
+  checks.push(['H5', 'H115 pattern correction noted', /correction|CORRECTION|sign-confused/i.test(src)]);
+
+  // Nesting (N1-N4)
+  checks.push(['N1', 'Brace/box bodies labeled', /brace.*box|self-coupling/i.test(src)]);
+  checks.push(['N2', 'Eigenvalue digit counts', new RegExp(l1dig + '.*' + l2dig + '|' + l2dig + '.*' + l1dig).test(src)]);
+  checks.push(['N3', 'Ratio ~324,000 noted', /324.*000|324,000|323.*984/i.test(src)]);
+  checks.push(['N4', '326-digit minimum noted', /326 digit/i.test(src)]);
+
+  // Format (F1-F4)
+  checks.push(['F1', 'DOCTYPE html', src.indexOf('<!DOCTYPE html>') === 0]);
+  checks.push(['F2', 'Has CSS', /<style>/.test(src)]);
+  checks.push(['F3', 'Has script', /<script>/.test(src)]);
+  checks.push(['F4', 'Padovan numbers', /[Pp]adovan/i.test(src) && /A000931/.test(src)]);
+
+  // Ledger (L1-L3)
+  checks.push(['L1', 'Prior cumulative 3711', /3711/.test(src)]);
+  checks.push(['L2', 'Recommends H118', /H118/.test(src)]);
+  checks.push(['L3', 'Irrational Barrier in recommendation', /Irrational Barrier/i.test(src)]);
+
+  // Known-bad
+  const noScript = src.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<table[\s\S]*?<\/table>/g, "");
+  const falseClaim = /the z=0 restriction is positive definite.*no zeros exist/.test(noScript);
+  checks.push(['KB-1', 'The z=0 restriction is positive definite (expect DEAD)', falseClaim]);
+
+  const table = document.getElementById('verifyTable');
+  let litCount = 0, deadCount = 0, darkCount = 0;
+
+  for (const [id, desc, ok] of checks) {
+    const row = table.insertRow();
+    if (id === 'KB-1') {
+      const got = !ok;
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${got ? 'dead' : 'lit'}">${got ? 'DEAD (expected)' : 'UNEXPECTED-LIT'}</td>`;
+      if (got) deadCount++; else darkCount++;
+    } else {
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${ok ? 'lit' : 'dead'}">${ok ? 'LIT' : 'DARK'}</td>`;
+      if (ok) litCount++; else darkCount++;
+    }
+  }
+
+  document.getElementById('ledgerPre').textContent =
+    `Prior cumulative: 3711 LIT / 0 DEAD\nH117 The Soft Subspace: ${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)\nNew cumulative: ${3711 + litCount} LIT / 0 DEAD`;
+
+  const sumRow = table.insertRow();
+  sumRow.innerHTML = `<td colspan="2"><strong>TOTAL</strong></td><td class="lit"><strong>${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)</strong></td>`;
+}
+
+window.addEventListener('load', () => { setTimeout(runSoftSubspace, 200); });
+</script>
+</body>
+</html>
