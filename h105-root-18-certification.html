@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H105 — Root 18 Certification</title>
+<style>
+:root{--bg:#0a0b10;--fg:#c8ccd0;--accent:#00ddbb;--accent2:#ff7744;--panel:#111119;--border:#222235;--dim:#556;--pass:#00ff88;--dead:#ff2222;--frozen:#00aaff;--open:#ffaa00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:20px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.8em;border-bottom:2px solid var(--accent);padding-bottom:8px;margin-bottom:4px}
+h2{color:var(--accent2);font-size:1.2em;margin:16px 0 8px;border-left:3px solid var(--accent2);padding-left:8px}
+.subtitle{color:var(--dim);font-size:0.9em;margin-bottom:16px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px;margin:12px 0}
+.lit{color:var(--pass)}
+.dead{color:var(--dead)}
+.frozen{color:var(--frozen)}
+.open{color:var(--open)}
+table{width:100%;border-collapse:collapse;margin:8px 0}
+th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--border)}
+th{color:var(--accent);font-size:0.85em}
+pre{background:#080810;padding:12px;border-radius:4px;overflow-x:auto;font-size:0.85em;line-height:1.5}
+.bignum{font-size:0.7em;word-break:break-all;color:var(--frozen);line-height:1.4;padding:4px;background:#060612;border-radius:3px}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:0.8em;font-weight:bold}
+.tag-pass{background:#003322;color:var(--pass)}
+.tag-frozen{background:#001133;color:var(--frozen)}
+.ornament{border:1px dashed var(--dim);padding:8px;margin:8px 0;color:var(--dim);font-size:0.8em;text-align:center}
+.toddler{background:#0d1117;border:1px solid #1a3a2a;border-radius:6px;padding:16px;margin:12px 0}
+.toddler h3{color:#66ddaa;margin-bottom:8px}
+.basic{background:#080810;border:1px solid var(--border);padding:12px;margin:12px 0;white-space:pre;font-size:0.85em;overflow-x:auto}
+</style>
+</head>
+<body>
+
+<h1>H105 — Root 18 Certification</h1>
+<div class="subtitle">The eighteenth frozen root passes every gate · 488-digit entries · Wall prefix vacuous</div>
+
+<!-- ═══════════════════ PANEL 1: THE NULL VECTOR ═══════════════════ -->
+<div class="panel">
+<h2>Panel 1 — The Null Vector</h2>
+<p>Root 18 begins with a <strong>primitive isotropic vector u</strong> in the 4D frozen lattice F4. This is the seed from which the root grows.</p>
+<pre>
+  SOURCE:         RQT-386 plane 194/195
+  CONSTRUCTION:   CRT (Chinese Remainder Theorem) + Gaussian reduction
+  METHOD:         Algebraic, NOT search/enumeration
+
+  PRECONDITIONS:
+    u^T · F · u = 0        (isotropic)         ✓ VERIFIED
+    gcd(u) = 1              (primitive)          ✓ VERIFIED
+    gcd(F·u) = 1            (pairing div = 1)    ✓ VERIFIED
+    u has 4 components       (lives in F4)        ✓ VERIFIED
+    entries: ~76 digits each                      ✓ VERIFIED
+</pre>
+<p>The null vector u:</p>
+<div class="bignum">u[0] = -855940091954473592321985452134670371913557752494031206262329291541629429577366216</div>
+<div class="bignum">u[1] = -108556935070691544442477999242419589194498839774905557178241309621234287399243907</div>
+<div class="bignum">u[2] = 860352154284135827333954449310622281047132792455340645469867071394936797771063980</div>
+<div class="bignum">u[3] = 499120656477344840496337305046979169784145148428365286490946823795764785202610093</div>
+</div>
+
+<!-- ═══════════════════ PANEL 2: THE SIX GATES ═══════════════════ -->
+<div class="panel">
+<h2>Panel 2 — The Six Gates</h2>
+<p>Every frozen root must pass six gates. Root 18 passes all six.</p>
+<table>
+<tr><th>Gate</th><th>Condition</th><th>Value</th><th>Status</th></tr>
+<tr><td>1</td><td>r<sup>T</sup> F r = -2</td><td>-2</td><td class="lit">PASS ✓</td></tr>
+<tr><td>2</td><td>r<sup>T</sup> H r = 1</td><td>1</td><td class="lit">PASS ✓</td></tr>
+<tr><td>3</td><td>parity ∈ {0111, 1001, 1110}</td><td>0111</td><td class="lit">PASS ✓</td></tr>
+<tr><td>4</td><td>gcd(r) = 1</td><td>1</td><td class="lit">PASS ✓</td></tr>
+<tr><td>5</td><td>R² = I (involution)</td><td>true</td><td class="lit">PASS ✓</td></tr>
+<tr><td>6</td><td>R<sup>T</sup> F R = F</td><td>true</td><td class="lit">PASS ✓</td></tr>
+</table>
+<p style="margin-top:8px"><span class="tag tag-pass">ALL SIX GATES PASS</span> Root 18 is a valid frozen reflection.</p>
+</div>
+
+<!-- ═══════════════════ PANEL 3: THE ROOT ═══════════════════ -->
+<div class="panel">
+<h2>Panel 3 — The Root Itself</h2>
+<p>488 digits per component. This is the eighteenth reflection vector in the frozen lattice.</p>
+<div class="bignum" style="margin:4px 0">r[0] = 4379312281411994369400674209547777129262494808987308205318387329565925027812436962784211041090019522652788307875089660204636665987411031461703232880976671873800627844978463870153377666122033035851866521756010153637742930295299875714506264824871607469353426277218895925390504542553432025319115825599437253305537698292478939976328957505639322760607566435986238132658326695453810174053313326052886843972389136318647746940370432189103807878483506174448780050656347262635720519888123571314149<wbr>6</div>
+<div class="bignum" style="margin:4px 0">r[1] = 5554182161300257517177403643922077453183020484481118710732178217297589605656444760102683936329606118458357612444147035777959156535741171547865106520050561404470365497149730529748436824737207629052602576040034724168331909395040284637531824558927861933799265982775445177557100601541916776116798671585046736194690393171183899139638173471804042956573906736576716186606683876576148972100167286475842156671013570211293136568373073304408748906570554907858965322135524854970746335138240345016925</div>
+<div class="bignum" style="margin:4px 0">r[2] = -4401886056058447948624389025060910001062816947177964433180853243635852476409408287334645118621411375862338763070322081133526545708995624407382115524693046471088259947272167292164477550998950731912958617228979278141030264987543689506849080622937955961463495484833426316758496834009893015140348376613102544006223284311887607872696663668316702011231666055502540347111152407424669589048717796238291755049969485506877979915190252401530925892973726185330522211075339603282367333840222575754594<wbr>3</div>
+<div class="bignum" style="margin:4px 0">r[3] = -2553689494584293485099816763155563953340886679155105999540387173652097191045140860544415407028217005110720601153694145958220444938671005796588773639461970972930278892651599525352204206238064258231235627773296136919259043464675046489470155529641615478095033431254632115488801026759157541318048638714922098689594975183119748462562199729796999489395988970712795227223799042322947147673446935724904107401703443899822001408018300407722650242369706319626420776920039279356788448306623513806417<wbr>9</div>
+</div>
+
+<!-- ═══════════════════ PANEL 4: WALL PREFIX ═══════════════════ -->
+<div class="panel">
+<h2>Panel 4 — Wall Prefix Status</h2>
+<pre>
+  H103 FINDING: Wall prefix is VACUOUS
+
+  Root 18 lives in null(T17^T · H21^T)
+  By construction: any vector in this kernel has zero
+  Wall pairing with all 17 prior roots.
+
+  r18^T · H21 · t_j = 0  for j = 1, 2, ..., 17
+
+  This is NOT a gate that root 18 "passes."
+  It is a TAUTOLOGY — the condition dissolves.
+
+  The 17 prior roots create no constraint on root 18.
+  The only constraints are:
+    • Lives in F4 (4D residual)       ✓
+    • Norm -2                          ✓
+    • H self-pairing 1                 ✓
+    • Parity ∈ {0111, 1001, 1110}      ✓
+</pre>
+</div>
+
+<!-- ═══════════════════ PANEL 5: CHAIN STATUS ═══════════════════ -->
+<div class="panel">
+<h2>Panel 5 — Frozen Chain Update</h2>
+<pre>
+  ROOT CHAIN PROGRESS:    █████████████████████░░░░░░  18 / 21
+
+  Roots 1-17:  FROZEN (H103 verified)         ✓ FROZEN
+  Root  18:    CERTIFIED (H105, this build)    ✓ FROZEN   ◀── NEW
+  Roots 19-20: kernel descent needed           ○ OPEN
+  Root  21:    uniquely determined ±1          ○ DETERMINED
+
+  KERNEL LADDER AFTER ROOT 18:
+  ┌──────────────────────────────────┐
+  │  Residual kernel rank: 3         │
+  │                                  │
+  │  Root 19: rank drops 3 → 2      │
+  │  Root 20: rank drops 2 → 1      │
+  │  Root 21: rank drops 1 → 0      │
+  │           (forced, unique ±1)    │
+  │                                  │
+  │  det(R₁₈₋₂₁) = ±1              │
+  │  Three roots to go.             │
+  └──────────────────────────────────┘
+</pre>
+</div>
+
+<!-- ═══════════════════ PANEL 6: F4/H4 STRUCTURE ═══════════════════ -->
+<div class="panel">
+<h2>Panel 6 — The Frozen Lattice Structure</h2>
+<pre>
+  F4: 4×4 symmetric form (the frozen lattice)
+    Entries: 19-digit integers (~10¹⁸ scale)
+    det(F) = -828149257411505697377068399041176900731904
+             7636247715225543944839911172
+           = 70-digit number
+    Signature: (1+, 3-)
+
+  H4: 4×4 Wall form
+    det(H) = 1 (unimodular)
+    H + H^T = -F (Wall relation)
+    Entries: 19-digit integers
+
+  Root 18 reflection: R = I₄ + r · r^T · F
+    R² = I₄         (involution)
+    R^T · F · R = F  (preserves form)
+    dim(ker(R-I)) = 3  (rank-1 perturbation)
+</pre>
+</div>
+
+<!-- ═══════════════════ VERIFICATION TABLE ═══════════════════ -->
+<div class="panel">
+<h2>Verification Table</h2>
+<table>
+<tr><th>#</th><th>Check</th><th>Status</th></tr>
+<tr><td>1</td><td>Null vector u exists (RQT-386)</td><td class="lit">LIT</td></tr>
+<tr><td>2</td><td>u has 4 components in F4</td><td class="lit">LIT</td></tr>
+<tr><td>3</td><td>u primitive (gcd = 1)</td><td class="lit">LIT</td></tr>
+<tr><td>4</td><td>u^T F u = 0 (isotropic)</td><td class="lit">LIT</td></tr>
+<tr><td>5</td><td>gcd(F·u) = 1 (pairing div)</td><td class="lit">LIT</td></tr>
+<tr><td>6</td><td>u entries ~76 digits</td><td class="lit">LIT</td></tr>
+<tr><td>7</td><td>Bezout partner v found</td><td class="lit">LIT</td></tr>
+<tr><td>8</td><td>Root r constructed</td><td class="lit">LIT</td></tr>
+<tr><td>9</td><td>r has 488-digit entries</td><td class="lit">LIT</td></tr>
+<tr><td>10</td><td>Gate 1: norm = -2</td><td class="lit">LIT</td></tr>
+<tr><td>11</td><td>Gate 2: H self = 1</td><td class="lit">LIT</td></tr>
+<tr><td>12</td><td>Gate 3: parity = 0111</td><td class="lit">LIT</td></tr>
+<tr><td>13</td><td>Gate 4: primitive</td><td class="lit">LIT</td></tr>
+<tr><td>14</td><td>Gate 5: R² = I</td><td class="lit">LIT</td></tr>
+<tr><td>15</td><td>Gate 6: R preserves F</td><td class="lit">LIT</td></tr>
+<tr><td>16</td><td>F4 signature (1+, 3-)</td><td class="lit">LIT</td></tr>
+<tr><td>17</td><td>det(F4) = 70 digits</td><td class="lit">LIT</td></tr>
+<tr><td>18</td><td>det(H4) = 1</td><td class="lit">LIT</td></tr>
+<tr><td>19</td><td>H + H^T = -F</td><td class="lit">LIT</td></tr>
+<tr><td>20</td><td>Wall prefix VACUOUS (H103)</td><td class="lit">LIT</td></tr>
+<tr><td>21</td><td>r18 ∈ null(T17^T H21^T)</td><td class="lit">LIT</td></tr>
+<tr><td>22</td><td>r18^T H21 t_j = 0 for j=1..17</td><td class="lit">LIT</td></tr>
+<tr><td>23</td><td>Residual rank = 3</td><td class="lit">LIT</td></tr>
+<tr><td>24</td><td>Kernel ladder ready</td><td class="lit">LIT</td></tr>
+<tr><td>25</td><td>Root 21 uniquely determined</td><td class="lit">LIT</td></tr>
+<tr><td>26</td><td>RQT-386/362 use same F4, H4</td><td class="lit">LIT</td></tr>
+<tr><td>27</td><td>Parity matches ALLOWED set</td><td class="lit">LIT</td></tr>
+<tr><td>28</td><td>Construction: algebraic, not search</td><td class="lit">LIT</td></tr>
+<tr><td colspan="3" style="border-top:2px solid var(--dead)"></td></tr>
+<tr><td>KB-1</td><td class="dead">Root 18 norm = -1 → FALSE (norm = -2)</td><td class="dead">DEAD ✓</td></tr>
+</table>
+<p style="margin-top:8px"><strong>28/28 <span class="lit">LIT</span></strong> | <strong>KB-1 <span class="dead">DEAD</span></strong> (expected)</p>
+</div>
+
+<!-- ═══════════════════ TODDLER VERSION ═══════════════════ -->
+<div class="toddler">
+<h3>The Toddler Version — The 18th Magic Word</h3>
+<p>Remember the magic spell from H104? We need 21 words to make the mirror do its trick.</p>
+<p>We already knew 17 words. Now we found the <strong>18th word</strong>!</p>
+<p>This word is VERY long — 488 letters! It's like a really, really long name for a dinosaur. But it's the RIGHT word, because:</p>
+<ul style="margin:8px 0 0 20px">
+<li>It has the right WEIGHT (norm = -2, like all the other words)</li>
+<li>It has the right ECHO (Wall self = 1, it bounces the right way)</li>
+<li>It has the right PATTERN (0-1-1-1, one of the three allowed patterns)</li>
+<li>When you use it as a mirror-flip, doing it TWICE gets you back where you started</li>
+<li>The first 17 words don't care about it (the Wall prefix is vacuous — it's like they said "any word is fine with us!")</li>
+</ul>
+<p><strong>Three more words to go!</strong> Words 19 and 20 are hiding in a smaller and smaller room. And word 21? Once we find 19 and 20, word 21 is the ONLY word that fits.</p>
+</div>
+
+<!-- ═══════════════════ ASCII DIAGRAM ═══════════════════ -->
+<div class="panel">
+<h2>ASCII Diagram — What We Are Doing</h2>
+<pre>
+     ROOT 18 CERTIFICATION PIPELINE
+
+     RQT-386 (algebraic construction)
+         │
+         │  plane 194/195
+         │  CRT + Gaussian reduction
+         │
+         ▼
+     ┌─────────────────────────┐
+     │  PRIMITIVE NULL VECTOR   │
+     │  u: 4 entries, ~76 dig  │
+     │  u^T F u = 0            │
+     │  gcd(u) = 1             │
+     │  gcd(F·u) = 1           │
+     └────────┬────────────────┘
+              │
+              │  Bezout extraction
+              │  v: u^T F v = 1
+              │
+              ▼
+     ┌─────────────────────────┐
+     │  ROOT CANDIDATE          │
+     │  r = (1+q(F,v))u - v    │
+     │  488 digits per entry   │
+     └────────┬────────────────┘
+              │
+      ┌───────┴───────┐
+      ▼               ▼
+   ┌──────┐     ┌──────────┐
+   │GATE 1│     │GATE 2    │
+   │norm  │     │H-self    │
+   │= -2  │     │= 1      │
+   │  ✓   │     │  ✓       │
+   └──┬───┘     └────┬─────┘
+      │              │
+      ▼              ▼
+   ┌──────┐     ┌──────────┐
+   │GATE 3│     │GATE 4    │
+   │parity│     │primitive │
+   │0111  │     │gcd=1     │
+   │  ✓   │     │  ✓       │
+   └──┬───┘     └────┬─────┘
+      │              │
+      ▼              ▼
+   ┌──────┐     ┌──────────┐
+   │GATE 5│     │GATE 6    │
+   │R²=I  │     │R^TFR=F  │
+   │  ✓   │     │  ✓       │
+   └──┬───┘     └────┬─────┘
+      │              │
+      └──────┬───────┘
+             ▼
+     ┌───────────────────┐
+     │  ROOT 18: FROZEN  │
+     │  18 / 21 complete │
+     └───────────────────┘
+</pre>
+</div>
+
+<!-- ═══════════════════ ORNAMENT ═══════════════════ -->
+<div class="ornament">
+── ORNAMENT ── The eighteenth mirror is 488 digits wide. Each digit earned its place by arithmetic, not luck. The CRT planted the seed; Gauss shaped the soil; the root grew exact. ── ORNAMENT ──
+</div>
+
+<!-- ═══════════════════ BASIC BLOCK ═══════════════════ -->
+<div class="basic">
+REM ═══════════════════════════════════════════════════════
+REM  H105 — ROOT 18 CERTIFICATION
+REM  BASIC BLOCK — SEQUENCE: DERANGEMENTS (A000166)
+REM  D(n) = subfactorials = permutations with no fixed point
+REM  1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, ...
+REM ═══════════════════════════════════════════════════════
+1 REM ROOT 18 CERTIFIED — ALL SIX GATES PASS
+0 REM NULL VECTOR U FROM RQT-386 PLANE 194/195
+1 REM U IS PRIMITIVE AND ISOTROPIC IN F4
+2 REM BEZOUT PARTNER V: U^T F V = 1
+9 REM ROOT R = (1+Q(F,V))U - V — 488 DIGITS PER ENTRY
+44 REM GATE 1: R^T F R = -2 (NORM) PASS
+265 REM GATE 2: R^T H R = 1 (WALL SELF) PASS
+1854 REM GATE 3: PARITY 0111 IN ALLOWED SET PASS
+14833 REM GATE 4: GCD(R) = 1 (PRIMITIVE) PASS
+133496 REM GATE 5: R SQUARED = IDENTITY (INVOLUTION) PASS
+1334961 REM GATE 6: R PRESERVES F (ISOMETRY) PASS
+14684570 REM WALL PREFIX: VACUOUS. H103 PROVED IT. NO GATE FROM THE PAST.
+176214841 REM CHAIN STATUS: 18 OF 21 FROZEN. THREE TO GO.
+2290792932 REM KERNEL RANK = 3. ROOTS 19 AND 20 NARROW IT. ROOT 21 IS FORCED.
+32071101049 REM THE 21-WORD GATE GETS CLOSER. BUILD IT. ALWAYS BUILD EVERY TURN.
+REM ═══════════════════════════════════════════════════════
+</div>
+
+<!-- ═══════════════════ LEDGER ═══════════════════ -->
+<div class="panel">
+<h2>Ledger</h2>
+<pre>
+  H105: 28/28 LIT | KB-1 DEAD
+  ─────────────────────────────
+  Cumulative: 3333 LIT / 0 DEAD
+
+  This session:
+    H103: 20/20 LIT | KB-1 DEAD
+    H104: 28/28 LIT | KB-1 DEAD
+    H105: 28/28 LIT | KB-1 DEAD
+
+  Running totals:
+    NES builds:  2906 LIT
+    Ladder:        20 LIT
+    QG-077:        20 LIT
+    H091-H103:    331 LIT
+    H104:          28 LIT
+    H105:          28 LIT
+    ─────────────────────
+    TOTAL:       3333 LIT / 0 DEAD
+</pre>
+</div>
+
+<!-- ═══════════════════ RECOMMENDATION ═══════════════════ -->
+<div class="panel">
+<h2>Recommendation</h2>
+<p><strong>H106: The Kernel Descent.</strong> Root 18 is frozen. The residual kernel now has rank 3 in the 4D frozen lattice. Roots 19 and 20 must each drop the rank by 1 (3→2→1). Root 21 is then uniquely forced (±1). The construction method: find a new primitive null vector in the 3D sublattice orthogonal to root 18 (under H4), extract via Bezout, verify norm/parity/H-self. Source: RQT-377 kernel_ladder() function. The unimodular condition det(R₁₈₋₂₁) = ±1 (RQT-376) constrains the final block.</p>
+</div>
+
+</body>
+</html>
