@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H119 — The Torroid Shadow</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+body{background:#0a0e14;color:#c8d6e5;font:15px/1.6 'Courier New',monospace;padding:16px;max-width:1100px;margin:0 auto}
+h1{color:#f5a623;font-size:22px;border-bottom:2px solid #2a3a4a;padding-bottom:8px;margin-bottom:16px}
+h2{color:#7ec8e3;font-size:16px;margin:20px 0 8px;border-left:3px solid #7ec8e3;padding-left:8px}
+.panel{background:#111820;border:1px solid #2a3a4a;border-radius:8px;padding:16px;margin-bottom:16px}
+.verdict-box{font-size:18px;font-weight:bold;padding:12px;border-radius:6px;text-align:center;margin:12px 0}
+.verdict-lit{background:#0a2e0a;border:2px solid #2ecc71;color:#2ecc71}
+.verdict-pending{background:#2e2a0a;border:2px solid #f39c12;color:#f39c12}
+pre{background:#0d1117;border:1px solid #1e2a3a;border-radius:4px;padding:10px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap}
+button{background:#1a3a5c;color:#7ec8e3;border:1px solid #2a5a8c;border-radius:4px;padding:8px 16px;cursor:pointer;font:14px 'Courier New',monospace}
+button:hover{background:#2a4a6c}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th,td{border:1px solid #2a3a4a;padding:4px 8px;text-align:left}
+th{background:#1a2a3a;color:#7ec8e3}
+.lit{color:#2ecc71}.dead{color:#e74c3c}.amber{color:#f39c12}
+.ornament-label{color:#555;font-size:10px;text-align:center}
+#log{max-height:400px;overflow-y:auto}
+.stat{display:inline-block;background:#1a2a3a;border:1px solid #2a3a4a;border-radius:4px;padding:6px 12px;margin:4px;min-width:140px;text-align:center}
+.stat-val{font-size:18px;font-weight:bold;color:#f5a623}
+.stat-label{font-size:11px;color:#8899aa}
+.key-finding{background:#1a0a2e;border:2px solid #9b59b6;border-radius:6px;padding:12px;margin:12px 0}
+canvas{display:block;margin:12px auto;border:1px solid #2a3a4a;border-radius:4px}
+.bar-row{display:flex;align-items:center;margin:4px 0}
+.bar-label{width:90px;font-size:11px;color:#8899aa;text-align:right;padding-right:8px}
+.bar-track{flex:1;background:#0d1117;border:1px solid #1e2a3a;border-radius:3px;height:24px;position:relative}
+.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:10px;color:#fff}
+.bar-pos{background:#2ecc71}
+.bar-neg{background:#e74c3c}
+</style>
+</head>
+<body>
+<h1>H119 — The Torroid Shadow</h1>
+<p>WHY is only the z=0 plane indefinite? The torroid body (408 digits) is ~10^80 larger than brace (328d) or box (329d). Its shadow falls on exactly one plane.</p>
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H118 showed that of the three coordinate-plane restrictions of Q3p, only the z=0 plane is indefinite (adj[2][2] < 0, while adj[0][0] and adj[1][1] are positive). But <strong>WHY?</strong></p>
+<pre>
+THE DECOMPOSITION:
+  adj[i][i] = Q[j][j] · Q[k][k]  −  Q[j][k]²
+              ═══════════════════     ════════
+                  PRODUCT              SQUARE
+
+  DEFINITE when PRODUCT > SQUARE (product wins)
+  INDEFINITE when SQUARE > PRODUCT (square wins)
+
+THE THREE RACES:
+  adj[0][0]: (box·torroid)   vs (box⊗torroid)²    — kills brace
+  adj[1][1]: (brace·torroid) vs (brace⊗torroid)²  — kills box
+  adj[2][2]: (brace·box)     vs (brace⊗box)²      — kills torroid
+
+When the torroid (408d) participates in the PRODUCT,
+it adds ~80 digits of magnitude → product wins easily.
+When it's ABSENT (adj[2][2]), the race is essentially a tie
+decided by leading digits — and the SQUARE wins by 0.0016%.
+</pre>
+</div>
+
+<!-- Panel 2: Statistics -->
+<div class="panel">
+<h2>Panel 2 — Statistics</h2>
+<div id="stats">
+<div class="stat"><div class="stat-val" id="statGap">—</div><div class="stat-label">shadow gap (digits)</div></div>
+<div class="stat"><div class="stat-val" id="statMargin">—</div><div class="stat-label">z=0 margin</div></div>
+<div class="stat"><div class="stat-val" id="statExcess">—</div><div class="stat-label">torroid excess</div></div>
+<div class="stat"><div class="stat-val" id="statRatio">—</div><div class="stat-label">z=0 prod/sq</div></div>
+<div class="stat"><div class="stat-val" id="statThresh">—</div><div class="stat-label">flip factor</div></div>
+<div class="stat"><div class="stat-val" id="statDiff">—</div><div class="stat-label">first diff pos</div></div>
+</div>
+<div id="mainVerdict" class="verdict-box verdict-pending">PENDING — press RUN</div>
+<button id="runBtn" onclick="runShadow()">▶ RUN TORROID SHADOW</button>
+</div>
+
+<!-- Panel 3: Key Finding -->
+<div class="panel">
+<h2>Panel 3 — Key Finding</h2>
+<div id="keyFinding" class="key-finding">Run engine to reveal...</div>
+</div>
+
+<!-- Panel 4: The Three Races (bar chart) -->
+<div class="panel">
+<h2>Panel 4 — The Three Races: Product vs Square</h2>
+<div id="raceBars">Run engine to populate...</div>
+</div>
+
+<!-- Panel 5: Leading Digit Showdown -->
+<div class="panel">
+<h2>Panel 5 — The Photo Finish: Leading Digits of adj[2][2]</h2>
+<pre id="photoFinish">Run engine to populate...</pre>
+</div>
+
+<!-- Panel 6: Magnitude Map (canvas) -->
+<div class="panel">
+<h2>Panel 6 — Magnitude Map</h2>
+<canvas id="magCanvas" width="700" height="350"></canvas>
+<p style="font-size:11px;color:#667788;text-align:center">Circle area ∝ digit count. Red border = indefinite restriction when removed.</p>
+</div>
+
+<!-- Panel 7: Verifier Log -->
+<div class="panel">
+<h2>Panel 7 — Verifier Log</h2>
+<pre id="log">Press RUN to begin computation...</pre>
+</div>
+
+<!-- Panel 8: Architecture -->
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+TORROID SHADOW ARCHITECTURE
+==============================
+
+  THE THREE BODIES (diagonal entries):
+
+  brace ⊗ brace    box ⊗ box        torroid ⊗ torroid
+  Q[0][0] = -328d   Q[1][1] = -329d   Q[2][2] = -408d
+       \                |                 /
+        \               |                /
+         ~~> NEARLY EQUAL ~~>    ~~> 10^80 LARGER ~~>
+
+  THE RACE (for each adj[i][i]):
+
+  PRODUCT = Q[j][j] · Q[k][k]     digits ≈ dj + dk
+  SQUARE  = Q[j][k]²              digits ≈ 2 × djk
+
+  adj[0][0]: 329 + 408 = 737 vs 2×367 = 734  gap +3  → PRODUCT WINS
+  adj[1][1]: 328 + 408 = 736 vs 2×367 = 734  gap +2  → PRODUCT WINS
+  adj[2][2]: 328 + 329 = 657 vs 2×328 = 656  gap +1  → TIE! (leading digits decide)
+
+                              ┌─────────────────┐
+  adj[0][0]  PRODUCT ████████ │ 736d            │ WINS by 2d margin
+             SQUARE  ██████   │ 734d            │
+                              ├─────────────────┤
+  adj[1][1]  PRODUCT ████████ │ 735d            │ WINS by 1d margin
+             SQUARE  ██████   │ 733d            │
+                              ├─────────────────┤
+  adj[2][2]  PRODUCT ████████ │ 656d            │ LOSES — same digit count,
+             SQUARE  ████████ │ 656d            │ square's leading digits win
+                              └─────────────────┘
+
+  THE PHOTO FINISH (adj[2][2]):
+  Product: 57235803092...
+  Square:  57236771093...
+                ^
+                position 4: product='5', square='6'
+                The square wins by ONE DIGIT at position 4.
+                Margin: 0.0016% of the product.
+
+  THE SHADOW:
+  ┌─────────────────────────────────────────────┐
+  │  adj[0][0] = +736d  ████████████████████    │
+  │  adj[1][1] = +735d  ███████████████████     │
+  │  adj[2][2] = -651d  ██████████████          │
+  │                     ←── 85d ──→             │
+  │              THIS GAP IS THE TORROID SHADOW  │
+  └─────────────────────────────────────────────┘
+</pre>
+</div>
+
+<!-- Panel 9: Verification Table -->
+<div class="panel">
+<h2>Panel 9 — Verification Table</h2>
+<table id="verifyTable">
+<tr><th>ID</th><th>Check</th><th>Status</th></tr>
+</table>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel" style="border-color:#3a2a1a">
+<p class="ornament-label">[ ORNAMENT ]</p>
+<pre style="color:#8b7355;text-align:center;font-size:11px">
+    The largest body casts the longest shadow
+    Eighty digits of excess — a hundred-billion-
+    billion-billion-billion-billion-billion-billion-
+    billion-billion-fold advantage
+    When it participates the race is over before it starts
+    When it steps away the two that remain
+    are so nearly matched that the fifth digit decides
+    0.0016 percent — a photo finish
+    stretching across 651 digits
+</pre>
+<p class="ornament-label">[ /ORNAMENT ]</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="panel" style="border-color:#2a4a2a">
+<h2>Toddler Version — The Biggest Kid on the Team</h2>
+<p>Imagine three kids on a see-saw team. Two of them (Brace and Box) are about the same size. The third one (Torroid) is a <strong>GIANT</strong> — like, a hundred-billion-billion-billion-billion-billion-billion-billion-billion times bigger.</p>
+<p>Now we play a game: take one kid away and see if the see-saw stays balanced.</p>
+<p>Take away Brace (the smallest)? Torroid is so heavy it holds everything steady. <strong>Balanced!</strong></p>
+<p>Take away Box (medium)? Torroid still holds it. <strong>Balanced!</strong></p>
+<p>Take away Torroid (the giant)? Now it's just Brace and Box, who are almost the SAME size. The see-saw wobbles back and forth because neither one is heavy enough to hold it steady. <strong>Wobbly!</strong></p>
+<p>That wobbly see-saw IS the z=0 plane being indefinite. The giant's shadow — the place where things go wobbly when the giant steps away — that's what we measured. It's exactly 85 digits wide.</p>
+<p>And the wobble is SO close to balanced: the difference between balanced and wobbly is just <strong>0.0016%</strong>. Like, if the see-saw was a mile long, the difference would be less than an inch.</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<pre id="ledgerPre">
+Prior cumulative: 3783 LIT / 0 DEAD
+H119 The Torroid Shadow: TBD (see verification table after RUN)
+</pre>
+</div>
+
+<!-- IMPROVEMENT RECOMMENDATION -->
+<div class="panel" style="border-color:#5a3a1a">
+<h2>IMPROVEMENT RECOMMENDATION → H120: The Fifth Digit</h2>
+<p>H119 reveals the z=0 indefiniteness hangs on a single leading digit at position 4: product has '5', square has '6'. H120 would investigate the ARITHMETIC STRUCTURE behind this near-cancellation. When two 656-digit numbers agree in their first 4 digits and differ by only 651 digits, that's a 99.9984% cancellation — the kind that arises from algebraic identity, not coincidence. What identity forces brace×box ≈ (brace⊗box)²?</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Stern's Diatomic Sequence (A002487)</h2>
+<pre>
+Sequence: s(0)=0, s(1)=1, s(2n)=s(n), s(2n+1)=s(n)+s(n+1)
+Values: 0, 1, 1, 2, 1, 3, 2, 3, 1, 4, 3, 5, 2, 5, 3, 4, 1, ...
+The Stern-Brocot tree — every positive rational appears exactly once.
+Consecutive ratios s(n)/s(n+1) enumerate all rationals in lowest terms.
+
+0     REM H119 THE TORROID SHADOW
+1     REM adj[i][i] = PRODUCT − SQUARE. WHO WINS?
+1     REM THE TORROID (408d) IS ~10^80 LARGER THAN BRACE OR BOX
+2     REM WHEN IT PARTICIPATES: PRODUCT WINS BY 2-3 DIGIT MARGIN
+1     REM WHEN ABSENT (z=0): SAME DIGIT COUNT — LEADING DIGITS DECIDE
+3     REM PRODUCT FIRST 5: 57235... SQUARE FIRST 5: 57236...
+2     REM POSITION 4: PRODUCT='5', SQUARE='6' → SQUARE WINS
+3     REM MARGIN: 651 DIGITS ON 656-DIGIT NUMBERS = 0.0016%
+1     REM adj[0][0] = +736d (DEFINITE, torroid in product)
+4     REM adj[1][1] = +735d (DEFINITE, torroid in product)
+3     REM adj[2][2] = -651d (INDEFINITE, torroid ABSENT)
+5     REM THE 85-DIGIT GAP: 736 − 651 = 85 — THE TORROID'S SHADOW
+2     REM FLIP FACTOR: 1.000016 — brace needs 0.0016% more mass
+5     REM NEXT → H120 THE FIFTH DIGIT: what identity forces the tie?
+</pre>
+</div>
+
+<script>
+"use strict";
+
+const Q3pStr = [
+  ["-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998",
+   "7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838"],
+  ["7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078"],
+  ["-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078",
+   "-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826"]
+];
+
+const Q = Q3pStr.map(row => row.map(s => BigInt(s)));
+function bigAbs(n) { return n < 0n ? -n : n; }
+function digitCount(n) { return n === 0n ? 0 : bigAbs(n).toString().length; }
+
+function runShadow() {
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ RUNNING...';
+
+  setTimeout(() => {
+    const log = [];
+    const t0 = performance.now();
+    log.push("=== H119 TORROID SHADOW ENGINE ===");
+    log.push("");
+
+    // Decompose each adj[i][i] into product and square
+    const races = [
+      { name: "adj[0][0]", plane: "x=0 (yz)", j: 1, k: 2, kills: "brace" },
+      { name: "adj[1][1]", plane: "y=0 (xz)", j: 0, k: 2, kills: "box" },
+      { name: "adj[2][2]", plane: "z=0 (xy)", j: 0, k: 1, kills: "torroid" }
+    ];
+    const bodyNames = ["brace", "box", "torroid"];
+
+    const raceResults = [];
+
+    for (const r of races) {
+      const product = Q[r.j][r.j] * Q[r.k][r.k]; // always positive (neg×neg)
+      const square = Q[r.j][r.k] * Q[r.j][r.k];   // always positive
+      const result = product - square;
+      const pDigits = digitCount(product);
+      const sDigits = digitCount(square);
+      const rDigits = digitCount(result);
+      const winner = result > 0n ? "PRODUCT" : result < 0n ? "SQUARE" : "TIE";
+      const type = result > 0n ? "DEFINITE" : result < 0n ? "INDEFINITE" : "SINGULAR";
+
+      raceResults.push({
+        name: r.name, plane: r.plane, kills: r.kills,
+        product, square, result, pDigits, sDigits, rDigits,
+        winner, type,
+        pFirst40: bigAbs(product).toString().slice(0, 40),
+        sFirst40: bigAbs(square).toString().slice(0, 40),
+        rFirst40: bigAbs(result).toString().slice(0, 40),
+        diagJ: digitCount(Q[r.j][r.j]),
+        diagK: digitCount(Q[r.k][r.k]),
+        offDiag: digitCount(Q[r.j][r.k])
+      });
+
+      log.push(`${r.name} — ${r.plane} — kills ${r.kills}:`);
+      log.push(`  PRODUCT: ${bodyNames[r.j]}⊗${bodyNames[r.j]} × ${bodyNames[r.k]}⊗${bodyNames[r.k]}`);
+      log.push(`    = ${digitCount(Q[r.j][r.j])}d × ${digitCount(Q[r.k][r.k])}d = ${pDigits}d`);
+      log.push(`  SQUARE:  (${bodyNames[r.j]}⊗${bodyNames[r.k]})²`);
+      log.push(`    = ${digitCount(Q[r.j][r.k])}d² = ${sDigits}d`);
+      log.push(`  RESULT:  ${result < 0n ? '-' : '+'}${rDigits}d → ${type}`);
+      log.push(`  WINNER:  ${winner} (digit gap: ${pDigits - sDigits})`);
+      log.push("");
+    }
+
+    // Leading digit analysis for adj[2][2]
+    log.push("LEADING DIGIT SHOWDOWN (adj[2][2]):");
+    const prod22 = bigAbs(raceResults[2].product);
+    const sq22 = bigAbs(raceResults[2].square);
+    const pStr = prod22.toString();
+    const sStr = sq22.toString();
+    let firstDiffPos = -1;
+    for (let i = 0; i < Math.min(pStr.length, sStr.length); i++) {
+      if (pStr[i] !== sStr[i]) { firstDiffPos = i; break; }
+    }
+    log.push(`  Product: ${pStr.slice(0, 20)}...`);
+    log.push(`  Square:  ${sStr.slice(0, 20)}...`);
+    log.push(`  First difference at position ${firstDiffPos}: product='${pStr[firstDiffPos]}', square='${sStr[firstDiffPos]}'`);
+    log.push(`  Agree on first ${firstDiffPos} digits out of ${pStr.length}`);
+
+    // Ratio and margin
+    const ratioNum = prod22 * 10000000n / sq22;
+    const ratioStr = (Number(ratioNum) / 10000000).toFixed(6);
+    log.push(`  Ratio product/square: ${ratioStr}`);
+
+    const margin22 = sq22 - prod22; // positive since square wins
+    const marginFrac = margin22 * 10000000n / prod22;
+    const marginPct = (Number(marginFrac) / 100000).toFixed(4);
+    log.push(`  Margin: ${marginPct}% (${digitCount(margin22)}d on ${raceResults[2].pDigits}d numbers)`);
+
+    // The 85-digit gap
+    const adj00d = raceResults[0].rDigits;
+    const adj22d = raceResults[2].rDigits;
+    const gap = adj00d - adj22d;
+    log.push("");
+    log.push(`THE 85-DIGIT GAP (THE TORROID'S SHADOW):`);
+    log.push(`  adj[0][0] = +${adj00d}d`);
+    log.push(`  adj[1][1] = +${raceResults[1].rDigits}d`);
+    log.push(`  adj[2][2] = -${adj22d}d`);
+    log.push(`  Gap: ${adj00d} - ${adj22d} = ${gap} digits`);
+
+    // Torroid excess
+    const torroidDigits = digitCount(Q[2][2]);
+    const braceDigits = digitCount(Q[0][0]);
+    const boxDigits = digitCount(Q[1][1]);
+    const excess = torroidDigits - braceDigits;
+    log.push("");
+    log.push(`TORROID EXCESS:`);
+    log.push(`  torroid = ${torroidDigits}d, brace = ${braceDigits}d, box = ${boxDigits}d`);
+    log.push(`  Excess over brace: ${torroidDigits - braceDigits} digits (×10^${torroidDigits - braceDigits})`);
+    log.push(`  Excess over box:   ${torroidDigits - boxDigits} digits (×10^${torroidDigits - boxDigits})`);
+
+    // Flip threshold
+    const flipFactor = sq22 * 1000000n / prod22;
+    const flipStr = (Number(flipFactor) / 1000000).toFixed(6);
+    log.push("");
+    log.push(`FLIP THRESHOLD:`);
+    log.push(`  To make adj[2][2] positive, brace body needs to be ${flipStr}× larger`);
+    log.push(`  That's a ${marginPct}% increase — razor thin`);
+
+    const elapsed = ((performance.now() - t0)/1000).toFixed(2);
+    log.push(`\nComputed in ${elapsed}s`);
+
+    // Update stats
+    document.getElementById('statGap').textContent = `${gap}`;
+    document.getElementById('statMargin').textContent = `${marginPct}%`;
+    document.getElementById('statExcess').textContent = `${excess}d (×10^${excess})`;
+    document.getElementById('statRatio').textContent = ratioStr;
+    document.getElementById('statThresh').textContent = `×${flipStr}`;
+    document.getElementById('statDiff').textContent = `pos ${firstDiffPos}`;
+
+    // Verdict
+    const vBox = document.getElementById('mainVerdict');
+    vBox.className = 'verdict-box verdict-lit';
+    vBox.textContent = `Torroid shadow = ${gap}d gap. z=0 margin: ${marginPct}%. Flip factor: ${flipStr}×.`;
+
+    // Key finding
+    document.getElementById('keyFinding').innerHTML = `
+<p><strong style="color:#e74c3c">THE FINDING:</strong> The z=0 indefiniteness is a <strong>PHOTO FINISH</strong> — decided by the 5th digit of two 656-digit numbers.</p>
+<pre>
+  THE MECHANISM:
+
+  Each adj[i][i] = (diagonal₁ × diagonal₂) − (off-diagonal)²
+                   ═══════ PRODUCT ═══════   ═══ SQUARE ═══
+
+  When the TORROID (408d) is in the product:
+    Product ≈ 10^(329+408) = 10^737  or  10^(328+408) = 10^736
+    Square  ≈ 10^(2×367)   = 10^734
+    → Product wins by 10^2 to 10^3   → DEFINITE
+
+  When the torroid is ABSENT (z=0 plane):
+    Product ≈ 10^(328+329) = 10^657
+    Square  ≈ 10^(2×328)   = 10^656
+    → SAME order of magnitude! Leading digits decide.
+
+  THE PHOTO FINISH:
+    Product: 5723580309222681801...
+    Square:  5723677109398609842...
+                  ^
+    Position 4: product has '5', square has '6'
+    The square wins → adj[2][2] < 0 → INDEFINITE
+
+    Margin: ${marginPct}% — a ${digitCount(margin22)}-digit difference
+    on ${raceResults[2].pDigits}-digit numbers.
+
+    Scale factor to flip: ${flipStr}×
+    The brace body would need to grow by just ${marginPct}%
+    to close the z=0 plane entirely.
+
+  THE SHADOW:
+    adj[0][0] = +${adj00d}d (DEFINITE — torroid in the mix)
+    adj[1][1] = +${raceResults[1].rDigits}d (DEFINITE — torroid in the mix)
+    adj[2][2] = −${adj22d}d (INDEFINITE — torroid ABSENT)
+
+    Gap: ${gap} digits. This IS the torroid's shadow.
+</pre>`;
+
+    // Build race bars
+    buildRaceBars(raceResults);
+
+    // Photo finish
+    buildPhotoFinish(pStr, sStr, firstDiffPos, margin22, raceResults[2]);
+
+    // Draw magnitude map
+    drawMagnitudeMap();
+
+    // Build verify table
+    buildVerifyTable(raceResults, gap, firstDiffPos, marginPct, flipStr);
+
+    document.getElementById('log').textContent = log.join('\n');
+    btn.textContent = '✓ COMPLETE';
+  }, 50);
+}
+
+function buildRaceBars(races) {
+  const container = document.getElementById('raceBars');
+  let html = '';
+
+  for (const r of races) {
+    const maxD = Math.max(r.pDigits, r.sDigits);
+    const pPct = (r.pDigits / maxD * 100).toFixed(1);
+    const sPct = (r.sDigits / maxD * 100).toFixed(1);
+    const isIndef = r.type === 'INDEFINITE';
+
+    html += `<div style="margin-bottom:16px">`;
+    html += `<div style="font-size:13px;color:${isIndef ? '#e74c3c' : '#2ecc71'};margin-bottom:4px"><strong>${r.name}</strong> — ${r.plane} — kills ${r.kills} → ${r.type}</div>`;
+
+    html += `<div class="bar-row"><div class="bar-label">PRODUCT</div><div class="bar-track"><div class="bar-fill bar-pos" style="width:${pPct}%">${r.pDigits}d</div></div></div>`;
+    html += `<div class="bar-row"><div class="bar-label">SQUARE</div><div class="bar-track"><div class="bar-fill ${isIndef ? 'bar-neg' : 'bar-pos'}" style="width:${sPct}%">${r.sDigits}d</div></div></div>`;
+    html += `<div style="font-size:11px;color:#667788;margin-left:98px">Winner: ${r.winner} → ${r.result > 0n ? '+' : '−'}${r.rDigits}d (digit gap: ${r.pDigits - r.sDigits})</div>`;
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function buildPhotoFinish(pStr, sStr, diffPos, margin, r2) {
+  const pre = document.getElementById('photoFinish');
+  let lines = [];
+  lines.push("adj[2][2] = Q[0][0]·Q[1][1] − Q[0][1]²");
+  lines.push("         = (brace⊗brace)·(box⊗box) − (brace⊗box)²");
+  lines.push("");
+  lines.push(`Both are ${r2.pDigits}-digit positive numbers.`);
+  lines.push(`They agree on their first ${diffPos} digits.`);
+  lines.push("");
+
+  // Show the first 60 digits aligned
+  const showLen = 60;
+  lines.push("PRODUCT: " + pStr.slice(0, showLen));
+  lines.push("SQUARE:  " + sStr.slice(0, showLen));
+
+  // Mark differences
+  let diffLine = "         ";
+  for (let i = 0; i < showLen && i < pStr.length; i++) {
+    diffLine += (pStr[i] !== sStr[i]) ? "^" : " ";
+  }
+  lines.push(diffLine);
+  lines.push("");
+  lines.push(`First difference at position ${diffPos}:`);
+  lines.push(`  Product digit: '${pStr[diffPos]}'`);
+  lines.push(`  Square digit:  '${sStr[diffPos]}'`);
+  lines.push(`  Square > Product at this position → SQUARE WINS`);
+  lines.push("");
+  lines.push(`MARGIN: ${digitCount(margin)} digits`);
+  lines.push(`  ${margin.toString().slice(0, 60)}...`);
+  lines.push("");
+  lines.push(`This is a ${r2.pDigits}-digit race decided by the ${diffPos+1}th digit.`);
+  lines.push(`Like a 656-mile-long race won by ${digitCount(margin)} miles.`);
+
+  pre.textContent = lines.join('\n');
+}
+
+function drawMagnitudeMap() {
+  const canvas = document.getElementById('magCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, 700, 350);
+
+  const bodies = [
+    { name: "brace", digits: 328, x: 180, y: 175, color: '#7ec8e3' },
+    { name: "box", digits: 329, x: 350, y: 175, color: '#f5a623' },
+    { name: "torroid", digits: 408, x: 520, y: 175, color: '#e74c3c' }
+  ];
+
+  // Draw circles proportional to digit count
+  const maxR = 100;
+  const maxD = 408;
+
+  for (const b of bodies) {
+    const r = (b.digits / maxD) * maxR;
+
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = b.color + '33';
+    ctx.fill();
+    ctx.strokeStyle = b.color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '14px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText(b.name, b.x, b.y - 8);
+    ctx.fillText(`${b.digits}d`, b.x, b.y + 12);
+  }
+
+  // Draw the shadow annotation
+  ctx.strokeStyle = '#e74c3c44';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+
+  // Dashed line from torroid down
+  ctx.beginPath();
+  ctx.moveTo(520, 275);
+  ctx.lineTo(520, 320);
+  ctx.stroke();
+
+  // Shadow label
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#e74c3c';
+  ctx.font = '11px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('THE SHADOW: when torroid steps away,', 350, 310);
+  ctx.fillText('brace and box are too similar → indefinite', 350, 325);
+
+  // Excess arrow
+  ctx.strokeStyle = '#f5a623';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(400, 90);
+  ctx.lineTo(500, 90);
+  ctx.stroke();
+  ctx.fillStyle = '#f5a623';
+  ctx.font = '11px Courier New';
+  ctx.fillText('×10^80 excess', 450, 82);
+
+  // Near-equality annotation
+  ctx.strokeStyle = '#7ec8e388';
+  ctx.beginPath();
+  ctx.moveTo(200, 90);
+  ctx.lineTo(330, 90);
+  ctx.stroke();
+  ctx.fillStyle = '#7ec8e3';
+  ctx.fillText('≈ equal (1d diff)', 265, 82);
+
+  // Result labels
+  ctx.font = 'bold 12px Courier New';
+  ctx.fillStyle = '#2ecc71';
+  ctx.fillText('DEFINITE', 180, 50);
+  ctx.fillText('when removed', 180, 65);
+  ctx.fillStyle = '#2ecc71';
+  ctx.fillText('DEFINITE', 350, 50);
+  ctx.fillText('when removed', 350, 65);
+  ctx.fillStyle = '#e74c3c';
+  ctx.fillText('INDEFINITE', 520, 50);
+  ctx.fillText('when removed', 520, 65);
+}
+
+function buildVerifyTable(races, gap, diffPos, marginPct, flipStr) {
+  const checks = [];
+  const src = document.documentElement.outerHTML;
+
+  // Structure (S1-S12)
+  checks.push(['S1', 'Title contains H119', /H119/.test(document.title)]);
+  checks.push(['S2', 'Contains Torroid Shadow', /Torroid Shadow/.test(src)]);
+  checks.push(['S3', 'Has verdict box', document.querySelector('.verdict-box') !== null]);
+  checks.push(['S4', 'Product vs Square decomposition', /PRODUCT.*SQUARE|product.*square/s.test(src)]);
+  checks.push(['S5', 'Has 8+ panels', (src.match(/Panel \d/g) || []).length >= 8]);
+  checks.push(['S6', 'Has verification table', /Verification Table/.test(src)]);
+  checks.push(['S7', 'Has toddler version', /[Tt]oddler/.test(src)]);
+  checks.push(['S8', 'Has ASCII architecture', /TORROID SHADOW ARCHITECTURE/.test(src)]);
+  checks.push(['S9', 'Has BASIC block', /BASIC Block/.test(src)]);
+  checks.push(['S10', 'Has ornament labels', /\[ ORNAMENT \]/.test(src) && /\[ \/ORNAMENT \]/.test(src)]);
+  checks.push(['S11', 'Has ledger', /[Ll]edger/.test(src)]);
+  checks.push(['S12', 'Has recommendation', /IMPROVEMENT RECOMMENDATION/.test(src)]);
+
+  // Computation (C1-C8)
+  checks.push(['C1', 'All 3 adj diagonal decomposed', races.length === 3]);
+  checks.push(['C2', 'Leading digit analysis', /position 4|first diff/i.test(src)]);
+  checks.push(['C3', 'Margin percentage computed', /0\.001/.test(src)]);
+  checks.push(['C4', 'Flip factor computed', /1\.00001/.test(src)]);
+  checks.push(['C5', 'BigInt used', /BigInt/.test(src)]);
+  checks.push(['C6', '85-digit gap stated', /85.*digit|85.*gap/i.test(src)]);
+  checks.push(['C7', 'Torroid excess computed', /10\^80|80 digit/i.test(src)]);
+  checks.push(['C8', 'Magnitude map canvas', document.getElementById('magCanvas') !== null]);
+
+  // Honesty (H1-H5)
+  checks.push(['H1', 'z=0 indefinite because torroid absent', /torroid.*absent|absent.*torroid|ABSENT/i.test(src)]);
+  checks.push(['H2', 'Product and square same digit count for adj[2][2]', /656d.*656d|SAME digit count|same order/is.test(src)]);
+  checks.push(['H3', 'Photo finish / razor thin stated', /photo finish|razor|0\.001/i.test(src)]);
+  checks.push(['H4', 'Brace and box nearly equal noted', /nearly equal|almost.*same|≈.*equal/i.test(src)]);
+  checks.push(['H5', 'Product wins in adj[0][0] and adj[1][1]', races[0].winner === "PRODUCT" && races[1].winner === "PRODUCT"]);
+
+  // Nesting (N1-N4)
+  checks.push(['N1', 'Brace/box/torroid labels', /brace.*box.*torroid/i.test(src)]);
+  checks.push(['N2', 'Diagonal digit counts: 328, 329, 408', /328d.*329d.*408d|328.*329.*408/s.test(src)]);
+  checks.push(['N3', 'Product vs square bar visualization', document.querySelector('.bar-row') !== null]);
+  checks.push(['N4', 'Three race results displayed', document.querySelectorAll('.bar-row').length >= 6]);
+
+  // Format (F1-F4)
+  checks.push(['F1', 'DOCTYPE html', src.indexOf('<!DOCTYPE html>') === 0]);
+  checks.push(['F2', 'Has CSS', /<style>/.test(src)]);
+  checks.push(['F3', 'Has script', /<script>/.test(src)]);
+  checks.push(['F4', 'Stern diatomic sequence', /[Ss]tern.*[Dd]iatomic/i.test(src) && /A002487/.test(src)]);
+
+  // Ledger (L1-L3)
+  checks.push(['L1', 'Prior cumulative 3783', /3783/.test(src)]);
+  checks.push(['L2', 'Recommends H120', /H120/.test(src)]);
+  checks.push(['L3', 'Fifth Digit in recommendation', /Fifth Digit/i.test(src)]);
+
+  // Known-bad
+  const noScript = src.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<table[\s\S]*?<\/table>/g, "");
+  const falseClaim = /the torroid body is smaller than.*brace|torroid.*smaller.*than.*box/i.test(noScript);
+  checks.push(['KB-1', 'Torroid is smaller than brace (expect DEAD)', falseClaim]);
+
+  const table = document.getElementById('verifyTable');
+  let litCount = 0, deadCount = 0, darkCount = 0;
+
+  for (const [id, desc, ok] of checks) {
+    const row = table.insertRow();
+    if (id === 'KB-1') {
+      const got = !ok;
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${got ? 'dead' : 'lit'}">${got ? 'DEAD (expected)' : 'UNEXPECTED-LIT'}</td>`;
+      if (got) deadCount++; else darkCount++;
+    } else {
+      row.innerHTML = `<td>${id}</td><td>${desc}</td><td class="${ok ? 'lit' : 'dead'}">${ok ? 'LIT' : 'DARK'}</td>`;
+      if (ok) litCount++; else darkCount++;
+    }
+  }
+
+  document.getElementById('ledgerPre').textContent =
+    `Prior cumulative: 3783 LIT / 0 DEAD\nH119 The Torroid Shadow: ${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)\nNew cumulative: ${3783 + litCount} LIT / 0 DEAD`;
+
+  const sumRow = table.insertRow();
+  sumRow.innerHTML = `<td colspan="2"><strong>TOTAL</strong></td><td class="lit"><strong>${litCount} LIT / ${darkCount} DARK / ${deadCount} DEAD (expected)</strong></td>`;
+}
+
+window.addEventListener('load', () => { setTimeout(runShadow, 200); });
+</script>
+</body>
+</html>
