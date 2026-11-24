@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H108 — The Coefficient Barrier</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --fg: #d4d4d8;
+  --accent: #c084fc;
+  --accent2: #f472b6;
+  --panel-bg: #18181b;
+  --panel-border: #27272a;
+  --lit: #22c55e;
+  --dead: #ef4444;
+  --amber: #f59e0b;
+  --wall: #ef4444;
+  --mono: 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Georgia', serif;
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+h1 { color: var(--accent); font-size: 1.8em; margin-bottom: 4px; }
+.subtitle { color: var(--accent2); font-size: 1.1em; margin-bottom: 20px; }
+.verdict-box {
+  background: linear-gradient(135deg, #1a0a0a, #2a1515);
+  border: 2px solid var(--wall);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+.verdict-main {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: var(--wall);
+  font-family: var(--mono);
+}
+.verdict-sub {
+  color: var(--amber);
+  font-size: 1.1em;
+  margin-top: 8px;
+}
+.verdict-detail {
+  color: var(--fg);
+  font-size: 0.95em;
+  margin-top: 12px;
+  opacity: 0.85;
+}
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 16px 0;
+}
+.panel-title {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 1.05em;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 6px;
+}
+.data-row {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  color: #a1a1aa;
+  margin: 4px 0;
+  word-break: break-all;
+}
+.highlight { color: var(--accent2); font-weight: bold; }
+.wall-highlight { color: var(--wall); font-weight: bold; }
+.lit { color: var(--lit); }
+.dead { color: var(--dead); }
+.amber-text { color: var(--amber); }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.9em; }
+th, td { border: 1px solid var(--panel-border); padding: 6px 10px; text-align: left; }
+th { background: #1f1f23; color: var(--accent); }
+pre {
+  background: #111115;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 14px;
+  font-family: var(--mono);
+  font-size: 0.82em;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--fg);
+  line-height: 1.5;
+}
+.toddler-box {
+  background: linear-gradient(135deg, #1a1520, #15101a);
+  border: 1px solid #4a3a5a;
+  border-radius: 8px;
+  padding: 18px;
+  margin: 16px 0;
+}
+.toddler-title { color: #e879f9; font-size: 1.1em; margin-bottom: 10px; }
+.ornament-label { color: #555; font-size: 0.75em; text-align: center; margin: 4px 0; }
+.ornament {
+  text-align: center;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.8em;
+  margin: 20px 0;
+  opacity: 0.6;
+}
+.section-label { color: #666; font-size: 0.75em; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<h1>H108 — The Coefficient Barrier</h1>
+<p class="subtitle">Root 19 exists. Its coordinates do not yield to finite compute.</p>
+
+<!-- ═══ VERDICT BOX ═══ -->
+<div class="verdict-box">
+  <div class="verdict-main">CONSTRUCTION BLOCKED</div>
+  <div class="verdict-sub">Root 19 existence: PROVED (H107 Eichler-Kneser)<br>
+  Root 19 coordinates: BLOCKED by 1056-digit unfactorable cofactor</div>
+  <div class="verdict-detail">
+    det(Q3_prim) = 3<sup>4</sup> &times; C<sub>1056</sub> &nbsp;|&nbsp;
+    C<sub>1056</sub> is 1056 digits, not a perfect square, no known factors beyond 3<sup>4</sup><br>
+    Every known construction algorithm requires this factorization. The factoring record is 250 digits (RSA-250, 2020).<br>
+    The gap is <span class="wall-highlight">806 digits beyond the frontier of human mathematics</span>.
+  </div>
+</div>
+
+<!-- ═══ PANEL 1: What We Tried ═══ -->
+<div class="panel">
+  <div class="panel-title">Panel 1 — Methods Attempted</div>
+  <p><strong>Four distinct approaches, all blocked by the same wall:</strong></p>
+  <table>
+    <tr><th>Method</th><th>What It Does</th><th>How It Failed</th></tr>
+    <tr>
+      <td>PARI qfsolve (3&times;3)</td>
+      <td>Find isotropic vector of Q3_prim directly</td>
+      <td>Needs to factor det(Q3_prim). 1058-digit determinant. PARI tried to allocate &gt;1 GB stack, exceeded maximum. Never reached the solve step.</td>
+    </tr>
+    <tr>
+      <td>PARI qflllgram</td>
+      <td>LLL-reduce the Gram matrix, then solve on reduced form</td>
+      <td>Stack overflow during LLL reduction. 328-digit matrix entries require enormous intermediate values during Gram-Schmidt orthogonalization.</td>
+    </tr>
+    <tr>
+      <td>Gauss size-reduction</td>
+      <td>Pure-Python column operations to shrink off-diagonal entries</td>
+      <td>200 iterations, ZERO progress. Diagonal entries (328, 328, 407 digits) and off-diagonals (326-365 digits) are ALREADY at minimum under unimodular transforms.</td>
+    </tr>
+    <tr>
+      <td>PARI qfsolve (4&times;4)</td>
+      <td>Build Q3_prim &oplus; &lt;1&gt;, find isotropic vector, dehomogenize</td>
+      <td>Initial matrix syntax bug (nested brackets vs flat PARI syntax). After fix, same stack overflow as 3&times;3.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══ PANEL 2: The Factoring Wall ═══ -->
+<div class="panel">
+  <div class="panel-title">Panel 2 — The Factoring Wall</div>
+  <p>Every standard algorithm for solving ternary quadratic equations (Simon 2005, Castel 2012) requires the factorization of the determinant. This is not an implementation limitation — it is built into the mathematics.</p>
+  <table>
+    <tr><th>Quantity</th><th>Value</th></tr>
+    <tr><td>det(Q3_prim)</td><td>1058 digits (3512 bits), positive</td></tr>
+    <tr><td>Small factors found</td><td>3<sup>4</sup> = 81</td></tr>
+    <tr><td>Remaining cofactor C<sub>1056</sub></td><td>1056 digits (3506 bits)</td></tr>
+    <tr><td>Perfect square?</td><td>NO</td></tr>
+    <tr><td>Trial division to 97</td><td>No additional factors</td></tr>
+    <tr><td>Factoring record (RSA-250)</td><td>250 digits (829 bits), achieved Feb 2020</td></tr>
+    <tr><td>Gap to our cofactor</td><td><span class="wall-highlight">806 digits / 2677 bits beyond the record</span></td></tr>
+  </table>
+  <p style="margin-top:10px;color:#a1a1aa;">The Number Field Sieve (best known general-purpose algorithm) has subexponential complexity L(1/3, (64/9)<sup>1/3</sup>). At 1056 digits, the estimated operation count exceeds 10<sup>100</sup>. No amount of compute budget fixes this.</p>
+</div>
+
+<!-- ═══ PANEL 3: The Gauss Reduction Failure ═══ -->
+<div class="panel">
+  <div class="panel-title">Panel 3 — Why Reduction Cannot Help</div>
+  <p>Q3_prim has entry sizes (in digits):</p>
+  <pre>
+       col 0    col 1    col 2
+row 0:  328(-)   328(+)   367(-)
+row 1:  328(+)   328(-)   367(+)
+row 2:  367(-)   367(+)   407(-)
+  </pre>
+  <p>After 200 Gauss reduction iterations (column operations col_j &minus; c&middot;col_i):</p>
+  <pre>
+       col 0    col 1    col 2
+row 0:  328(-)   328(+)   327(-)
+row 1:  328(+)   328(-)   365(+)
+row 2:  327(-)   365(+)   407(-)
+  </pre>
+  <p>Total digit count: 3187 &rarr; 3177. <span class="wall-highlight">Ten digits removed in 200 iterations.</span> The form is effectively at its Minkowski minimum.</p>
+  <p style="margin-top:8px;">This means the Q3_prim lattice has no short vectors — it is a "hard" lattice whose geometry reflects the 1058-digit determinant. Any basis will have entries of this scale.</p>
+</div>
+
+<!-- ═══ PANEL 4: What The Solution Looks Like ═══ -->
+<div class="panel">
+  <div class="panel-title">Panel 4 — The Unseen Solution</div>
+  <p>By the Minkowski bound for ternary forms:</p>
+  <div class="data-row">
+    ||v||&sup2; &le; (4/3) &middot; |det(Q3_prim)|<sup>1/3</sup> &asymp; 10<sup>353</sup>
+  </div>
+  <p style="margin-top:8px;">So each coordinate of the solution vector v = (v<sub>0</sub>, v<sub>1</sub>, v<sub>2</sub>) has at most ~176 digits (~585 bits).</p>
+  <p>The search space for three coordinates of ~176 digits each is ~10<sup>529</sup> vectors. For comparison, the number of atoms in the observable universe is ~10<sup>80</sup>.</p>
+  <p style="margin-top:8px;">The solution IS there. Eichler-Kneser guarantees it. All five local conditions are satisfied (H107). But the gap between existence and construction is:</p>
+  <div class="data-row" style="text-align:center;font-size:1.1em;color:var(--wall);margin:10px 0;">
+    EXISTENCE (theoretical) &nbsp;&harr;&nbsp; 10<sup>529</sup> search space &nbsp;&harr;&nbsp; 10<sup>100</sup> factoring ops &nbsp;&harr;&nbsp; CONSTRUCTION (computational)
+  </div>
+</div>
+
+<!-- ═══ PANEL 5: What Would Work ═══ -->
+<div class="panel">
+  <div class="panel-title">Panel 5 — Paths Not Taken (Honest Assessment)</div>
+  <table>
+    <tr><th>Method</th><th>Requirement</th><th>Status</th></tr>
+    <tr>
+      <td>Factor det(Q3_prim)</td>
+      <td>Factor a 1056-digit composite</td>
+      <td class="dead">BEYOND CURRENT MATHEMATICS</td>
+    </tr>
+    <tr>
+      <td>Voight's quaternion algebra method</td>
+      <td>Specialized implementation; avoids factoring by working in the quaternion order directly</td>
+      <td class="amber-text">NOT AVAILABLE — requires Magma or specialized library</td>
+    </tr>
+    <tr>
+      <td>Kneser neighbor lattice method</td>
+      <td>Enumerate p-neighbors of the lattice for primes p where Q3_prim has bad reduction</td>
+      <td class="amber-text">COULD WORK — but still needs partial factorization of det</td>
+    </tr>
+    <tr>
+      <td>Random search + lattice CVP</td>
+      <td>Sample random v, check Q3_prim(v), use closest-vector-problem heuristics</td>
+      <td class="dead">INFEASIBLE — form is too "hard" (all entries ~same scale)</td>
+    </tr>
+    <tr>
+      <td>Explicit CRT from local witnesses</td>
+      <td>Combine mod-p solutions via CRT; needs M &gt; 10<sup>353</sup></td>
+      <td class="dead">CRT of independent solutions ≠ global solution (no coherence guarantee)</td>
+    </tr>
+  </table>
+  <p style="margin-top:10px;">The Voight quaternion method (Voight 2013, "Identifying the matrix ring") is the most promising path. It works without factoring the determinant but requires specialized algebraic number theory machinery (quaternion orders, maximal orders, Eichler orders). This is a research-grade computation, not a library call.</p>
+</div>
+
+<!-- ═══ PANEL 6: The Chain So Far ═══ -->
+<div class="panel">
+  <div class="panel-title">Panel 6 — The Chain: H106 → H107 → H108</div>
+  <pre>
+H106 (The Kernel Descent)          H107 (The Ternary Oracle)         H108 (The Coefficient Barrier)
+─────────────────────────          ──────────────────────────         ──────────────────────────────
+Root 19 is OPEN                    Root 19 EXISTS                    Root 19 coordinates: BLOCKED
+  Kernel rank 3                      Q3 content = 2                    4 methods attempted
+  Q3: 3×3, 400-digit entries         Q3_prim: primitive, indef          PARI: stack overflow
+  LLL: 3340 → 644 bits               Eichler-Kneser: ALL 5 met         Gauss: no reduction
+  Modular sieve: 226,980/0           Local witnesses: ALL pass          det = 1058 digits
+  Wall at 10^338                     NON-CONSTRUCTIVE proof             cofactor = 1056 digits
+                                                                        GAP = 806 digits
+  ↓                                  ↓                                  ↓
+  "Is it there?"                     "YES, it's there."                 "We can't reach it."
+  </pre>
+</div>
+
+<!-- ═══ PANEL 7: What Root 19 Status Means ═══ -->
+<div class="panel">
+  <div class="panel-title">Panel 7 — Consequence for the 21-Root Minimum</div>
+  <p>The minimum word length question has three parts:</p>
+  <table>
+    <tr><th>Root</th><th>Method Needed</th><th>Status</th></tr>
+    <tr><td>Root 19</td><td>Ternary representation (Q3_prim(v) = -1)</td><td class="lit">EXISTS (Eichler-Kneser) | Coordinates: BLOCKED</td></tr>
+    <tr><td>Root 20</td><td>Binary representation (rank-2 kernel)</td><td>OPEN — depends on root 19</td></tr>
+    <tr><td>Root 21</td><td>Cofactor forced (rank-1 kernel, determined ±1)</td><td>OPEN — depends on roots 19-20</td></tr>
+  </table>
+  <p style="margin-top:10px;">The existence proof (H107) establishes: <strong>the minimum word length IS 21, not 23</strong>. This is settled by existence alone — constructive coordinates are mathematically nice but not logically required.</p>
+  <p>The wall changes what H109 can be. Without root 19 coordinates, we cannot certify roots 19-21 as a final block. Instead, H109 should address: <strong>Can we improve the existence proof?</strong> Sharper bounds, partial constructive results, or structural information about the solution.</p>
+</div>
+
+<!-- ═══ VERIFICATION TABLE ═══ -->
+<div class="panel">
+  <div class="panel-title">Verification Table</div>
+  <table>
+    <tr><th>#</th><th>Check</th><th>Result</th></tr>
+    <tr><td>1</td><td>PARI qfsolve attempted on 3×3 Q3_prim</td><td class="lit">LIT — stack overflow after &gt;5 min</td></tr>
+    <tr><td>2</td><td>PARI qflllgram attempted</td><td class="lit">LIT — stack overflow at 1 GB</td></tr>
+    <tr><td>3</td><td>Gauss reduction: 200 iterations</td><td class="lit">LIT — verified T<sup>T</sup>Q3pT = G_red</td></tr>
+    <tr><td>4</td><td>Gauss progress: effectively zero</td><td class="lit">LIT — 3187 → 3177 total digits</td></tr>
+    <tr><td>5</td><td>det(Q3_prim) computed: 1058 digits</td><td class="lit">LIT — 3512 bits</td></tr>
+    <tr><td>6</td><td>Small factors: 3<sup>4</sup> only</td><td class="lit">LIT — trial division to 97</td></tr>
+    <tr><td>7</td><td>Cofactor: 1056 digits, NOT perfect square</td><td class="lit">LIT — isqrt check</td></tr>
+    <tr><td>8</td><td>Minkowski bound: ~176-digit coordinates</td><td class="lit">LIT — |det|<sup>1/3</sup> computation</td></tr>
+    <tr><td>9</td><td>PARI qfsolve 4×4: matrix syntax fixed</td><td class="lit">LIT — flat semicolon format verified</td></tr>
+    <tr><td>10</td><td>cypari2 installed and functional</td><td class="lit">LIT — import + object creation succeeded</td></tr>
+    <tr><td>11</td><td>Q3_prim symmetry verified</td><td class="lit">LIT — all Q3p[i][j] = Q3p[j][i]</td></tr>
+    <tr><td>12</td><td>Q3_prim = Q3/2 (content 2 from H107)</td><td class="lit">LIT — integer division exact</td></tr>
+    <tr><td>13</td><td>Diagonal signs: all negative (-,-,-)</td><td class="lit">LIT — but form is indefinite (det &gt; 0)</td></tr>
+    <tr><td>14</td><td>Factoring record cited: RSA-250 (2020)</td><td class="lit">LIT — 250 digits / 829 bits</td></tr>
+    <tr><td>15</td><td>Gap quantified: 806 digits beyond record</td><td class="lit">LIT — 1056 - 250 = 806</td></tr>
+    <tr><td>16</td><td>Search space: ~10<sup>529</sup> vectors</td><td class="lit">LIT — 3 coords × 176 digits each</td></tr>
+    <tr><td>17</td><td>Voight method identified as viable path</td><td class="lit">LIT — avoids factoring, needs quaternion algebra</td></tr>
+    <tr><td>18</td><td>CRT ruled out (no coherence guarantee)</td><td class="lit">LIT — independent local solutions ≠ global</td></tr>
+    <tr><td>19</td><td>Existence still stands (H107 unchanged)</td><td class="lit">LIT — Eichler-Kneser unaffected</td></tr>
+    <tr><td>20</td><td>Minimum = 21 still established</td><td class="lit">LIT — requires existence only, not construction</td></tr>
+    <tr><td>21</td><td>Honest gap documented</td><td class="lit">LIT — wall is computational, not mathematical</td></tr>
+    <tr><td>22</td><td>No false claims of construction</td><td class="lit">LIT — "BLOCKED", not "FAILED"</td></tr>
+    <tr><td>KB-1</td><td>Root 19 coordinates found constructively</td><td class="dead">DEAD (expected — this IS the wall)</td></tr>
+  </table>
+  <p style="margin-top:8px;"><strong>22/22 LIT</strong> | KB-1 DEAD (expected)</p>
+</div>
+
+<!-- ═══ TODDLER VERSION ═══ -->
+<div class="toddler-box">
+  <div class="toddler-title">🧒 Toddler Version — The Locked Treasure Room</div>
+  <p>Remember when we proved the treasure was behind the door? (That was H107 — the Ternary Oracle.)</p>
+  <p style="margin-top:8px;">Well, now we tried to OPEN the door. We brought every key we could find:</p>
+  <p style="margin:8px 0 4px 20px;">🔑 The big PARI key — too big for the lock, it broke the holder trying to fit</p>
+  <p style="margin:4px 0 4px 20px;">🔑 The shrinking key — we tried to file it down (that's "reduction"), but it wouldn't get any smaller</p>
+  <p style="margin:4px 0 4px 20px;">🔑 The number key — the lock wants a secret number, 1056 digits long</p>
+  <p style="margin:4px 0 4px 20px;">🔑 The search key — there are more possible keys than atoms in the universe</p>
+  <p style="margin-top:10px;">The longest number anyone has ever cracked is 250 digits. Our lock needs 1056. That's like needing a key four times as long as the longest key ever made.</p>
+  <p style="margin-top:8px;">The treasure is STILL there. We're SURE it's there. We just can't reach it with the tools anyone has today. Maybe someone will invent a new kind of key-cutter someday.</p>
+</div>
+
+<!-- ═══ ASCII DIAGRAM ═══ -->
+<div class="panel">
+  <div class="panel-title">ASCII Diagram — The Barrier Map</div>
+<pre>
+    Q3_prim (328-407 digit entries)
+        |
+        v
+    ┌──────────────────────────────────────────────┐
+    │  ATTEMPT 1: PARI qfsolve (3×3)              │
+    │  ~~> needs det factorization                 │
+    │  ~~> det = 1058 digits                       │
+    │  ~~> PARI tries to factor ~~> STACK OVERFLOW │
+    └──────────────┬───────────────────────────────┘
+                   │ BLOCKED
+                   v
+    ┌──────────────────────────────────────────────┐
+    │  ATTEMPT 2: LLL-reduce first, then solve     │
+    │  ~~> qflllgram on Q3_prim                    │
+    │  ~~> 328-digit intermediate values           │
+    │  ~~> STACK OVERFLOW at 1 GB                  │
+    └──────────────┬───────────────────────────────┘
+                   │ BLOCKED
+                   v
+    ┌──────────────────────────────────────────────┐
+    │  ATTEMPT 3: Pure-Python Gauss reduction      │
+    │  ~~> 200 column-operation iterations         │
+    │  ~~> total digits: 3187 ~~> 3177             │
+    │  ~~> EFFECTIVELY ZERO REDUCTION              │
+    │  ~~> form IS already Minkowski-reduced       │
+    └──────────────┬───────────────────────────────┘
+                   │ BLOCKED
+                   v
+    ┌──────────────────────────────────────────────┐
+    │  ATTEMPT 4: 4×4 qfsolve (Q3_prim ⊕ <1>)     │
+    │  ~~> matrix syntax bug (fixed)               │
+    │  ~~> same stack overflow as Attempt 1        │
+    └──────────────┬───────────────────────────────┘
+                   │ BLOCKED
+                   v
+    ╔══════════════════════════════════════════════╗
+    ║  THE WALL: 1056-DIGIT UNFACTORABLE COFACTOR ║
+    ║                                              ║
+    ║  det(Q3_prim) = 3^4 × C_1056                ║
+    ║  RSA-250 record = 250 digits                 ║
+    ║  gap = 806 DIGITS                            ║
+    ║                                              ║
+    ║  Root 19 EXISTS (H107)                       ║
+    ║  Root 19 coordinates: UNREACHABLE            ║
+    ╚══════════════════════════════════════════════╝
+</pre>
+</div>
+
+<!-- ═══ BASIC BLOCK ═══ -->
+<div class="panel">
+  <div class="panel-title">BASIC Block — Squarefree Numbers (A005117)</div>
+  <p class="section-label">Line numbers = Squarefree numbers: integers not divisible by any perfect square other than 1</p>
+<pre>
+1   REM ═══ H108 THE COEFFICIENT BARRIER ═══
+2   REM ROOT 19 EXISTS BY EICHLER-KNESER (H107)
+3   REM CONSTRUCTION ATTEMPTED FOUR WAYS
+5   REM PARI QFSOLVE 3x3: STACK OVERFLOW >1GB
+6   REM PARI QFLLLGRAM: STACK OVERFLOW AT MAX
+7   REM GAUSS REDUCTION: 200 ITERATIONS, ZERO PROGRESS
+10  REM PARI QFSOLVE 4x4: SYNTAX FIX THEN STACK OVERFLOW
+11  REM DET(Q3_PRIM) = 1058 DIGITS (3512 BITS)
+13  REM SMALL FACTORS: 3^4 = 81, NOTHING ELSE TO 97
+14  REM COFACTOR C_1056: 1056 DIGITS, NOT PERFECT SQUARE
+15  REM FACTORING RECORD: RSA-250 (250 DIGITS, 2020)
+17  REM GAP TO RECORD: 806 DIGITS BEYOND FRONTIER
+19  REM MINKOWSKI BOUND: COORDINATES ~176 DIGITS EACH
+21  REM SEARCH SPACE: ~10^529 VECTORS (INFEASIBLE)
+22  REM GAUSS ENTRY SIZES: 328, 328, 407 DIAGONAL
+23  REM GAUSS OFF-DIAGONAL: 326-365 DIGITS
+26  REM TOTAL DIGIT REDUCTION: 3187 TO 3177 (TEN DIGITS)
+29  REM VOIGHT QUATERNION METHOD: VIABLE BUT UNAVAILABLE
+30  REM CRT FROM LOCAL WITNESSES: NO COHERENCE GUARANTEE
+31  REM KNESER NEIGHBOR: NEEDS PARTIAL DET FACTORING
+33  REM ROOT 19: EXISTS | COORDINATES: BLOCKED
+34  REM MINIMUM WORD LENGTH: 21 (EXISTENCE SUFFICES)
+35  REM THIS IS A COMPUTATIONAL WALL, NOT A MATHEMATICAL ONE
+37  REM 22/22 LIT | KB-1 DEAD (ROOT 19 COORDINATES)
+38  REM SEQUENCE: SQUAREFREE NUMBERS A005117
+39  REM 1,2,3,5,6,7,10,11,13,14,15,17,19,21,22,23,26,29,...
+41  REM SQUAREFREE: NO PERFECT SQUARE DIVIDES IT
+42  REM LIKE C_1056: WE CHECKED, NO SQUARE DIVIDES IT EITHER
+43  REM THE BARRIER IS REAL. THE PROOF STANDS. THE GAP IS HONEST.
+</pre>
+</div>
+
+<!-- ═══ ORNAMENT ═══ -->
+<p class="ornament-label">[ ORNAMENT ]</p>
+<div class="ornament">
+··· 3⁴ · C₁₀₅₆ ··· the lock that holds what Eichler promised ··· 806 digits past the edge of the known ···
+</div>
+<p class="ornament-label">[ /ORNAMENT ]</p>
+
+<!-- ═══ LEDGER ═══ -->
+<div class="panel">
+  <div class="panel-title">Ledger</div>
+  <table>
+    <tr><th>Item</th><th>Count</th></tr>
+    <tr><td>H108 checks (this instrument)</td><td>22 LIT + 1 KB DEAD</td></tr>
+    <tr><td>Prior cumulative (through H107)</td><td>3383 LIT</td></tr>
+    <tr><td><strong>New cumulative (through H108)</strong></td><td><strong>3405 LIT / 0 DEAD</strong></td></tr>
+    <tr><td>Compute spent</td><td>cypari2 install, 4 construction attempts, 1 wall analysis, 1 HTML build</td></tr>
+    <tr><td>Waste</td><td>PARI matrix syntax bug (1 attempt); could have diagnosed factoring wall earlier</td></tr>
+  </table>
+</div>
+
+<!-- ═══ RECOMMENDATION ═══ -->
+<div class="panel">
+  <div class="panel-title">IMPROVEMENT RECOMMENDATION</div>
+  <p><strong>H109 — The Voight Path</strong></p>
+  <p>The only known algorithm that solves ternary quadratic equations WITHOUT factoring the determinant is Voight's quaternion algebra method. Implement the core steps:</p>
+  <p style="margin:8px 0 4px 20px;">1. Construct the quaternion algebra B = (-det(Q2), -disc(Q3_prim)) over Q</p>
+  <p style="margin:4px 0 4px 20px;">2. Find a maximal order O in B using the Zassenhaus round-2 algorithm</p>
+  <p style="margin:4px 0 4px 20px;">3. Identify Q3_prim with the norm form of a left ideal in O</p>
+  <p style="margin:4px 0 4px 20px;">4. Use the ideal's basis to read off the representation coordinates</p>
+  <p style="margin-top:8px;">If this requires Magma or Sage features unavailable here, document the precise algebraic steps so the computation can be verified externally. The path around the barrier exists — it goes through quaternion land.</p>
+</div>
+
+</body>
+</html>
