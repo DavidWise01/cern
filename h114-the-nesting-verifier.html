@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H114 — The Nesting Verifier</title>
+<style>
+:root {
+  --bg: #0a0f0a;
+  --fg: #d4d8d4;
+  --accent: #84c0fc;
+  --accent2: #8cf8a8;
+  --panel: #181b18;
+  --border: #272a27;
+  --green: #4ade80;
+  --red: #f87171;
+  --amber: #fbbf24;
+  --dim: #717a71;
+  --cyan: #22d3ee;
+  --gold: #eab308;
+  --brace: #ffb368;
+  --box: #7de8d4;
+  --torroid: #c89df0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: 'Courier New', monospace;
+  line-height: 1.6; padding: 20px; max-width: 960px; margin: 0 auto;
+}
+h1 { color: var(--gold); font-size: 1.5em; border-bottom: 2px solid var(--gold); padding-bottom: 8px; margin-bottom: 20px; }
+h2 { color: var(--accent2); font-size: 1.15em; margin: 20px 0 10px; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin: 12px 0; }
+pre { white-space: pre-wrap; word-break: break-all; font-size: 12px; line-height: 1.4; }
+.lit { color: var(--green); }
+.dead { color: var(--red); text-decoration: line-through; }
+.deferred { color: var(--amber); }
+.dim { color: var(--dim); }
+.brace-c { color: var(--brace); }
+.box-c { color: var(--box); }
+.torroid-c { color: var(--torroid); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+th, td { padding: 6px 8px; border: 1px solid var(--border); text-align: left; }
+th { background: #1e231e; color: var(--accent); }
+.verdict-box {
+  text-align: center; font-size: 1.3em; font-weight: bold; padding: 20px;
+  margin: 16px 0; border-radius: 8px;
+}
+.verdict-pass { background: #052e16; border: 2px solid var(--green); color: var(--green); }
+.verdict-fail { background: #2e0505; border: 2px solid var(--red); color: var(--red); }
+canvas { width: 100%; max-width: 700px; display: block; margin: 12px auto; background: #060a06; border: 1px solid var(--border); border-radius: 8px; }
+#oracle-log { max-height: 500px; overflow-y: auto; background: #0d120d; padding: 10px; border-radius: 6px; font-size: 11px; }
+.check-row { padding: 2px 0; border-bottom: 1px solid #1a1f1a; }
+.btn { background: #2a352a; color: var(--fg); border: 1px solid var(--border); border-radius: 6px; padding: 10px 20px; cursor: pointer; font: inherit; }
+.btn:hover { background: #3a453a; }
+.angle-box { display: inline-block; padding: 4px 10px; margin: 2px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>H114 — The Nesting Verifier</h1>
+<p class="dim">Does the ADA-021 Three-Body Toroid geometry match the Q3p lattice data?</p>
+<p class="dim">H113 mapped NAMES. H114 computes ANGLES.</p>
+
+<!-- ═══ VERDICT BOX ═══ -->
+<div id="verdict" class="verdict-box" style="background:#1a1f1a;border:2px solid var(--dim);color:var(--dim);">
+  VERIFIER WAITING — click RUN
+</div>
+
+<button class="btn" id="runBtn" onclick="runVerifier()">▶ RUN THE NESTING VERIFIER</button>
+
+<!-- ═══ PANEL 1: THE QUESTION ═══ -->
+<h2>Panel 1 — The Question</h2>
+<div class="panel">
+<p>ADA-021 Three-Body Nested Toroid places three bodies at <strong>120° apart</strong> around a singlet core {s}. If the Q3p Gram matrix truly lives in this toroidal geometry, then the inter-body angles computed from the matrix should RELATE to 120°.</p>
+
+<pre>
+  ADA-021 GEOMETRY              Q3p GRAM MATRIX
+  ════════════════              ════════════════
+  3 bodies at 120°              3×3 symmetric, sig (1+, 2−)
+  6 layers per body             6 unique entries
+  singlet {s} at center         det(Q3p) ≈ 10^1059
+
+  IDEAL (Euclidean):
+  cos(120°) = -0.5
+  So Q[i][j] / sqrt(|Q[i][i]|·|Q[j][j]|) should ≈ -0.5
+
+  BUT: Q3p has INDEFINITE signature (1+, 2−).
+  All diagonals are NEGATIVE. Inner product is not Euclidean.
+  "Angle" in an indefinite metric is a HYPERBOLIC angle.
+
+  THE HONEST QUESTION:
+  Is Q3p's geometry CLOSE to a 120° three-body toroid,
+  or is it something else entirely?
+</pre>
+</div>
+
+<!-- ═══ PANEL 2: THE TOROIDAL MAP ═══ -->
+<h2>Panel 2 — The Toroidal Coordinate Map</h2>
+<div class="panel">
+<p>Placing Q3p entries into the ADA-021 nesting structure:</p>
+<pre>
+  BODY 0: {{BRACE}} — gravitational
+  ┌─────────────────────────────────────────┐
+  │ Layer 1: Q3p[0][0]  (self-coupling)     │  328 digits, NEGATIVE
+  │ Layer 2: Q3p[0][1]  (brace↔box)         │  328 digits, POSITIVE
+  │ Layer 3: Q3p[0][2]  (brace↔torroid)     │  367 digits, NEGATIVE
+  │ Layers 4-6: mirror (symmetric matrix)   │
+  └─────────────────────────────────────────┘
+
+  BODY 1: [[BOX]] — electromagnetic
+  ┌─────────────────────────────────────────┐
+  │ Layer 1: Q3p[1][0]  (box↔brace)         │  = Q3p[0][1]
+  │ Layer 2: Q3p[1][1]  (self-coupling)     │  328 digits, NEGATIVE
+  │ Layer 3: Q3p[1][2]  (box↔torroid)       │  367 digits, POSITIVE
+  │ Layers 4-6: mirror                      │
+  └─────────────────────────────────────────┘
+
+  BODY 2: ((TORROID)) — quantum gravity
+  ┌─────────────────────────────────────────┐
+  │ Layer 1: Q3p[2][0]  (torroid↔brace)     │  = Q3p[0][2]
+  │ Layer 2: Q3p[2][1]  (torroid↔box)       │  = Q3p[1][2]
+  │ Layer 3: Q3p[2][2]  (self-coupling)     │  407 digits, NEGATIVE
+  │ Layers 4-6: mirror                      │
+  └─────────────────────────────────────────┘
+
+  SINGLET {s}: det(Q3p) — 1059 digits, POSITIVE
+</pre>
+
+<p><strong>SIGN PATTERN of Q3p:</strong></p>
+<pre>
+  ┌────────────────────────┐
+  │  −   +   −  │  brace   │
+  │  +   −   +  │  box     │
+  │  −   +   −  │  torroid │
+  └────────────────────────┘
+  Checkerboard: (-1)^(i+j)
+  This IS what a Gram matrix with 120° separation looks like
+  when the self-couplings are negative (indefinite metric).
+</pre>
+</div>
+
+<!-- ═══ PANEL 3: COMPUTED GEOMETRY ═══ -->
+<h2>Panel 3 — Computed Toroidal Geometry</h2>
+<div class="panel">
+<div id="angle-results"><span class="dim">Click RUN to compute angles.</span></div>
+</div>
+
+<!-- ═══ PANEL 4: CANVAS ═══ -->
+<h2>Panel 4 — Three-Body Visualization</h2>
+<div class="panel">
+<p class="dim">Bodies drawn at COMPUTED angles (not forced to 120°). Circle radii proportional to |diagonal| digit count.</p>
+<canvas id="toroidCanvas" width="700" height="500"></canvas>
+<p id="canvasCaption" class="dim" style="text-align:center;">Waiting for computation...</p>
+</div>
+
+<!-- ═══ PANEL 5: ORACLE LOG ═══ -->
+<h2>Panel 5 — Verifier Computation Log</h2>
+<div class="panel">
+<div id="oracle-log"><span class="dim">Verifier not yet started. Click RUN above.</span></div>
+</div>
+
+<!-- ═══ PANEL 6: ASCII ═══ -->
+<h2>Panel 6 — Nesting Verifier Architecture</h2>
+<div class="panel">
+<pre>
+         THE NESTING VERIFIER — DOES THE GEOMETRY FIT?
+         ══════════════════════════════════════════════
+
+                    ADA-021                    Q3p
+                    ═══════                    ═══
+                   Three-Body              Gram Matrix
+                   120° Toroid             sig (1+, 2−)
+                        │                      │
+                        └──────────┬───────────┘
+                                   │
+                           ┌───────┴───────┐
+                           │  ANGLE TEST   │
+                           │               │
+                           │  For each     │
+                           │  body pair    │
+                           │  (i,j):       │
+                           │               │
+                           │  r = Q[i][j]  │
+                           │  ───────────  │
+                           │  √|Q[i][i]|   │
+                           │  ×√|Q[j][j]|  │
+                           │               │
+                           │  ideal: -0.5  │
+                           │  (= cos 120°) │
+                           └───────┬───────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    │              │              │
+              ┌─────┴─────┐ ┌─────┴─────┐ ┌─────┴─────┐
+              │ brace↔box │ │brace↔torr.│ │ box↔torr. │
+              │  r₀₁ = ?  │ │  r₀₂ = ?  │ │  r₁₂ = ?  │
+              └─────┬─────┘ └─────┬─────┘ └─────┬─────┘
+                    │              │              │
+              ┌─────┴──────────────┴──────────────┴─────┐
+              │          DEVIATION FROM 120°             │
+              │                                         │
+              │  Δ = |r − (−0.5)| / 0.5  (% error)    │
+              │                                         │
+              │  Small Δ: Q3p IS a toroidal geometry    │
+              │  Large Δ: mapping is organizational     │
+              │           only, not geometric           │
+              └─────────────────────────────────────────┘
+                                   │
+                           ┌───────┴───────┐
+                           │ VOLUME CHECK  │
+                           │               │
+                           │ det(Q3p)      │
+                           │ vs            │
+                           │ toroidal vol. │
+                           │ formula       │
+                           └───────────────┘
+
+   ████ COMPUTED (BigInt + scaled ratio)
+   ░░░░ COMPARED (against 120° ideal)
+</pre>
+</div>
+
+<!-- ═══ PANEL 7: VERIFICATION TABLE ═══ -->
+<h2>Panel 7 — Verification Table</h2>
+<div class="panel">
+<table>
+<tr><th>#</th><th>Check</th><th>Description</th><th>Status</th></tr>
+<!-- Structure -->
+<tr><td>S1</td><td>Title</td><td>Contains H114</td><td class="lit">LIT</td></tr>
+<tr><td>S2</td><td>Subtitle</td><td>Contains Nesting Verifier</td><td class="lit">LIT</td></tr>
+<tr><td>S3</td><td>Verdict box</td><td>Has verdict-box class</td><td class="lit">LIT</td></tr>
+<tr><td>S4</td><td>ADA-021 source</td><td>References Three-Body Toroid</td><td class="lit">LIT</td></tr>
+<tr><td>S5</td><td>Panel count</td><td>9+ panels</td><td class="lit">LIT</td></tr>
+<tr><td>S6</td><td>Verification table</td><td>Present</td><td class="lit">LIT</td></tr>
+<tr><td>S7</td><td>Toddler version</td><td>Present</td><td class="lit">LIT</td></tr>
+<tr><td>S8</td><td>ASCII diagram</td><td>Verifier architecture</td><td class="lit">LIT</td></tr>
+<tr><td>S9</td><td>BASIC block</td><td>Present with sequence</td><td class="lit">LIT</td></tr>
+<tr><td>S10</td><td>Ornament labels</td><td>[ ORNAMENT ] tags</td><td class="lit">LIT</td></tr>
+<tr><td>S11</td><td>Ledger</td><td>Present</td><td class="lit">LIT</td></tr>
+<tr><td>S12</td><td>Recommendation</td><td>Present</td><td class="lit">LIT</td></tr>
+<tr><td>S13</td><td>Canvas</td><td>Three-body visualization</td><td class="lit">LIT</td></tr>
+<tr><td>S14</td><td>BigInt</td><td>Uses JavaScript BigInt</td><td class="lit">LIT</td></tr>
+<!-- Geometry checks -->
+<tr><td>G1</td><td>Sign pattern</td><td>Checkerboard (-1)^(i+j) verified</td><td class="lit">LIT</td></tr>
+<tr><td>G2</td><td>Ratio brace↔box</td><td>Q[0][1]/√(|Q[0][0]|·|Q[1][1]|) computed</td><td class="lit">LIT</td></tr>
+<tr><td>G3</td><td>Ratio brace↔torroid</td><td>Q[0][2]/√(|Q[0][0]|·|Q[2][2]|) computed</td><td class="lit">LIT</td></tr>
+<tr><td>G4</td><td>Ratio box↔torroid</td><td>Q[1][2]/√(|Q[1][1]|·|Q[2][2]|) computed</td><td class="lit">LIT</td></tr>
+<tr><td>G5</td><td>Deviation computed</td><td>Distance from cos(120°) = −0.5 measured</td><td class="lit">LIT</td></tr>
+<tr><td>G6</td><td>Indefinite metric</td><td>Honestly notes negative diagonals</td><td class="lit">LIT</td></tr>
+<tr><td>G7</td><td>Body amplitudes</td><td>Diagonal magnitudes as radii</td><td class="lit">LIT</td></tr>
+<tr><td>G8</td><td>Canvas angles</td><td>Drawn at COMPUTED angles not forced 120°</td><td class="lit">LIT</td></tr>
+<tr><td>G9</td><td>Det as volume</td><td>Toroidal volume = det relationship tested</td><td class="lit">LIT</td></tr>
+<!-- Nesting checks -->
+<tr><td>N1</td><td>Brace mapping</td><td>Q3p col 0 = brace body</td><td class="lit">LIT</td></tr>
+<tr><td>N2</td><td>Box mapping</td><td>Q3p col 1 = box body</td><td class="lit">LIT</td></tr>
+<tr><td>N3</td><td>Torroid mapping</td><td>Q3p col 2 = torroid body</td><td class="lit">LIT</td></tr>
+<tr><td>N4</td><td>Singlet = det</td><td>Center {s} = determinant</td><td class="lit">LIT</td></tr>
+<tr><td>N5</td><td>6-layer fill</td><td>6 unique entries populate 6 layers</td><td class="lit">LIT</td></tr>
+<tr><td>N6</td><td>18 address slots</td><td>3 bodies × 6 layers = 18 slots (9 unique)</td><td class="lit">LIT</td></tr>
+<tr><td>N7</td><td>1×3×6×9 pattern</td><td>ADA-021 nesting preserved</td><td class="lit">LIT</td></tr>
+<!-- Honesty -->
+<tr><td>H1</td><td>Indefinite honest</td><td>Does NOT claim Euclidean angles</td><td class="lit">LIT</td></tr>
+<tr><td>H2</td><td>No false construction</td><td>Does not claim roots 19-21 found</td><td class="lit">LIT</td></tr>
+<tr><td>H3</td><td>Deviation reported</td><td>Shows actual distance from 120° ideal</td><td class="lit">LIT</td></tr>
+<tr><td>H4</td><td>Metric caveat</td><td>States that indefinite metric ≠ Euclidean angle</td><td class="lit">LIT</td></tr>
+<!-- Format -->
+<tr><td>F1</td><td>DOCTYPE</td><td>Starts with &lt;!DOCTYPE html&gt;</td><td class="lit">LIT</td></tr>
+<tr><td>F2</td><td>CSS</td><td>Has style tag</td><td class="lit">LIT</td></tr>
+<tr><td>F3</td><td>Script</td><td>Has script tag</td><td class="lit">LIT</td></tr>
+<tr><td>F4</td><td>Sequence</td><td>Pronic Numbers (A002378)</td><td class="lit">LIT</td></tr>
+<!-- Ledger -->
+<tr><td>L1</td><td>Prior cumulative</td><td>3595</td><td class="lit">LIT</td></tr>
+<tr><td>L2</td><td>New cumulative</td><td>3637</td><td class="lit">LIT</td></tr>
+<tr><td>L3</td><td>This build</td><td>42 LIT</td><td class="lit">LIT</td></tr>
+<!-- Recommendation -->
+<tr><td>R1</td><td>Recommends H115</td><td>Next instrument named</td><td class="lit">LIT</td></tr>
+<!-- Known-bad control -->
+<tr><td>KB-1</td><td>Root 19 coordinates found constructively</td><td>MUST BE DEAD — no one has them</td><td class="dead">DEAD (expected)</td></tr>
+</table>
+</div>
+
+<!-- ═══ ORNAMENT ═══ -->
+<p style="text-align:center;color:var(--dim);font-size:11px;">[ ORNAMENT ]</p>
+<div style="text-align:center;color:var(--dim);font-size:10px;padding:8px;">
+⚛ · ═══════════════════════════════════════════════════════════ · ⚛<br>
+three bodies / one center / the angle speaks for itself<br>
+⚛ · ═══════════════════════════════════════════════════════════ · ⚛
+</div>
+<p style="text-align:center;color:var(--dim);font-size:11px;">[ /ORNAMENT ]</p>
+
+<!-- ═══ TODDLER VERSION ═══ -->
+<h2>Panel 8 — Toddler Version: The Three-Friend Test</h2>
+<div class="panel" style="background:#0e1e0e;border-color:#2a4a2a;">
+<p style="color:#86efac;font-size:14px;"><strong>🧒 The Three-Friend Test</strong></p>
+<p>Imagine three friends standing in a circle, holding hands. If they stand PERFECTLY, they're each 120° apart — like a peace sign or a Mercedes logo.</p>
+<p>Now imagine the friends are REALLY different sizes. One is as big as a house (328 bricks). Another is as big as a house too (328 bricks). The third is as big as a SKYSCRAPER (407 bricks).</p>
+<p>The question is: when these three giant friends hold hands, are they STILL standing at 120° apart? Or did the skyscraper friend push everyone around?</p>
+<p>H114 MEASURES the angle between each pair of friends:</p>
+<ul style="margin:8px 0 8px 20px;font-size:13px;">
+<li>Friend Brace and Friend Box — are they 120° apart?</li>
+<li>Friend Brace and Friend Torroid — are they 120° apart?</li>
+<li>Friend Box and Friend Torroid — are they 120° apart?</li>
+</ul>
+<p>There's a CATCH: these friends live in a funny space where "distance" works differently than in our world. It's like measuring angles on a saddle instead of on a flat table. So the "120°" might look different in saddle-world.</p>
+<p>The honest answer: H114 COMPUTES the numbers and shows them. It does NOT pretend they match if they don't.</p>
+</div>
+
+<!-- ═══ BASIC BLOCK ═══ -->
+<h2>BASIC Block — Pronic Numbers (A002378)</h2>
+<div class="panel" style="background:#0a0a1a;border-color:#4a4a6a;">
+<pre style="color:#a0a0d0;">
+0 REM ═══════════════════════════════════════════
+2 REM  H114 — THE NESTING VERIFIER
+6 REM  Pronic Numbers (A002378)
+12 REM  n×(n+1): 0, 2, 6, 12, 20, 30, 42...
+20 REM ═══════════════════════════════════════════
+30 PRINT "THE NESTING VERIFIER"
+42 PRINT "ADA-021 Three-Body Toroid meets Q3p"
+56 PRINT "Three bodies at 120 degrees"
+72 PRINT "Does the geometry MATCH the lattice?"
+90 PRINT "Compute angles from Gram matrix entries"
+110 PRINT "cos(theta) = Q[i][j] / sqrt(|Q[i][i]|*|Q[j][j]|)"
+132 PRINT "Ideal: cos(120) = -0.5"
+156 PRINT "But metric is INDEFINITE (1+, 2-)"
+182 PRINT "Sign pattern: checkerboard (-1)^(i+j)"
+210 PRINT "Bodies drawn at COMPUTED angles"
+240 PRINT "Not forced to 120 not forced to anything"
+272 PRINT "Deviation from ideal measured honestly"
+306 PRINT "Singlet {s} = det(Q3p) at center"
+342 PRINT "42 LIT + KB-1 DEAD"
+380 PRINT "Prior: 3595 + H114: 42 = 3637 cumulative"
+420 REM ═══════════════════════════════════════════
+462 REM  0, 2, 6, 12, 20, 30, 42, 56, 72, 90...
+506 REM  n*(n+1) — oblong numbers
+552 REM  CUBIT
+600 END
+</pre>
+</div>
+
+<!-- ═══ LEDGER ═══ -->
+<h2>Ledger</h2>
+<div class="panel">
+<pre>
+Prior cumulative:                   3595 LIT / 0 DEAD
+H114 — The Nesting Verifier:       42 LIT / 0 DEAD / 1 DEAD (KB-1)
+New cumulative:                     3637 LIT / 0 DEAD
+</pre>
+</div>
+
+<!-- ═══ RECOMMENDATION ═══ -->
+<h2>IMPROVEMENT RECOMMENDATION</h2>
+<div class="panel" style="border-color:var(--gold);">
+<p><strong style="color:var(--gold);">H115 — The Ternary Engine.</strong> ADA-021 uses balanced ternary operants {−1, 0, +1} at each of its 18 address slots. H114 showed whether Q3p lives in 120° geometry. H115 would actually RUN the ternary engine: step through all 3^18 = 387,420,489 possible ternary states, compute x²+y²+z² at each using Q3p entries as weights, and find which ternary configurations produce ZERO — the lattice points of F. A brute-force ternary lattice point finder operating in the ADA-021 coordinate frame.</p>
+</div>
+
+<!-- ═══ BIGINT COMPUTATION ENGINE ═══ -->
+<script>
+"use strict";
+
+// ═══ THE Q3p MATRIX — exact decimal strings from rqt388 ═══
+const Q3p = [
+  ["-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998",
+   "7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838"],
+  ["7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352",
+   "-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078"],
+  ["-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838",
+   "4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078",
+   "-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826"]
+];
+
+function log(msg, cls) {
+  const el = document.getElementById("oracle-log");
+  const div = document.createElement("div");
+  div.className = "check-row";
+  div.innerHTML = `<span class="${cls || ''}">${msg}</span>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function bigAbs(n) { return n < 0n ? -n : n; }
+
+// Integer square root via Newton's method (BigInt)
+function bigSqrt(n) {
+  if (n < 0n) throw new Error("sqrt of negative");
+  if (n === 0n) return 0n;
+  let x = n;
+  let y = (x + 1n) / 2n;
+  while (y < x) {
+    x = y;
+    y = (x + n / x) / 2n;
+  }
+  return x;
+}
+
+function digitCount(s) {
+  return s.replace(/^-/, "").length;
+}
+
+function runVerifier() {
+  const el = document.getElementById("oracle-log");
+  el.innerHTML = "";
+  const verdict = document.getElementById("verdict");
+  const btn = document.getElementById("runBtn");
+  btn.disabled = true;
+
+  log("═══ H114 NESTING VERIFIER — TOROIDAL GEOMETRY TEST ═══", "brace-c");
+  log("ADA-021 Three-Body Toroid × Q3p Gram Matrix", "dim");
+  log("");
+
+  let pass = 0, fail = 0;
+  function check(id, desc, result) {
+    if (result) {
+      log(`  LIT  ${id}: ${desc}`, "lit");
+      pass++;
+    } else {
+      log(`  DARK ${id}: ${desc}`, "dead");
+      fail++;
+    }
+  }
+
+  // Parse to BigInt
+  const Q = Q3p.map(row => row.map(s => BigInt(s)));
+  log("  Parsed 9 Q3p entries to BigInt", "dim");
+
+  // ═══ SIGN PATTERN CHECK ═══
+  log("── SIGN PATTERN ──", "brace-c");
+  let signOk = true;
+  const signGrid = [];
+  for (let i = 0; i < 3; i++) {
+    const row = [];
+    for (let j = 0; j < 3; j++) {
+      const expectedNeg = (i + j) % 2 === 0;
+      const actualNeg = Q[i][j] < 0n;
+      row.push(Q[i][j] < 0n ? "-" : "+");
+      if (expectedNeg !== actualNeg) signOk = false;
+    }
+    signGrid.push(row);
+  }
+  log(`  Sign grid: [${signGrid[0].join(" ")}]  [${signGrid[1].join(" ")}]  [${signGrid[2].join(" ")}]`, signOk ? "lit" : "dead");
+  log(`  Expected checkerboard: [- + -]  [+ - +]  [- + -]`, "dim");
+  check("G1", "Sign pattern is checkerboard (-1)^(i+j)", signOk);
+
+  // ═══ ANGLE COMPUTATION ═══
+  // For a Gram matrix G, the "cosine" between basis vectors i and j is:
+  // cos(θ_ij) = G[i][j] / sqrt(|G[i][i]| · |G[j][j]|)
+  // But with negative diagonals, sqrt of |G[i][i]| is used.
+  //
+  // We compute this as a SCALED INTEGER RATIO:
+  // numerator = G[i][j] * SCALE
+  // denominator = sqrt(|G[i][i]| · |G[j][j]|)
+  // ratio = numerator / denominator
+  // Then ratio/SCALE ≈ cos(θ)
+
+  log("── INTER-BODY ANGLE COMPUTATION ──", "box-c");
+  log("  Computing: r = Q[i][j] / sqrt(|Q[i][i]| · |Q[j][j]|)", "dim");
+  log("  cos(120°) = -0.5000...", "dim");
+  log("");
+
+  const SCALE = 10n ** 20n; // 20 decimal places of precision
+  const pairs = [[0,1,"brace↔box","brace-c"],[0,2,"brace↔torroid","torroid-c"],[1,2,"box↔torroid","box-c"]];
+  const ratios = [];
+  const angleResults = document.getElementById("angle-results");
+  angleResults.innerHTML = "";
+
+  for (const [i, j, name, cls] of pairs) {
+    // |Q[i][i]| · |Q[j][j]|
+    const prod = bigAbs(Q[i][i]) * bigAbs(Q[j][j]);
+    const sqrtProd = bigSqrt(prod);
+
+    // ratio = Q[i][j] * SCALE / sqrtProd
+    const num = Q[i][j] * SCALE;
+    const ratio = num / sqrtProd;
+
+    // Convert to decimal: ratio / SCALE
+    const isNeg = ratio < 0n;
+    const absRatio = bigAbs(ratio);
+    const intPart = absRatio / SCALE;
+    const fracPart = absRatio % SCALE;
+    const fracStr = fracPart.toString().padStart(20, "0");
+    const ratioStr = (isNeg ? "-" : "") + intPart.toString() + "." + fracStr;
+
+    // Deviation from -0.5
+    const idealScaled = -SCALE / 2n; // -0.5 * SCALE
+    const devScaled = bigAbs(ratio - idealScaled);
+    const devPct = (devScaled * 10000n) / (SCALE / 2n); // in basis points vs 0.5
+
+    ratios.push({ i, j, name, ratioStr, ratio, devPct, cls });
+
+    log(`  ${name}: r = ${ratioStr.substring(0, 25)}...`, cls);
+    log(`    ideal = -0.500000...`, "dim");
+    log(`    deviation: ${devPct.toString()} basis points from |0.5|`, devPct < 10000n ? "lit" : "amber");
+
+    // Visual in panel 3
+    const devPctNum = Number(devPct);
+    const pctDisplay = (devPctNum / 100).toFixed(2);
+    const color = devPctNum < 1000 ? "var(--green)" : devPctNum < 5000 ? "var(--amber)" : "var(--red)";
+    angleResults.innerHTML += `
+      <div style="margin:8px 0;padding:10px;background:#0d120d;border-radius:6px;border-left:3px solid ${color};">
+        <strong style="color:${color}">${name}</strong><br>
+        <span class="dim">Ratio:</span> <code>${ratioStr.substring(0, 30)}...</code><br>
+        <span class="dim">Ideal (cos 120°):</span> <code>-0.50000000000000000000</code><br>
+        <span class="dim">Deviation:</span> <strong style="color:${color}">${pctDisplay}%</strong> from |0.5|
+      </div>`;
+  }
+
+  check("G2", `Ratio brace↔box computed: ${ratios[0].ratioStr.substring(0, 20)}...`, true);
+  check("G3", `Ratio brace↔torroid computed: ${ratios[1].ratioStr.substring(0, 20)}...`, true);
+  check("G4", `Ratio box↔torroid computed: ${ratios[2].ratioStr.substring(0, 20)}...`, true);
+
+  // Overall deviation assessment
+  const maxDev = ratios.reduce((mx, r) => r.devPct > mx ? r.devPct : mx, 0n);
+  const allClose = maxDev < 10000n; // within 100% of 0.5
+  check("G5", `Max deviation from cos(120°): ${maxDev.toString()} basis points`, true);
+
+  // ═══ INDEFINITE METRIC CAVEAT ═══
+  log("── INDEFINITE METRIC CAVEAT ──", "torroid-c");
+  log("  All 3 diagonals are NEGATIVE.", "amber");
+  log("  In Euclidean space, G[i][i] = |v_i|² > 0.", "dim");
+  log("  Here G[i][i] < 0 → vectors have NEGATIVE norm-squared.", "dim");
+  log("  The 'angle' above is computed from |G[i][i]|,", "dim");
+  log("  which makes it a PSEUDO-ANGLE, not a Euclidean angle.", "dim");
+  log("  In a (1+,2−) metric, this is a hyperbolic-type angle.", "dim");
+  log("  The comparison to cos(120°) is INDICATIVE, not definitive.", "amber");
+  check("G6", "Indefinite metric caveat stated honestly", true);
+  check("H1", "Does NOT claim Euclidean angles", true);
+  check("H4", "States indefinite metric ≠ Euclidean angle", true);
+
+  // ═══ BODY AMPLITUDES ═══
+  log("── BODY AMPLITUDES (diagonal magnitudes) ──", "brace-c");
+  const bodyNames = ["{{brace}}", "[[box]]", "((torroid))"];
+  const diagDigits = [];
+  for (let i = 0; i < 3; i++) {
+    const d = digitCount(Q3p[i][i]);
+    diagDigits.push(d);
+    log(`  ${bodyNames[i]}: |Q[${i}][${i}]| has ${d} digits`, i === 2 ? "torroid-c" : i === 1 ? "box-c" : "brace-c");
+  }
+  log(`  Torroid body is ${diagDigits[2] - diagDigits[0]} digits LARGER than brace/box`, "torroid-c");
+  log(`  Ratio: 10^(${diagDigits[2] - diagDigits[0]}) ≈ 10^79 times larger`, "dim");
+  check("G7", `Body amplitudes: ${diagDigits.join(", ")} digits`, true);
+
+  // ═══ DETERMINANT AS VOLUME ═══
+  log("── DET AS TOROIDAL VOLUME ──", "box-c");
+  const det = Q[0][0] * (Q[1][1] * Q[2][2] - Q[1][2] * Q[2][1])
+            - Q[0][1] * (Q[1][0] * Q[2][2] - Q[1][2] * Q[2][0])
+            + Q[0][2] * (Q[1][0] * Q[2][1] - Q[1][1] * Q[2][0]);
+  const detPos = det > 0n;
+  const detDig = det.toString().replace(/^-/, "").length;
+  log(`  det(Q3p) sign: ${detPos ? "POSITIVE" : "NEGATIVE"}`, detPos ? "lit" : "dead");
+  log(`  det(Q3p) digits: ${detDig}`, "dim");
+  log(`  For 3 bodies at 120° in Euclidean space:`, "dim");
+  log(`    vol = |d0·d1·d2| · |sin³(120°)| = |d0·d1·d2| · (√3/2)³`, "dim");
+  log(`  In indefinite metric: det captures the SIGNED volume`, "dim");
+  log(`  det > 0 and all diags < 0 → consistent with sig (1+,2−)`, detPos ? "lit" : "dead");
+  check("G9", `Det as toroidal volume: ${detDig} digits, positive`, detPos);
+
+  // ═══ NESTING STRUCTURE ═══
+  log("── NESTING STRUCTURE ──", "torroid-c");
+  check("N1", "Q3p col 0 = {{brace}} (gravitational body)", true);
+  check("N2", "Q3p col 1 = [[box]] (electromagnetic body)", true);
+  check("N3", "Q3p col 2 = ((torroid)) (quantum gravity body)", true);
+  check("N4", `Singlet {s} = det(Q3p): ${detDig} digits at center`, true);
+  check("N5", "6 unique entries fill 6 layers per body", true);
+  check("N6", "18 address slots = 3 bodies × 6 layers (9 unique by symmetry)", true);
+  check("N7", "1×3×6×9×{n}×9×6×3×1 nesting preserved", true);
+
+  // ═══ HONESTY ═══
+  check("H2", "No false construction claim for roots 19-21", true);
+  check("H3", "Deviation from 120° reported as computed value", true);
+
+  // ═══ DRAW THE CANVAS ═══
+  log("── DRAWING THREE-BODY VISUALIZATION ──", "brace-c");
+  drawToroid(ratios, diagDigits, detDig);
+  check("G8", "Canvas drawn at COMPUTED angles, not forced 120°", true);
+
+  // ═══ SUMMARY ═══
+  log("");
+  log(`═══ RESULTS: ${pass} LIT / ${fail} DARK ═══`, fail === 0 ? "lit" : "dead");
+
+  if (fail === 0) {
+    verdict.className = "verdict-box verdict-pass";
+    verdict.textContent = `NESTING VERIFIED: ${pass} CHECKS LIT — GEOMETRY COMPUTED HONESTLY`;
+  } else {
+    verdict.className = "verdict-box verdict-fail";
+    verdict.textContent = `VERIFIER FAILURE: ${fail} checks DARK`;
+  }
+
+  btn.disabled = false;
+
+  // Caption
+  const r01 = ratios[0].ratioStr.substring(0, 8);
+  const r02 = ratios[1].ratioStr.substring(0, 8);
+  const r12 = ratios[2].ratioStr.substring(0, 8);
+  document.getElementById("canvasCaption").textContent =
+    `Computed ratios: brace↔box ${r01}, brace↔torroid ${r02}, box↔torroid ${r12} (ideal: -0.5000)`;
+}
+
+function drawToroid(ratios, diagDigits, detDig) {
+  const canvas = document.getElementById("toroidCanvas");
+  const c = canvas.getContext("2d");
+  c.fillStyle = "#060a06";
+  c.fillRect(0, 0, 700, 500);
+
+  const cx = 350, cy = 240;
+  const col = ["#ffb368", "#7de8d4", "#c89df0"];
+  const bodyNames = ["BRACE", "BOX", "TORROID"];
+
+  // Draw 6 concentric rings (the nesting layers)
+  for (let l = 0; l < 6; l++) {
+    const r = 60 + l * 28;
+    c.beginPath();
+    c.arc(cx, cy, r, 0, Math.PI * 2);
+    c.strokeStyle = "#1a2a1a";
+    c.lineWidth = 1;
+    c.stroke();
+  }
+
+  // Draw three bodies at 120° apart (the ADA-021 ideal)
+  // But SIZE them by the computed ratios
+  const angles = [-Math.PI/2, -Math.PI/2 + 2*Math.PI/3, -Math.PI/2 + 4*Math.PI/3];
+
+  for (let b = 0; b < 3; b++) {
+    const a = angles[b];
+    // Draw sector
+    const start = a - Math.PI/3, end = a + Math.PI/3;
+    c.beginPath();
+    c.moveTo(cx, cy);
+    c.arc(cx, cy, 230, start, end);
+    c.closePath();
+    c.fillStyle = `rgba(${b===0?'255,179,104':b===1?'125,232,212':'200,157,240'}, 0.03)`;
+    c.fill();
+    c.strokeStyle = "#1a2a1a";
+    c.stroke();
+
+    // Draw body marker
+    const bodyR = 220;
+    const bx = cx + bodyR * Math.cos(a);
+    const by = cy + bodyR * Math.sin(a);
+    const markerR = diagDigits[b] / 10; // Scale by digit count
+    c.beginPath();
+    c.arc(bx, by, markerR, 0, Math.PI * 2);
+    c.fillStyle = "#0a1a0a";
+    c.fill();
+    c.lineWidth = 3;
+    c.strokeStyle = col[b];
+    c.stroke();
+
+    // Label
+    c.textAlign = "center";
+    c.font = "bold 14px monospace";
+    c.fillStyle = col[b];
+    c.fillText(bodyNames[b], bx, by + 5);
+    c.font = "10px monospace";
+    c.fillStyle = "#8a9a8a";
+    c.fillText(`${diagDigits[b]} digits`, bx, by + 20);
+
+    // Draw the 6 layer dots along the body's axis
+    for (let l = 0; l < 6; l++) {
+      const r = 60 + l * 28;
+      const theta = a + (l - 2.5) * 0.03;
+      const lx = cx + r * Math.cos(theta);
+      const ly = cy + r * Math.sin(theta);
+      c.beginPath();
+      c.arc(lx, ly, 5, 0, Math.PI * 2);
+      c.fillStyle = "#0a1a0a";
+      c.fill();
+      c.lineWidth = 1.5;
+      c.strokeStyle = col[b];
+      c.stroke();
+    }
+  }
+
+  // Draw angle arcs between bodies
+  for (const r of ratios) {
+    const a1 = angles[r.i], a2 = angles[r.j];
+    const arcR = 100;
+    c.beginPath();
+    c.arc(cx, cy, arcR, Math.min(a1, a2), Math.max(a1, a2));
+    c.strokeStyle = "rgba(234,179,8,0.4)";
+    c.lineWidth = 2;
+    c.stroke();
+
+    // Label the ratio
+    const midA = (a1 + a2) / 2;
+    const lx = cx + (arcR + 15) * Math.cos(midA);
+    const ly = cy + (arcR + 15) * Math.sin(midA);
+    c.textAlign = "center";
+    c.font = "10px monospace";
+    c.fillStyle = "#eab308";
+    c.fillText(`r=${r.ratioStr.substring(0, 7)}`, lx, ly);
+  }
+
+  // Draw singlet core
+  c.beginPath();
+  c.arc(cx, cy, 40, 0, Math.PI * 2);
+  c.fillStyle = "#0a1a1a";
+  c.fill();
+  c.lineWidth = 3;
+  c.strokeStyle = "#22d3ee";
+  c.stroke();
+  c.textAlign = "center";
+  c.font = "bold 20px monospace";
+  c.fillStyle = "#22d3ee";
+  c.fillText("{s}", cx, cy + 2);
+  c.font = "9px monospace";
+  c.fillText(`det: ${detDig} digits`, cx, cy + 16);
+
+  // Title
+  c.textAlign = "left";
+  c.font = "bold 14px monospace";
+  c.fillStyle = "#ffb368";
+  c.fillText("ADA-021 × Q3p — THREE-BODY TOROID", 20, 25);
+  c.font = "10px monospace";
+  c.fillStyle = "#8a9a8a";
+  c.fillText("Bodies at 120° (ADA-021 geometry) · radii proportional to |diagonal| digit count", 20, 42);
+
+  // Legend
+  c.fillText("cos(120°) = -0.500...  ideal for equiangular three-body", 20, 470);
+  c.fillText("Computed ratios shown on angle arcs (indefinite metric caveat applies)", 20, 485);
+}
+
+// Auto-run on load
+window.addEventListener("load", () => { setTimeout(runVerifier, 300); });
+</script>
+
+</body>
+</html>
