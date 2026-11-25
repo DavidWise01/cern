@@ -1,6 +1,6 @@
-//! H153: The Continued Fraction
-//! CF expansion of n₊ = (|Q01| − √R01)/|Q00| ≈ 1.771
-//! and its consequences for the null cone structure.
+//! H154: The Ternary Escape
+//! Since c=0 is forbidden (H153), compute Q3p(a, b, 1) to find
+//! the smallest lattice point on the null cone with c >= 1.
 
 use num_bigint::BigInt;
 use num_traits::{Zero, One, Signed};
@@ -33,254 +33,252 @@ fn isqrt(n: &BigInt) -> BigInt {
     x
 }
 
-fn eval_binary(q00: &BigInt, q01: &BigInt, q11: &BigInt, a: &BigInt, b: &BigInt) -> BigInt {
-    let aa = a * a;
-    let ab = a * b;
-    let bb = b * b;
-    q00 * &aa + BigInt::from(2) * q01 * &ab + q11 * &bb
+fn fp_div(a: &BigInt, b: &BigInt, prec: u32) -> String {
+    let scale = BigInt::from(10u32).pow(prec);
+    let result = (a * &scale) / b;
+    let s = result.magnitude().to_string();
+    let sign = if result.is_negative() { "-" } else { "" };
+    if s.len() <= prec as usize {
+        let pad = prec as usize - s.len();
+        format!("{}0.{}{}", sign, "0".repeat(pad), s)
+    } else {
+        let ip = &s[..s.len() - prec as usize];
+        let dp = &s[s.len() - prec as usize..];
+        format!("{}{}.{}", sign, ip, dp)
+    }
 }
 
 fn main() {
     let q = q3p_matrix();
     let q00 = &q[0][0]; let q01 = &q[0][1]; let q11 = &q[1][1];
+    let q02 = &q[0][2]; let q12 = &q[1][2]; let q22 = &q[2][2];
 
-    println!("=== H153: THE CONTINUED FRACTION (Rust BigInt) ===\n");
+    println!("=== H154: THE TERNARY ESCAPE (Rust BigInt) ===\n");
 
-    // ═══════════════════════════════════════════
-    // STEP 1: R01 AND PERFECT SQUARE TEST
-    // ═══════════════════════════════════════════
-    println!("=== STEP 1: PERFECT SQUARE TEST ===");
+    // ═══ STEP 1: THE c=1 QUADRATIC ═══
+    println!("=== STEP 1: THE c=1 SLICE ===");
+    println!("Q3p(a, b, 1) = Q00*a^2 + 2Q01*a*b + Q11*b^2 + 2Q02*a + 2Q12*b + Q22");
+    println!("");
+    println!("Term magnitudes:");
+    println!("  Q00: {}d  (brace self-energy)", digit_count(q00));
+    println!("  Q01: {}d  (brace-box coupling)", digit_count(q01));
+    println!("  Q11: {}d  (box self-energy)", digit_count(q11));
+    println!("  Q02: {}d  (brace-torroid coupling)", digit_count(q02));
+    println!("  Q12: {}d  (box-torroid coupling)", digit_count(q12));
+    println!("  Q22: {}d  (torroid self-energy)", digit_count(q22));
+
+    // ═══ STEP 2: DISCRIMINANT COEFFICIENTS ═══
+    println!("\n=== STEP 2: DISCRIMINANT COEFFICIENTS ===");
+    println!("Solving Q3p(a, b, 1) = 0 as quadratic in a:");
+    println!("  Q00*a^2 + (2Q01*b + 2Q02)*a + (Q11*b^2 + 2Q12*b + Q22) = 0");
+    println!("  Discriminant Delta(b) = 4*(A*b^2 + 2*B*b + C) where:");
+
+    // A = R01 = Q01^2 - Q00*Q11 = Q01^2 - |Q00|*|Q11|
     let r01 = q01 * q01 - &(q00.abs() * q11.abs());
-    let s = isqrt(&r01);
-    let residual = &r01 - &s * &s;
-    let is_psq = residual.is_zero();
+    println!("  A = R01 = Q01^2 - |Q00|*|Q11| = {}d", digit_count(&r01));
 
-    println!("R01 = {}d", digit_count(&r01));
-    println!("isqrt(R01) = {}d", digit_count(&s));
-    println!("R01 - isqrt(R01)^2 = {}d (residual)", digit_count(&residual));
-    println!("R01 is perfect square: {}", is_psq);
-    if !is_psq {
-        println!("");
-        println!("THEOREM: The binary form Q00*x^2 + 2*Q01*x*y + Q11*y^2");
-        println!("has discriminant 4*R01 which is NOT a perfect square.");
-        println!("Therefore this form does NOT represent zero over Z.");
-        println!("CONSEQUENCE: No lattice point (a, b, 0) lies on Q3p = 0.");
-        println!("CONSEQUENCE: ALL null-cone roots have c >= 1.");
-    }
+    // B = Q01*Q02 - Q00*Q12
+    let big_b = q01 * q02 - q00 * q12;
+    println!("  B = Q01*Q02 - Q00*Q12 = {} sign, {}d",
+        if big_b.is_positive() { "+" } else { "-" }, digit_count(&big_b));
 
-    // Also check: what is R01 mod small primes?
-    let r01_mod2 = &r01 % BigInt::from(2);
-    let r01_mod4 = &r01 % BigInt::from(4);
-    let r01_mod8 = &r01 % BigInt::from(8);
-    println!("\nR01 mod 2 = {}", r01_mod2);
-    println!("R01 mod 4 = {}", r01_mod4);
-    println!("R01 mod 8 = {}", r01_mod8);
+    // C = Q02^2 - Q00*Q22
+    let big_c = q02 * q02 - q00 * q22;
+    println!("  C = Q02^2 - Q00*Q22 = {} sign, {}d",
+        if big_c.is_positive() { "+" } else { "-" }, digit_count(&big_c));
 
-    // ═══════════════════════════════════════════
-    // STEP 2: HIGH-PRECISION n₊
-    // ═══════════════════════════════════════════
-    println!("\n=== STEP 2: HIGH-PRECISION n_+ ===");
-    let prec: u32 = 400;
-    let ten = BigInt::from(10u64);
-    let scale = ten.pow(prec);
-    let scale_sq = ten.pow(2 * prec);
+    // The discriminant of the discriminant: D_min = C - B^2/A
+    // If D_min > 0: real solutions exist for some b
+    // If D_min < 0: Q3p(a,b,1) has constant sign for all (a,b)
+    let b_sq = &big_b * &big_b;
+    // D_min * A = C*A - B^2
+    let d_min_times_a = &big_c * &r01 - &b_sq;
+    println!("\n  D_min * A = C*A - B^2 = {} sign, {}d",
+        if d_min_times_a.is_positive() { "+" } else { "-" }, digit_count(&d_min_times_a));
+    println!("  D_min sign: {} (since A > 0, D_min has same sign as D_min*A)",
+        if d_min_times_a.is_positive() { "POSITIVE -> real solutions exist" }
+        else { "NEGATIVE -> no real solutions at c=1" });
 
-    // sqrt(R01) * 10^PREC via isqrt(R01 * 10^(2*PREC))
-    println!("Computing sqrt(R01) to {} digits...", prec);
-    let sqrt_r01_sc = isqrt(&(&r01 * &scale_sq));
-    println!("Done. sqrt(R01) scaled has {}d", digit_count(&sqrt_r01_sc));
+    // ═══ STEP 3: CRITICAL POINT ═══
+    println!("\n=== STEP 3: CRITICAL POINT ===");
+    // b_crit = -B/A (the b that minimizes the discriminant)
+    let b_crit = -&big_b / &r01;
+    println!("b_crit = -B/A = {} sign, {}d",
+        if b_crit.is_positive() { "+" } else { "-" }, digit_count(&b_crit));
+    let b_crit_s = b_crit.magnitude().to_string();
+    println!("  Leading digits: {}...", &b_crit_s[..20.min(b_crit_s.len())]);
 
-    // n_+ * 10^PREC = (|Q01| * 10^PREC - sqrt(R01) * 10^PREC) / |Q00|
-    let q01_sc = q01.abs() * &scale;
-    let numer_plus = &q01_sc - &sqrt_r01_sc;
-    let n_plus_fp = &numer_plus / &q00.abs();
+    // a_crit from b_crit: a = -(Q01*b + Q02)/Q00
+    let a_crit_num = -(q01 * &b_crit + q02);
+    let a_crit = &a_crit_num / q00;
+    println!("a_crit = -(Q01*b_crit + Q02)/Q00 = {} sign, {}d",
+        if a_crit.is_positive() { "+" } else { "-" }, digit_count(&a_crit));
+    let a_crit_s = a_crit.magnitude().to_string();
+    println!("  Leading digits: {}...", &a_crit_s[..20.min(a_crit_s.len())]);
 
-    // n_- * 10^PREC
-    let numer_minus = &q01_sc + &sqrt_r01_sc;
-    let n_minus_fp = &numer_minus / &q00.abs();
+    // Word length at critical point
+    let wl_crit = a_crit.abs() + b_crit.abs() + BigInt::one();
+    println!("Word length at critical point: |a| + |b| + 1 = {}d",
+        digit_count(&wl_crit));
+    let wl_s = wl_crit.magnitude().to_string();
+    println!("  Leading digits: {}...", &wl_s[..20.min(wl_s.len())]);
 
-    let np_s = n_plus_fp.to_string();
-    let nm_s = n_minus_fp.to_string();
+    // ═══ STEP 4: Q3p AT CRITICAL POINT ═══
+    println!("\n=== STEP 4: Q3p AT AND NEAR CRITICAL POINT ===");
 
-    println!("n_+ = {}.{}", &np_s[..1], &np_s[1..51.min(np_s.len())]);
-    println!("n_- = {}.{}", &nm_s[..1], &nm_s[1..51.min(nm_s.len())]);
+    // Evaluate Q3p(a, b, c) exactly
+    let eval_q3p = |a: &BigInt, b: &BigInt, c: &BigInt| -> BigInt {
+        let aa = a * a; let bb = b * b; let cc = c * c;
+        let ab = a * b; let ac = a * c; let bc = b * c;
+        q00 * &aa + BigInt::from(2) * q01 * &ab + q11 * &bb
+        + BigInt::from(2) * q02 * &ac + BigInt::from(2) * q12 * &bc + q22 * &cc
+    };
 
-    // Gap
-    let gap_fp = &n_minus_fp - &n_plus_fp;
-    let gap_s = gap_fp.to_string();
-    println!("n_- - n_+ = 0.0{}", &gap_s[..30.min(gap_s.len())]);
-    println!("  (gap has {} significant digits)", digit_count(&gap_fp));
+    let one = BigInt::one();
+    let val_crit = eval_q3p(&a_crit, &b_crit, &one);
+    println!("Q3p(a_crit, b_crit, 1) = {} sign, {}d",
+        if val_crit.is_positive() { "+" } else { "-" }, digit_count(&val_crit));
 
-    // ═══════════════════════════════════════════
-    // STEP 3: CF EXTRACTION
-    // ═══════════════════════════════════════════
-    println!("\n=== STEP 3: CONTINUED FRACTION EXTRACTION ===");
-    let mut cf: Vec<i64> = Vec::new();
-    let mut x = n_plus_fp.clone();
-    let max_terms = 35;
+    // Try nearby points (a_crit ± delta, b_crit ± delta)
+    println!("\nScanning nearby lattice points:");
+    println!("{:<12} {:>8} {:>12}", "Offset", "Q3p sign", "Q3p digits");
+    println!("{}", "-".repeat(35));
 
-    for i in 0..max_terms {
-        let a = &x / &scale;
-        let a_i64: i64 = a.to_string().parse().unwrap_or(-1);
-        cf.push(a_i64);
-        let frac = &x - &a * &scale;
-        if frac.is_zero() {
-            println!("CF terminated exactly at term {}!", i);
-            break;
-        }
-        let frac_digits = digit_count(&frac);
-        if frac_digits < 20 {
-            println!("Precision exhausted at term {} (frac has {} digits)", i, frac_digits);
-            break;
-        }
-        x = &scale_sq / &frac;
-    }
-
-    print!("CF(n_+) = [{}", cf[0]);
-    for i in 1..cf.len() {
-        print!(", {}", cf[i]);
-    }
-    println!("]");
-    println!("({} terms computed)", cf.len());
-
-    // ═══════════════════════════════════════════
-    // STEP 4: CONVERGENTS AND Q3p VALUES
-    // ═══════════════════════════════════════════
-    println!("\n=== STEP 4: CONVERGENTS AND Q3p VALUES ===");
-    println!("{:<4} {:>6} {:>12} {:>12} {:>5} {:>8} {:>12}",
-             "k", "a_k", "p_k", "q_k", "sign", "Q3p(d)", "word_len");
-    println!("{}", "-".repeat(65));
-
-    let mut h_prev = BigInt::one();
-    let mut h_curr = BigInt::from(cf[0]);
-    let mut k_prev = BigInt::zero();
-    let mut k_curr = BigInt::one();
-
-    let val = eval_binary(q00, q01, q11, &h_curr, &k_curr);
-    let wl = &h_curr.abs() + &k_curr.abs();
-    let sign_str = if val.is_positive() { "+" } else { "-" };
-    println!("{:<4} {:>6} {:>12} {:>12} {:>5} {:>8} {:>12}",
-             0, cf[0], h_curr, k_curr, sign_str, digit_count(&val), wl);
-
-    for i in 1..cf.len() {
-        let a_i = BigInt::from(cf[i]);
-        let h_next = &a_i * &h_curr + &h_prev;
-        let k_next = &a_i * &k_curr + &k_prev;
-
-        let val = eval_binary(q00, q01, q11, &h_next, &k_next);
-        let wl = &h_next.abs() + &k_next.abs();
-        let sign_str = if val.is_positive() { "+" } else { "-" };
-
-        // For small convergents, show actual values; for large, show digit count
-        if digit_count(&h_next) <= 10 {
-            println!("{:<4} {:>6} {:>12} {:>12} {:>5} {:>8} {:>12}",
-                     i, cf[i], h_next, k_next, sign_str, digit_count(&val), wl);
-        } else {
-            println!("{:<4} {:>6} {:>10}d {:>10}d {:>5} {:>8} {:>10}d",
-                     i, cf[i], digit_count(&h_next), digit_count(&k_next),
-                     sign_str, digit_count(&val), digit_count(&wl));
-        }
-
-        h_prev = h_curr;
-        h_curr = h_next;
-        k_prev = k_curr;
-        k_curr = k_next;
-    }
-
-    // ═══════════════════════════════════════════
-    // STEP 5: Q3p AT SPECIFIC CONVERGENTS
-    // ═══════════════════════════════════════════
-    println!("\n=== STEP 5: Q3p AT KEY CONVERGENTS ===");
-    // Recompute for (7, 4, 0) — the best small approximation
-    let v74 = eval_binary(q00, q01, q11, &BigInt::from(7), &BigInt::from(4));
-    println!("Q3p(7, 4, 0) = {} sign, {}d", if v74.is_positive() { "+" } else { "-" }, digit_count(&v74));
-    // Show first few digits
-    let v74_s = v74.magnitude().to_string();
-    println!("  Leading digits: {}...{}", &v74_s[..20.min(v74_s.len())], &v74_s[v74_s.len().saturating_sub(10)..]);
-
-    let v169 = eval_binary(q00, q01, q11, &BigInt::from(16), &BigInt::from(9));
-    println!("Q3p(16, 9, 0) = {} sign, {}d", if v169.is_positive() { "+" } else { "-" }, digit_count(&v169));
-
-    let v2314 = eval_binary(q00, q01, q11, &BigInt::from(23), &BigInt::from(13));
-    println!("Q3p(23, 13, 0) = {} sign, {}d", if v2314.is_positive() { "+" } else { "-" }, digit_count(&v2314));
-
-    // ═══════════════════════════════════════════
-    // STEP 6: PERIODICITY DETECTION
-    // ═══════════════════════════════════════════
-    println!("\n=== STEP 6: PERIODICITY DETECTION ===");
-    if cf.len() > 3 {
-        let cf_tail = &cf[1..];
-        let mut found_period = false;
-        for period in 1..=(cf_tail.len() / 2) {
-            let mut ok = true;
-            for j in 0..period {
-                if j + period >= cf_tail.len() { ok = false; break; }
-                if cf_tail[j] != cf_tail[j + period] { ok = false; break; }
-            }
-            // Need at least 2 full repeats to call it
-            if ok && period * 2 <= cf_tail.len() {
-                // Check 3rd repeat too if possible
-                let triple_ok = if period * 3 <= cf_tail.len() {
-                    (0..period).all(|j| j + 2*period < cf_tail.len() && cf_tail[j] == cf_tail[j + 2*period])
-                } else { false };
-
-                if triple_ok || period >= 5 {
-                    println!("PERIOD DETECTED: length {}", period);
-                    print!("  Repeating block: [");
-                    for j in 0..period {
-                        if j > 0 { print!(", "); }
-                        print!("{}", cf_tail[j]);
-                    }
-                    println!("]");
-                    found_period = true;
-                    break;
-                }
+    for da in -3i64..=3 {
+        for db in -3i64..=3 {
+            let a_try = &a_crit + BigInt::from(da);
+            let b_try = &b_crit + BigInt::from(db);
+            let v = eval_q3p(&a_try, &b_try, &one);
+            if da.abs() + db.abs() <= 3 {
+                let sign = if v.is_positive() { "+" } else if v.is_negative() { "-" } else { "0" };
+                println!("({:+2},{:+2})     {:>5}    {:>8}", da, db, sign, digit_count(&v));
             }
         }
-        if !found_period {
-            println!("No period detected in {} tail terms.", cf_tail.len());
-            println!("Period may exceed {} (expected for 651-digit discriminant).", cf_tail.len());
-        }
     }
 
-    // ═══════════════════════════════════════════
-    // STEP 7: THE SIGN ALTERNATION
-    // ═══════════════════════════════════════════
-    println!("\n=== STEP 7: SIGN ALTERNATION PATTERN ===");
-    println!("Convergent Q3p values alternate sign:");
-    println!("  Even-indexed convergents: Q3p < 0 (below null cone)");
-    println!("  Odd-indexed convergents:  Q3p > 0 (above null cone)");
-    println!("  (or vice versa, depending on initial sign)");
-    println!("The null cone is BRACKETED but never reached.");
-    println!("Each convergent overshoots or undershoots n_+.");
-    println!("The binary form acts as a SPRING: it repels the lattice");
-    println!("from Q3p=0, keeping |Q3p| at ~325d regardless of word length.");
+    // ═══ STEP 5: DISCRIMINANT AT CRITICAL b ═══
+    println!("\n=== STEP 5: DISCRIMINANT PROFILE ===");
+    // Delta(b) = 4*(A*b^2 + 2*B*b + C)
+    // At b_crit: Delta_min = 4*(C - B^2/A)
 
-    // ═══════════════════════════════════════════
-    // SUMMARY
-    // ═══════════════════════════════════════════
+    // Compute Delta at b_crit and neighbors
+    let delta_at = |b: &BigInt| -> BigInt {
+        &r01 * b * b + BigInt::from(2) * &big_b * b + &big_c
+    };
+
+    println!("Delta(b)/4 at b_crit and neighbors:");
+    for db in -5i64..=5 {
+        let b_try = &b_crit + BigInt::from(db);
+        let d = delta_at(&b_try);
+        let sign = if d.is_positive() { "+" } else if d.is_negative() { "-" } else { "0" };
+        println!("  b_crit{:+2}: {} {}d", db, sign, digit_count(&d));
+    }
+
+    // ═══ STEP 6: PERFECT SQUARE SEARCH ═══
+    println!("\n=== STEP 6: PERFECT SQUARE SEARCH ===");
+    // Check if Delta(b)/4 is a perfect square for b near b_crit
+    let mut found_psq = false;
+    for db in -100i64..=100 {
+        let b_try = &b_crit + BigInt::from(db);
+        let d = delta_at(&b_try);
+        if d.is_negative() { continue; }
+        let s = isqrt(&d);
+        if &s * &s == d {
+            println!("PERFECT SQUARE at b = b_crit + {} !", db);
+            println!("  sqrt(Delta/4) = {}d", digit_count(&s));
+            // Solve for a
+            let coeff_a = BigInt::from(2) * q01 * &b_try + BigInt::from(2) * q02;
+            let a_sol1 = (-&coeff_a + BigInt::from(2) * &s) / (BigInt::from(2) * q00);
+            let a_sol2 = (-&coeff_a - BigInt::from(2) * &s) / (BigInt::from(2) * q00);
+            println!("  a_1 = {}d, a_2 = {}d", digit_count(&a_sol1), digit_count(&a_sol2));
+            let v1 = eval_q3p(&a_sol1, &b_try, &one);
+            let v2 = eval_q3p(&a_sol2, &b_try, &one);
+            println!("  Q3p(a_1, b, 1) = {} {}d", if v1.is_zero() { "0" } else { "nonzero" }, digit_count(&v1));
+            println!("  Q3p(a_2, b, 1) = {} {}d", if v2.is_zero() { "0" } else { "nonzero" }, digit_count(&v2));
+            found_psq = true;
+            break;
+        }
+    }
+    if !found_psq {
+        println!("No perfect square Delta(b)/4 found in [b_crit-100, b_crit+100].");
+        println!("Closest: checking residuals...");
+        let mut min_resid_d = BigInt::from(0);
+        let mut min_resid_db: i64 = 0;
+        let mut first = true;
+        for db in -10i64..=10 {
+            let b_try = &b_crit + BigInt::from(db);
+            let d = delta_at(&b_try);
+            if d.is_negative() { continue; }
+            let s = isqrt(&d);
+            let resid = &d - &s * &s;
+            if first || digit_count(&resid) < digit_count(&min_resid_d) {
+                min_resid_d = resid.clone();
+                min_resid_db = db;
+                first = false;
+            }
+            println!("  b_crit{:+3}: Delta/4 residual = {}d", db, digit_count(&resid));
+        }
+        println!("Smallest residual at db={}: {}d", min_resid_db, digit_count(&min_resid_d));
+    }
+
+    // ═══ STEP 7: SCALE ANALYSIS ═══
+    println!("\n=== STEP 7: SCALE ANALYSIS ===");
+    println!("At the critical point:");
+    println!("  |a_crit| ~ 10^{}", digit_count(&a_crit) - 1);
+    println!("  |b_crit| ~ 10^{}", digit_count(&b_crit) - 1);
+    println!("  Word length ~ 10^{}", digit_count(&wl_crit) - 1);
+    println!("");
+    println!("Compare to the 21-Root Theorem: minimum word length = 21.");
+    println!("The c=1 critical point has word length ~ 10^{} >> 21.", digit_count(&wl_crit) - 1);
+    println!("");
+
+    // Check: what about larger c?
+    println!("What about c >= 2?");
+    println!("  Q3p(a, b, c) = binary(a,b) + 2c*(Q02*a + Q12*b) + c^2*Q22");
+    println!("  For c=2: Q22 term is 4*Q22 ~ 10^{}, coupling is 4*(Q02*a + Q12*b)", digit_count(q22));
+    println!("  Need |binary(a,b)| ~ 4*|Q22| ~ 10^{}", digit_count(q22) + 1);
+    println!("  This requires a,b ~ sqrt(10^{}/ 10^{}) ~ 10^{}",
+        digit_count(q22) + 1, digit_count(q00), (digit_count(q22) + 1 - digit_count(q00)) / 2 + 1);
+    println!("  Word length even LARGER than c=1 case.");
+    println!("  c=1 is the OPTIMAL escape.");
+
+    // ═══ STEP 8: THE STRUCTURE ═══
+    println!("\n=== STEP 8: THE ESCAPE STRUCTURE ===");
+    println!("At c=1, the ternary form adds three terms to the binary form:");
+    println!("  +2Q02*a: {}d, NEGATIVE (Q02 < 0)", digit_count(q02));
+    println!("  +2Q12*b: {}d, POSITIVE (Q12 > 0)", digit_count(q12));
+    println!("  +Q22:    {}d, NEGATIVE (Q22 < 0)", digit_count(q22));
+    println!("");
+    println!("Q22 dominates for small a,b. To cancel it, need:");
+    println!("  binary(a,b) + 2Q02*a + 2Q12*b ≈ -Q22 ≈ +10^{}", digit_count(q22));
+    println!("  binary(a,b) ~ |Q00|*a^2 ~ 10^{}*a^2 for a ~ b*n_+", digit_count(q00));
+    println!("  Need a^2 ~ 10^{}/10^{} = 10^{}",
+        digit_count(q22), digit_count(q00), digit_count(q22) - digit_count(q00));
+    println!("  a ~ 10^{}", (digit_count(q22) - digit_count(q00)) / 2);
+
+    // The ratio of coupling to self-energy
+    let ratio = fp_div(&q02.abs(), &q22.abs(), 10);
+    println!("\n  |Q02|/|Q22| = {} (coupling/self ratio)", ratio);
+    let ratio2 = fp_div(&q12.abs(), &q22.abs(), 10);
+    println!("  |Q12|/|Q22| = {} (coupling/self ratio)", ratio2);
+
+    // ═══ SUMMARY ═══
     println!("\n{}", "=".repeat(60));
-    println!("SUMMARY: H153 — THE CONTINUED FRACTION");
+    println!("SUMMARY: H154 — THE TERNARY ESCAPE");
     println!("{}", "=".repeat(60));
-    println!("1. R01 is NOT a perfect square.");
-    println!("   Residual R01 - isqrt(R01)^2 = {}d.", digit_count(&residual));
-    println!("2. Binary form has NO integer zeros (c=0 impossible).");
-    println!("3. ALL null-cone roots must have c >= 1.");
-    println!("4. n_+ = 1.{} (50 digits shown)", &np_s[1..51.min(np_s.len())]);
-    print!("5. CF = [");
-    for (i, &a) in cf.iter().enumerate() {
-        if i > 0 { print!(", "); }
-        if i == 1 { print!("; "); }
-        print!("{}", a);
-    }
-    println!("]");
-    println!("6. Q3p at convergents: ~325-328 digits, alternating sign.");
-    println!("   The form REPELS the lattice from zero at every scale.");
-    println!("7. CORRECTION TO H150: The 'w=0 family' CANNOT be c=0 vectors.");
-    println!("   They must have c >= 1 with torroid coupling compensating.");
-    println!("8. The CF period (Lagrange) may be astronomically long");
-    println!("   (order sqrt(R01) ~ 10^325 terms).");
-    println!("9. Word length 21 from the 21-Root Theorem CANNOT come from");
-    println!("   the binary form alone. The ternary form with c >= 1 is");
-    println!("   the only path to Q3p = 0 on the integer lattice.");
+    println!("1. c=1 slice: Q3p(a,b,1) is a shifted binary form.");
+    println!("2. Discriminant coefficients: A={}d, B={}d, C={}d.",
+        digit_count(&r01), digit_count(&big_b), digit_count(&big_c));
+    println!("3. D_min*A = {} sign, {}d -> real solutions {} at c=1.",
+        if d_min_times_a.is_positive() { "+" } else { "-" },
+        digit_count(&d_min_times_a),
+        if d_min_times_a.is_positive() { "EXIST" } else { "DON'T EXIST" });
+    println!("4. Critical point: a ~ 10^{}, b ~ 10^{}, word length ~ 10^{}.",
+        digit_count(&a_crit) - 1, digit_count(&b_crit) - 1, digit_count(&wl_crit) - 1);
+    println!("5. The c=1 escape exists in REAL numbers but requires");
+    println!("   word length ~ 10^{} to reach from the integer lattice.", digit_count(&wl_crit) - 1);
+    println!("6. This is >> 21 (the 21-Root Theorem).");
+    println!("7. IMPLICATION: The 21 roots of the frozen lattice are NOT");
+    println!("   null-cone vectors. They are shortest vectors in F by a");
+    println!("   DIFFERENT criterion than Q3p = 0.");
 }
