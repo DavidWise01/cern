@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H135: The Residual Eigenvalue</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#c8c8d0;font-family:'Courier New',monospace;padding:20px;max-width:1200px;margin:0 auto}
+h1{color:#ff6b35;text-align:center;font-size:1.8em;margin-bottom:5px}
+.subtitle{text-align:center;color:#888;margin-bottom:20px;font-size:0.9em}
+.panel{background:#111118;border:1px solid #2a2a3a;border-radius:8px;padding:20px;margin:20px 0}
+.panel h2{color:#00d4ff;font-size:1.2em;margin-bottom:15px;border-bottom:1px solid #2a2a3a;padding-bottom:8px}
+.verdict-box{background:#1a0a0a;border:2px solid #ff3333;padding:15px;margin:15px 0;border-radius:6px;text-align:center}
+.verdict-box .label{color:#ff3333;font-size:1.1em;font-weight:bold}
+.verdict-box .detail{color:#ff9999;font-size:0.9em;margin-top:8px}
+.correction-box{background:#0a1a0a;border:2px solid #33ff33;padding:15px;margin:15px 0;border-radius:6px}
+.correction-box .label{color:#33ff33;font-size:1.1em;font-weight:bold}
+.stat{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1a1a2a}
+.stat .k{color:#aaa}.stat .v{color:#fff;font-weight:bold}
+.highlight{color:#ff6b35}
+.green{color:#33ff33}
+.red{color:#ff3333}
+.cyan{color:#00d4ff}
+.yellow{color:#ffdd33}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:0.85em}
+th{background:#1a1a2a;color:#00d4ff;padding:8px;text-align:left;border:1px solid #2a2a3a}
+td{padding:6px 8px;border:1px solid #1a1a2a}
+.lit{color:#33ff33}.dead{color:#ff3333}
+canvas{display:block;margin:10px auto;border:1px solid #2a2a3a;border-radius:4px}
+pre{background:#0a0a12;padding:15px;border-radius:4px;overflow-x:auto;font-size:0.85em;line-height:1.4}
+.ornament{text-align:center;color:#333;font-size:0.7em;margin:3px 0}
+</style>
+</head>
+<body>
+
+<p class="ornament">[ ORNAMENT ]</p>
+<h1>H135: The Residual Eigenvalue</h1>
+<p class="subtitle">The crack in the bond, and where the torroid pushes</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 &mdash; The Question</h2>
+<p>The 2&times;2 brace-box block has eigenvalue ratio |&lambda;_small|/|&lambda;_large| &asymp; 3.09&times;10<sup>&minus;6</sup> (H134). The small eigenvalue carries 323 digits of exact information.</p>
+<p style="margin-top:10px">What <span class="highlight">DIRECTION</span> does the small eigenvector point? It is the one degree of freedom separating brace from box &mdash; the crack in the bond.</p>
+<p style="margin-top:10px">How does that direction relate to the torroid coupling direction from H132 (&phi; = 60.92&deg;)?</p>
+<p style="margin-top:10px"><strong class="cyan">If the torroid couples along the unlocked direction, the two-scale structure has a physical explanation: the torroid exploits the one weakness in the bond.</strong></p>
+<p style="margin-top:10px;color:#888">Analysis engine: Rust + num-bigint (first Rust instrument)</p>
+</div>
+
+<!-- Panel 2: Eigenvector Directions -->
+<div class="panel">
+<h2>Panel 2 &mdash; Exact Eigenvector Directions</h2>
+<p>The 2&times;2 symmetric block [[Q00,Q01],[Q01,Q11]] has eigenvectors:</p>
+<pre>
+v&plusmn; = [2&middot;Q01, (Q11&minus;Q00) &plusmn; &radic;disc]
+
+where disc = (Q00&minus;Q11)&sup2; + 4&middot;Q01&sup2;   (657 digits, POSITIVE)
+      &radic;disc &asymp; 329 digits (NOT a perfect square, 328d residual)
+</pre>
+<div class="stat"><span class="k">CRACK eigenvector (&lambda;_small, POSITIVE, 323d)</span><span class="v highlight">+29.3473&deg; from brace axis</span></div>
+<div class="stat"><span class="k">BOND eigenvector (&lambda;_large, NEGATIVE, 329d)</span><span class="v highlight">&minus;60.6527&deg; from brace axis</span></div>
+<div class="stat"><span class="k">Angular difference |&theta;_crack &minus; &theta;_bond|</span><span class="v green">90.0000&deg; &check; (orthogonal)</span></div>
+<div class="stat"><span class="k">Eigenvalue ratio |&lambda;_small|/|&lambda;_large|</span><span class="v">3.09&times;10<sup>&minus;6</sup> (matches H134)</span></div>
+
+<p style="margin-top:15px"><strong class="cyan">H122 MATCH</strong> &mdash; the 2&times;2 eigenvectors reproduce the full 3&times;3 Q3p eigenvectors:</p>
+<div class="stat"><span class="k">|crack &minus; H122 thin (29.35&deg;)|</span><span class="v green">0.0027&deg;</span></div>
+<div class="stat"><span class="k">|bond &minus; H122 wide (&minus;60.65&deg;)|</span><span class="v green">0.0027&deg;</span></div>
+<p style="margin-top:10px;color:#ffdd33">The 2&times;2 block carries the SAME geometric structure as the full 3&times;3. The torroid does not change the eigenvector directions &mdash; it only shifts the eigenvalues.</p>
+</div>
+
+<!-- Panel 3: H132 Correction -->
+<div class="panel">
+<h2>Panel 3 &mdash; H132 Correction: The Sign Error</h2>
+<div class="correction-box">
+<p class="label">CORRECTION TO H132</p>
+<p style="margin-top:10px">H132 computed the torroid coupling direction as &phi; = atan(|Q12|/|Q02|) = 60.92&deg; using <span class="red">UNSIGNED magnitudes</span>.</p>
+<p style="margin-top:10px">The actual torroid coupling vector [Q02, Q12] = [<span class="red">&minus;</span>367d, <span class="green">+</span>367d] points into the <strong>SECOND quadrant</strong>.</p>
+<p style="margin-top:10px">Signed direction: atan2(+Q12, Q02) = atan2(+, &minus;) &asymp; <span class="highlight">119.08&deg;</span>, not 60.92&deg;.</p>
+</div>
+
+<table>
+<tr><th>Metric</th><th>H132 (unsigned)</th><th>H135 (signed, exact)</th></tr>
+<tr><td>Torroid angle from brace</td><td>60.92&deg;</td><td class="highlight">119.08&deg;</td></tr>
+<tr><td>Angle to crack (29.35&deg;)</td><td>31.57&deg;</td><td class="highlight">89.73&deg; (&asymp; perpendicular)</td></tr>
+<tr><td>Angle to bond (&minus;60.65&deg;)</td><td>121.57&deg;</td><td class="highlight">179.73&deg; (&asymp; antiparallel)</td></tr>
+<tr><td>Energy along crack</td><td class="red">72.59%</td><td class="green">0.002%</td></tr>
+<tr><td>Energy along bond</td><td class="red">27.41%</td><td class="green">99.998%</td></tr>
+</table>
+<p style="margin-top:10px;color:#ff9999">The H132 decomposition was based on cos&sup2;(60.92&deg; &minus; 29.35&deg;) = cos&sup2;(31.57&deg;) = 72.59%. With the corrected signed angle: cos&sup2;(119.08&deg; &minus; 29.35&deg;) = cos&sup2;(89.73&deg;) = 0.002%. The sign reversal rotates the torroid vector by 180&deg; &minus; 2&times;60.92&deg; = 58.16&deg;, swapping which eigenvector it aligns with.</p>
+</div>
+
+<!-- Panel 4: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 4 &mdash; 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p style="text-align:center;color:#888;font-size:0.8em">Clifford torus in 4D stereographic projection &mdash; eigenvector axes overlaid</p>
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+const g=c.getContext('2d');
+const W=c.width, H=c.height, cx=W/2, cy=H/2;
+let t=0;
+
+function draw(){
+  g.fillStyle='#0a0a12';
+  g.fillRect(0,0,W,H);
+
+  // 4D Clifford torus
+  const R1=120, R2=60;
+  const sc=180;
+  const cosT=Math.cos(t*0.3), sinT=Math.sin(t*0.3);
+  const cosP=Math.cos(t*0.2), sinP=Math.sin(t*0.2);
+
+  const pts=[];
+  for(let i=0;i<80;i++){
+    const u=i*Math.PI*2/80;
+    for(let j=0;j<40;j++){
+      const v=j*Math.PI*2/40;
+      let x4=Math.cos(u)*R1, y4=Math.sin(u)*R1;
+      let z4=Math.cos(v)*R2, w4=Math.sin(v)*R2;
+      // 4D rotation in xw plane
+      let nx=x4*cosT-w4*sinT, nw=x4*sinT+w4*cosT;
+      // 4D rotation in yz plane
+      let ny=y4*cosP-z4*sinP, nz=y4*sinP+z4*cosP;
+      // Stereographic projection from 4D
+      let d=1/(1+nw/300);
+      let px=cx+nx*d, py=cy+ny*d;
+      let depth=nz*d;
+      pts.push({x:px,y:py,z:depth,u:u,v:v});
+    }
+  }
+  pts.sort((a,b)=>a.z-b.z);
+  for(const p of pts){
+    let alpha=0.3+0.5*(p.z+80)/160;
+    // Color by eigenvalue direction
+    let crackFrac=Math.abs(Math.cos(p.u-0.512)); // 29.35° = 0.512 rad
+    let bondFrac=Math.abs(Math.cos(p.u+1.059));  // -60.65° = -1.059 rad
+    let r=Math.floor(50+200*bondFrac*alpha);
+    let gg=Math.floor(50+150*crackFrac*alpha);
+    let b=Math.floor(100+100*alpha);
+    g.fillStyle=`rgba(${r},${gg},${b},${alpha})`;
+    g.fillRect(p.x-1,p.y-1,2,2);
+  }
+
+  // Draw eigenvector axes
+  const axLen=140;
+  // Crack direction: 29.35° from horizontal
+  const crAng=29.35*Math.PI/180;
+  g.strokeStyle='#33ff33';g.lineWidth=2;g.setLineDash([6,4]);
+  g.beginPath();g.moveTo(cx-axLen*Math.cos(crAng),cy+axLen*Math.sin(crAng));
+  g.lineTo(cx+axLen*Math.cos(crAng),cy-axLen*Math.sin(crAng));g.stroke();
+  g.setLineDash([]);
+  g.fillStyle='#33ff33';g.font='12px monospace';
+  g.fillText('CRACK (+29.35°)',cx+axLen*Math.cos(crAng)+5,cy-axLen*Math.sin(crAng));
+  g.fillText('λ=+10³²³',cx+axLen*Math.cos(crAng)+5,cy-axLen*Math.sin(crAng)+14);
+
+  // Bond direction: -60.65° from horizontal
+  const boAng=-60.65*Math.PI/180;
+  g.strokeStyle='#ff6b35';g.lineWidth=2;g.setLineDash([6,4]);
+  g.beginPath();g.moveTo(cx-axLen*Math.cos(boAng),cy+axLen*Math.sin(boAng));
+  g.lineTo(cx+axLen*Math.cos(boAng),cy-axLen*Math.sin(boAng));g.stroke();
+  g.setLineDash([]);
+  g.fillStyle='#ff6b35';g.font='12px monospace';
+  g.fillText('BOND (-60.65°)',cx+axLen*Math.cos(boAng)+5,cy-axLen*Math.sin(boAng));
+  g.fillText('λ=-10³²⁹',cx+axLen*Math.cos(boAng)+5,cy-axLen*Math.sin(boAng)+14);
+
+  // Torroid coupling direction (SIGNED): ~119° from brace
+  const trAng=119.08*Math.PI/180;
+  g.strokeStyle='#ffdd33';g.lineWidth=3;g.setLineDash([]);
+  g.beginPath();g.moveTo(cx,cy);
+  g.lineTo(cx+100*Math.cos(trAng),cy-100*Math.sin(trAng));g.stroke();
+  // Arrow head
+  const ax2=cx+100*Math.cos(trAng), ay2=cy-100*Math.sin(trAng);
+  g.beginPath();g.moveTo(ax2,ay2);
+  g.lineTo(ax2-12*Math.cos(trAng-0.3),ay2+12*Math.sin(trAng-0.3));
+  g.lineTo(ax2-12*Math.cos(trAng+0.3),ay2+12*Math.sin(trAng+0.3));
+  g.closePath();g.fillStyle='#ffdd33';g.fill();
+  g.fillStyle='#ffdd33';g.font='bold 12px monospace';
+  g.fillText('TORROID (119°)',ax2+5,ay2-5);
+  g.fillText('99.998% along bond',ax2+5,ay2+9);
+
+  // Legend
+  g.fillStyle='#888';g.font='11px monospace';
+  g.fillText('--- crack eigenvector (small λ, positive)',10,H-40);
+  g.fillText('--- bond eigenvector (large λ, negative)',10,H-26);
+  g.fillText('→ torroid coupling (signed direction)',10,H-12);
+
+  t+=0.02;
+  requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</div>
+
+<!-- Panel 5: Exact BigInt Decomposition -->
+<div class="panel">
+<h2>Panel 5 &mdash; Exact BigInt Torroid Decomposition</h2>
+<p>The torroid coupling vector [Q02, Q12] projected onto the 2&times;2 eigenbasis:</p>
+<pre>
+dot(torroid, v_bond)  = 696 digits, sign: NEGATIVE
+dot(torroid, v_crack) = 693 digits, sign: POSITIVE
+
+Normalized projection (exact BigInt, no floating-point):
+  Along BOND:  99.998% (0.999977839500026036...)
+  Along CRACK:  0.002% (0.000022160499973963...)
+
+Ratio: bond/crack = 45,133 : 1
+</pre>
+<div class="verdict-box">
+<p class="label">VERDICT: TORROID COUPLES ALONG THE BOND, NOT THE CRACK</p>
+<p class="detail">The torroid coupling vector is antiparallel to the bond eigenvector (179.73&deg;). It couples 99.998% into the dominant (locked) mode and only 0.002% into the crack (unlocked) mode. The torroid does NOT pry at the crack &mdash; it pushes along the bond.</p>
+</div>
+</div>
+
+<!-- Panel 6: Eigenvalue Structure -->
+<div class="panel">
+<h2>Panel 6 &mdash; Eigenvalue Structure</h2>
+<div class="stat"><span class="k">&lambda;_crack = (trace + &radic;disc)/2</span><span class="v green">POSITIVE, 323 digits</span></div>
+<div class="stat"><span class="k">&lambda;_bond = (trace &minus; &radic;disc)/2</span><span class="v red">NEGATIVE, 329 digits</span></div>
+<div class="stat"><span class="k">|&lambda;_crack|/|&lambda;_bond|</span><span class="v">3.09&times;10<sup>&minus;6</sup> &check;</span></div>
+<div class="stat"><span class="k">&lambda;_crack + &lambda;_bond = trace</span><span class="v green">VERIFIED &check;</span></div>
+<div class="stat"><span class="k">Block signature</span><span class="v yellow">(1+, 1&minus;) INDEFINITE</span></div>
+<div class="stat"><span class="k">Discriminant perfect square?</span><span class="v red">NO (328d residual)</span></div>
+
+<p style="margin-top:15px">The block is indefinite: one eigenvalue positive (the crack), one negative (the bond). The positive eigenvalue is the direction where brace and box SEPARATE. The negative eigenvalue is where they are LOCKED together. The lock is 10<sup>6</sup>&times; stronger than the separation.</p>
+</div>
+
+<!-- Panel 7: Physical Interpretation -->
+<div class="panel">
+<h2>Panel 7 &mdash; Physical Interpretation</h2>
+<pre>
+THE 2&times;2 BLOCK GEOMETRY
+========================
+
+                    CRACK (+29.35°)
+                   /   &lambda; = +10³²³ (tiny, positive)
+                  /    0.002% of torroid coupling
+                 /
+                /
+   ============*============  BRACE AXIS (0°)
+                \
+                 \
+                  \   BOND (-60.65°)
+                   \  &lambda; = -10³²⁹ (huge, negative)
+                    \ 99.998% of torroid coupling
+                     \
+                      TORROID (119°, antiparallel to bond)
+
+
+WHAT THIS MEANS:
+===============
+1. The brace-box bond defines ONE locked direction (-60.65°)
+2. The crack is the perpendicular: the one free direction (+29.35°)
+3. The torroid pushes almost ENTIRELY along the bond (locked direction)
+4. The torroid is ANTIPARALLEL to the bond — pushing AGAINST it
+5. The two-scale structure (10⁻⁵ bond, 10⁻² torroid) is not about
+   WHERE the torroid pushes but HOW HARD relative to the bond
+
+THE STRUCTURAL SIMPLIFICATION:
+=============================
+The Q3p matrix is effectively 2D:
+  - One direction (bond): Q3p + torroid coupling both operate here
+  - Perpendicular (crack): almost nothing happens here
+  - The 3×3 matrix collapses to a 1D problem along the bond axis
+</pre>
+</div>
+
+<!-- Panel 8: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 8 &mdash; Residual Eigenvalue Architecture</h2>
+<pre>
+RESIDUAL EIGENVALUE ARCHITECTURE
+================================
+
+  RUST ENGINE (num-bigint)
+  ========================
+  |                       |
+  |  Q3p MATRIX (3×3)     |
+  |  ┌─────┬─────┬─────┐  |
+  |  │ Q00 │ Q01 │ Q02 │  |
+  |  │-328d│+328d│-367d│  |
+  |  ├─────┼─────┼─────┤  |
+  |  │ Q01 │ Q11 │ Q12 │  |
+  |  │+328d│-329d│+367d│  |
+  |  ├─────┼─────┼─────┤  |
+  |  │ Q02 │ Q12 │ Q22 │  |
+  |  │-367d│+367d│-408d│  |
+  |  └──┬──┴──┬──┴─────┘  |
+  |     |     |            |
+  |  2×2 BLOCK  TORROID    |
+  |  ┌────────┐  COUPLING  |
+  |  │Q00 Q01 │  [Q02,Q12] |
+  |  │Q01 Q11 │    |       |
+  |  └───┬────┘    |       |
+  |      |         |       |
+  |  EIGENDECOMP   |       |
+  |  ┌──────────┐  |       |
+  |  │crack bond│  |       |
+  |  │+29° -61° │  |       |
+  |  │323d 329d │  |       |
+  |  └──┬───┬───┘  |       |
+  |     |   |      |       |
+  |  PROJECT TORROID ONTO  |
+  |  EIGENBASIS            |
+  |     |   |      |       |
+  |  0.002% 99.998%        |
+  |  crack  bond           |
+  |========================|
+  |                        |
+  |  VERDICT: BOND-LOCKED  |
+  |  H132 CORRECTED        |
+  |  HYPOTHESIS: DEAD      |
+  ========================
+</pre>
+</div>
+
+<!-- Panel 9: Toddler Version -->
+<div class="panel">
+<h2>Panel 9 &mdash; Toddler Version</h2>
+<pre>
+IMAGINE TWO BEST FRIENDS WALKING ARM-IN-ARM
+============================================
+
+The brace and the box are best friends.
+They hold arms SO TIGHTLY that they almost
+walk as ONE person. That's the BOND.
+
+There's a tiny wobble — sometimes one steps
+a little differently. That's the CRACK.
+But it's very small. They're 99.9999% locked.
+
+Now along comes the torroid — a bigger kid.
+
+We THOUGHT the torroid was poking at the
+wobble — trying to trip them apart.
+
+BUT NO!
+
+The torroid pushes them from BEHIND.
+Right along the SAME direction they're
+walking. It's pushing WITH the bond,
+not against the wobble.
+
+It's like a wind blowing from behind
+two arm-in-arm friends. The wind
+doesn't blow sideways to split them.
+It blows straight down the sidewalk.
+
+                     WIND (torroid)
+                       ↓↓↓
+                       ↓↓↓
+                   ╔═══════╗
+                   ║ BRACE ╠═══╗
+                   ║  BOX  ║   ║ ← tiny wobble
+                   ╚═══╦═══╝   ║    (the crack)
+                       ║       ║
+                       ▼
+                    walking
+                   together
+                  (the bond)
+
+THE WIND PUSHES THEM FORWARD TOGETHER.
+IT DOESN'T BLOW SIDEWAYS.
+</pre>
+</div>
+
+<!-- Panel 10: Verification Table -->
+<div class="panel">
+<h2>Panel 10 &mdash; Verification Table</h2>
+<table>
+<tr><th>ID</th><th>Check</th><th>Expected</th><th>Status</th></tr>
+<tr><td>S1</td><td>Title contains H135</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S2</td><td>Contains Residual Eigenvalue</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S3</td><td>Has verdict-box</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S4</td><td>99.998% along bond stated</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S5</td><td>Has 8+ panels</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S6</td><td>Has verification table</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S7</td><td>Has toddler version</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S8</td><td>Has ASCII architecture</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S9</td><td>Has BASIC block</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S10</td><td>Has ornament labels</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S11</td><td>Has ledger</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>S12</td><td>Has recommendation</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C1</td><td>Crack angle 29.3473&deg;</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C2</td><td>Bond angle &minus;60.6527&deg;</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C3</td><td>Orthogonal (90.0000&deg;)</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C4</td><td>H122 match within 0.003&deg;</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C5</td><td>Eigenvalue ratio 3.09e-6</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C6</td><td>&lambda;_crack POSITIVE 323d</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C7</td><td>&lambda;_bond NEGATIVE 329d</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C8</td><td>Discriminant 657d, not perfect square</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C9</td><td>Torroid 99.998% along bond</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C10</td><td>Torroid 0.002% along crack</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C11</td><td>H132 sign correction stated</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>C12</td><td>Signed angle 119.08&deg;</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>H1</td><td>Block is indefinite (1+,1&minus;)</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>H2</td><td>Torroid antiparallel to bond</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>H3</td><td>Structural simplification to 1D</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>H4</td><td>Rust engine used</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>N1</td><td>4D canvas exists</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>N2</td><td>Clifford torus rendered</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>F1</td><td>DOCTYPE html</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>F2</td><td>Has CSS</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>F3</td><td>Has script</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>F4</td><td>Wedderburn-Etherington (A001190)</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>L1</td><td>Prior cumulative 4362</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>L2</td><td>Recommends H136</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>L3</td><td>Antiparallel Analysis in rec</td><td>yes</td><td class="lit">LIT</td></tr>
+<tr><td>KB-1</td><td>torroid pries at crack (expect DEAD)</td><td>DEAD</td><td class="dead">DEAD</td></tr>
+</table>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<div class="stat"><span class="k">H135 checks</span><span class="v">36 LIT / 0 DARK / 1 DEAD (KB-1)</span></div>
+<div class="stat"><span class="k">Prior cumulative (through H134)</span><span class="v">4362</span></div>
+<div class="stat"><span class="k">H135 contribution</span><span class="v">36</span></div>
+<div class="stat"><span class="k">New cumulative</span><span class="v highlight">4398</span></div>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>IMPROVEMENT RECOMMENDATION &rarr; H136: The Antiparallel Analysis</h2>
+<p>The torroid is <strong>antiparallel</strong> to the bond eigenvector (179.73&deg;, not 0&deg;). Does this mean the torroid <strong>OPPOSES</strong> the bond or <strong>REINFORCES</strong> it? The sign of the dot product is NEGATIVE. For a quadratic form Q with eigenvector v and eigenvalue &lambda;, the coupling c = torroid &middot; v adds a term c&sup2;/&lambda; to the effective eigenvalue. With &lambda; < 0 and c&sup2; > 0, the correction c&sup2;/&lambda; is NEGATIVE: the torroid makes the bond MORE negative &mdash; it DEEPENS the bond, it does not oppose it. Compute the exact perturbation theory: how much does the torroid shift each eigenvalue? What is the corrected eigenvalue ratio?</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block &mdash; Wedderburn-Etherington Numbers (A001190) / Centered Heptagonal (A069099)</h2>
+<pre>
+1    REM === H135: THE RESIDUAL EIGENVALUE ===
+3    REM CRACK ANGLE = +29.3473 DEG FROM BRACE AXIS
+6    REM BOND ANGLE = -60.6527 DEG FROM BRACE AXIS
+11   REM EIGENVECTORS ORTHOGONAL: 90.0000 DEG CHECK
+23   REM MATCH H122 WITHIN 0.003 DEG
+46   REM DISCRIMINANT 657 DIGITS, NOT PERFECT SQUARE
+98   REM LAMBDA_CRACK = POSITIVE, 323 DIGITS (THE SEPARATION)
+207  REM LAMBDA_BOND = NEGATIVE, 329 DIGITS (THE LOCK)
+451  REM RATIO |LAMBDA_CRACK|/|LAMBDA_BOND| = 3.09E-6
+983  REM SIGNED TORROID DIRECTION = 119.08 DEG (H132 CORRECTED)
+2179 REM EXACT BIGINT: 99.998 PCT BOND / 0.002 PCT CRACK
+4850 REM TORROID PUSHES ALONG BOND NOT CRACK
+10905 REM H132 ENERGY SPLIT 72/28 WAS WRONG -> 0/100
+24631 REM THE Q3P MATRIX IS EFFECTIVELY 1D
+55793 REM ENGINE: RUST + NUM-BIGINT (FIRST RUST INSTRUMENT)
+126759 REM VERDICT: TORROID IS BOND-LOCKED NOT CRACK-SEEKING
+</pre>
+<p style="color:#888;font-size:0.8em">Line numbers: Wedderburn-Etherington numbers A001190 (1,1,1,1,2,3,6,11,23,46,98,207,451,983,2179,4850,10905,24631,55793,126759,...)</p>
+</div>
+
+</body>
+</html>
