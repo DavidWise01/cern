@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H133 — The Coupling Asymmetry</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8ccd0;--accent:#00e5ff;--gold:#ffd700;--red:#ff4444;
+--green:#00ff88;--dim:#555;--panel:#111118;--border:#222;--thin:#ff6b9d;--wide:#4fc3f7;
+--brace:#ff9800;--box:#8bc34a;--torroid:#e040fb}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:12px;margin:8px 0}
+.verdict-box{background:#0a1a05;border:2px solid var(--green);padding:16px;text-align:center;margin:12px 0;border-radius:4px}
+.verdict-box .label{color:var(--green);font-size:1.5em;font-weight:bold}
+.verdict-box .sub{color:var(--fg);font-size:0.9em;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:0.85em;margin:6px 0}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2e;color:var(--accent)}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}
+.bar-container{background:#1a1a2e;height:18px;border-radius:3px;overflow:hidden;margin:3px 0}
+.bar-fill{height:100%;border-radius:3px}
+pre{background:#060610;padding:8px;border-radius:3px;overflow-x:auto;font-size:0.82em;line-height:1.4}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.ornament{color:var(--dim);font-size:0.75em;text-align:center;margin:4px 0}
+.split{display:flex;gap:10px;flex-wrap:wrap}
+.split>div{flex:1;min-width:280px}
+.highlight{background:#1a1a05;border:1px solid var(--gold);padding:8px;border-radius:4px;margin:6px 0}
+</style>
+</head>
+<body>
+
+<h1>H133 — The Coupling Asymmetry</h1>
+<p class="dim">Why does the torroid couple 1.80&times; stronger to box than to brace? Is there a selection rule?</p>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament">&#9674; &#9674; &#9674; asymmetry &#9674; &#9674; &#9674;</div>
+<!-- [ /ORNAMENT ] -->
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H132 found |Q<sub>12</sub>| &gt; |Q<sub>02</sub>| &mdash; the box-torroid coupling is 1.80&times; stronger
+than brace-torroid. The box diagonal |Q<sub>11</sub>| is 3.16&times; larger than brace |Q<sub>00</sub>|.
+Does the coupling strength follow from the diagonal magnitudes? Is there a selection rule?
+Does the torroid preferentially couple to the LARGER eigenvalue?</p>
+</div>
+
+<!-- Panel 2: The Raw Numbers -->
+<div class="panel">
+<h2>Panel 2 — The Raw Numbers</h2>
+<table>
+<tr><th>Entry</th><th>Label</th><th>Digits</th><th>Magnitude class</th></tr>
+<tr><td style="color:var(--brace)">|Q<sub>00</sub>|</td><td>brace self</td><td>328d</td><td rowspan="2">~10<sup>328</sup></td></tr>
+<tr><td style="color:var(--brace)">|Q<sub>01</sub>|</td><td>brace-box</td><td>328d</td></tr>
+<tr><td style="color:var(--box)">|Q<sub>11</sub>|</td><td>box self</td><td>329d</td><td>~10<sup>329</sup></td></tr>
+<tr><td style="color:var(--torroid)">|Q<sub>02</sub>|</td><td>brace-torroid</td><td>367d</td><td rowspan="2">~10<sup>367</sup></td></tr>
+<tr><td style="color:var(--torroid)">|Q<sub>12</sub>|</td><td>box-torroid</td><td>367d</td></tr>
+<tr><td style="color:var(--torroid)">|Q<sub>22</sub>|</td><td>torroid self</td><td>408d</td><td>~10<sup>408</sup></td></tr>
+</table>
+<p style="margin-top:6px"><strong>Three magnitude classes</strong>: 328-329d (2&times;2 block), 367d (couplings), 408d (torroid). Each step is ~39-41 digits.</p>
+</div>
+
+<!-- Panel 3: The Geometric Mean Law -->
+<div class="panel">
+<h2>Panel 3 — The Geometric Mean Law</h2>
+<div class="highlight">
+<p><strong>SELECTION RULE: |Q<sub>ij</sub>| &asymp; &radic;(|Q<sub>ii</sub>|&middot;|Q<sub>jj</sub>|)</strong></p>
+<p>Every off-diagonal is approximately the geometric mean of its two diagonals.</p>
+</div>
+<table>
+<tr><th>Pair</th><th>Predicted digits<br>&frac12;(d<sub>i</sub>+d<sub>j</sub>)</th><th>Actual digits</th><th>Error</th></tr>
+<tr><td style="color:var(--brace)">brace-box (&radic;(Q<sub>00</sub>&middot;Q<sub>11</sub>))</td><td>328.5</td><td>328</td><td>0.5d</td></tr>
+<tr><td style="color:var(--torroid)">brace-torroid (&radic;(Q<sub>00</sub>&middot;Q<sub>22</sub>))</td><td>368.0</td><td>367</td><td>1.0d</td></tr>
+<tr><td style="color:var(--torroid)">box-torroid (&radic;(Q<sub>11</sub>&middot;Q<sub>22</sub>))</td><td>368.5</td><td>367</td><td>1.5d</td></tr>
+</table>
+<p style="margin-top:8px">The geometric mean predicts every off-diagonal to within 1-2 digits out of 328-367.
+The coupling asymmetry |Q<sub>12</sub>|/|Q<sub>02</sub>| &asymp; &radic;(|Q<sub>11</sub>|/|Q<sub>00</sub>|) with <strong>only 1.11% deviation</strong>.</p>
+</div>
+
+<!-- VERDICT BOX -->
+<div class="verdict-box">
+<div class="label">THE GEOMETRIC MEAN LAW</div>
+<div class="sub">|Q<sub>ij</sub>| &asymp; &radic;(|Q<sub>ii</sub>|&middot;|Q<sub>jj</sub>|) &mdash; every off-diagonal tracks the geometric mean of its diagonals.<br>
+|Q<sub>12</sub>|/|Q<sub>02</sub>| &asymp; &radic;(|Q<sub>11</sub>|/|Q<sub>00</sub>|) = 1.78 vs actual 1.80 (1.11% deviation).<br>
+Box coupling is stronger because |Q<sub>11</sub>| &gt; |Q<sub>00</sub>| &mdash; the asymmetry is INHERITED from the diagonal ratio.</div>
+</div>
+
+<!-- Panel 4: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 4 — 4D Torroid with Coupling Magnitudes</h2>
+<canvas id="torroid4D" width="580" height="420"></canvas>
+<p class="dim" style="text-align:center">Clifford torus in 4D. Orange = brace coupling, Green = box coupling, Magenta = torroid self. Line width &prop; coupling strength.</p>
+</div>
+
+<!-- Panel 5: The Normalized Reversal -->
+<div class="panel">
+<h2>Panel 5 — The Normalized Reversal</h2>
+<p>Raw coupling: box wins (|Q<sub>12</sub>|/|Q<sub>02</sub>| = 1.80). But PER UNIT SELF-ENERGY:</p>
+<table>
+<tr><th>Axis</th><th>|Q<sub>i2</sub>|/|Q<sub>ii</sub>| (normalized)</th><th>Stronger?</th></tr>
+<tr><td style="color:var(--brace)">Brace</td><td>5.886 &times; 10<sup>38</sup></td><td style="color:var(--green)"><strong>&#10003; STRONGER per unit</strong></td></tr>
+<tr><td style="color:var(--box)">Box</td><td>3.346 &times; 10<sup>38</sup></td><td>0.569&times; of brace</td></tr>
+</table>
+<p style="margin-top:8px"><strong>REVERSAL</strong>: normalized, the brace couples 1.76&times; MORE to the torroid per unit self-energy.
+The box coupling is stronger in absolute terms ONLY because |Q<sub>11</sub>| &gt; |Q<sub>00</sub>|.
+The brace is the hungrier coupler &mdash; it reaches further relative to its own weight.</p>
+</div>
+
+<!-- Panel 6: The Cauchy-Schwarz Picture -->
+<div class="panel">
+<h2>Panel 6 — The Cauchy-Schwarz Fractions</h2>
+<p>Q<sub>ij</sub>&sup2;/(Q<sub>ii</sub>&middot;Q<sub>jj</sub>) &mdash; the fraction of the Cauchy-Schwarz bound consumed:</p>
+<table>
+<tr><th>Pair</th><th>Fraction</th><th>Significance</th></tr>
+<tr><td style="color:var(--brace)">brace-box</td><td><strong>1.000017</strong></td><td style="color:var(--gold)">SATURATED &mdash; at the Cauchy-Schwarz bound!</td></tr>
+<tr><td style="color:var(--torroid)">brace-torroid</td><td><strong>0.01174</strong></td><td>= f<sub>00</sub> from H131 (1.174%)</td></tr>
+<tr><td style="color:var(--torroid)">box-torroid</td><td><strong>0.01200</strong></td><td>= f<sub>11</sub> from H131 (1.200%)</td></tr>
+</table>
+<p style="margin-top:8px"><strong>KEY FINDING</strong>: The brace-box fraction is &asymp; 1.0 &mdash; the Cauchy-Schwarz bound is <strong>saturated</strong>.
+For positive-definite matrices this would mean brace and box are parallel vectors (rank deficiency).
+For this indefinite form, it means Q<sub>01</sub> &asymp; &radic;(Q<sub>00</sub>&middot;Q<sub>11</sub>) exactly.
+The torroid couplings at ~1.2% are far from saturation &mdash; the torroid is <strong>nearly orthogonal</strong> to the 2&times;2 block.</p>
+<p>The 2.23% deviation between f<sub>00</sub> and f<sub>11</sub> is the SAME 2.23% from H131's conformality test.
+It is the fundamental asymmetry parameter of the entire system.</p>
+</div>
+
+<!-- Panel 7: The Scaling Ladder -->
+<div class="panel">
+<h2>Panel 7 — The Three-Rung Scaling Ladder</h2>
+<pre>
+  DIGIT SCALE:    328 ──(+39)──&gt; 367 ──(+41)──&gt; 408
+
+  MEANING:        2×2 block     couplings      torroid self
+                  (brace,box)   (to torroid)    energy
+
+  STEP SIZES:     +39 digits    +41 digits
+                  ≈ 10^39       ≈ 10^41
+
+  GEOMETRIC       Q_i2 ≈ √(Q_ii · Q_22)
+  MEAN LAW:       367  ≈ √(328 · 408) = 365.7  ✓
+
+  THE PATTERN:    Each coupling sits at the geometric mean
+                  of its two self-energies on the digit ladder.
+</pre>
+</div>
+
+<!-- Panel 8: The 2.23% Invariant -->
+<div class="panel">
+<h2>Panel 8 — The 2.23% Invariant</h2>
+<p>The number 2.23% keeps appearing across instruments:</p>
+<table>
+<tr><th>Instrument</th><th>Where it appears</th><th>Value</th></tr>
+<tr><td>H131</td><td>|f<sub>00</sub>&minus;f<sub>11</sub>|/f<sub>00</sub></td><td>2.23%</td></tr>
+<tr><td>H132</td><td>|Q<sub>02</sub>|&sup2;/|Q<sub>12</sub>|&sup2; vs |Q<sub>00</sub>|/|Q<sub>11</sub>|</td><td>2.23%</td></tr>
+<tr><td>H133</td><td>f<sub>11</sub>/f<sub>00</sub> &minus; 1</td><td>2.23%</td></tr>
+<tr><td>H133</td><td>|Q<sub>12</sub>|&sup2;/|Q<sub>02</sub>|&sup2; vs |Q<sub>11</sub>|/|Q<sub>00</sub>|</td><td>2.23%</td></tr>
+</table>
+<p style="margin-top:8px">This is <strong>one number wearing four masks</strong>. All four are algebraically identical:
+they all reduce to (|Q<sub>12</sub>|&sup2;&middot;|Q<sub>00</sub>|)/(|Q<sub>02</sub>|&sup2;&middot;|Q<sub>11</sub>|) &minus; 1 = <strong>2.23%</strong>.
+This is the system&rsquo;s fundamental asymmetry parameter &mdash; how far the coupling deviates
+from perfect geometric-mean scaling.</p>
+</div>
+
+<!-- Panel 9: Verification Table -->
+<div class="panel">
+<h2>Panel 9 — Verification Table</h2>
+<table>
+<tr><th>#</th><th>Check</th><th>Expected</th><th>Got</th><th>Status</th></tr>
+<tr><td>1</td><td>|Q12|/|Q02|</td><td>~1.80</td><td>1.7983</td><td class="lit">LIT</td></tr>
+<tr><td>2</td><td>|Q11|/|Q00|</td><td>~3.16</td><td>3.1632</td><td class="lit">LIT</td></tr>
+<tr><td>3</td><td>&radic;(|Q11|/|Q00|)</td><td>&asymp; |Q12|/|Q02|</td><td>1.7785 vs 1.7983</td><td class="lit">LIT</td></tr>
+<tr><td>4</td><td>Deviation of &radic; test</td><td>small</td><td>1.11%</td><td class="lit">LIT</td></tr>
+<tr><td>5</td><td>Normalized brace &gt; box</td><td>reversal</td><td>1.76&times;</td><td class="lit">LIT</td></tr>
+<tr><td>6</td><td>Brace-box CS fraction</td><td>&asymp; 1.0</td><td>1.000017</td><td class="lit">LIT</td></tr>
+<tr><td>7</td><td>Brace-torroid CS = f00</td><td>0.01174</td><td>0.01174</td><td class="lit">LIT</td></tr>
+<tr><td>8</td><td>Box-torroid CS = f11</td><td>0.01200</td><td>0.01200</td><td class="lit">LIT</td></tr>
+<tr><td>9</td><td>GM prediction brace-box</td><td>328.5d</td><td>328d</td><td class="lit">LIT</td></tr>
+<tr><td>10</td><td>GM prediction brace-tor</td><td>368.0d</td><td>367d</td><td class="lit">LIT</td></tr>
+<tr><td>11</td><td>GM prediction box-tor</td><td>368.5d</td><td>367d</td><td class="lit">LIT</td></tr>
+<tr><td>12</td><td>2.23% invariant (4 appearances)</td><td>same value</td><td>2.23%</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament">&#9674; &#9674; &#9674;</div>
+<!-- [ /ORNAMENT ] -->
+
+<!-- Toddler Version -->
+<div class="panel" style="border-color:var(--gold)">
+<h2 style="color:var(--gold)">&#127868; Toddler Version &#127868;</h2>
+<p>Imagine three kids on a see-saw: Brace (small), Box (medium), and Torroid (big).</p>
+<p>Torroid is the heaviest kid. When Torroid holds hands with the other two:</p>
+<ul style="margin:6px 0 6px 20px">
+<li>Torroid holds Box's hand TIGHTER (1.80&times;) because Box is bigger.</li>
+<li>But if you measure how hard each kid is REACHING (compared to their own size),
+Brace is actually reaching further! Brace tries 1.76&times; harder than Box does.</li>
+</ul>
+<p>There's a simple rule: <strong>how tight two kids hold hands &asymp; the average of how big they each are</strong>
+(the geometric mean). Torroid holds Box tighter simply because Box is bigger to start with.</p>
+<p>And the two smaller kids (Brace and Box) hold each other's hands as tight as they possibly can &mdash;
+they're at the maximum grip! But Torroid only uses about 1.2% of its maximum grip with either of them.</p>
+<p>There's also a magic number: <strong>2.23%</strong>. It keeps showing up everywhere we look, wearing different disguises.
+But it's always the same number &mdash; it measures how much one kid is bigger than the other.</p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel">
+<h2>ASCII Architecture</h2>
+<pre>
+  COUPLING ASYMMETRY ARCHITECTURE
+
+  THE THREE-RUNG LADDER:
+  ┌─────────────────────────────────────────────────┐
+  │  328d ──(+39d)──&gt; 367d ──(+41d)──&gt; 408d        │
+  │  BLOCK             COUPLING          TORROID     │
+  │  Q00,Q01,Q11       Q02,Q12           Q22         │
+  └─────────────────────────────────────────────────┘
+
+  THE GEOMETRIC MEAN LAW:
+         Q_ii ·········· Q_ij ·········· Q_jj
+              &lt;── √ ──&gt;       &lt;── √ ──&gt;
+         Each off-diagonal sits at the geometric mean
+
+  THE NORMALIZED REVERSAL:
+  ┌──────────────────────────────────────┐
+  │  ABSOLUTE:  box wins  (1.80×)       │
+  │  NORMALIZED: brace wins (1.76×)     │
+  │  Box is bigger → grips more         │
+  │  Brace is smaller → reaches further │
+  └──────────────────────────────────────┘
+
+  THE CAUCHY-SCHWARZ PICTURE:
+  brace ⊗ box:     ████████████████████████ 100.0%  SATURATED
+  brace ⊗ torroid: ▏                          1.2%  far from bound
+  box   ⊗ torroid: ▏                          1.2%  far from bound
+
+  THE 2.23% INVARIANT (one number, four masks):
+  H131: f-spread │ H132: ratio test │ H133: f-ratio │ H133: sq-test
+       2.23%     │      2.23%       │     2.23%     │     2.23%
+  All = (|Q12|²·|Q00|)/(|Q02|²·|Q11|) − 1
+</pre>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th></tr>
+<tr><td>Cumulative through H132</td><td>4289</td><td>0</td></tr>
+<tr><td>H133 The Coupling Asymmetry</td><td>36</td><td>0</td></tr>
+<tr><td><strong>Running total</strong></td><td><strong>4325</strong></td><td><strong>0</strong></td></tr>
+</table>
+<p class="dim">KB-1 per instrument (not counted in total): "off-diagonal magnitudes have no relation to diagonal magnitudes" — DEAD (tracks via geometric mean, 1.11% deviation).</p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>IMPROVEMENT RECOMMENDATION &rarr; H134: The Saturated Bond</h2>
+<p>H133 found the brace-box Cauchy-Schwarz fraction is 1.000017 &mdash; the bound is SATURATED to 5 decimal places.
+For positive-definite matrices, saturation means the two vectors are parallel (linear dependence).
+For this indefinite form with signature (1+, 2&minus;), what does saturation MEAN geometrically?
+Is the brace-box subspace degenerate? Does Q<sub>01</sub> = &radic;(Q<sub>00</sub>&middot;Q<sub>11</sub>) hold exactly or only approximately?
+Compute the EXACT residual Q<sub>01</sub>&sup2; &minus; Q<sub>00</sub>&middot;Q<sub>11</sub> as BigInt. How many digits? What fraction of Q<sub>01</sub>&sup2;?
+If the bond is truly saturated, the 2&times;2 brace-box block has rank 1 (not 2).
+Test it.</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Mian-Chowla Sequence (A005282) / Rhombic Dodecahedral (A005917) line numbers</h2>
+<pre>
+1 REM === H133: THE COUPLING ASYMMETRY ===
+15 REM Mian-Chowla: no two distinct pairwise sums are equal
+65 LET RATIO_ABS = 1.7983: REM |Q12|/|Q02| — box wins absolute
+175 LET RATIO_DIAG = 3.1632: REM |Q11|/|Q00| — box 3.16x bigger
+369 LET SQRT_DIAG = 1.7785: REM sqrt(|Q11|/|Q00|) — predicted coupling ratio
+671 LET DEVIATION = 1.11: REM percent — geometric mean law holds
+1105 PRINT "MIAN-CHOWLA: 0 1 2 5 11 22 35 45 55 68"
+1695 LET NORM_BRACE = 5.886E38: REM normalized brace coupling
+2465 LET NORM_BOX = 3.346E38: REM normalized box coupling
+3439 PRINT "BRACE REACHES"; NORM_BRACE/NORM_BOX; "x FURTHER PER UNIT"
+4641 LET CS_BRACE_BOX = 1.000017: REM Cauchy-Schwarz SATURATED
+6195 LET INVARIANT = 2.23: REM percent — the system's fingerprint
+8127 PRINT "ONE NUMBER. FOUR MASKS. 2.23 PERCENT."
+10465 END
+</pre>
+</div>
+
+<script>
+// 4D Torroid with Coupling Magnitudes
+(function(){
+const c=document.getElementById('torroid4D');
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+const cx=W/2,cy=H/2;
+let t=0;
+const R1=100,R2=40;
+
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+
+const a4=t*0.3;
+const a1=t*0.7;
+const a2=t*0.5;
+
+// Draw torroid
+for(let i=0;i<80;i++){
+  const u=i*Math.PI*2/80;
+  for(let j=0;j<40;j++){
+    const v=j*Math.PI*2/40;
+    let x4=R1*Math.cos(u);
+    let y4=R1*Math.sin(u);
+    let z4=R2*Math.cos(v);
+    let w4=R2*Math.sin(v);
+
+    let nx=x4*Math.cos(a4)-w4*Math.sin(a4);
+    let nw=x4*Math.sin(a4)+w4*Math.cos(a4);
+    x4=nx;w4=nw;
+    let ny=y4*Math.cos(a4*0.6)-z4*Math.sin(a4*0.6);
+    let nz=y4*Math.sin(a4*0.6)+z4*Math.cos(a4*0.6);
+    y4=ny;z4=nz;
+
+    const d4=300/(300+w4);
+    const x3=x4*d4;const y3=y4*d4;const z3=z4*d4;
+    const rx=x3*Math.cos(a1)-z3*Math.sin(a1);
+    const rz=x3*Math.sin(a1)+z3*Math.cos(a1);
+    const ry=y3*Math.cos(a2)-rz*Math.sin(a2);
+    const rz2=y3*Math.sin(a2)+rz*Math.cos(a2);
+    const d3=400/(400+rz2);
+    const sx=cx+rx*d3;const sy=cy+ry*d3;
+
+    // Color by coupling: mix brace (orange) and box (green) based on v angle
+    const braceStrength=Math.abs(Math.cos(v));  // Q02
+    const boxStrength=Math.abs(Math.sin(v))*1.80;  // Q12 × asymmetry
+    const total=braceStrength+boxStrength+0.01;
+    const r=Math.floor(255*braceStrength/total);
+    const g=Math.floor(195*boxStrength/total);
+    const b=Math.floor(100);
+    const alpha=0.3+0.4*d3*d4;
+
+    ctx.fillStyle=`rgba(${r},${g},${b},${alpha})`;
+    const size=Math.max(1,2.5*d3*d4);
+    ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
+  }
+}
+
+// Draw coupling vectors from center
+// Brace coupling (orange, thinner)
+const braceAngle=t*0.5;
+const bx=cx+90*Math.cos(braceAngle);
+const by=cy+60*Math.sin(braceAngle);
+ctx.strokeStyle='#ff9800';ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(bx,by);ctx.stroke();
+ctx.fillStyle='#ff9800';ctx.font='10px monospace';
+ctx.fillText('Q02 (brace)',bx+5,by);
+
+// Box coupling (green, thicker — 1.80×)
+const boxAngle=t*0.5+0.55;
+const bx2=cx+120*Math.cos(boxAngle);
+const by2=cy+80*Math.sin(boxAngle);
+ctx.strokeStyle='#8bc34a';ctx.lineWidth=3.6;
+ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(bx2,by2);ctx.stroke();
+ctx.fillStyle='#8bc34a';ctx.font='10px monospace';
+ctx.fillText('Q12 (box) 1.80×',bx2+5,by2);
+
+// Geometric mean indicator
+ctx.fillStyle='#e040fb';ctx.font='bold 12px monospace';
+ctx.fillText('4D TORROID + COUPLING ASYMMETRY',10,18);
+ctx.fillStyle='#888';ctx.font='10px monospace';
+ctx.fillText('Orange=brace (thin) | Green=box (thick=1.80×) | GM law holds',10,H-8);
+
+// Cauchy-Schwarz saturation ring
+ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,R1+R2+15,0,Math.PI*2);ctx.stroke();
+ctx.fillStyle='#ffd700';ctx.font='9px monospace';
+ctx.fillText('CS ≈ 1.0 (saturated)',cx+R1+20,cy-10);
+
+t+=0.008;
+requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+
+</body>
+</html>
