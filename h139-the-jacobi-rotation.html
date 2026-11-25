@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H139 — The Jacobi Rotation</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.warn{color:var(--warn)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H139 — The Jacobi Rotation</h1>
+<p class="dim">Instrument: Explicit Jacobi coordinate transform of Q3p · Engine: Rust BigInt (num-bigint) · 2026-11-25</p>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>Is the Q3p diagonalization literally Jacobi's method?</strong></p>
+<p>H122 through H138 decomposed Q3p by solving the 2×2 brace-box block, then treating the torroid as a perturbation. That's the textbook Jacobi eigenvalue algorithm — a sequence of 2×2 rotations that zero off-diagonal elements. But we never named it. This instrument computes the explicit Jacobi rotation parameters and measures what one rotation actually does.</p>
+<p><strong>Two meanings of "Jacobi":</strong> (1) Jacobi coordinates — the three-body transform separating a tight pair from the third body. (2) Jacobi's eigenvalue method — iterative 2×2 rotations to diagonalize a symmetric matrix. <em>Both apply simultaneously.</em></p>
+</div>
+
+<!-- Panel 2: Verdict -->
+<div class="verdict-box">
+<div class="label">MODE ISOLATOR, NOT NORM REDUCER</div>
+<div class="detail">The first Jacobi rotation removes 10⁻⁷⁸ of the total off-diagonal norm.<br>
+It doesn't shrink the problem — it SEPARATES the scales.<br>
+99.998% of torroid coupling redistributes to BOND, 0.002% to CRACK.</div>
+</div>
+
+<!-- Panel 3: Jacobi Angle Anatomy -->
+<div class="panel">
+<h2>Panel 3 — The Jacobi Angle</h2>
+<table>
+<tr><th>Quantity</th><th>Sign</th><th>Digits</th><th>Value (25 decimals)</th></tr>
+<tr><td>2·Q01 (numerator of tan(2θ))</td><td>+</td><td>329d</td><td>—</td></tr>
+<tr><td>Q00−Q11 (denominator)</td><td>+</td><td>328d</td><td>—</td></tr>
+<tr><td>gcd(num, den)</td><td>+</td><td>1d</td><td>= 1 (COPRIME)</td></tr>
+<tr><td>tan(2θ) = num/den</td><td>+</td><td>328d/328d</td><td>≈ 1.6443589754929062</td></tr>
+<tr><td>cos²(2θ)</td><td>+</td><td>—</td><td>≈ 0.2700</td></tr>
+<tr><td>sin²(2θ)</td><td>+</td><td>—</td><td>≈ 0.7300 (SIN DOMINATES)</td></tr>
+</table>
+<p><strong>Key:</strong> tan(2θ) > 1 → 2θ > 45° → θ > 22.5°. With θ ≈ 29.35° (from H122), the rotation is SUBSTANTIAL — not a small perturbation. The gcd = 1 means the angle fraction cannot be simplified. The rational cannot even be reduced.</p>
+<p><strong>Discriminant (p²+q²):</strong> 657 digits. NOT a perfect square → the Jacobi angle θ is IRRATIONAL (algebraic degree 2). It's a quadratic irrational, like √2. This is the eigenvalue gap of the 2×2 brace-box block, and it cannot be expressed as a rational angle.</p>
+</div>
+
+<!-- Panel 4: Norm Preservation -->
+<div class="panel">
+<h2>Panel 4 — The Norm Preservation Paradox</h2>
+<table>
+<tr><th>Quantity</th><th>Digits</th><th>Role</th></tr>
+<tr><td>Q01² (brace-box coupling²)</td><td>656d</td><td>REMOVED by rotation</td></tr>
+<tr><td>Q02² (brace-torroid coupling²)</td><td>733d</td><td>Preserved</td></tr>
+<tr><td>Q12² (box-torroid coupling²)</td><td>734d</td><td>Preserved</td></tr>
+<tr><td>Q02²+Q12² (torroid norm²)</td><td>734d</td><td>INVARIANT under rotation</td></tr>
+<tr><td>Total off-diag² = Q01²+Q02²+Q12²</td><td>734d</td><td>Dominated by torroid</td></tr>
+<tr><td>Fraction removed = Q01²/total</td><td>—</td><td>≈ 10⁻⁷⁸ ≈ <strong>ZERO</strong></td></tr>
+</table>
+<h3>The paradox:</h3>
+<p>The first Jacobi rotation "zeroes" Q'[0][1] = 0 — but that removes only 656 digits of norm from a 734-digit total. That's 10⁻⁷⁸ of the total off-diagonal energy. The rotation doesn't <em>shrink</em> the off-diagonal — it <em>separates</em> it into two independent scales.</p>
+<p><strong>The 78-digit invisibility</strong> = 734 − 656 = 78. The 85-digit gap from H138 (between M01 and M02/M12) manifests here as a 78-digit norm gap. The first Jacobi rotation is cosmetically invisible but structurally decisive.</p>
+</div>
+
+<!-- Panel 5: Off-Diagonal Products -->
+<div class="panel">
+<h2>Panel 5 — Off-Diagonal Products</h2>
+<table>
+<tr><th>Product</th><th>Sign</th><th>Digits</th><th>Interpretation</th></tr>
+<tr><td>Q01·Q02</td><td>−</td><td>695d</td><td>brace-box × brace-torroid</td></tr>
+<tr><td>Q01·Q12</td><td>+</td><td>695d</td><td>brace-box × box-torroid</td></tr>
+<tr><td>Q02·Q12</td><td>−</td><td>734d</td><td>brace-torroid × box-torroid</td></tr>
+<tr><td>|Q02|/|Q12|</td><td>+</td><td>—</td><td>≈ 0.5561 (asymmetry ratio)</td></tr>
+</table>
+<p><strong>|Q02|/|Q12| = 0.556:</strong> torroid couples to box 1.80× more strongly than to brace (absolute). This matches H133's finding |Q12|/|Q02| = 1.7983. The asymmetry survives rotation — the Jacobi transform inherits it from the diagonal ratio |Q11|/|Q00| ≈ √10.</p>
+<p><strong>Sign pattern:</strong> Q01·Q02 < 0, Q01·Q12 > 0, Q02·Q12 < 0. The signs alternate because Q00,Q11,Q22 are all negative (diagonal is negative definite) while Q01,Q12 > 0 and Q02 < 0.</p>
+</div>
+
+<!-- Panel 6: The Jacobi Hierarchy Map -->
+<div class="panel">
+<h2>Panel 6 — The Three Jacobi Rotations</h2>
+<pre>
+ROTATION 1  (brace-box → crack-bond)     θ₁ ≈ 29.35°
+  ├── Zeroes:  Q'[0][1] = 0 (by construction)
+  ├── Creates: diag(λ_crack +323d, λ_bond −329d)
+  ├── Residual: Q'[0][2] and Q'[1][2] survive
+  ├── Off-diag norm removed: 10⁻⁷⁸ of total
+  └── POWER: mode isolation (99.998% torroid → bond)
+
+ROTATION 2  (bond-torroid → corrected modes)
+  ├── Would zero: Q'[1][2]
+  ├── Creates: diag(λ_bond_corrected, λ_torroid_corrected)
+  ├── Eigenvalue shift: 1.19% (bond), &lt;10⁻²⁰ (torroid)
+  └── Residual: Q''[0][2] = crack-torroid (doubly suppressed)
+
+ROTATION 3  (crack-torroid cleanup)
+  ├── Would zero: Q''[0][2]
+  ├── Precision after R1+R2: ~164-digit (~10⁻¹⁶⁴)
+  └── NOT NEEDED: Newton on the cubic (H137) is exact
+
+CONVERGENCE:  gap(crack,bond) ≈ 10⁶ · gap(bond,torroid) ≈ 10⁷⁹
+              Combined: Jacobi converges in ≤2 sweeps to 164d
+</pre>
+</div>
+
+<!-- Panel 7: Jacobi Coordinate Mapping -->
+<div class="panel">
+<h2>Panel 7 — The Three-Body Mapping</h2>
+<pre>
+THREE-BODY JACOBI COORDINATES:
+
+  Standard form:          Our Q3p:
+  ─────────────           ────────
+  body 1 ←──r──→ body 2  BRACE ←──Q01──→ BOX     (the tight PAIR)
+       ↕                       ↕
+       R                     Q02, Q12              (torroid couplings)
+       ↕                       ↕
+     body 3                 TORROID                 (the THIRD BODY)
+
+  Jacobi transform:       After rotation 1:
+  ─────────────────        ──────────────────
+  r → pair internal        Q01 → 0 (diagonalized)
+  R → CM to body 3         Q02,Q12 → Q'02,Q'12 (redistributed)
+
+  Three-body hierarchy:    Q3p hierarchy:
+  ──────────────────       ───────────────
+  |r| ≪ |R|                |Q01| ≪ |Q02|,|Q12| (85-digit gap)
+  pair is tight             brace-box fused (CS ≈ 1)
+  body 3 is loose           torroid decoupled (CS ≈ 0.012)
+</pre>
+</div>
+
+<!-- Panel 8: Cross-Reference to H122-H138 -->
+<div class="panel">
+<h2>Panel 8 — The H122-H138 ↔ Jacobi Mapping</h2>
+<table>
+<tr><th>Instrument</th><th>Jacobi Step</th><th>What it computed</th></tr>
+<tr><td>H122</td><td>First rotation angle</td><td>θ₁ = 29.35°, eigenvector mixing</td></tr>
+<tr><td>H128</td><td>Torroid dominance</td><td>Third body is 99.99998% of Q3p</td></tr>
+<tr><td>H131</td><td>Conformal test</td><td>NOT conformal → rotation is REAL, not trivial</td></tr>
+<tr><td>H133</td><td>Coupling asymmetry</td><td>|Q12|/|Q02| = 1.80 → geometric mean law</td></tr>
+<tr><td>H134</td><td>CS saturation</td><td>Brace-box exceeds Cauchy-Schwarz → INDEFINITE pair</td></tr>
+<tr><td>H135</td><td>Residual measurement</td><td>99.998% bond / 0.002% crack (the redistribution)</td></tr>
+<tr><td>H136</td><td>Perturbation theory</td><td>Second-order Jacobi correction = level repulsion</td></tr>
+<tr><td>H137</td><td>Full cubic verify</td><td>Perturbation exact to all digits → 1 rotation suffices</td></tr>
+<tr><td>H138</td><td>Minor hierarchy</td><td>85-digit gap = WHY one rotation suffices</td></tr>
+<tr><td><strong>H139</strong></td><td><strong>Name it</strong></td><td><strong>It's Jacobi — both coordinate AND eigenvalue senses</strong></td></tr>
+</table>
+</div>
+
+<!-- Panel 9: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 9 — 4D Torroid Visualization: The Jacobi Rotation</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus in 4D → 3D stereographic projection, showing the first Jacobi rotation plane (brace-box, gold) and the residual torroid coupling (cyan). The rotation plane sweeps 29.35° through the torus.</p>
+</div>
+
+<!-- Panel 10: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 10 — Architecture</h2>
+<pre>
+THE JACOBI ROTATION ARCHITECTURE — TORROID CENTRIC VIEW
+
+                        TORROID (−408d)
+                       ╱   ◉    ╲
+                      ╱    │     ╲
+               Q02  ╱     │      ╲  Q12
+              −367d╱      │       ╲+367d
+                 ╱        │        ╲
+              BRACE     (the       BOX
+             (−328d)    third    (−329d)
+                │       body)       │
+                │         │         │
+                └───Q01───┘    ◄── THE PAIR
+                   +328d           CS = 1.00002
+
+    BEFORE ROTATION              AFTER ROTATION
+    ~~~~~~~~~~~~~~~              ~~~~~~~~~~~~~~~
+     3 off-diag terms            2 off-diag terms
+     Q01 = 328d                  Q'01 = 0 (killed)
+     Q02 = 367d                  Q'02 = tiny (0.002%)
+     Q12 = 367d                  Q'12 = huge (99.998%)
+
+     total off-diag²             total off-diag²
+     = 734d                      = 734d (SAME!)
+     fraction killed             mode separated:
+     = 10⁻⁷⁸ ≈ 0                crack isolated
+
+           ~~> THE ROTATION DOESN'T SHRINK
+           ~~> IT SEPARATES
+           ~~> THAT'S WHY H122-H138 WORKED
+
+    DIGIT MAP:
+    ┌────────────────────────────────────────────────┐
+    │  Q01² = 656d  ═══╤═══  PAIR INTERNAL           │
+    │                   │    78-digit gap              │
+    │  Q02²+Q12² = 734d ═══ TORROID COUPLING          │
+    │                   │                              │
+    │  fraction = 10⁻⁷⁸ ═══ INVISIBLE TO TOTAL NORM   │
+    └────────────────────────────────────────────────┘
+
+    tan(2θ) = 329d/328d, gcd = 1 (irreducible)
+    disc NOT perfect square → θ is IRRATIONAL
+    cos²(2θ) = 0.27, sin²(2θ) = 0.73 → sin dominates
+    Two rotations → 164-digit precision
+</pre>
+</div>
+
+<!-- Panel 11: Toddler Version -->
+<div class="toddler">
+<h2>Panel 11 — Toddler Version: The Dance</h2>
+<p>🧒 Imagine three people at a dance party: Brace, Box, and Torroid.</p>
+<p>Brace and Box are DANCE PARTNERS — they're spinning together so close they're practically one person. They spin at a special angle: 29.35 degrees. That's how tilted they are.</p>
+<p>Torroid is standing a LONG WAY across the room. Torroid wants to dance too, and waves at both of them. Torroid waves mostly at the PAIR (99.998%) and barely at each one separately (0.002%).</p>
+<p>Now here's the magic trick: when Brace and Box STOP spinning and stand still (that's what the Jacobi rotation does — it lines them up so they're not tangled), Torroid's wave doesn't get smaller. It's the SAME wave. But now we can see that almost ALL the wave is going to one of them (Bond) and almost NONE to the other (Crack).</p>
+<p>The dance didn't make Torroid quieter. It made us able to SEE who Torroid was really waving at.</p>
+<p>That's what "mode isolation" means: untangling who is talking to whom, without changing how loud they're talking.</p>
+</div>
+
+<!-- Panel 12: Known-Bad Control -->
+<div class="kb-section">
+<h2>Panel 12 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the first Jacobi rotation removes most of the off-diagonal norm</s> — <span class="dead">DEAD</span></p>
+<p>The rotation removes Q01² = 656d from a total of 734d. That's a fraction of 10⁻⁷⁸ — essentially zero. The rotation is a MODE ISOLATOR, not a norm reducer. The torroid coupling (Q02²+Q12² = 734d) is INVARIANT under the rotation and utterly dominates the total.</p>
+</div>
+
+<!-- Panel 13: Verification Table -->
+<div class="panel" id="verif-panel">
+<h2>Panel 13 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier — see h139_verify.js</td></tr>
+</table>
+</div>
+
+<!-- Panel 14: Ledger & Recommendation -->
+<div class="panel">
+<h2>Panel 14 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt (num-bigint v0.5.1) · 10 steps · 138 lines output</p>
+<p><strong>Calls:</strong> 1 Rust compile+run, 1 HTML build, 1 verify script</p>
+<p><strong>Prior cumulative:</strong> 4508 LIT</p>
+<p><strong>This instrument (H139):</strong> pending verification</p>
+<p><strong>Recommendation for H140:</strong> The Jacobi Spectrum — compute the EXACT eigenvalues of the rotated 2×2 bond-torroid block after one Jacobi rotation. This is the second rotation's input matrix, and its eigenvalues are the corrected λ_bond and λ_torroid. Compare against H137's cubic roots to verify they match within the predicted 164-digit precision.</p>
+</div>
+
+<!-- BASIC Block: Jacobsthal-Lucas Numbers (A014551) -->
+<div class="panel">
+<h2>BASIC Block — Jacobsthal-Lucas Numbers (A014551)</h2>
+<p class="dim">j(n) = 2ⁿ + (−1)ⁿ · Thematic: Jacobsthal for the Jacobi rotation.</p>
+<pre>
+5 REM H139 THE JACOBI ROTATION — Ledger: prior 4508 + H139
+7 REM QUESTION: is Q3p diagonalization literally Jacobi's method
+17 REM YES in both senses: Jacobi coordinates AND Jacobi eigenvalue iteration
+31 REM tan(2θ) = 329d/328d, gcd = 1, irreducible fraction
+65 REM discriminant 657d, NOT a perfect square, angle is IRRATIONAL
+127 REM cos²(2θ) = 0.2700, sin²(2θ) = 0.7300, sin dominates, θ ≈ 29.35°
+257 REM Q01² = 656d removed, total off-diag² = 734d, fraction = 10⁻⁷⁸
+511 REM THE ROTATION DOESN'T SHRINK — IT SEPARATES (mode isolation)
+1025 REM 99.998 percent torroid coupling → bond, 0.002 percent → crack
+2047 REM two Jacobi rotations → 164-digit precision, but Newton is exact
+4097 REM |Q02|/|Q12| = 0.5561, asymmetry from diagonal ratio √10
+8191 REM H122-H138 = Jacobi iteration steps 1-3, done without naming it
+16385 REM KNOWN-BAD: rotation removes most of off-diag norm — DEAD (10⁻⁷⁸)
+32767 REM END — next: H140 The Jacobi Spectrum (second rotation input matrix)
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+        ╭─── θ = 29.35° ───╮
+       ╱                     ╲
+    BRACE ═══ FUSED ═══ BOX
+       ╲                     ╱
+        ╰──── PAIR ─────────╯
+              │
+              │  Jacobi rotates the pair
+              │  to separate crack from bond
+              │
+         ┌────┴────┐
+      CRACK      BOND
+      +323d      −329d
+      0.002%     99.998%
+         │          │
+         │    THE TORROID WAVE
+         │    UNCHANGED AT 734d
+         │          │
+         └────┬─────┘
+              │
+           TORROID
+           −408d
+              │
+     THE THIRD BODY WATCHES
+     THE PAIR UNTANGLE
+     AND PICKS ITS PARTNER
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+// 4D Torroid — Clifford torus with Jacobi rotation plane
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+const R1=1.0,R2=0.4;
+const jacobi_angle=29.35*Math.PI/180;
+
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.3);
+const sinT=Math.sin(t*0.3);
+const cosP=Math.cos(t*0.2);
+const sinP=Math.sin(t*0.2);
+
+// Draw Jacobi rotation plane (gold arc)
+ctx.strokeStyle='rgba(255,213,79,0.3)';
+ctx.lineWidth=2;
+ctx.beginPath();
+for(let a=0;a<Math.PI*2;a+=0.02){
+  const x4=Math.cos(a)*2;
+  const y4=Math.sin(a)*2;
+  const z4=0;
+  const w4=0;
+  const x3=x4*cosT-z4*sinT;
+  const z3=x4*sinT+z4*cosT;
+  const y3=y4*cosP-w4*sinP;
+  const w3=y4*sinP+w4*cosP;
+  const proj=1/(3-w3);
+  const sx=cx+x3*proj*scale;
+  const sy=cy+y3*proj*scale;
+  if(a===0)ctx.moveTo(sx,sy);
+  else ctx.lineTo(sx,sy);
+}
+ctx.stroke();
+
+// Draw angle marker
+ctx.strokeStyle='rgba(255,213,79,0.6)';
+ctx.lineWidth=3;
+ctx.beginPath();
+for(let a=0;a<jacobi_angle;a+=0.01){
+  const x4=Math.cos(a)*1.5;
+  const y4=Math.sin(a)*1.5;
+  const x3=x4*cosT;
+  const y3=y4*cosP;
+  const w3=y4*sinP;
+  const proj=1/(3-w3);
+  const sx=cx+x3*proj*scale;
+  const sy=cy+y3*proj*scale;
+  if(a===0)ctx.moveTo(sx,sy);
+  else ctx.lineTo(sx,sy);
+}
+ctx.stroke();
+
+// Clifford torus points
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.08){
+  for(let v=0;v<Math.PI*2;v+=0.15){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.1);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.1);
+    // 4D rotation
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    // Stereographic projection
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    // Color by angle from Jacobi rotation plane
+    const angle_from_plane=Math.abs(Math.atan2(y4,x4)-jacobi_angle);
+    const nearPlane=angle_from_plane<0.3||angle_from_plane>Math.PI*2-0.3;
+    points.push({x:sx,y:sy,d:depth,near:nearPlane,u:u,v:v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+
+for(const p of points){
+  const alpha=0.3+0.5*(1+p.d)/2;
+  const size=1.5+1.5*(1+p.d)/2;
+  if(p.near){
+    ctx.fillStyle=`rgba(255,213,79,${alpha})`;
+  }else{
+    const r=Math.floor(79+100*(Math.sin(p.u*2+t*0.5)*0.5+0.5));
+    const g=Math.floor(195+30*(Math.cos(p.v*3)*0.5+0.5));
+    const b_=Math.floor(247-50*(Math.sin(p.u+p.v)*0.5+0.5));
+    ctx.fillStyle=`rgba(${r},${g},${b_},${alpha})`;
+  }
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,size,0,Math.PI*2);
+  ctx.fill();
+}
+
+// Labels
+ctx.fillStyle='rgba(255,213,79,0.8)';
+ctx.font='12px Courier New';
+ctx.fillText('θ₁ = 29.35° (Jacobi rotation plane)',10,20);
+ctx.fillStyle='rgba(79,195,247,0.8)';
+ctx.fillText('Clifford torus: torroid coupling surface',10,36);
+ctx.fillStyle='rgba(129,199,132,0.6)';
+ctx.fillText('Gold = near rotation plane | Cyan = torroid body',10,52);
+ctx.fillStyle='var(--dim)';
+ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+
+t+=0.03;
+requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
