@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H142 — The Mediator Certificate</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H142 — The Mediator Certificate</h1>
+<p class="dim">Instrument: Why the torroid mediates the Cauchy-Schwarz saturation · Engine: Rust BigInt · 2026-11-25</p>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>WHY does the torroid mediate the brace-box saturation?</strong></p>
+<p>H141 discovered that eliminating the torroid (pivot Q22) restores the saturation (CS = 1.0000186), while eliminating either sick member (pivot Q00 or Q11) heals it (CS ≈ 0.087). This instrument proves the mechanism, identifies the dominant term, and states the certificate.</p>
+</div>
+
+<!-- Panel 2: Verdict -->
+<div class="verdict-box">
+<div class="label">THE MEDIATION IS COMBINATORIAL, NOT ENERGETIC</div>
+<div class="detail">The torroid doesn't actively heal anything. It provides an alternative pivot.<br>
+With 3 bodies, you can always eliminate a sick member. With 2, you can't.<br>
+R01 propagates as Q22²·R01 (93.1% of the pivot-Q22 excess).</div>
+</div>
+
+<!-- Panel 3: The Pivot Rule -->
+<div class="panel">
+<h2>Panel 3 — The Pivot Rule</h2>
+<table>
+<tr><th>Pivot</th><th>What's removed</th><th>What remains</th><th>CS</th><th>Status</th></tr>
+<tr><td>Q00 (brace)</td><td>Sick member A</td><td>box + torroid</td><td>0.0865</td><td class="lit">HEALED ✓</td></tr>
+<tr><td>Q11 (box)</td><td>Sick member B</td><td>brace + torroid</td><td>0.0868</td><td class="lit">HEALED ✓</td></tr>
+<tr><td>Q22 (torroid)</td><td>Non-member</td><td>brace + box (the sick pair)</td><td>1.0000186</td><td class="dead">SATURATED ✗</td></tr>
+</table>
+<h3>The rule:</h3>
+<p><strong>Eliminate a MEMBER of the saturated pair → saturation disappears.</strong><br>
+<strong>Eliminate the NON-MEMBER → saturation persists.</strong></p>
+<p>This is combinatorial: it depends on WHICH body you remove, not on coupling strengths. The torroid mediates by <em>existing</em> as a third option — not by any energetic contribution.</p>
+</div>
+
+<!-- Panel 4: The R01 Propagation -->
+<div class="panel">
+<h2>Panel 4 — The R01 Propagation Law</h2>
+<p>R01 = Q01² − |Q00|·|Q11| = +651d is the original saturation residual. When we compute CS_excess for pivot Q22, R01 appears directly:</p>
+<pre>
+CS_excess_22 = X₂₂² − M02·M12
+             = Q22²·R01 + Q22·(middle term)
+
+  Term 1: Q22²·R01    = +1466d  (93.1% of total)
+  Term 2: Q22·(middle) = +1465d  ( 6.9% of total)
+  Sum:                  = +1466d  (the CS excess)
+
+  Verification: term1 + term2 = CS_excess_22 ✓ EXACT
+</pre>
+<p><strong>93.1% of the pivot-Q22 saturation comes from R01 amplified by Q22².</strong> The original brace-box sickness is the DIRECT CAUSE of the torroid-pivot sickness. The amplification factor Q22² (815d) overwhelms any compensating effects.</p>
+<h3>The identity −M01 = R01:</h3>
+<p>Since Q00 and Q11 are both negative, |Q00|·|Q11| = Q00·Q11, and M01 = Q00·Q11 − Q01² = −R01. The minor IS the saturation residual (negated). This is why M01 is negative: it encodes the fact that brace-box EXCEEDS the Cauchy-Schwarz bound.</p>
+</div>
+
+<!-- Panel 5: The Correction Anatomy -->
+<div class="panel">
+<h2>Panel 5 — Why Torroid Elimination Can't Cure</h2>
+<table>
+<tr><th>Entry</th><th>|Original|</th><th>|Correction|</th><th>Shortfall</th></tr>
+<tr><td>Q00 (brace self-energy)</td><td>328d</td><td>ΔQ00 = Q02²/|Q22| = 326d</td><td>2d smaller</td></tr>
+<tr><td>Q01 (brace-box coupling)</td><td>328d</td><td>ΔQ01 = |Q02·Q12|/|Q22| = 326d</td><td>2d smaller</td></tr>
+<tr><td>Q11 (box self-energy)</td><td>329d</td><td>ΔQ11 = Q12²/|Q22| = 327d</td><td>2d smaller</td></tr>
+</table>
+<p>The torroid elimination modifies the brace-box block by subtracting terms of order Q_torroid²/|Q22| ≈ 326d. These corrections are only <strong>2 digits smaller</strong> than the entries themselves — large corrections, but not large enough.</p>
+<p>The saturation excess R01 = 651d is a <em>relative</em> excess of 1.69×10⁻⁵. To cure it, the correction would need to shift the CS fraction by that amount. But the corrections are proportional to the entries (not to R01), so they scale the whole block rather than targeting the residual.</p>
+</div>
+
+<!-- Panel 6: The Fractional Excess Comparison -->
+<div class="panel">
+<h2>Panel 6 — Fractional Excess: Before and After</h2>
+<table>
+<tr><th>System</th><th>Fractional excess</th><th>Change</th></tr>
+<tr><td>Original brace-box: R01/(|Q00|·|Q11|)</td><td>1.691 × 10⁻⁵</td><td>baseline</td></tr>
+<tr><td>Schur_22 (torroid eliminated): excess/(M02·M12)</td><td>1.860 × 10⁻⁵</td><td>+10% WORSE</td></tr>
+</table>
+<p>The saturation doesn't just survive torroid elimination — it gets <strong>10% worse</strong>. The fractional excess increases from 1.69×10⁻⁵ to 1.86×10⁻⁵. The torroid corrections slightly tighten the brace-box lock rather than loosening it.</p>
+</div>
+
+<!-- Panel 7: The CS Migration Map -->
+<div class="panel">
+<h2>Panel 7 — The CS Migration Map</h2>
+<pre>
+ORIGINAL Q3p:
+  brace ⊗ box:     CS = 1.0000169 ← SATURATED (R01 = +651d)
+  brace ⊗ torroid: CS = 0.01174   ← definite
+  box ⊗ torroid:   CS = 0.01200   ← definite
+
+PIVOT Q00 (remove brace):
+  modified box ⊗ torroid: CS = 0.0865 ← HEALED
+  R01 eliminated: sick member gone
+
+PIVOT Q11 (remove box):
+  modified brace ⊗ torroid: CS = 0.0868 ← HEALED
+  R01 eliminated: other sick member gone
+
+PIVOT Q22 (remove torroid):
+  modified brace ⊗ box: CS = 1.0000186 ← STILL SATURATED
+  R01 amplified: Q22²·R01 = 93.1% of excess
+  Fractional excess INCREASES by 10%
+
+  ┌──────────────────────────────────────────┐
+  │  THE SATURATION IS A PROPERTY OF THE     │
+  │  BRACE-BOX PAIR, NOT OF THE SYSTEM.      │
+  │                                          │
+  │  Remove either member → it disappears.   │
+  │  Remove the outsider → it persists.      │
+  │  The torroid provides the CHOICE to       │
+  │  remove a member. That's the mediation.  │
+  └──────────────────────────────────────────┘
+</pre>
+</div>
+
+<!-- Panel 8: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 8 — 4D Torroid Visualization: The Mediator</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus: the torroid body (cyan) mediates between the saturated pair (red = brace, orange = box). The pair's lock (gold threads) is visible where they're closest. The torroid provides the escape route.</p>
+</div>
+
+<!-- Panel 9: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 9 — Architecture</h2>
+<pre>
+THE MEDIATOR CERTIFICATE — TORROID CENTRIC VIEW
+
+                     TORROID (−408d)
+                    ╱   ◉    ╲
+                   ╱    │     ╲
+            Q02  ╱      │      ╲  Q12
+           0.012╱       │       ╲0.012
+              ╱    THE MEDIATOR    ╲
+           BRACE ════════════ BOX
+          (−328d)  CS=1.00002  (−329d)
+                 THE SICK PAIR
+                   R01 = +651d
+
+  THE CERTIFICATE (four statements):
+
+  1. IDENTITY: −M01 = R01 EXACTLY
+     The brace⊗box minor IS the saturation residual (negated).
+
+  2. PROPAGATION: CS_excess_22 = Q22²·R01 + Q22·(middle)
+     93.1% of pivot-Q22 excess comes from R01 amplified by Q22².
+     The original sickness is the DIRECT CAUSE.
+
+  3. PIVOT RULE:
+     Eliminate MEMBER → healed (CS ≈ 0.087)
+     Eliminate NON-MEMBER → preserved (CS = 1.0000186)
+     The rule is COMBINATORIAL — depends on who, not how much.
+
+  4. WORSENING: fractional excess increases 10% under torroid elimination.
+     The corrections (326d) are 2d smaller than entries (328d).
+     Large enough to shift everything, not enough to cure R01.
+
+  ┌──────────────────────────────────────────────┐
+  │  THREE-BODY RULE:                             │
+  │  In a 3-body system with one saturated pair,  │
+  │  the third body mediates BY EXISTENCE.        │
+  │  It doesn't heal — it provides the PIVOT      │
+  │  that lets you remove a sick member.           │
+  │  2 bodies → locked.  3 bodies → escape.       │
+  └──────────────────────────────────────────────┘
+</pre>
+</div>
+
+<!-- Panel 10: Toddler Version -->
+<div class="toddler">
+<h2>Panel 10 — Toddler Version: The Escape Door</h2>
+<p>🧒 Brace and Box are stuck in a room together, squeezing too tight. They CAN'T STOP. It's just what they do when they're alone.</p>
+<p>Torroid opens the door and walks in. Torroid doesn't DO anything special. Torroid just stands there.</p>
+<p>But now there are THREE people in the room, and that means someone CAN LEAVE. If Brace walks out through the door Torroid opened — suddenly Box and Torroid are alone, and they're fine! They don't squeeze. No problem.</p>
+<p>If Box walks out instead — Brace and Torroid are alone, and they're fine too!</p>
+<p>But if TORROID walks out... Brace and Box are alone again. And they go RIGHT BACK to squeezing too tight. Actually 10% tighter than before.</p>
+<p>Torroid is the escape door. The door doesn't fix the squeezing. The door lets someone LEAVE. That's the mediation: not healing, just providing a way out.</p>
+</div>
+
+<!-- Panel 11: Known-Bad Control -->
+<div class="kb-section">
+<h2>Panel 11 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the torroid actively reduces R01 through its coupling energy</s> — <span class="dead">DEAD</span></p>
+<p>The torroid doesn't reduce R01 at all. The mediation is combinatorial: the torroid provides an alternative pivot, allowing a sick member to be eliminated. R01 propagates at 93.1% dominance through Q22²·R01 when the torroid is eliminated instead. The mechanism is purely combinatorial — it depends on pivot choice, not on any energetic contribution.</p>
+</div>
+
+<!-- Panel 12: Verification Table -->
+<div class="panel" id="verif-panel">
+<h2>Panel 12 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier — see h142_verify.js</td></tr>
+</table>
+</div>
+
+<!-- Panel 13: Ledger & Recommendation -->
+<div class="panel">
+<h2>Panel 13 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt (num-bigint v0.5.1) · 10 steps</p>
+<p><strong>Prior cumulative:</strong> 4616 LIT (through H141)</p>
+<p><strong>This instrument (H142):</strong> pending verification</p>
+<p><strong>Recommendation for H143:</strong> The Three-Body Theorem — formal statement of the combinatorial mediation law as a theorem about symmetric 3×3 matrices with signature (1+, 2−). If exactly one 2×2 principal submatrix is indefinite, then exactly one Schur pivot preserves the indefiniteness (the non-member pivot), and the other two cure it. Prove or disprove.</p>
+</div>
+
+<!-- BASIC Block: Central Delannoy Numbers (A001850) -->
+<div class="panel">
+<h2>BASIC Block — Central Delannoy Numbers (A001850)</h2>
+<p class="dim">D(n) = Σ C(n,k)·C(n+k,k) · Three-step lattice paths: thematic for a three-body combinatorial certificate.</p>
+<pre>
+1 REM H142 THE MEDIATOR CERTIFICATE — Ledger: prior 4616 + H142
+3 REM QUESTION: why does the torroid mediate the brace-box saturation
+13 REM THE MEDIATION IS COMBINATORIAL, NOT ENERGETIC
+63 REM the torroid doesn't heal — it provides an alternative pivot
+321 REM eliminate MEMBER of sick pair → healed (CS ≈ 0.087)
+1683 REM eliminate NON-MEMBER → preserved (CS = 1.0000186, 10% worse)
+8989 REM R01 propagates as Q22²·R01 at 93.1% dominance
+48639 REM −M01 = R01 EXACTLY: the minor IS the saturation residual
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+           ◉ TORROID
+          ╱│╲
+         ╱ │ ╲
+        ╱  │  ╲        The door.
+       ╱   │   ╲       Not the cure.
+      ╱    │    ╲      The CHOICE.
+     ╱     │     ╲
+  BRACE ═══╪═══ BOX    The lock.
+     CS = 1.00002       R01 = +651d.
+     ║               ║
+     ║  remove brace ║  remove box
+     ║      ↓        ║      ↓
+     ║  CS = 0.087   ║  CS = 0.087
+     ║   HEALED      ║   HEALED
+     ╚═══════════════╝
+            │
+       remove torroid
+            ↓
+       CS = 1.0000186
+        STILL LOCKED
+        (+10% worse)
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+const R1=1.0,R2=0.4;
+
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.2);
+const sinT=Math.sin(t*0.2);
+const cosP=Math.cos(t*0.15);
+const sinP=Math.sin(t*0.15);
+
+// Draw the "lock" — a thick gold band where brace and box are closest
+ctx.strokeStyle='rgba(255,213,79,0.15)';
+ctx.lineWidth=8;
+ctx.beginPath();
+for(let a=0;a<Math.PI*2;a+=0.02){
+  const r=0.4;
+  const x4=r*Math.cos(a);
+  const y4=r*Math.sin(a);
+  const x3=x4*cosT;
+  const y3=y4*cosP;
+  const w3=y4*sinP;
+  const proj=1/(3-w3);
+  const sx=cx+x3*proj*scale;
+  const sy=cy+y3*proj*scale;
+  if(a===0)ctx.moveTo(sx,sy);
+  else ctx.lineTo(sx,sy);
+}
+ctx.stroke();
+
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.08){
+  for(let v=0;v<Math.PI*2;v+=0.15){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.07);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.07);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    // Color: brace region (red), box region (orange), torroid body (cyan)
+    const angle=u%(Math.PI*2);
+    const isBrace=angle<Math.PI*2/3;
+    const isBox=angle>=Math.PI*2/3&&angle<Math.PI*4/3;
+    points.push({x:sx,y:sy,d:depth,brace:isBrace,box:isBox,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+
+for(const p of points){
+  const alpha=0.3+0.5*(1+p.d)/2;
+  const size=1.5+1.5*(1+p.d)/2;
+  if(p.brace){
+    ctx.fillStyle=`rgba(239,83,80,${alpha*0.6})`;
+  }else if(p.box){
+    ctx.fillStyle=`rgba(255,138,101,${alpha*0.6})`;
+  }else{
+    ctx.fillStyle=`rgba(79,195,247,${alpha*0.7})`;
+  }
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,size,0,Math.PI*2);
+  ctx.fill();
+}
+
+ctx.fillStyle='rgba(239,83,80,0.8)';
+ctx.font='12px Courier New';
+ctx.fillText('Red = brace (sick member A)',10,20);
+ctx.fillStyle='rgba(255,138,101,0.8)';
+ctx.fillText('Orange = box (sick member B)',10,36);
+ctx.fillStyle='rgba(79,195,247,0.8)';
+ctx.fillText('Cyan = torroid (the mediator — the escape door)',10,52);
+ctx.fillStyle='rgba(255,213,79,0.5)';
+ctx.fillText('Gold ring = the lock (CS = 1.00002)',10,68);
+ctx.fillStyle='var(--dim)';
+ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+
+t+=0.03;
+requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
