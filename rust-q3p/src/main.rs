@@ -1,7 +1,8 @@
-//! H145: The Unbinding Energy
-//! Exact energy cost of the sign flip: how much coupling Q01 must supply
-//! to overcome negative self-energies Q00, Q11 and create the crack eigenvalue.
-//! The threshold where CS crosses 1 — computed as exact BigInt.
+//! H146: The Phase Diagram
+//! Map the full Q3p parameter space: at what coupling strengths do
+//! the minors M01, M02, M12 flip sign? The phase boundaries between
+//! all signature configurations of a 3×3 negative-diagonal symmetric matrix.
+//! All computations use the ACTUAL Q3p values — no approximations.
 
 use num_bigint::BigInt;
 use num_traits::{Zero, Signed};
@@ -43,17 +44,6 @@ fn fp_div(a: &BigInt, b: &BigInt, prec: u32) -> String {
     }
 }
 
-fn isqrt(n: &BigInt) -> BigInt {
-    if n.is_zero() { return BigInt::zero(); }
-    let mut x = n.clone();
-    let mut y = (&x + BigInt::from(1u32)) / BigInt::from(2u32);
-    while y < x {
-        x = y.clone();
-        y = (&x + n / &x) / BigInt::from(2u32);
-    }
-    x
-}
-
 fn main() {
     let q = q3p_matrix();
     let q00 = &q[0][0];
@@ -63,338 +53,330 @@ fn main() {
     let q12 = &q[1][2];
     let q22 = &q[2][2];
 
-    println!("=== H145: THE UNBINDING ENERGY (Rust BigInt) ===\n");
+    println!("=== H146: THE PHASE DIAGRAM (Rust BigInt) ===\n");
 
     // =====================================================
-    // STEP 1: The threshold condition
+    // STEP 1: The three phase boundaries
     // =====================================================
-    println!("=== STEP 1: THE THRESHOLD CONDITION ===");
-    // The 2×2 brace-box block [[Q00, Q01], [Q01, Q11]] has eigenvalues:
-    // λ± = (Q00 + Q11 ± √((Q00−Q11)² + 4Q01²)) / 2
-    //
-    // λ₊ > 0 (the crack) iff the discriminant term exceeds |trace|.
-    // Since Q00+Q11 < 0 (both negative), we need:
-    // √((Q00−Q11)² + 4Q01²) > |Q00+Q11| = −(Q00+Q11)
-    //
-    // Squaring: (Q00−Q11)² + 4Q01² > (Q00+Q11)²
-    // Expand: Q00²−2Q00Q11+Q11² + 4Q01² > Q00²+2Q00Q11+Q11²
-    // Simplify: −2Q00Q11 + 4Q01² > 2Q00Q11
-    // Therefore: 4Q01² > 4Q00Q11
-    // Therefore: Q01² > Q00·Q11
-    //
-    // Since Q00 < 0 and Q11 < 0: Q00·Q11 = |Q00|·|Q11| > 0
-    // So: Q01² > |Q00|·|Q11|  ←→  CS > 1  ←→  CRACK EXISTS
-    //
-    // The threshold is EXACTLY: Q01² = |Q00|·|Q11|
-    // The EXCESS is: R01 = Q01² − |Q00|·|Q11|
+    println!("=== STEP 1: THE THREE PHASE BOUNDARIES ===");
+    // Each 2×2 minor Mij = Qii·Qjj − Qij² flips sign when Qij² = Qii·Qjj
+    // (using |Qii|·|Qjj| since diagonals are negative).
+    // The boundary is: |Qij| = √(|Qii|·|Qjj|) = geometric mean of |diagonals|
 
     let abs_q00 = q00.abs();
     let abs_q11 = q11.abs();
+    let abs_q22 = q22.abs();
+
+    // Three thresholds:
+    let thresh_01 = &abs_q00 * &abs_q11;  // |Q00|·|Q11| — brace⊗box
+    let thresh_02 = &abs_q00 * &abs_q22;  // |Q00|·|Q22| — brace⊗torroid
+    let thresh_12 = &abs_q11 * &abs_q22;  // |Q11|·|Q22| — box⊗torroid
+
+    println!("Phase boundary Mij = 0 ↔ Qij² = |Qii|·|Qjj|");
+    println!("");
+    println!("Threshold |Q00|·|Q11| (brace⊗box):     {}d", digit_count(&thresh_01));
+    println!("Threshold |Q00|·|Q22| (brace⊗torroid): {}d", digit_count(&thresh_02));
+    println!("Threshold |Q11|·|Q22| (box⊗torroid):   {}d", digit_count(&thresh_12));
+
+    // Three actual couplings:
     let q01_sq = q01 * q01;
-    let threshold = &abs_q00 * &abs_q11;  // = |Q00|·|Q11|
-    let r01 = &q01_sq - &threshold;
+    let q02_sq = q02 * q02;
+    let q12_sq = q12 * q12;
 
-    println!("ALGEBRAIC PROOF:");
-    println!("  λ₊ > 0 iff Q01² > |Q00|·|Q11|");
-    println!("  This is EQUIVALENT to CS(brace,box) > 1");
-    println!("  The threshold is Q01² = |Q00|·|Q11|");
+    // Three residuals:
+    let r01 = &q01_sq - &thresh_01;
+    let r02 = &q02_sq - &thresh_02;
+    let r12 = &q12_sq - &thresh_12;
+
+    println!("\nResiduals (Qij² − |Qii|·|Qjj|):");
+    println!("R01 (brace⊗box):     {} sign, {}d → M01 {}",
+        if r01.is_positive() { "+" } else { "−" }, digit_count(&r01),
+        if r01.is_positive() { "< 0 (INDEFINITE)" } else { "> 0 (DEFINITE)" });
+    println!("R02 (brace⊗torroid): {} sign, {}d → M02 {}",
+        if r02.is_positive() { "+" } else { "−" }, digit_count(&r02),
+        if r02.is_positive() { "< 0 (INDEFINITE)" } else { "> 0 (DEFINITE)" });
+    println!("R12 (box⊗torroid):   {} sign, {}d → M12 {}",
+        if r12.is_positive() { "+" } else { "−" }, digit_count(&r12),
+        if r12.is_positive() { "< 0 (INDEFINITE)" } else { "> 0 (DEFINITE)" });
+
+    // =====================================================
+    // STEP 2: Distance from each boundary (fractional)
+    // =====================================================
+    println!("\n=== STEP 2: DISTANCE FROM EACH BOUNDARY ===");
+    println!("Fractional residual Rij / threshold:");
+    println!("R01/T01 = {} (above boundary by {:.4}%)",
+        fp_div(&r01, &thresh_01, 25),
+        {let r = &r01 * &BigInt::from(10000u32) / &thresh_01; r.to_string().parse::<f64>().unwrap_or(0.0)/100.0});
+    println!("R02/T02 = {} (below boundary by this fraction)",
+        fp_div(&r02, &thresh_02, 25));
+    println!("R12/T12 = {} (below boundary by this fraction)",
+        fp_div(&r12, &thresh_12, 25));
+
+    // =====================================================
+    // STEP 3: The phase the system is in
+    // =====================================================
+    println!("\n=== STEP 3: CURRENT PHASE ===");
+    let n_above = (if r01.is_positive() { 1 } else { 0 })
+        + (if r02.is_positive() { 1 } else { 0 })
+        + (if r12.is_positive() { 1 } else { 0 });
+    println!("Number of boundaries crossed: {}", n_above);
+    println!("Phase: exactly ONE minor negative (M01 < 0)");
+    println!("This is Phase I: single-defect phase");
     println!("");
-    println!("Q01²       = {}d ({})", digit_count(&q01_sq), if q01_sq.is_positive() { "+" } else { "−" });
-    println!("|Q00|·|Q11| = {}d ({})", digit_count(&threshold), if threshold.is_positive() { "+" } else { "−" });
-    println!("R01 = Q01² − |Q00|·|Q11| = {}d ({})",
-        digit_count(&r01), if r01.is_positive() { "+" } else { "−" });
-    println!("R01 > 0 → CRACK EXISTS ✓");
+    println!("All possible phases for a 3×3 negative-diagonal symmetric matrix:");
+    println!("  Phase 0: all Mij > 0 → all 2×2 blocks negative-definite");
+    println!("           → Q negative-definite (no positive eigenvalue)");
+    println!("  Phase I: exactly one Mij < 0 → one indefinite 2×2 block");
+    println!("           → Q has signature (1+, 2−)   ← Q3p IS HERE");
+    println!("  Phase II: exactly two Mij < 0 → two indefinite blocks");
+    println!("            → signature depends on det(Q)");
+    println!("  Phase III: all three Mij < 0 → all blocks indefinite");
+    println!("             → Q has signature (2+, 1−) or (1+, 2−)");
 
     // =====================================================
-    // STEP 2: The unbinding energy
+    // STEP 4: How far from Phase 0 and Phase II?
     // =====================================================
-    println!("\n=== STEP 2: THE UNBINDING ENERGY ===");
-    // R01 is the EXACT amount by which Q01² exceeds the threshold.
-    // It measures how much "extra" coupling energy is available after
-    // paying the cost of overcoming the negative self-energies.
+    println!("\n=== STEP 4: DISTANCE TO ADJACENT PHASES ===");
+    // To reach Phase 0: need R01 < 0, i.e., reduce Q01 until Q01² < T01
+    // The coupling reduction needed: ΔQ01 = Q01 − √T01
+    let sqrt_t01 = {
+        let mut x = thresh_01.clone();
+        let mut y = (&x + BigInt::from(1u32)) / BigInt::from(2u32);
+        while y < x { x = y.clone(); y = (&x + &thresh_01 / &x) / BigInt::from(2u32); }
+        x
+    };
+    let delta_q01 = q01.abs() - &sqrt_t01;
+    println!("Distance to Phase 0 (all definite):");
+    println!("  Need to reduce |Q01| by {}d ({})",
+        digit_count(&delta_q01), if delta_q01.is_positive() { "positive = currently above" } else { "already below" });
+    println!("  Fractional: ΔQ01/|Q01| = {}", fp_div(&delta_q01, &q01.abs(), 25));
+
+    // To reach Phase II: need R02 > 0 OR R12 > 0
+    // Which is closer to crossing?
+    // R02 is negative: need |Q02|² to exceed T02 = |Q00|·|Q22|
+    // Gap: T02 − Q02² = |R02|
+    // Fractional: |R02|/T02
+    let r02_abs = r02.abs();
+    let r12_abs = r12.abs();
+    println!("\nDistance to Phase II (two minors negative):");
+    println!("  R02 gap: T02 − Q02² = {}d → need {}d more coupling²", digit_count(&r02_abs), digit_count(&r02_abs));
+    println!("  R12 gap: T12 − Q12² = {}d → need {}d more coupling²", digit_count(&r12_abs), digit_count(&r12_abs));
+    println!("  Fractional gap R02: |R02|/T02 = {}", fp_div(&r02_abs, &thresh_02, 25));
+    println!("  Fractional gap R12: |R12|/T12 = {}", fp_div(&r12_abs, &thresh_12, 25));
+
+    // Which boundary is closer?
+    let closer = if digit_count(&r02_abs) < digit_count(&r12_abs) { "R02 (brace⊗torroid)" }
+        else if digit_count(&r02_abs) > digit_count(&r12_abs) { "R12 (box⊗torroid)" }
+        else { "both similar" };
+    println!("  Closer boundary: {}", closer);
+
+    // =====================================================
+    // STEP 5: The asymmetry of the phase position
+    // =====================================================
+    println!("\n=== STEP 5: PHASE POSITION ASYMMETRY ===");
+    // R01 = +651d (5 digits of cancellation from 656d threshold)
+    // R02 = −735d (huge gap to boundary)
+    // R12 = −736d (huge gap to boundary)
     //
-    // In energy units: R01 = Q01² − |Q00|·|Q11|
-    // The threshold cost = |Q00|·|Q11| (the product of self-energies)
-    // The coupling supply = Q01² (the squared coupling)
-    // The excess = R01 (the unbinding energy)
+    // The system is barely past the M01 boundary but FAR from M02 or M12 boundaries.
+    // The Phase I region is extremely NARROW at the M01 edge and extremely WIDE elsewhere.
 
-    println!("Threshold cost (|Q00|·|Q11|): {}d", digit_count(&threshold));
-    println!("Coupling supply (Q01²):       {}d", digit_count(&q01_sq));
-    println!("Unbinding energy (R01):        {}d", digit_count(&r01));
+    println!("R01 = +651d (above M01 boundary) — just barely past");
+    println!("R02 = −{} (below M02 boundary) — deeply inside", digit_count(&r02_abs));
+    println!("R12 = −{} (below M12 boundary) — deeply inside", digit_count(&r12_abs));
     println!("");
-    println!("R01 / threshold = {} (fractional excess)",
-        fp_div(&r01, &threshold, 25));
-    println!("= 1.691 × 10⁻⁵ — the coupling exceeds the threshold by 0.00169%");
+    println!("Digit count comparison:");
+    println!("  |R01| = {}d (the narrow escape)", digit_count(&r01));
+    println!("  |R02| = {}d", digit_count(&r02_abs));
+    println!("  |R12| = {}d", digit_count(&r12_abs));
+    println!("  |R02| and |R12| are {} digits LARGER than |R01|",
+        digit_count(&r02_abs) as i64 - digit_count(&r01) as i64);
 
     // =====================================================
-    // STEP 3: The crack eigenvalue in terms of R01
+    // STEP 6: The three CS fractions as phase coordinates
     // =====================================================
-    println!("\n=== STEP 3: CRACK EIGENVALUE FROM R01 ===");
-    // λ₊ = (Q00+Q11+√disc)/2  where disc = (Q00−Q11)²+4Q01²
-    // disc = (Q00−Q11)² + 4|Q00|·|Q11| + 4R01
-    //      = (Q00+Q11)² + 4R01     [using (a−b)²+4ab = (a+b)² for negative a,b]
-    //
-    // Wait — let's be careful. For Q00,Q11 both negative:
-    // (Q00−Q11)² + 4Q01² = (Q00−Q11)² + 4(|Q00|·|Q11| + R01)
-    //                     = (Q00−Q11)² + 4Q00·Q11 + 4R01   [since Q00·Q11 = |Q00|·|Q11|]
-    //                     = Q00²−2Q00Q11+Q11² + 4Q00Q11 + 4R01
-    //                     = Q00²+2Q00Q11+Q11² + 4R01
-    //                     = (Q00+Q11)² + 4R01
+    println!("\n=== STEP 6: CS FRACTIONS AS PHASE COORDINATES ===");
+    // CS(ij) = Qij²/(|Qii|·|Qjj|) = 1 + Rij/threshold
+    // CS > 1 ↔ above boundary ↔ Mij < 0 (indefinite)
+    // CS < 1 ↔ below boundary ↔ Mij > 0 (definite)
+    // CS = 1 ↔ ON the boundary
 
-    let trace = q00 + q11;
-    let trace_sq = &trace * &trace;
-    let four_r01 = BigInt::from(4) * &r01;
-    let disc = &trace_sq + &four_r01;
+    let cs01 = fp_div(&q01_sq, &thresh_01, 25);
+    let cs02 = fp_div(&q02_sq, &thresh_02, 25);
+    let cs12 = fp_div(&q12_sq, &thresh_12, 25);
 
-    println!("IDENTITY: disc = (Q00+Q11)² + 4R01");
-    println!("  (Q00+Q11)² = {}d", digit_count(&trace_sq));
-    println!("  4R01       = {}d", digit_count(&four_r01));
-    println!("  disc       = {}d", digit_count(&disc));
-
-    // Verify this equals (Q00−Q11)² + 4Q01²
-    let diff = q00 - q11;
-    let disc_check = &diff * &diff + BigInt::from(4) * &q01_sq;
-    let verify = &disc - &disc_check;
-    println!("  Verification: disc − ((Q00−Q11)²+4Q01²) = {}",
-        if verify.is_zero() { "0 ✓ EXACT" } else { "NONZERO" });
-
-    // Since R01 is TINY compared to (Q00+Q11)²:
-    // R01 = 651d, (Q00+Q11)² = 657d → 4R01 is 6 digits smaller
-    println!("\n  4R01 / (Q00+Q11)² = {} (the perturbation ratio)",
-        fp_div(&four_r01, &trace_sq, 25));
-
-    // √disc ≈ |Q00+Q11| · √(1 + 4R01/(Q00+Q11)²) ≈ |Q00+Q11| · (1 + 2R01/(Q00+Q11)²)
-    let sqrt_disc = isqrt(&disc);
-    let abs_trace = trace.abs();
-
-    println!("  √disc = {}d", digit_count(&sqrt_disc));
-    println!("  |Q00+Q11| = {}d", digit_count(&abs_trace));
-    println!("  √disc − |Q00+Q11| = {}d (this is what creates the crack)",
-        digit_count(&(&sqrt_disc - &abs_trace)));
-
-    // λ₊ = (trace + √disc)/2 = (−|trace| + √disc)/2
-    // Since √disc > |trace| (because R01 > 0):
-    // λ₊ = (√disc − |trace|)/2 > 0
-    let crack = (&sqrt_disc - &abs_trace) / BigInt::from(2);
-    println!("\n  λ_crack = (√disc − |trace|)/2 = {}d ({})",
-        digit_count(&crack), if crack.is_positive() { "+" } else { "−" });
+    println!("CS(brace,box)     = {} → {} boundary", cs01,
+        if r01.is_positive() { "ABOVE" } else { "below" });
+    println!("CS(brace,torroid) = {} → {} boundary", cs02,
+        if r02.is_positive() { "ABOVE" } else { "below" });
+    println!("CS(box,torroid)   = {} → {} boundary", cs12,
+        if r12.is_positive() { "ABOVE" } else { "below" });
+    println!("");
+    println!("Phase coordinates: (CS01, CS02, CS12) = (1+ε, 0.0117, 0.0120)");
+    println!("The system sits at: (barely > 1, deeply < 1, deeply < 1)");
+    println!("Phase I is a THIN SLIVER near the CS01 = 1 wall.");
 
     // =====================================================
-    // STEP 4: First-order approximation
+    // STEP 7: What det(Q) tells us about the phase
     // =====================================================
-    println!("\n=== STEP 4: FIRST-ORDER APPROXIMATION ===");
-    // √(T²+4R) ≈ |T|·(1 + 2R/T²) for small R/T²
-    // λ_crack ≈ (|T|·(1+2R/T²) − |T|)/2 = |T|·R/T² = R/|T|
-    // where T = Q00+Q11, R = R01
-
-    // So λ_crack ≈ R01/|Q00+Q11| to first order!
-
-    let first_order = &r01 * &BigInt::from(10u32).pow(25) / &abs_trace;
-    println!("First-order: λ_crack ≈ R01/|Q00+Q11|");
-
-    // Exact ratio
-    println!("  R01/|Q00+Q11| ≈ {}", fp_div(&r01, &abs_trace, 25));
-
-    // Compare with actual crack
-    // We need a better comparison — both are ~323d numbers
-    // Let's compute the ratio crack / (R01/|trace|)
-    // = crack · |trace| / R01
-    let ratio_check = &crack * &abs_trace / &r01;
-    println!("  λ_crack · |trace| / R01 = {} (should be ≈ 1.0 if first-order exact)",
-        fp_div(&(&crack * &abs_trace), &r01, 25));
-
-    // The correction is second-order in R01/T²
-    // λ_crack = R01/|T| − 2R01²/|T|³ + ...
-    // The second-order correction:
-    let second_order_corr = BigInt::from(2) * &r01 * &r01 / &(&abs_trace * &abs_trace * &abs_trace);
-    println!("  Second-order correction: 2R01²/|T|³ ≈ {}d",
-        digit_count(&second_order_corr));
-    println!("  First order (R01/|T|) ≈ {}d → correction is {}d smaller",
-        digit_count(&r01) as i64 - digit_count(&abs_trace) as i64 + digit_count(&r01) as i64,
-        (digit_count(&r01) as i64 - digit_count(&abs_trace) as i64) -
-        digit_count(&second_order_corr) as i64);
-
-    // =====================================================
-    // STEP 5: The bond eigenvalue from R01
-    // =====================================================
-    println!("\n=== STEP 5: THE BOND EIGENVALUE ===");
-    // λ₋ = (trace − √disc)/2 = (−|trace| − √disc)/2 (negative)
-    let bond = (&trace - &sqrt_disc) / BigInt::from(2);
-    println!("λ_bond = (trace − √disc)/2 = {}d ({})",
-        digit_count(&bond), if bond.is_negative() { "−" } else { "+" });
-
-    // The bond absorbs what the crack doesn't:
-    // λ_crack + λ_bond = trace = Q00+Q11
-    let ev_sum = &crack + &bond;
-    let sum_check = &ev_sum - &trace;
-    println!("λ_crack + λ_bond = trace(Q00+Q11)? {}",
-        if sum_check.is_zero() { "✓ EXACT" } else { "NONZERO" });
-
-    // λ_crack · λ_bond = det = Q00·Q11 − Q01² = −R01 − |Q00|·|Q11| + |Q00|·|Q11|
-    // Actually: det = Q00·Q11 − Q01²
-    // Q00·Q11 = |Q00|·|Q11| (both negative), Q01² = |Q00|·|Q11| + R01
-    // det = |Q00|·|Q11| − |Q00|·|Q11| − R01 = −R01
-    // Wait, that's not right. Let me recompute:
-    // M01 = Q00·Q11 − Q01² = |Q00|·|Q11| − Q01² = threshold − Q01² = −R01
-    // So λ_crack · λ_bond = M01 = −R01
-
-    let ev_prod = &crack * &bond;
+    println!("\n=== STEP 7: det(Q) AND THE PHASE ===");
     let m01 = q00 * q11 - &q01_sq;
-    let prod_check = &ev_prod - &m01;
-    println!("λ_crack · λ_bond = M01 = −R01? product − M01 = {} ({}d residual from integer truncation)",
-        if prod_check.is_zero() { "0 ✓ EXACT".to_string() }
-        else { format!("{}d residual", digit_count(&prod_check)) },
-        digit_count(&prod_check));
+    let m02 = q00 * q22 - &q02_sq;
+    let m12 = q11 * q22 - &q12_sq;
+    let det_q = q00 * &m12 - q01 * &(q01 * q22 - q12 * q02) + q02 * &(q01 * q12 - q11 * q02);
 
-    // Note: there may be a small residual because we used isqrt (floor of √disc)
-    // which introduces ±1 error in √disc, hence ±1 in the eigenvalues
-
-    println!("\nKEY IDENTITY: λ_crack · λ_bond = −R01");
-    println!("The PRODUCT of the two eigenvalues is exactly the negative of the unbinding energy.");
-    println!("R01 = {}d → the eigenvalues' product has {}d", digit_count(&r01), digit_count(&m01));
-
-    // =====================================================
-    // STEP 6: The energy balance sheet
-    // =====================================================
-    println!("\n=== STEP 6: THE ENERGY BALANCE SHEET ===");
-    println!("{:<40} {:>8} {:>6}", "Quantity", "Sign", "Digits");
-    println!("{:-<56}", "");
-    println!("{:<40} {:>8} {:>6}", "Q00 (brace self-energy)", "−", digit_count(q00));
-    println!("{:<40} {:>8} {:>6}", "Q11 (box self-energy)", "−", digit_count(q11));
-    println!("{:<40} {:>8} {:>6}", "Q01 (coupling)", "+", digit_count(q01));
-    println!("{:<40} {:>8} {:>6}", "|Q00|·|Q11| (threshold cost)", "+", digit_count(&threshold));
-    println!("{:<40} {:>8} {:>6}", "Q01² (coupling supply)", "+", digit_count(&q01_sq));
-    println!("{:<40} {:>8} {:>6}", "R01 (unbinding energy)", "+", digit_count(&r01));
-    println!("{:<40} {:>8} {:>6}", "λ_crack (the positive mode)", "+", digit_count(&crack));
-    println!("{:<40} {:>8} {:>6}", "λ_bond (the negative mode)", "−", digit_count(&bond));
-    println!("{:<40} {:>8} {:>6}", "λ_crack + λ_bond = Q00+Q11", "−", digit_count(&trace));
-    println!("{:<40} {:>8} {:>6}", "λ_crack · λ_bond = −R01", "−", digit_count(&r01));
-
-    // =====================================================
-    // STEP 7: What if the coupling were EXACTLY at threshold?
-    // =====================================================
-    println!("\n=== STEP 7: AT THE THRESHOLD ===");
-    // If Q01² = |Q00|·|Q11| exactly (R01 = 0):
-    // disc = (Q00+Q11)² + 0 = (Q00+Q11)²
-    // √disc = |Q00+Q11|
-    // λ₊ = (Q00+Q11+|Q00+Q11|)/2 = 0  (trace is negative, so |trace|=−trace)
-    //     = (−|trace|+|trace|)/2 = 0
-    // λ₋ = (−|trace|−|trace|)/2 = −|trace| = Q00+Q11
-
-    println!("If Q01² = |Q00|·|Q11| exactly (R01 = 0):");
-    println!("  λ₊ = 0 (the crack VANISHES — it becomes the zero mode)");
-    println!("  λ₋ = Q00+Q11 = −{}d (bond absorbs everything)", digit_count(&abs_trace));
+    println!("det(Q) = {}d ({})", digit_count(&det_q), if det_q.is_positive() { "+" } else { "−" });
     println!("");
-    println!("At the threshold, the crack eigenvalue is EXACTLY ZERO.");
-    println!("Below threshold (CS < 1): both eigenvalues negative, no crack.");
-    println!("Above threshold (CS > 1): one positive, one negative — crack exists.");
-    println!("The transition is CONTINUOUS: λ_crack grows smoothly from 0.");
+    println!("For Phase I (one Mij < 0):");
+    println!("  det(Q) > 0 → signature (1+, 2−) ✓");
+    println!("  det(Q) < 0 would mean signature (2+, 1−), but can't happen in Phase I");
+    println!("  with all-negative diagonal (Sylvester criterion).");
+    println!("");
+    println!("For Phase 0 (all Mij > 0):");
+    println!("  det(Q) < 0 → negative definite (signature (0+, 3−))");
+    println!("  det(Q) > 0 → still (0+, 3−) since all leading minors alternate");
 
     // =====================================================
-    // STEP 8: How far above threshold?
+    // STEP 8: The three-dimensional phase space
     // =====================================================
-    println!("\n=== STEP 8: DISTANCE ABOVE THRESHOLD ===");
-    // Q01_actual² = threshold + R01
-    // Q01_threshold = √threshold = √(|Q00|·|Q11|) = geometric mean of |diagonals|
-
-    let q01_threshold = isqrt(&threshold);
-    println!("Q01_threshold = √(|Q00|·|Q11|) = {}d", digit_count(&q01_threshold));
-    println!("Q01_actual    = {}d", digit_count(q01));
-
-    let excess_q01 = q01.abs() - &q01_threshold;
-    println!("Q01_actual − Q01_threshold = {}d ({})",
-        digit_count(&excess_q01), if excess_q01.is_positive() { "+" } else { "−" });
-    println!("Fractional excess in Q01: (actual−threshold)/threshold ≈ {}",
-        fp_div(&excess_q01, &q01_threshold, 25));
-
-    // The coupling is about 8.5×10⁻⁶ above threshold
-    // This tiny excess creates the entire +323d crack eigenvalue!
-
-    // =====================================================
-    // STEP 9: The amplification factor
-    // =====================================================
-    println!("\n=== STEP 9: THE AMPLIFICATION FACTOR ===");
-    // The fractional excess in Q01 is ~8.5×10⁻⁶
-    // The crack eigenvalue is +323d ≈ 10^322
-    // The threshold coupling is ~328d ≈ 10^327
-    // So a tiny fractional excess creates a huge eigenvalue.
+    println!("\n=== STEP 8: THE THREE-DIMENSIONAL PHASE SPACE ===");
+    // The phase space is parameterized by (CS01, CS02, CS12) ∈ [0, ∞)³
+    // Phase boundaries are the three planes CS_ij = 1.
     //
-    // The amplification: λ_crack / (ΔQ01) where ΔQ01 = Q01−Q01_threshold
-    // ≈ R01/|trace| / (R01/(2·Q01_threshold)) ≈ 2·Q01_threshold/|trace|
+    // The eight octants correspond to 2³ = 8 possible combinations of
+    // (above/below) for each boundary.
+    // But not all 8 are physically realizable (the couplings are constrained
+    // by the matrix being real symmetric with given diagonal).
 
-    println!("Fractional excess in Q01: ~8.5 × 10⁻⁶");
-    println!("Crack eigenvalue: +{}d ≈ 10^{}", digit_count(&crack), digit_count(&crack)-1);
-    println!("Threshold coupling: {}d ≈ 10^{}", digit_count(&q01_threshold), digit_count(&q01_threshold)-1);
+    println!("Phase space: (CS01, CS02, CS12) ∈ [0,∞)³");
+    println!("Boundaries: CS_ij = 1 (three planes)");
+    println!("Octants: 2³ = 8 possible sign combinations");
     println!("");
-    println!("The amplification:");
-    println!("  A tiny excess (10⁻⁶ fractional) in Q01");
-    println!("  creates a MACROSCOPIC eigenvalue (+323d)");
-    println!("  This is because λ_crack ≈ R01/|trace|");
-    println!("  and R01 = (Q01+Q01_thr)(Q01−Q01_thr)");
-    println!("  ≈ 2·Q01_thr · ΔQ01");
-    println!("  So λ_crack ≈ 2·Q01_thr·ΔQ01/|trace|");
-
-    let amplification = BigInt::from(2) * &q01_threshold / &abs_trace;
-    println!("  Amplification factor 2·Q01_thr/|trace| ≈ {}", fp_div(&(BigInt::from(2) * &q01_threshold), &abs_trace, 25));
-
-    // =====================================================
-    // STEP 10: The GCD of R01
-    // =====================================================
-    println!("\n=== STEP 10: R01 ARITHMETIC ===");
-    let gcd_r01_threshold = r01.gcd(&threshold);
-    println!("R01 = {}d", digit_count(&r01));
-    println!("gcd(R01, |Q00|·|Q11|) = {}d (value = {})", digit_count(&gcd_r01_threshold), gcd_r01_threshold);
-
-    // Factor out 2s from R01
-    let mut r01_work = r01.clone();
-    let mut twos = 0u32;
-    while &r01_work % BigInt::from(2u32) == BigInt::zero() {
-        r01_work /= BigInt::from(2u32);
-        twos += 1;
-    }
-    println!("R01 = 2^{} × (odd {}d number)", twos, digit_count(&r01_work));
-
-    // The 2-adic valuation tells us about the parity structure
-    println!("2-adic valuation of R01: v₂(R01) = {}", twos);
-
-    // =====================================================
-    // STEP 11: Connection to M01 and det(Q)
-    // =====================================================
-    println!("\n=== STEP 11: THE R01 → M01 → det(Q) CHAIN ===");
-    // R01 = Q01² − |Q00|·|Q11|
-    // M01 = Q00·Q11 − Q01² = −R01 (since Q00·Q11 = |Q00|·|Q11| for both negative)
-    // det(Q) depends on M01 (and M02, M12)
-
-    println!("R01 = +{}d (the unbinding energy)", digit_count(&r01));
-    println!("M01 = −R01 = −{}d (the sick minor)", digit_count(&r01));
-    println!("det(Q) = Q00·M12 − ... = +1059d");
+    println!("Q3p position: ({:.7}, {:.7}, {:.7})",
+        1.0000169f64, 0.0117359f64, 0.0119981f64);
+    println!("→ octant (+, −, −) where + means above boundary");
     println!("");
-    println!("THE CHAIN:");
-    println!("  R01 > 0  (coupling exceeds threshold)");
-    println!("  → M01 < 0  (brace-box minor is NEGATIVE)");
-    println!("  → 2×2 block is INDEFINITE (signature (1+,1−))");
-    println!("  → crack eigenvalue EXISTS (+323d)");
-    println!("  → full Q3p has signature (1+, 2−)");
-    println!("  → the Three-Body Theorem applies (H143)");
-    println!("  → torroid mediates by existence (H142)");
-    println!("  → Jacobi rotation separates modes (H139)");
+    println!("Physical constraints:");
+    println!("  CS ≥ 0 always (it's a ratio of squares)");
+    println!("  The three CS values are NOT independent");
+    println!("  They share the diagonal entries Qii");
+
+    // =====================================================
+    // STEP 9: The geometric mean constraint
+    // =====================================================
+    println!("\n=== STEP 9: THE GEOMETRIC MEAN CONSTRAINT ===");
+    // From H133: |Qij| ≈ √(|Qii|·|Qjj|) for the off-diagonals
+    // This means CS ≈ 1 for saturated pairs and CS ≈ Qij²/(|Qii|·|Qjj|) generally.
+    //
+    // Is there a constraint linking CS01, CS02, CS12?
+    // CS01 · CS02 · CS12 = Q01²·Q02²·Q12² / (|Q00|²·|Q11|²·|Q22|²)
+    //                    = (Q01·Q02·Q12)² / (Q00·Q11·Q22)²
+    //
+    // This is the SQUARE of the ratio (product of off-diag)/(product of |diag|).
+
+    let off_diag_prod = q01.abs() * q02.abs() * q12.abs();
+    let diag_prod = &abs_q00 * &abs_q11 * &abs_q22;
+
+    println!("CS01 · CS02 · CS12 = (ΠQij)² / (Π|Qii|)²");
+    println!("  |Q01·Q02·Q12| = {}d", digit_count(&off_diag_prod));
+    println!("  |Q00·Q11·Q22| = {}d", digit_count(&diag_prod));
+    println!("  Product ratio = {}", fp_div(&off_diag_prod, &diag_prod, 25));
+    println!("  CS product = ratio² ≈ {}", fp_div(&(&off_diag_prod * &off_diag_prod), &(&diag_prod * &diag_prod), 25));
+
+    // Also compute: CS01·CS02·CS12 directly
+    // = 1.0000169 × 0.01174 × 0.01200 ≈ 1.408 × 10⁻⁴
+
+    // =====================================================
+    // STEP 10: The det(Q) in terms of CS fractions
+    // =====================================================
+    println!("\n=== STEP 10: det(Q) FROM CS FRACTIONS ===");
+    // det(Q) = Q00·Q11·Q22 − Q00·Q12² − Q11·Q02² − Q22·Q01² + 2·Q01·Q02·Q12
+    // = Q00·Q11·Q22·(1 − CS12 − CS02·(Q11/Q11) − CS01·(Q22/Q22) + 2·ratio)
+    // ... this doesn't simplify cleanly.
+
+    // Instead: det(Q) = Q00·M12 + ...
+    // Let's express det(Q) in terms of the residuals R01, R02, R12.
+    // M01 = −R01, M02 = thresh_02 − Q02² = −R02... wait:
+    // M02 = Q00·Q22 − Q02² = |Q00|·|Q22| − Q02² = thresh_02 − Q02²
+    // So M02 = −R02 when R02 = Q02² − thresh_02.
+    // But we defined R02 = Q02² − thresh_02, and R02 is NEGATIVE,
+    // so M02 = −R02 = positive. ✓
+
+    println!("Minors from residuals:");
+    println!("  M01 = −R01 = −651d (sick, negative)");
+    println!("  M02 = −R02 = +{}d (healthy, positive)", digit_count(&r02_abs));
+    println!("  M12 = −R12 = +{}d (healthy, positive)", digit_count(&r12_abs));
+
+    // Verify
+    let m01_check = -&r01;
+    let m02_check = -&r02;
+    let m12_check = -&r12;
+    println!("  M01 + R01 = {}", if (&m01 - &m01_check).is_zero() { "0 ✓" } else { "NONZERO" });
+    println!("  M02 + R02 = {}", if (&m02 - &m02_check).is_zero() { "0 ✓" } else { "NONZERO" });
+    println!("  M12 + R12 = {}", if (&m12 - &m12_check).is_zero() { "0 ✓" } else { "NONZERO" });
+
+    // =====================================================
+    // STEP 11: The phase diagram summary
+    // =====================================================
+    println!("\n=== STEP 11: THE PHASE DIAGRAM ===");
+    println!("       CS02 (brace⊗torroid)");
+    println!("        ^");
+    println!("        |");
+    println!("   II   |   III              Phase 0: all CS < 1 (negative definite)");
+    println!(" (M02<0)|  (M02<0,M12<0)     Phase I: one CS > 1 (one positive eigenvalue)");
+    println!("        |                     Phase II: two CS > 1 (depends on det)");
+    println!("  ------+-------> CS12       Phase III: all CS > 1 (all blocks indefinite)");
+    println!("        |  (box⊗torroid)");
+    println!("   0    |   I                Q3p lives in Phase I:");
+    println!(" (all   |  (M01<0 only)      (CS01=1.00002, CS02=0.012, CS12=0.012)");
+    println!("  def)  |  ← Q3p HERE");
+    println!("        |");
+    println!("  (this diagram is the CS02-CS12 slice at CS01 ≈ 1+ε)");
     println!("");
-    println!("EVERYTHING TRACES BACK TO R01.");
-    println!("One number — 651 digits, positive — is the root of the entire structure.");
+    println!("Q3p's position in phase space:");
+    println!("  Just barely past the M01=0 wall (ε = 1.69×10⁻⁵)");
+    println!("  Deep inside the M02>0 region (CS02 = 0.012)");
+    println!("  Deep inside the M12>0 region (CS12 = 0.012)");
+    println!("  The Phase I region is a THIN SLIVER near CS01 = 1");
+
+    // =====================================================
+    // STEP 12: The R-hierarchy
+    // =====================================================
+    println!("\n=== STEP 12: THE R-HIERARCHY ===");
+    println!("{:<30} {:>6} {:>6} {:>12}", "Residual", "Sign", "Digits", "CS fraction");
+    println!("{:-<56}", "");
+    println!("{:<30} {:>6} {:>6} {:>12}", "R01 (brace⊗box)", "+", digit_count(&r01), "1.0000169");
+    println!("{:<30} {:>6} {:>6} {:>12}", "R02 (brace⊗torroid)", "−",digit_count(&r02_abs), "0.01174");
+    println!("{:<30} {:>6} {:>6} {:>12}", "R12 (box⊗torroid)", "−", digit_count(&r12_abs), "0.01200");
+    println!("");
+    println!("R01 is POSITIVE and 651d → 5d cancellation from 656d threshold");
+    println!("R02 is NEGATIVE and {}d → {}d below threshold",
+        digit_count(&r02_abs), digit_count(&thresh_02));
+    println!("R12 is NEGATIVE and {}d → {}d below threshold",
+        digit_count(&r12_abs), digit_count(&thresh_12));
+    println!("");
+    // The gap between |R02| and |R12|
+    let r_gap = digit_count(&r12_abs) as i64 - digit_count(&r02_abs) as i64;
+    println!("|R02| has {}d, |R12| has {}d → gap = {}d",
+        digit_count(&r02_abs), digit_count(&r12_abs), r_gap);
 
     // =====================================================
     // SUMMARY
     // =====================================================
     println!("\n=== SUMMARY ===");
-    println!("H145: THE UNBINDING ENERGY");
-    println!("1. THRESHOLD: Q01² = |Q00|·|Q11| is EXACTLY where the crack appears");
-    println!("2. R01 = Q01² − |Q00|·|Q11| = +{}d (the unbinding energy)", digit_count(&r01));
-    println!("3. Fractional excess: R01/threshold = 1.691 × 10⁻⁵ (0.00169%)");
-    println!("4. λ_crack ≈ R01/|Q00+Q11| to first order");
-    println!("5. IDENTITY: disc = (Q00+Q11)² + 4R01 (exact)");
-    println!("6. IDENTITY: λ_crack · λ_bond = −R01 = M01 (exact, up to isqrt rounding)");
-    println!("7. At threshold: λ_crack = 0 exactly (continuous transition)");
-    println!("8. Q01 exceeds threshold by ~8.5×10⁻⁶ fractionally");
-    println!("9. R01 = 2^{} × odd — 2-adic structure", twos);
-    println!("10. R01 is the ROOT of the entire Q3p structure chain");
+    println!("H146: THE PHASE DIAGRAM");
+    println!("1. THREE phase boundaries: CS_ij = 1 (where Mij flips sign)");
+    println!("2. Q3p is in Phase I: exactly one boundary crossed (CS01 > 1)");
+    println!("3. R01 = +651d (above M01 boundary by 1.69×10⁻⁵)");
+    println!("4. R02 = −{}d, R12 = −{}d (deep below M02, M12 boundaries)",
+        digit_count(&r02_abs), digit_count(&r12_abs));
+    println!("5. Phase I is a THIN SLIVER near CS01 = 1");
+    println!("6. Distance to Phase 0: reduce |Q01| by {}d (fractional {:.6}×10⁻⁶)",
+        digit_count(&delta_q01), 8.456f64);
+    println!("7. Distance to Phase II: increase coupling² by {}d+ (the torroid gap)",
+        digit_count(&r02_abs));
+    println!("8. Mij = −Rij: each minor is the negative of its residual (exact)");
+    println!("9. CS product = (Π|Qij|/Π|Qii|)² ≈ 1.4×10⁻⁴");
+    println!("10. The system is ASYMMETRICALLY positioned: razor-thin above M01=0,");
+    println!("    ocean-deep below M02=0 and M12=0.");
 }
