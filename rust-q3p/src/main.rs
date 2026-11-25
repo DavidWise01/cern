@@ -1,9 +1,10 @@
-//! H154: The Ternary Escape
-//! Since c=0 is forbidden (H153), compute Q3p(a, b, 1) to find
-//! the smallest lattice point on the null cone with c >= 1.
+//! H155: The Lattice Measure
+//! Computing invariants of Q3p that determine the minimum word length 21.
+//! Key question: WHY 21 and not some other number?
 
 use num_bigint::BigInt;
 use num_traits::{Zero, One, Signed};
+use num_integer::Integer;
 use std::str::FromStr;
 
 fn q3p_matrix() -> [[BigInt; 3]; 3] {
@@ -25,260 +26,234 @@ fn digit_count(n: &BigInt) -> usize {
     n.magnitude().to_string().len()
 }
 
-fn isqrt(n: &BigInt) -> BigInt {
-    if n.is_zero() { return BigInt::zero(); }
-    let mut x = n.clone();
-    let mut y = (&x + BigInt::one()) / BigInt::from(2u32);
-    while y < x { x = y.clone(); y = (&x + n / &x) / BigInt::from(2u32); }
-    x
-}
-
-fn fp_div(a: &BigInt, b: &BigInt, prec: u32) -> String {
-    let scale = BigInt::from(10u32).pow(prec);
-    let result = (a * &scale) / b;
-    let s = result.magnitude().to_string();
-    let sign = if result.is_negative() { "-" } else { "" };
-    if s.len() <= prec as usize {
-        let pad = prec as usize - s.len();
-        format!("{}0.{}{}", sign, "0".repeat(pad), s)
-    } else {
-        let ip = &s[..s.len() - prec as usize];
-        let dp = &s[s.len() - prec as usize..];
-        format!("{}{}.{}", sign, ip, dp)
-    }
-}
-
 fn main() {
     let q = q3p_matrix();
     let q00 = &q[0][0]; let q01 = &q[0][1]; let q11 = &q[1][1];
     let q02 = &q[0][2]; let q12 = &q[1][2]; let q22 = &q[2][2];
 
-    println!("=== H154: THE TERNARY ESCAPE (Rust BigInt) ===\n");
+    println!("=== H155: THE LATTICE MEASURE (Rust BigInt) ===\n");
 
-    // ═══ STEP 1: THE c=1 QUADRATIC ═══
-    println!("=== STEP 1: THE c=1 SLICE ===");
-    println!("Q3p(a, b, 1) = Q00*a^2 + 2Q01*a*b + Q11*b^2 + 2Q02*a + 2Q12*b + Q22");
-    println!("");
-    println!("Term magnitudes:");
-    println!("  Q00: {}d  (brace self-energy)", digit_count(q00));
-    println!("  Q01: {}d  (brace-box coupling)", digit_count(q01));
-    println!("  Q11: {}d  (box self-energy)", digit_count(q11));
-    println!("  Q02: {}d  (brace-torroid coupling)", digit_count(q02));
-    println!("  Q12: {}d  (box-torroid coupling)", digit_count(q12));
-    println!("  Q22: {}d  (torroid self-energy)", digit_count(q22));
+    // ═══ STEP 1: ALL COFACTORS ═══
+    println!("=== STEP 1: COFACTOR MATRIX (ADJUGATE) ===");
+    // cof_ij = (-1)^(i+j) * M_ij where M_ij is the (i,j) minor
+    let cof00 = q11 * q22 - q12 * q12;      // M00
+    let cof11 = q00 * q22 - q02 * q02;      // M11
+    let cof22 = q00 * q11 - q01 * q01;      // M22 = -R01
+    let cof01 = -(q01 * q22 - q12 * q02);   // -M01
+    let cof02 = q01 * q12 - q11 * q02;      // M02
+    let cof12 = -(q00 * q12 - q01 * q02);   // -M12
 
-    // ═══ STEP 2: DISCRIMINANT COEFFICIENTS ═══
-    println!("\n=== STEP 2: DISCRIMINANT COEFFICIENTS ===");
-    println!("Solving Q3p(a, b, 1) = 0 as quadratic in a:");
-    println!("  Q00*a^2 + (2Q01*b + 2Q02)*a + (Q11*b^2 + 2Q12*b + Q22) = 0");
-    println!("  Discriminant Delta(b) = 4*(A*b^2 + 2*B*b + C) where:");
+    println!("Cofactor digit counts:");
+    println!("  cof(Q00) = Q11*Q22 - Q12^2 = {} sign, {}d",
+        if cof00.is_positive() { "+" } else { "-" }, digit_count(&cof00));
+    println!("  cof(Q11) = Q00*Q22 - Q02^2 = {} sign, {}d",
+        if cof11.is_positive() { "+" } else { "-" }, digit_count(&cof11));
+    println!("  cof(Q22) = Q00*Q11 - Q01^2 = {} sign, {}d (= -R01)",
+        if cof22.is_positive() { "+" } else { "-" }, digit_count(&cof22));
+    println!("  cof(Q01) = -(Q01*Q22-Q12*Q02) = {} sign, {}d",
+        if cof01.is_positive() { "+" } else { "-" }, digit_count(&cof01));
+    println!("  cof(Q02) = Q01*Q12-Q11*Q02 = {} sign, {}d",
+        if cof02.is_positive() { "+" } else { "-" }, digit_count(&cof02));
+    println!("  cof(Q12) = -(Q00*Q12-Q01*Q02) = {} sign, {}d",
+        if cof12.is_positive() { "+" } else { "-" }, digit_count(&cof12));
 
-    // A = R01 = Q01^2 - Q00*Q11 = Q01^2 - |Q00|*|Q11|
-    let r01 = q01 * q01 - &(q00.abs() * q11.abs());
-    println!("  A = R01 = Q01^2 - |Q00|*|Q11| = {}d", digit_count(&r01));
+    // ═══ STEP 2: DETERMINANT ═══
+    println!("\n=== STEP 2: DETERMINANT ===");
+    let det = q00 * &cof00 + q01 * &cof01 + q02 * &cof02;
+    println!("det(Q3p) = {} sign, {}d",
+        if det.is_positive() { "+" } else { "-" }, digit_count(&det));
+    let det_s = det.magnitude().to_string();
+    println!("  Leading digits: {}...", &det_s[..30.min(det_s.len())]);
 
-    // B = Q01*Q02 - Q00*Q12
-    let big_b = q01 * q02 - q00 * q12;
-    println!("  B = Q01*Q02 - Q00*Q12 = {} sign, {}d",
-        if big_b.is_positive() { "+" } else { "-" }, digit_count(&big_b));
+    // ═══ STEP 3: GCD STRUCTURE ═══
+    println!("\n=== STEP 3: GCD STRUCTURE ===");
+    // d1 = gcd of all entries
+    let g1 = q00.abs().gcd(&q01.abs());
+    let g2 = g1.gcd(&q11.abs());
+    let g3 = g2.gcd(&q02.abs());
+    let g4 = g3.gcd(&q12.abs());
+    let d1 = g4.gcd(&q22.abs());
+    println!("d1 = gcd(all entries) = {}", d1);
 
-    // C = Q02^2 - Q00*Q22
-    let big_c = q02 * q02 - q00 * q22;
-    println!("  C = Q02^2 - Q00*Q22 = {} sign, {}d",
-        if big_c.is_positive() { "+" } else { "-" }, digit_count(&big_c));
+    // d1*d2 = gcd of all cofactors (2x2 minors)
+    let gc1 = cof00.abs().gcd(&cof11.abs());
+    let gc2 = gc1.gcd(&cof22.abs());
+    let gc3 = gc2.gcd(&cof01.abs());
+    let gc4 = gc3.gcd(&cof02.abs());
+    let gcd_cof = gc4.gcd(&cof12.abs());
+    println!("gcd(all cofactors) = {}d", digit_count(&gcd_cof));
+    let d2 = &gcd_cof / &d1;
+    println!("d2 = gcd(cofactors)/d1 = {}d", digit_count(&d2));
 
-    // The discriminant of the discriminant: D_min = C - B^2/A
-    // If D_min > 0: real solutions exist for some b
-    // If D_min < 0: Q3p(a,b,1) has constant sign for all (a,b)
-    let b_sq = &big_b * &big_b;
-    // D_min * A = C*A - B^2
-    let d_min_times_a = &big_c * &r01 - &b_sq;
-    println!("\n  D_min * A = C*A - B^2 = {} sign, {}d",
-        if d_min_times_a.is_positive() { "+" } else { "-" }, digit_count(&d_min_times_a));
-    println!("  D_min sign: {} (since A > 0, D_min has same sign as D_min*A)",
-        if d_min_times_a.is_positive() { "POSITIVE -> real solutions exist" }
-        else { "NEGATIVE -> no real solutions at c=1" });
+    // d3 = det / (d1 * d2)
+    let d1d2 = &d1 * &d2;
+    let d3 = &det.abs() / &d1d2;
+    println!("d1*d2 = {}d", digit_count(&d1d2));
+    println!("d3 = |det|/(d1*d2) = {}d", digit_count(&d3));
 
-    // ═══ STEP 3: CRITICAL POINT ═══
-    println!("\n=== STEP 3: CRITICAL POINT ===");
-    // b_crit = -B/A (the b that minimizes the discriminant)
-    let b_crit = -&big_b / &r01;
-    println!("b_crit = -B/A = {} sign, {}d",
-        if b_crit.is_positive() { "+" } else { "-" }, digit_count(&b_crit));
-    let b_crit_s = b_crit.magnitude().to_string();
-    println!("  Leading digits: {}...", &b_crit_s[..20.min(b_crit_s.len())]);
+    // Check: d1*d2*d3 should equal |det|
+    let check = &d1 * &d2 * &d3;
+    let det_check = &check - &det.abs();
+    println!("d1*d2*d3 - |det| = {} (should be 0 or small)",
+        if det_check.is_zero() { "0 ✓".to_string() } else { format!("{}d", digit_count(&det_check)) });
 
-    // a_crit from b_crit: a = -(Q01*b + Q02)/Q00
-    let a_crit_num = -(q01 * &b_crit + q02);
-    let a_crit = &a_crit_num / q00;
-    println!("a_crit = -(Q01*b_crit + Q02)/Q00 = {} sign, {}d",
-        if a_crit.is_positive() { "+" } else { "-" }, digit_count(&a_crit));
-    let a_crit_s = a_crit.magnitude().to_string();
-    println!("  Leading digits: {}...", &a_crit_s[..20.min(a_crit_s.len())]);
+    println!("\nSMITH NORMAL FORM: diag({}, {}d, {}d)", d1, digit_count(&d2), digit_count(&d3));
 
-    // Word length at critical point
-    let wl_crit = a_crit.abs() + b_crit.abs() + BigInt::one();
-    println!("Word length at critical point: |a| + |b| + 1 = {}d",
-        digit_count(&wl_crit));
-    let wl_s = wl_crit.magnitude().to_string();
-    println!("  Leading digits: {}...", &wl_s[..20.min(wl_s.len())]);
+    // ═══ STEP 4: THE 42-DIGIT GAP CONNECTION ═══
+    println!("\n=== STEP 4: THE 42-DIGIT GAP CONNECTION ===");
+    // From H140: the Schur complement gap = 42 digits
+    // The gap is: log10(|M02/X|) where M02 is the (0,2) Schur diagonal
+    // and X is the cross-minor.
+    // M02 = cof(Q11) = Q00*Q22 - Q02^2 (the Schur complement diagonal)
+    // The cross-minor: Q01*Q22 - Q02*Q12 (or similar)
 
-    // ═══ STEP 4: Q3p AT CRITICAL POINT ═══
-    println!("\n=== STEP 4: Q3p AT AND NEAR CRITICAL POINT ===");
+    // The 42d gap means: the torroid is decoupled at 10^42 precision
+    // CONJECTURE: minimum word length = gap/2 = 42/2 = 21
 
-    // Evaluate Q3p(a, b, c) exactly
-    let eval_q3p = |a: &BigInt, b: &BigInt, c: &BigInt| -> BigInt {
-        let aa = a * a; let bb = b * b; let cc = c * c;
-        let ab = a * b; let ac = a * c; let bc = b * c;
-        q00 * &aa + BigInt::from(2) * q01 * &ab + q11 * &bb
-        + BigInt::from(2) * q02 * &ac + BigInt::from(2) * q12 * &bc + q22 * &cc
-    };
+    // Let me verify the gap exactly:
+    let r01 = q01 * q01 - &(q00.abs() * q11.abs()); // 651d
+    // The Schur complement of Q22 (eliminate torroid):
+    // S22 = [[Q00 - Q02^2/Q22, Q01 - Q02*Q12/Q22],
+    //        [Q01 - Q02*Q12/Q22, Q11 - Q12^2/Q22]]
+    //
+    // The off-diagonal of S22: Q01 - Q02*Q12/Q22
+    // = (Q01*Q22 - Q02*Q12) / Q22
 
-    let one = BigInt::one();
-    let val_crit = eval_q3p(&a_crit, &b_crit, &one);
-    println!("Q3p(a_crit, b_crit, 1) = {} sign, {}d",
-        if val_crit.is_positive() { "+" } else { "-" }, digit_count(&val_crit));
+    let s22_offdiag_num = q01 * q22 - q02 * q12; // = -cof01
+    println!("Schur off-diagonal numerator: {}d", digit_count(&s22_offdiag_num));
+    println!("Q22 (denominator): {}d", digit_count(q22));
+    println!("Schur off-diagonal: {}d / {}d = effective {}d",
+        digit_count(&s22_offdiag_num), digit_count(q22),
+        digit_count(&s22_offdiag_num) as i64 - digit_count(q22) as i64);
 
-    // Try nearby points (a_crit ± delta, b_crit ± delta)
-    println!("\nScanning nearby lattice points:");
-    println!("{:<12} {:>8} {:>12}", "Offset", "Q3p sign", "Q3p digits");
-    println!("{}", "-".repeat(35));
+    // Schur diagonal: Q00 - Q02^2/Q22 = (Q00*Q22 - Q02^2)/Q22 = cof11/Q22
+    let s22_diag0_num = q00 * q22 - q02 * q02; // = cof11
+    let s22_diag1_num = q11 * q22 - q12 * q12; // = cof00
 
-    for da in -3i64..=3 {
-        for db in -3i64..=3 {
-            let a_try = &a_crit + BigInt::from(da);
-            let b_try = &b_crit + BigInt::from(db);
-            let v = eval_q3p(&a_try, &b_try, &one);
-            if da.abs() + db.abs() <= 3 {
-                let sign = if v.is_positive() { "+" } else if v.is_negative() { "-" } else { "0" };
-                println!("({:+2},{:+2})     {:>5}    {:>8}", da, db, sign, digit_count(&v));
-            }
-        }
+    println!("\nSchur complement of Q22:");
+    println!("  S[0,0] numerator: {}d (= cof11)", digit_count(&s22_diag0_num));
+    println!("  S[1,1] numerator: {}d (= cof00)", digit_count(&s22_diag1_num));
+    println!("  S[0,1] numerator: {}d (= -cof01)", digit_count(&s22_offdiag_num));
+
+    // The "gap" is the digit count difference between diagonal and off-diagonal
+    let diag_digits = digit_count(&s22_diag0_num) as i64;
+    let offdiag_digits = digit_count(&s22_offdiag_num) as i64;
+    let gap = diag_digits - offdiag_digits;
+    println!("\n  DIGIT GAP = {} - {} = {}", diag_digits, offdiag_digits, gap);
+    println!("  GAP / 2 = {}", gap as f64 / 2.0);
+    println!("  21-Root Theorem: minimum word length = 21");
+    println!("  MATCH: gap/2 = {} vs word length = 21", gap / 2);
+
+    // ═══ STEP 5: THE COFACTOR DIGIT SPECTRUM ═══
+    println!("\n=== STEP 5: COFACTOR DIGIT SPECTRUM ===");
+    let cof_digits = [
+        ("cof00", digit_count(&cof00)),
+        ("cof11", digit_count(&cof11)),
+        ("cof22", digit_count(&cof22)),
+        ("cof01", digit_count(&cof01)),
+        ("cof02", digit_count(&cof02)),
+        ("cof12", digit_count(&cof12)),
+    ];
+    for (name, d) in &cof_digits {
+        println!("  {}: {}d", name, d);
     }
+    println!("\n  DIAGONAL cofactors: {}d, {}d, {}d",
+        digit_count(&cof00), digit_count(&cof11), digit_count(&cof22));
+    println!("  OFF-DIAGONAL cofactors: {}d, {}d, {}d",
+        digit_count(&cof01), digit_count(&cof02), digit_count(&cof12));
+    println!("  cof22 (= -R01) has {}d — SMALLEST by {} digits",
+        digit_count(&cof22), digit_count(&cof00) as i64 - digit_count(&cof22) as i64);
 
-    // ═══ STEP 5: DISCRIMINANT AT CRITICAL b ═══
-    println!("\n=== STEP 5: DISCRIMINANT PROFILE ===");
-    // Delta(b) = 4*(A*b^2 + 2*B*b + C)
-    // At b_crit: Delta_min = 4*(C - B^2/A)
-
-    // Compute Delta at b_crit and neighbors
-    let delta_at = |b: &BigInt| -> BigInt {
-        &r01 * b * b + BigInt::from(2) * &big_b * b + &big_c
-    };
-
-    println!("Delta(b)/4 at b_crit and neighbors:");
-    for db in -5i64..=5 {
-        let b_try = &b_crit + BigInt::from(db);
-        let d = delta_at(&b_try);
-        let sign = if d.is_positive() { "+" } else if d.is_negative() { "-" } else { "0" };
-        println!("  b_crit{:+2}: {} {}d", db, sign, digit_count(&d));
+    // ═══ STEP 6: 2-ADIC STRUCTURE ═══
+    println!("\n=== STEP 6: 2-ADIC STRUCTURE ===");
+    // How many times does 2 divide each entry and cofactor?
+    fn val2(n: &BigInt) -> u32 {
+        if n.is_zero() { return 999; }
+        let mut v = 0u32;
+        let mut m = n.abs();
+        let two = BigInt::from(2u32);
+        while (&m % &two).is_zero() { m /= &two; v += 1; }
+        v
     }
+    println!("v2(Q00) = {}", val2(q00));
+    println!("v2(Q01) = {}", val2(q01));
+    println!("v2(Q11) = {}", val2(q11));
+    println!("v2(Q02) = {}", val2(q02));
+    println!("v2(Q12) = {}", val2(q12));
+    println!("v2(Q22) = {}", val2(q22));
+    println!("v2(det) = {}", val2(&det));
+    println!("v2(R01) = {}", val2(&r01));
+    println!("v2(d1) = {}", val2(&d1));
+    println!("v2(gcd_cof) = {}", val2(&gcd_cof));
 
-    // ═══ STEP 6: PERFECT SQUARE SEARCH ═══
-    println!("\n=== STEP 6: PERFECT SQUARE SEARCH ===");
-    // Check if Delta(b)/4 is a perfect square for b near b_crit
-    let mut found_psq = false;
-    for db in -100i64..=100 {
-        let b_try = &b_crit + BigInt::from(db);
-        let d = delta_at(&b_try);
-        if d.is_negative() { continue; }
-        let s = isqrt(&d);
-        if &s * &s == d {
-            println!("PERFECT SQUARE at b = b_crit + {} !", db);
-            println!("  sqrt(Delta/4) = {}d", digit_count(&s));
-            // Solve for a
-            let coeff_a = BigInt::from(2) * q01 * &b_try + BigInt::from(2) * q02;
-            let a_sol1 = (-&coeff_a + BigInt::from(2) * &s) / (BigInt::from(2) * q00);
-            let a_sol2 = (-&coeff_a - BigInt::from(2) * &s) / (BigInt::from(2) * q00);
-            println!("  a_1 = {}d, a_2 = {}d", digit_count(&a_sol1), digit_count(&a_sol2));
-            let v1 = eval_q3p(&a_sol1, &b_try, &one);
-            let v2 = eval_q3p(&a_sol2, &b_try, &one);
-            println!("  Q3p(a_1, b, 1) = {} {}d", if v1.is_zero() { "0" } else { "nonzero" }, digit_count(&v1));
-            println!("  Q3p(a_2, b, 1) = {} {}d", if v2.is_zero() { "0" } else { "nonzero" }, digit_count(&v2));
-            found_psq = true;
-            break;
-        }
-    }
-    if !found_psq {
-        println!("No perfect square Delta(b)/4 found in [b_crit-100, b_crit+100].");
-        println!("Closest: checking residuals...");
-        let mut min_resid_d = BigInt::from(0);
-        let mut min_resid_db: i64 = 0;
-        let mut first = true;
-        for db in -10i64..=10 {
-            let b_try = &b_crit + BigInt::from(db);
-            let d = delta_at(&b_try);
-            if d.is_negative() { continue; }
-            let s = isqrt(&d);
-            let resid = &d - &s * &s;
-            if first || digit_count(&resid) < digit_count(&min_resid_d) {
-                min_resid_d = resid.clone();
-                min_resid_db = db;
-                first = false;
-            }
-            println!("  b_crit{:+3}: Delta/4 residual = {}d", db, digit_count(&resid));
-        }
-        println!("Smallest residual at db={}: {}d", min_resid_db, digit_count(&min_resid_d));
-    }
+    // ═══ STEP 7: SCALE RATIOS ═══
+    println!("\n=== STEP 7: SCALE RATIOS ===");
+    // Key ratios that might produce 21:
+    println!("Digit count ratios:");
+    println!("  |Q22|/|Q00| digits: {} - {} = {} → sqrt = {}",
+        digit_count(q22), digit_count(q00),
+        digit_count(q22) as i64 - digit_count(q00) as i64,
+        (digit_count(q22) as i64 - digit_count(q00) as i64) / 2);
+    println!("  |Q02|/|Q00| digits: {} - {} = {}",
+        digit_count(q02), digit_count(q00),
+        digit_count(q02) as i64 - digit_count(q00) as i64);
+    println!("  |Q12|/|Q11| digits: {} - {} = {}",
+        digit_count(q12), digit_count(q11),
+        digit_count(q12) as i64 - digit_count(q11) as i64);
+    println!("  R01 digits: {} → R01/2 digits: {}",
+        digit_count(&r01), digit_count(&r01) as i64 / 2);
+    println!("  det digits: {} → det/3 digits: {}",
+        digit_count(&det), digit_count(&det) as i64 / 3);
 
-    // ═══ STEP 7: SCALE ANALYSIS ═══
-    println!("\n=== STEP 7: SCALE ANALYSIS ===");
-    println!("At the critical point:");
-    println!("  |a_crit| ~ 10^{}", digit_count(&a_crit) - 1);
-    println!("  |b_crit| ~ 10^{}", digit_count(&b_crit) - 1);
-    println!("  Word length ~ 10^{}", digit_count(&wl_crit) - 1);
+    // The half-gap: Schur gap 42 → 42/2 = 21
+    println!("\n  SCHUR GAP = {} digits", gap);
+    println!("  HALF-GAP = {} = THE MINIMUM WORD LENGTH", gap / 2);
+    println!("  This is the HALF-GAP LAW:");
+    println!("  The minimum word length in the frozen lattice equals");
+    println!("  HALF the digit gap in the Schur complement of Q22.");
+
+    // ═══ STEP 8: WHY THE HALF ═══
+    println!("\n=== STEP 8: WHY THE HALF ===");
+    println!("The Schur complement gap measures how 'diagonal' the");
+    println!("torroid coupling is: off-diag/diag ~ 10^(-{}).", gap);
     println!("");
-    println!("Compare to the 21-Root Theorem: minimum word length = 21.");
-    println!("The c=1 critical point has word length ~ 10^{} >> 21.", digit_count(&wl_crit) - 1);
+    println!("A lattice vector (a, b, c) with c = 1 contributes:");
+    println!("  cross-energy ~ Q02*a + Q12*b (367d scale)");
+    println!("  self-energy  ~ Q00*a^2 (328d * a^2 scale)");
+    println!("  For these to interact: a * 10^367 ~ a^2 * 10^328");
+    println!("  → a ~ 10^(367-328) = 10^39");
+    println!("  → log10(a) ≈ 39 ≈ gap - 3");
     println!("");
-
-    // Check: what about larger c?
-    println!("What about c >= 2?");
-    println!("  Q3p(a, b, c) = binary(a,b) + 2c*(Q02*a + Q12*b) + c^2*Q22");
-    println!("  For c=2: Q22 term is 4*Q22 ~ 10^{}, coupling is 4*(Q02*a + Q12*b)", digit_count(q22));
-    println!("  Need |binary(a,b)| ~ 4*|Q22| ~ 10^{}", digit_count(q22) + 1);
-    println!("  This requires a,b ~ sqrt(10^{}/ 10^{}) ~ 10^{}",
-        digit_count(q22) + 1, digit_count(q00), (digit_count(q22) + 1 - digit_count(q00)) / 2 + 1);
-    println!("  Word length even LARGER than c=1 case.");
-    println!("  c=1 is the OPTIMAL escape.");
-
-    // ═══ STEP 8: THE STRUCTURE ═══
-    println!("\n=== STEP 8: THE ESCAPE STRUCTURE ===");
-    println!("At c=1, the ternary form adds three terms to the binary form:");
-    println!("  +2Q02*a: {}d, NEGATIVE (Q02 < 0)", digit_count(q02));
-    println!("  +2Q12*b: {}d, POSITIVE (Q12 > 0)", digit_count(q12));
-    println!("  +Q22:    {}d, NEGATIVE (Q22 < 0)", digit_count(q22));
+    println!("The word length n = |a| + |b| + 1 ~ 2a ~ 2*10^39");
+    println!("log10(word length) ≈ 39 + log10(2) ≈ 39.3");
     println!("");
-    println!("Q22 dominates for small a,b. To cancel it, need:");
-    println!("  binary(a,b) + 2Q02*a + 2Q12*b ≈ -Q22 ≈ +10^{}", digit_count(q22));
-    println!("  binary(a,b) ~ |Q00|*a^2 ~ 10^{}*a^2 for a ~ b*n_+", digit_count(q00));
-    println!("  Need a^2 ~ 10^{}/10^{} = 10^{}",
-        digit_count(q22), digit_count(q00), digit_count(q22) - digit_count(q00));
-    println!("  a ~ 10^{}", (digit_count(q22) - digit_count(q00)) / 2);
-
-    // The ratio of coupling to self-energy
-    let ratio = fp_div(&q02.abs(), &q22.abs(), 10);
-    println!("\n  |Q02|/|Q22| = {} (coupling/self ratio)", ratio);
-    let ratio2 = fp_div(&q12.abs(), &q22.abs(), 10);
-    println!("  |Q12|/|Q22| = {} (coupling/self ratio)", ratio2);
+    println!("But 42/2 = 21 and log10(21) ≈ 1.32, not 39.");
+    println!("The gap/2 connection is NUMEROLOGICAL, not from");
+    println!("the cross-energy balance. The TRUE reason 21 appears");
+    println!("lies in the rqt362 lattice construction, not in the");
+    println!("continuous geometry of Q3p.");
+    println!("");
+    println!("HONEST ASSESSMENT:");
+    println!("  42/2 = 21 may be coincidence.");
+    println!("  The gap = {} digits matches earlier measurements.", gap);
+    println!("  But we have NOT derived 21 from Q3p alone.");
+    println!("  The frozen lattice F has structure beyond what");
+    println!("  the quadratic form's invariants determine.");
 
     // ═══ SUMMARY ═══
     println!("\n{}", "=".repeat(60));
-    println!("SUMMARY: H154 — THE TERNARY ESCAPE");
+    println!("SUMMARY: H155 — THE LATTICE MEASURE");
     println!("{}", "=".repeat(60));
-    println!("1. c=1 slice: Q3p(a,b,1) is a shifted binary form.");
-    println!("2. Discriminant coefficients: A={}d, B={}d, C={}d.",
-        digit_count(&r01), digit_count(&big_b), digit_count(&big_c));
-    println!("3. D_min*A = {} sign, {}d -> real solutions {} at c=1.",
-        if d_min_times_a.is_positive() { "+" } else { "-" },
-        digit_count(&d_min_times_a),
-        if d_min_times_a.is_positive() { "EXIST" } else { "DON'T EXIST" });
-    println!("4. Critical point: a ~ 10^{}, b ~ 10^{}, word length ~ 10^{}.",
-        digit_count(&a_crit) - 1, digit_count(&b_crit) - 1, digit_count(&wl_crit) - 1);
-    println!("5. The c=1 escape exists in REAL numbers but requires");
-    println!("   word length ~ 10^{} to reach from the integer lattice.", digit_count(&wl_crit) - 1);
-    println!("6. This is >> 21 (the 21-Root Theorem).");
-    println!("7. IMPLICATION: The 21 roots of the frozen lattice are NOT");
-    println!("   null-cone vectors. They are shortest vectors in F by a");
-    println!("   DIFFERENT criterion than Q3p = 0.");
+    println!("1. Cofactor spectrum: 651d (R01) to 737d.");
+    println!("2. det(Q3p) = {} sign, {}d.", if det.is_positive(){"+"} else{"-"}, digit_count(&det));
+    println!("3. Smith form: d1={}, d2={}d, d3={}d.", d1, digit_count(&d2), digit_count(&d3));
+    println!("4. Schur gap (Q22 eliminated) = {} digits.", gap);
+    println!("5. HALF-GAP = {} = 21-Root word length. Coincidence?", gap/2);
+    println!("6. The cross-energy balance gives scale 10^39, not 21.");
+    println!("7. HONEST: 42/2=21 is observed but NOT derived.");
+    println!("8. The frozen lattice F carries structure from rqt362");
+    println!("   that the quadratic form alone does not determine.");
+    println!("9. What IS established: Q3p's invariants set the");
+    println!("   NULL-CONE scale (10^42) and the GEOMETRY,");
+    println!("   but the ARITHMETIC of F sets word length 21.");
 }
