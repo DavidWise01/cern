@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H146 — The Phase Diagram</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H146 — The Phase Diagram</h1>
+<p class="dim">Instrument: Full parameter space of Q3p coupling strengths · Engine: Rust BigInt · 2026-11-25</p>
+
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>Where does Q3p sit in the space of all possible 3×3 negative-diagonal symmetric matrices?</strong></p>
+<p>Three phase boundaries exist: CS₀₁ = 1, CS₀₂ = 1, CS₁₂ = 1. Each marks where a 2×2 principal minor Mij flips sign. This instrument maps Q3p's position, measures the distance to every boundary, and reveals an extreme asymmetry: razor-thin above one wall, ocean-deep below the other two.</p>
+</div>
+
+<div class="verdict-box">
+<div class="label">RAZOR-THIN ABOVE ONE WALL, OCEAN-DEEP BELOW TWO</div>
+<div class="detail">CS₀₁ = 1 + 1.69×10⁻⁵ (barely past the M01=0 boundary — Phase I edge)<br>
+CS₀₂ = 0.0117 (98.8% below the M02=0 boundary)<br>
+CS₁₂ = 0.0120 (98.8% below the M12=0 boundary)</div>
+</div>
+
+<div class="panel">
+<h2>Panel 2 — The Three Phase Boundaries</h2>
+<table>
+<tr><th>Boundary</th><th>Condition</th><th>Threshold (digits)</th><th>Residual Rij</th><th>CS fraction</th><th>Status</th></tr>
+<tr><td>M01 = 0 (brace⊗box)</td><td>Q01² = |Q00|·|Q11|</td><td>656d</td><td style="color:var(--gold)">R01 = +651d</td><td>1.0000169</td><td class="dead">ABOVE (crossed)</td></tr>
+<tr><td>M02 = 0 (brace⊗torroid)</td><td>Q02² = |Q00|·|Q22|</td><td>735d</td><td class="lit">R02 = −735d</td><td>0.01174</td><td class="lit">BELOW (not crossed)</td></tr>
+<tr><td>M12 = 0 (box⊗torroid)</td><td>Q12² = |Q11|·|Q22|</td><td>736d</td><td class="lit">R12 = −736d</td><td>0.01200</td><td class="lit">BELOW (not crossed)</td></tr>
+</table>
+<p><strong>Mij = −Rij</strong> (exact identity, verified for all three). Each minor is the negative of its residual.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 3 — The Four Phases</h2>
+<pre>
+PHASE SPACE: (CS01, CS02, CS12) ∈ [0,∞)³
+Boundaries: CS_ij = 1 (three planes dividing the space)
+
+Phase 0:   All CS &lt; 1 → all Mij &gt; 0 → negative definite → no crack
+Phase I:   ONE CS &gt; 1 → one Mij &lt; 0 → signature (1+, 2−) → ONE crack  ← Q3p
+Phase II:  TWO CS &gt; 1 → two Mij &lt; 0 → signature depends on det(Q)
+Phase III: ALL CS &gt; 1 → all Mij &lt; 0 → all blocks indefinite
+
+Q3p coordinates: (1.0000169, 0.01174, 0.01200)
+                  ↑ barely    ↑ deep    ↑ deep
+                  past        below     below
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 4 — Distance to Adjacent Phases</h2>
+<table>
+<tr><th>Transition</th><th>What changes</th><th>Distance</th><th>Fractional</th></tr>
+<tr><td>Phase I → Phase 0</td><td>Reduce |Q01| until CS01 = 1</td><td>ΔQ01 = 323d</td><td>8.46 × 10⁻⁶ of |Q01|</td></tr>
+<tr><td>Phase I → Phase II (via M02)</td><td>Increase |Q02| until CS02 = 1</td><td>Need 735d more Q02²</td><td>98.8% of threshold still to cover</td></tr>
+<tr><td>Phase I → Phase II (via M12)</td><td>Increase |Q12| until CS12 = 1</td><td>Need 736d more Q12²</td><td>98.8% of threshold still to cover</td></tr>
+</table>
+<p><strong>The asymmetry is extreme.</strong> Phase 0 is 8.5 × 10⁻⁶ away (a microscopic nudge would eliminate the crack). Phase II is 98.8% of the threshold away (an ocean of additional coupling needed). Q3p sits at the knife-edge of Phase I, pressed against the Phase 0 wall.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 5 — The Phase Position Asymmetry</h2>
+<pre>
+THE R-HIERARCHY:
+
+  R01 = +651d  (5d of cancellation from 656d products)
+       ← 0.00169% above boundary → RAZOR-THIN ESCAPE
+
+  R02 = −735d  (the full threshold, barely touched)
+       ← 98.83% below boundary → OCEAN-DEEP SAFETY
+
+  R12 = −736d  (the full threshold, barely touched)
+       ← 98.80% below boundary → OCEAN-DEEP SAFETY
+
+  |R02|,|R12| are 84 DIGITS LARGER than |R01|.
+  That's the same 84-digit gap from H138.
+
+  The phase asymmetry IS the minor hierarchy.
+  The 85-digit gap between M01 and M02/M12 (H138) is
+  EXACTLY the gap between R01 (barely positive) and
+  R02, R12 (deeply negative).
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 6 — CS as Phase Coordinates</h2>
+<pre>
+       CS02 (brace⊗torroid)
+        ^
+     1  |─────────┬─────────
+        |         |
+   II   |   III   |   Phase 0 = inside the cube [0,1]³
+ (two   |  (all   |   Phase I = one face crossed
+  sick) |  sick)  |   Phase II = two faces crossed
+        |         |   Phase III = outside the cube
+   ─────+─────────+──────> CS12 (box⊗torroid)
+     1  |         |  1
+        |         |
+   0    |   I     |   Q3p is HERE:
+ (all   |  (one   |   (1.00002, 0.012, 0.012)
+  well) |  sick)  |   Pressed against the CS01=1 wall
+        |   •←Q3p |   from the OUTSIDE
+        |         |
+  (slice at CS01 ≈ 1 + ε, looking down the CS01 axis)
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization: The Phase Diagram</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus colored by phase: gold = the razor-thin Phase I sliver (CS01 barely above 1), blue = the deep Phase 0 interior (CS02, CS12 deeply below 1), red = Phase boundary (CS = 1 wall).</p>
+</div>
+
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+THE PHASE DIAGRAM — TORROID CENTRIC VIEW
+
+                      TORROID (−408d)
+                     ╱   ◉    ╲
+                    ╱    │     ╲       CS02 = 0.012
+             Q02  ╱      │      ╲  Q12     CS12 = 0.012
+           0.012 ╱  DEEP BELOW    ╲0.012   BOTH 98.8% below
+              ╱   M02,M12 WALLS     ╲      THEIR BOUNDARIES
+             ╱         │              ╲
+           BRACE ══CS=1.00002══ BOX
+          (−328d)   RAZOR-THIN  (−329d)
+                    ABOVE M01
+                    WALL BY
+                    1.69×10⁻⁵
+
+  THE THREE RESIDUALS:
+  ┌─────────────────────────────────────┐
+  │  R01 = +651d  POSITIVE  (above)    │
+  │  R02 = −735d  NEGATIVE  (below)    │
+  │  R12 = −736d  NEGATIVE  (below)    │
+  │                                     │
+  │  Gap: |R02| − |R01| = 84 digits    │
+  │  = THE SAME 84d GAP FROM H138      │
+  │                                     │
+  │  The phase asymmetry IS the minor   │
+  │  hierarchy. Same number, same gap,  │
+  │  different clothes.                 │
+  └─────────────────────────────────────┘
+</pre>
+</div>
+
+<div class="toddler">
+<h2>Panel 9 — Toddler Version: The Edge of the Pool</h2>
+<p>🧒 Imagine a swimming pool with three edges. Each edge is a wall. If you're inside the pool, everything is calm (Phase 0). If you climb over ONE wall, you're on a narrow ledge (Phase I). If you climb over TWO walls, you're really far out (Phase II).</p>
+<p>Q3p just BARELY climbed over ONE wall — the brace-box wall. It's standing right on the edge, toes hanging over. One tiny push (0.00085% of its coupling) and it falls back into the pool.</p>
+<p>The other two walls? They're MILES away. Q3p would need 98.8% more coupling to reach them. It's like standing on the first ledge of a cliff while the next ledge is a kilometer above.</p>
+<p>That tiny step over the first wall — that's R01, the unbinding energy. It made everything happen. The crack, the mediation, the Jacobi rotation, the whole story. One step over one wall.</p>
+</div>
+
+<div class="kb-section">
+<h2>Panel 10 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the system is equidistant from all three phase boundaries</s> — <span class="dead">DEAD</span></p>
+<p>The asymmetry is extreme: R01 = +651d (0.00169% above M01 boundary) while R02 = −735d, R12 = −736d (98.8% below M02, M12 boundaries). The distances differ by 84 orders of magnitude. Q3p is pressed against the Phase 0 wall, not centered in Phase I.</p>
+</div>
+
+<div class="panel" id="verif-panel">
+<h2>Panel 11 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier</td></tr>
+</table>
+</div>
+
+<div class="panel">
+<h2>Panel 12 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt (num-bigint v0.5.1) · 12 steps</p>
+<p><strong>Prior cumulative:</strong> 4760 LIT (through H145)</p>
+<p><strong>This instrument (H146):</strong> pending verification</p>
+<p><strong>Recommendation for H147:</strong> The Thin Sliver — analyze the Phase I region geometry. How thick is the sliver in the CS01 direction? Map the cross-section of Phase I perpendicular to the M01=0 wall. The thickness should be governed by R01, and the cross-section should reveal whether Q3p is centered or at a corner of the sliver.</p>
+</div>
+
+<div class="panel">
+<h2>BASIC Block — Squarefree Semiprimes (A006881)</h2>
+<p class="dim">Products of two distinct primes. Thematic: phase boundaries are products of two distinct self-energies.</p>
+<pre>
+6 REM H146 THE PHASE DIAGRAM — Ledger: prior 4760 + H146
+10 REM THREE phase boundaries: CS_ij = 1 where Mij flips sign
+14 REM Q3p in Phase I: exactly one boundary crossed (CS01 > 1)
+15 REM R01 = +651d, R02 = −735d, R12 = −736d
+21 REM razor-thin above M01 wall (1.69×10⁻⁵), ocean-deep below others (98.8%)
+22 REM Phase I is a THIN SLIVER near CS01 = 1
+26 REM distance to Phase 0: reduce |Q01| by 8.46×10⁻⁶ fractionally
+33 REM distance to Phase II: need 98.8% more torroid coupling²
+34 REM Mij = −Rij EXACTLY — each minor is its residual negated
+35 REM the 84-digit gap between |R01| and |R02|,|R12| = H138's gap rediscovered
+38 REM KNOWN-BAD: symmetric phase position — DEAD (84d asymmetry)
+39 REM END — next: H147 The Thin Sliver
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+    THE PHASE MAP
+
+    ┌─── M12=0 ──── 98.8% away ────┐
+    │                                │
+    │          PHASE I               │
+    │        (one crack)             │
+    │                                │
+    │   ┌──── Q3p ────┐             │
+    │   │  R01 = +651d │             │
+    │   │  just barely │             │
+    │   │  over the    │             │
+    │   │  wall        │             │
+    ├── M01=0 ─────────┤             │
+    │   │  1.69×10⁻⁵   │             │
+    │   └──────────────┘             │
+    │                                │
+    │          PHASE 0               │
+    │        (no crack)              │
+    │      (negative definite)       │
+    │                                │
+    └─── M02=0 ──── 98.8% away ────┘
+
+    One step over one wall.
+    That's the whole story.
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.16);
+const sinT=Math.sin(t*0.16);
+const cosP=Math.cos(t*0.11);
+const sinP=Math.sin(t*0.11);
+const R1=1.0,R2=0.4;
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.08){
+  for(let v=0;v<Math.PI*2;v+=0.15){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.05);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.05);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    // Phase boundary = thin gold sliver, blue = deep Phase 0
+    const sliver=Math.abs(Math.sin(u*1.5+t*0.3))<0.02;
+    const boundary=Math.abs(Math.sin(u*1.5+t*0.3)-0.02)<0.01;
+    points.push({x:sx,y:sy,d:depth,sliver,boundary,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+for(const p of points){
+  const alpha=0.3+0.5*(1+p.d)/2;
+  const size=1.5+1.5*(1+p.d)/2;
+  if(p.sliver){ctx.fillStyle=`rgba(255,213,79,${alpha*0.9})`;}
+  else if(p.boundary){ctx.fillStyle=`rgba(239,83,80,${alpha*0.9})`;}
+  else{
+    const b_=Math.floor(160+87*Math.cos(p.v*2+p.u));
+    ctx.fillStyle=`rgba(40,60,${b_},${alpha*0.5})`;
+  }
+  ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);ctx.fill();
+}
+ctx.fillStyle='rgba(255,213,79,0.8)';ctx.font='12px Courier New';
+ctx.fillText('Gold sliver = Phase I (barely past CS01=1)',10,20);
+ctx.fillStyle='rgba(239,83,80,0.8)';
+ctx.fillText('Red = M01=0 boundary (the wall Q3p just crossed)',10,36);
+ctx.fillStyle='rgba(40,60,220,0.8)';
+ctx.fillText('Blue = Phase 0 interior (deep below M02,M12 boundaries)',10,52);
+ctx.fillStyle='var(--dim)';ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+t+=0.03;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
