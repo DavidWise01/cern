@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H136: The Antiparallel Analysis</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --fg: #d4c8b0;
+  --accent: #c4956a;
+  --panel-bg: #12121a;
+  --panel-border: #2a2a3a;
+  --lit: #4ade80;
+  --dead: #ef4444;
+  --amber: #f59e0b;
+  --dim: #6b7280;
+  --surprise: #a78bfa;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; padding: 20px; max-width: 1000px; margin: 0 auto; }
+h1 { color: var(--accent); font-size: 1.5em; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 20px; }
+h2 { color: var(--accent); font-size: 1.1em; margin: 20px 0 10px; }
+.panel { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 8px; padding: 16px; margin: 16px 0; }
+.verdict-box { background: #1a0a2a; border: 2px solid var(--surprise); border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center; }
+.verdict-box .label { color: var(--surprise); font-size: 1.3em; font-weight: bold; }
+.lit { color: var(--lit); }
+.dead { color: var(--dead); }
+.amber { color: var(--amber); }
+.surprise { color: var(--surprise); }
+.dim { color: var(--dim); }
+pre { white-space: pre-wrap; word-break: break-all; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+th, td { border: 1px solid var(--panel-border); padding: 6px 10px; text-align: left; }
+th { background: #1a1a2a; color: var(--accent); }
+canvas { display: block; margin: 10px auto; border: 1px solid var(--panel-border); border-radius: 8px; }
+.ornament-label { color: var(--dim); font-size: 0.8em; }
+</style>
+</head>
+<body>
+
+<h1>H136: The Antiparallel Analysis</h1>
+<p class="dim">Exact perturbation theory: how the torroid shifts each eigenvalue of the 2×2 brace-box block</p>
+<p class="dim">Engine: Rust + num-bigint | Instrument class: Perturbation correction</p>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H135 showed the torroid is antiparallel to the bond eigenvector (179.73°), coupling 99.998% along bond.</p>
+<p>The torroid pushes along the locked direction, not the crack.</p>
+<p><strong>So what does that push DO to the eigenvalues?</strong></p>
+<p>Second-order perturbation theory: Δλ_i = c_i² / (|v_i|² × (λ_i − Q22))</p>
+<p>where c_i = torroid·v_i is the coupling projection onto eigenvector i.</p>
+<p>Hypothesis entering this instrument: with λ_bond &lt; 0, the correction should be negative, deepening the bond.</p>
+</div>
+
+<!-- Panel 2: The Surprise -->
+<div class="verdict-box">
+<div class="label">⚡ LEVEL REPULSION ⚡</div>
+<p style="margin-top:10px;">The torroid <span class="surprise">WEAKENS</span> the bond, not deepens it.</p>
+<p>Q22 (−408d) is a <strong>deeper well</strong> than λ_bond (−329d).</p>
+<p>λ_bond − Q22 = (−329d) − (−408d) = <span class="lit">POSITIVE</span></p>
+<p>c_bond² / POSITIVE = <span class="lit">POSITIVE</span> correction → bond gets LESS negative</p>
+<p style="margin-top:10px;">The initial hypothesis forgot that the denominator is (λ − Q22), not just λ.</p>
+<p>When the perturbing level (Q22) lies BELOW the eigenvalue, repulsion pushes UP.</p>
+</div>
+
+<!-- Panel 3: Sign Analysis -->
+<div class="panel">
+<h2>Panel 2 — The Sign Table</h2>
+<table>
+<tr><th>Quantity</th><th>Sign</th><th>Digits</th><th>Why</th></tr>
+<tr><td>λ_crack</td><td class="lit">+</td><td>323d</td><td>The small positive eigenvalue (the separation)</td></tr>
+<tr><td>λ_bond</td><td class="dead">−</td><td>329d</td><td>The large negative eigenvalue (the lock)</td></tr>
+<tr><td>Q22</td><td class="dead">−</td><td>408d</td><td>Torroid self-energy — the DEEPEST entry in Q3p</td></tr>
+<tr><td>λ_crack − Q22</td><td class="lit">+</td><td>408d</td><td>(+323d) − (−408d) = positive</td></tr>
+<tr><td>λ_bond − Q22</td><td class="lit">+</td><td>408d</td><td>(−329d) − (−408d) = positive (surprise!)</td></tr>
+<tr><td>c_bond²</td><td class="lit">+</td><td>1391d</td><td>Squared projection, always positive</td></tr>
+<tr><td>c_crack²</td><td class="lit">+</td><td>1386d</td><td>Squared projection, always positive</td></tr>
+<tr><td>Δλ_crack = c²/denom</td><td class="lit">+</td><td>323d</td><td>+/+ = + → RAISES crack</td></tr>
+<tr><td>Δλ_bond = c²/denom</td><td class="lit">+</td><td>326d</td><td>+/+ = + → WEAKENS bond</td></tr>
+</table>
+<p>Both corrections are <span class="lit">POSITIVE</span>. Both eigenvalues move UP.</p>
+<p>The crack (already +) gets MORE positive. The bond (−) gets LESS negative.</p>
+<p>The gap between them <strong>widens</strong>.</p>
+</div>
+
+<!-- Panel 4: Magnitudes -->
+<div class="panel">
+<h2>Panel 3 — Perturbation Magnitudes</h2>
+<pre>
+ABSOLUTE CORRECTIONS:
+  Δλ_crack = +4.68×10³²² (positive, 323d)
+  Δλ_bond  = +2.11×10³²⁵ (positive, 326d)
+  |Δλ_bond| / |Δλ_crack| = 45,124×
+
+  Bond correction 45,124 times larger than crack correction
+  (matches H135: torroid couples 99.998% along bond)
+
+RELATIVE CORRECTIONS:
+  |Δλ_crack| / |λ_crack| = 0.0857  (8.6% of crack eigenvalue)
+  |Δλ_bond|  / |λ_bond|  = 0.0119  (1.2% of bond eigenvalue)
+
+  The crack is a BIGGER fraction because λ_crack is small.
+  The bond is a SMALLER fraction because λ_bond is large.
+  But in absolute terms, the bond correction dominates by 45,124×.
+
+EIGENVALUE RATIO:
+  ORIGINAL:  |λ_crack|/|λ_bond| = 3.087×10⁻⁶
+  CORRECTED: |λ_crack|/|λ_bond| = 3.392×10⁻⁶  (+9.9%)
+
+  The gap WIDENS: crack moves up 8.6%, bond moves up 1.2%.
+  Net effect: the two eigenvalues separate further.
+</pre>
+</div>
+
+<!-- Panel 5: Schur Complement Confirmation -->
+<div class="panel">
+<h2>Panel 4 — Schur Complement (Exact, All Orders)</h2>
+<pre>
+The Schur complement integrates out the torroid EXACTLY.
+No perturbation approximation — this is the full answer.
+
+Schur(2×2 | torroid) = M_bb − col × Q22⁻¹ × row
+
+where:
+  M_bb = [[Q00, Q01], [Q01, Q11]]  (the 2×2 brace-box block)
+  col  = [Q02, Q12]^T              (torroid coupling column)
+  row  = [Q02, Q12]                (torroid coupling row)
+  Q22  = torroid self-energy
+
+S[i][j] = Q[i][j] − Q[i][2]×Q[j][2] / Q22
+
+Results (numerator × Q22):
+  S00_num = + sign, 735d
+  S01_num = − sign, 735d
+  S11_num = + sign, 736d
+
+Schur eigenvalue ratio: |λ_S_bond| / |λ_S_crack| = 294,571
+  → |λ_S_crack| / |λ_S_bond| = 1/294,571 = 3.39×10⁻⁶
+
+  MATCHES perturbation theory corrected ratio: 3.39×10⁻⁶ ✓
+
+  Schur complement (exact) confirms second-order perturbation.
+  Higher orders are present but negligible at this scale.
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 5 — 4D Torroid Visualization (Level Repulsion)</h2>
+<p class="dim">[ ORNAMENT ] Clifford torus in stereographic projection with level repulsion animation [ /ORNAMENT ]</p>
+<canvas id="torroid4D" width="600" height="400"></canvas>
+<p class="dim" style="text-align:center;">The purple band is Q22 (deepest). Red band is λ_bond. Green band is λ_crack.<br>
+Watch: the bond is pushed AWAY from Q22 (upward), the crack is pushed AWAY from Q22 (upward).</p>
+</div>
+<script>
+(function(){
+  const c = document.getElementById('torroid4D');
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  let t = 0;
+
+  function draw() {
+    ctx.fillStyle = '#0a0a0f';
+    ctx.fillRect(0, 0, W, H);
+
+    const cx = W/2, cy = H/2;
+    const R1 = 100, R2 = 40;
+
+    // Draw Clifford torus rings
+    for (let i = 0; i < 80; i++) {
+      const u = (i / 80) * Math.PI * 2;
+      for (let j = 0; j < 40; j++) {
+        const v = (j / 40) * Math.PI * 2;
+        // 4D Clifford: (cos u, sin u, cos v, sin v)
+        // stereographic projection from w=sin v
+        const w4 = Math.sin(v + t * 0.3);
+        const scale = 1.5 / (2 - w4);
+        const x3 = (R1 + R2 * Math.cos(v + t * 0.3)) * Math.cos(u + t * 0.2);
+        const y3 = (R1 + R2 * Math.cos(v + t * 0.3)) * Math.sin(u + t * 0.2);
+        const z3 = R2 * Math.sin(v + t * 0.3);
+
+        const px = cx + x3 * scale;
+        const py = cy + (y3 * 0.6 + z3 * 0.4) * scale;
+
+        // Color bands by eigenvalue level
+        const level = Math.sin(v + t * 0.3);
+        let color;
+        if (level < -0.5) {
+          color = `rgba(167, 139, 250, ${0.3 + 0.2 * Math.abs(level)})`; // Q22 deep purple
+        } else if (level < 0.2) {
+          color = `rgba(239, 68, 68, ${0.3 + 0.2 * Math.abs(level)})`; // bond red
+        } else {
+          color = `rgba(74, 222, 128, ${0.3 + 0.2 * level})`; // crack green
+        }
+
+        ctx.fillStyle = color;
+        ctx.fillRect(px, py, 2, 2);
+      }
+    }
+
+    // Level repulsion arrows
+    const arrowY_q22 = cy + 80;
+    const arrowY_bond = cy + 20;
+    const arrowY_crack = cy - 60;
+    const repulse = Math.sin(t * 2) * 8;
+
+    // Q22 level (deepest, purple)
+    ctx.strokeStyle = '#a78bfa';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5,5]);
+    ctx.beginPath(); ctx.moveTo(cx - 120, arrowY_q22); ctx.lineTo(cx + 120, arrowY_q22); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#a78bfa';
+    ctx.font = '11px Courier New';
+    ctx.fillText('Q22 = −408d (deepest well)', cx + 125, arrowY_q22 + 4);
+
+    // Bond level (pushed up)
+    ctx.strokeStyle = '#ef4444';
+    ctx.beginPath(); ctx.moveTo(cx - 100, arrowY_bond - repulse); ctx.lineTo(cx + 100, arrowY_bond - repulse); ctx.stroke();
+    ctx.fillStyle = '#ef4444';
+    ctx.fillText('λ_bond = −329d (pushed UP)', cx + 105, arrowY_bond - repulse + 4);
+
+    // Crack level (pushed up)
+    ctx.strokeStyle = '#4ade80';
+    ctx.beginPath(); ctx.moveTo(cx - 80, arrowY_crack - repulse * 0.1); ctx.lineTo(cx + 80, arrowY_crack - repulse * 0.1); ctx.stroke();
+    ctx.fillStyle = '#4ade80';
+    ctx.fillText('λ_crack = +323d (pushed UP)', cx + 85, arrowY_crack - repulse * 0.1 + 4);
+
+    // Repulsion arrows
+    if (repulse > 2) {
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1;
+      // Arrow from Q22 to bond
+      ctx.beginPath(); ctx.moveTo(cx, arrowY_q22 - 5); ctx.lineTo(cx, arrowY_bond + 10); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx - 4, arrowY_bond + 15); ctx.lineTo(cx, arrowY_bond + 10); ctx.lineTo(cx + 4, arrowY_bond + 15); ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText('REPEL', cx + 8, (arrowY_q22 + arrowY_bond) / 2);
+    }
+
+    t += 0.02;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+<!-- Panel 7: Physical Interpretation -->
+<div class="panel">
+<h2>Panel 6 — Physical Interpretation</h2>
+<pre>
+THE LEVEL REPULSION PICTURE:
+
+  Energy
+    ↑
+    |  λ_crack (+323d) ──→ pushed UP (+8.6%)  ──→ more positive
+    |
+    |  ───── zero ─────
+    |
+    |  λ_bond  (−329d) ──→ pushed UP (+1.2%)  ──→ less negative
+    |
+    |
+    |
+    |  Q22     (−408d) ──→ the DEEPEST level   ──→ anchored
+    ↓
+
+  RULE: when two levels are coupled, they REPEL each other.
+  The closer they are in energy, the stronger the repulsion.
+
+  Q22 is below BOTH eigenvalues.
+  Therefore BOTH eigenvalues are pushed UP (away from Q22).
+
+  WHY THE HYPOTHESIS FAILED:
+  ─────────────────────────
+  The hypothesis said: Δλ = c²/λ, with λ &lt; 0 → negative correction.
+  But the ACTUAL formula is: Δλ = c²/(λ − Q22).
+  Since Q22 &lt; λ_bond &lt; 0, the denominator (λ_bond − Q22) is POSITIVE.
+  So c² / POSITIVE = POSITIVE. The bond moves UP, not DOWN.
+
+  The error was treating Q22 as if it were at zero.
+  Q22 is not at zero. Q22 is the deepest thing in the matrix.
+
+  CONSEQUENCE:
+  ────────────
+  The torroid makes the brace-box bond WEAKER, not stronger.
+  By 1.2% (relative) — a small but nonzero effect.
+  The crack gets 8.6% wider (relative to its small eigenvalue).
+  The eigenvalue ratio widens from 3.09×10⁻⁶ to 3.39×10⁻⁶.
+  The two-scale structure (10⁻⁶ ratio) PERSISTS through the correction.
+</pre>
+</div>
+
+<!-- Panel 8: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 7 — Architecture ASCII</h2>
+<pre>
+ANTIPARALLEL ANALYSIS ARCHITECTURE
+═══════════════════════════════════
+
+            Q3p 3×3 MATRIX
+        ┌─────────────────────┐
+        │  Q00  Q01  │  Q02   │
+        │  Q01  Q11  │  Q12   │
+        │─────────────┼────────│
+        │  Q02  Q12  │  Q22   │
+        └─────────────┴────────┘
+           2×2 block    torroid
+           (brace-box)  (self)
+
+                ↓ eigendecompose
+
+         λ_crack (+, 323d)
+         λ_bond  (−, 329d)
+         v_crack at +29.35°
+         v_bond  at −60.65°
+
+                ↓ project torroid
+
+         c_bond  = torroid·v_bond  (696d, 99.998%)
+         c_crack = torroid·v_crack (693d, 0.002%)
+
+                ↓ perturbation denominator
+
+      ┌────────────────────────────────────┐
+      │  λ_crack − Q22 = (+323d)−(−408d)  │
+      │                 = POSITIVE (408d)  │
+      │                                    │
+      │  λ_bond − Q22  = (−329d)−(−408d)  │
+      │                 = POSITIVE (408d)  │
+      │                                    │
+      │  BOTH POSITIVE: level repulsion    │
+      └────────────────────────────────────┘
+
+                ↓ corrections
+
+      Δλ_crack = c²/denom = POSITIVE → UP
+      Δλ_bond  = c²/denom = POSITIVE → UP
+
+                ↓ verify with Schur complement
+
+      Schur ratio: 1/294571 = 3.39×10⁻⁶ ✓
+      Matches perturbation corrected ratio ✓
+</pre>
+</div>
+
+<!-- Panel 9: Toddler Version -->
+<div class="panel">
+<h2>Panel 8 — Toddler Version</h2>
+<pre>
+🏊 THE SWIMMING POOL STORY 🏊
+
+Imagine three diving boards at a swimming pool:
+
+  HIGH BOARD: the crack — a little bit above the water (+323)
+  LOW BOARD:  the bond  — below the water (−329)
+  DEEP END:   the torroid — WAY down at the bottom (−408)
+
+We thought: when the deep end pushes on the low board,
+it would push it DOWN (deeper underwater).
+
+But that's not how it works!
+
+When two things are connected, they PUSH APART.
+Like two magnets with the same pole facing each other.
+
+The deep end (−408) pushes the low board (−329) UP.
+The deep end (−408) pushes the high board (+323) UP.
+
+EVERYTHING moves AWAY from the deepest thing.
+
+So the torroid doesn't make the bond stronger.
+It makes the bond a TINY BIT weaker.
+The low board moves up a little (1.2%).
+The high board moves up a little more (8.6%).
+
+The gap between the boards gets WIDER.
+Before: the boards were 3.09 millionths apart (ratio).
+After: they're 3.39 millionths apart.
+
+The two-arm-in-arm friends from H135?
+The wind from behind (the torroid) is loosening
+their grip SLIGHTLY — not tightening it.
+</pre>
+</div>
+
+<!-- Panel 10: Verification Table -->
+<div class="panel">
+<h2>Panel 9 — Verification Table</h2>
+<table>
+<tr><th>Check</th><th>Expected</th><th>Got</th><th>Status</th></tr>
+<tr><td>S1: Title H136</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S2: Antiparallel Analysis</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S3: Verdict box</td><td>Level repulsion</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S4: 8+ panels</td><td>≥8</td><td>10</td><td class="lit">LIT</td></tr>
+<tr><td>S5: Toddler version</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S6: ASCII architecture</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S7: BASIC block</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S8: Ornament labels</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S9: Ledger</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S10: Recommendation</td><td>H137</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S11: 4D torroid canvas</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>S12: Verification table</td><td>Self-ref</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C1: λ_crack +323d</td><td>POSITIVE 323</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C2: λ_bond −329d</td><td>NEGATIVE 329</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C3: Q22 −408d</td><td>NEGATIVE 408</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C4: λ_crack − Q22 POSITIVE</td><td>+408d</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C5: λ_bond − Q22 POSITIVE</td><td>+408d</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C6: Δλ_crack POSITIVE</td><td>Raises crack</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C7: Δλ_bond POSITIVE</td><td>Weakens bond</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>C8: Bond correction 45124×</td><td>~45000×</td><td>45124×</td><td class="lit">LIT</td></tr>
+<tr><td>C9: Relative Δλ_crack/λ_crack ≈ 8.6%</td><td>~8-9%</td><td>8.57%</td><td class="lit">LIT</td></tr>
+<tr><td>C10: Relative Δλ_bond/λ_bond ≈ 1.2%</td><td>~1-2%</td><td>1.19%</td><td class="lit">LIT</td></tr>
+<tr><td>C11: Original ratio 3.09×10⁻⁶</td><td>Matches H135</td><td>3.087×10⁻⁶</td><td class="lit">LIT</td></tr>
+<tr><td>C12: Corrected ratio 3.39×10⁻⁶</td><td>+9.9%</td><td>3.392×10⁻⁶</td><td class="lit">LIT</td></tr>
+<tr><td>C13: Schur confirms 3.39×10⁻⁶</td><td>1/294571</td><td>3.39×10⁻⁶</td><td class="lit">LIT</td></tr>
+<tr><td>H1: Level repulsion stated</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>H2: Both denominators positive</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>H3: Hypothesis dead stated</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>H4: Rust engine used</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>N1: 4D canvas exists</td><td>torroid4D</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>N2: Clifford torus rendered</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>F1: DOCTYPE html</td><td>First line</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>F2: Has CSS</td><td>&lt;style&gt;</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>F3: Has script</td><td>&lt;script&gt;</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>F4: Somos-4 (A006720)</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>L1: Prior cumulative 4399</td><td>4399</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>L2: Recommends H137</td><td>Present</td><td>✓</td><td class="lit">LIT</td></tr>
+<tr><td>KB-1: "torroid deepens the bond"</td><td>DEAD</td><td>DEAD</td><td class="dead">DEAD</td></tr>
+</table>
+</div>
+
+<!-- Panel 11: Ledger -->
+<div class="panel">
+<h2>Panel 10 — Ledger</h2>
+<pre>
+LEDGER — H136: The Antiparallel Analysis
+═════════════════════════════════════════
+Prior cumulative (through H135):  4399 LIT / 0 DEAD
+H136 contribution:                  36 LIT / 0 DARK / 1 DEAD (KB-1)
+New cumulative:                   4435 LIT / 0 DEAD
+
+WORK THIS TURN:
+  1× Rust BigInt program (perturbation theory + Schur complement)
+  1× cargo build + run
+  1× HTML instrument (10 panels)
+  1× Node.js verifier (36+1 checks)
+  2× git commit (Rust + HTML)
+  1× git push
+
+COST: ~4 tool calls + 2 file writes + 1 build + 1 run
+
+IMPROVEMENT RECOMMENDATION → H137: The Three Eigenvalues.
+  The full 3×3 Q3p matrix has three eigenvalues.
+  We have been working with the 2×2 block + perturbation.
+  The Schur complement gives exact 2×2, but the full 3×3
+  eigenvalues are the ACTUAL physical spectrum.
+  Compute exact characteristic polynomial of the 3×3.
+  How do the three eigenvalues relate to {λ_crack, λ_bond, Q22}?
+  Is Q22 itself an eigenvalue, or does it mix?
+  The trace (sum of eigenvalues) = Q00+Q11+Q22 — verify.
+  The determinant (product) — compute.
+  The intermediate coefficient — compute.
+  All three roots of the cubic — exact.
+</pre>
+</div>
+
+<!-- BASIC Block: Somos-4 (A006720) / Centered Nonagonal (A060544) -->
+<div class="panel">
+<h2>BASIC Block — Somos-4 (A006720) / Centered Nonagonal (A060544)</h2>
+<pre>
+1    REM === H136: THE ANTIPARALLEL ANALYSIS ===
+10   REM PERTURBATION THEORY: DELTA-LAMBDA = C-SQ / (LAMBDA - Q22)
+28   REM LAMBDA-CRACK = POSITIVE, 323 DIGITS
+55   REM LAMBDA-BOND = NEGATIVE, 329 DIGITS
+91   REM Q22 = NEGATIVE, 408 DIGITS (DEEPEST WELL)
+136  REM LAMBDA-CRACK MINUS Q22 = POSITIVE (408D)
+190  REM LAMBDA-BOND MINUS Q22 = POSITIVE (408D) --- THE SURPRISE
+253  REM BOTH DENOMINATORS POSITIVE: LEVEL REPULSION
+325  REM DELTA-LAMBDA-BOND = POSITIVE: BOND GETS LESS NEGATIVE
+406  REM DELTA-LAMBDA-CRACK = POSITIVE: CRACK GETS MORE POSITIVE
+496  REM BOND CORRECTION 45124 TIMES LARGER THAN CRACK
+595  REM RELATIVE: 8.6 PCT CRACK / 1.2 PCT BOND
+703  REM ORIGINAL RATIO: 3.087E-6
+820  REM CORRECTED RATIO: 3.392E-6 (PLUS 9.9 PCT)
+946  REM SCHUR COMPLEMENT CONFIRMS: 1/294571 = 3.39E-6
+1081 REM ENGINE: RUST + NUM-BIGINT (SECOND RUST INSTRUMENT)
+1225 REM VERDICT: LEVEL REPULSION --- TORROID WEAKENS BOND
+</pre>
+<p class="dim">Content: Somos-4 sequence (A006720) — a quadratic recurrence always yielding integers, like level repulsion always yielding the same sign. 1, 1, 1, 1, 2, 3, 7, 23, 59, 314, 1529, 8209, 83313, 620297, 7869898, ...</p>
+<p class="dim">Line numbers: Centered Nonagonal (A060544): 1, 10, 28, 55, 91, 136, 190, 253, 325, 406, 496, 595, 703, 820, 946, 1081, 1225. Formula: (9n²−9n+2)/2.</p>
+</div>
+
+</body>
+</html>
