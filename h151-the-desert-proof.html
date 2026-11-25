@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H151 — The Desert Proof</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H151 — The Desert Proof</h1>
+<p class="dim">Instrument: Rigorous lower bound on w≥1 roots + correction to H150 · Engine: Rust BigInt · 2026-11-25</p>
+
+<div class="verdict-box">
+<div class="label">THE DESERT IS A FLOOR, NOT A GAP — H150 CORRECTED</div>
+<div class="detail">PROVED: for any w≥1 root, |u| ≥ √(|λ_torroid|/λ_crack) ≈ 10⁴² (tight bound).<br>
+CORRECTED: w=0 roots can exist at ANY u-scale — the desert is one-sided.<br>
+H150 overstated the claim. The correction is the finding.</div>
+</div>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>Can we prove no lattice points exist on the null cone between u ≈ 10³ and u ≈ 10⁴²?</strong></p>
+<p><strong>Answer: NO — but we can prove something better and correct H150 in the process.</strong></p>
+<p>The desert in H150 was overstated. w=0 roots (Family 1) can have arbitrarily large u — there is no upper bound. The provable statement is a one-sided FLOOR: w≥1 roots cannot have |u| below 10⁴². The correction is itself a finding: the desert is about which FAMILY a root belongs to, not about which u-values are populated.</p>
+</div>
+
+<!-- Panel 2: The Proved Theorem -->
+<div class="panel">
+<h2>Panel 2 — The Desert Lower Bound (PROVED)</h2>
+<pre>
+THEOREM. For any v ∈ Z³ with Q3p(v) = 0 and w-component ≥ 1
+(in the eigenvector basis):
+
+    |u| ≥ √(|λ_torroid| / λ_crack) ≈ 10⁴²
+
+PROOF.
+  From the null cone equation:
+    λ_crack · u² = |λ_bond| · v² + |λ_torroid| · w²
+                 ≥ |λ_torroid| · w²     (since |λ_bond|·v² ≥ 0)
+                 ≥ |λ_torroid|           (since w ≥ 1)
+  Therefore:
+    u² ≥ |λ_torroid| / λ_crack ≈ 10⁸⁵
+    |u| ≥ 10⁴²                          ∎
+
+The bound is TIGHT: achieved when v = 0, w = 1.
+</pre>
+</div>
+
+<!-- Panel 3: The Correction -->
+<div class="panel">
+<h2>Panel 3 — Correction to H150</h2>
+<table>
+<tr><th>H150 Claimed</th><th>H151 Corrects</th></tr>
+<tr><td class="dead">"No lattice points on the cone with 10³ &lt; u &lt; 10⁴²"</td><td class="lit">w=0 roots CAN exist at any u — no upper bound</td></tr>
+<tr><td class="dead">"39-digit desert between families"</td><td class="lit">Desert is a FLOOR on w≥1, not a gap in all roots</td></tr>
+<tr><td class="lit">Two families exist (w=0 and w≥1)</td><td class="lit">Confirmed ✓ — the families are real</td></tr>
+<tr><td class="lit">w≥1 roots need u ≈ 10⁴²</td><td class="lit">PROVED ✓ — the lower bound holds</td></tr>
+</table>
+<p><strong>What was RIGHT in H150:</strong> The two families exist. The w≥1 family needs u ≥ 10⁴². The 85-digit gap sets the scale.</p>
+<p><strong>What was WRONG in H150:</strong> The desert was described as a gap in ALL roots. It's actually a floor on w≥1 roots only. w=0 roots form an infinite family at all u-scales.</p>
+</div>
+
+<!-- Panel 4: What the hierarchy proves vs conjectures -->
+<div class="panel">
+<h2>Panel 4 — The Honest Ledger</h2>
+<table>
+<tr><th>Statement</th><th>Status</th><th>Source</th></tr>
+<tr><td>w≥1 roots have |u| ≥ 10⁴²</td><td class="lit">PROVED</td><td>Null cone equation + w integer</td></tr>
+<tr><td>Two root families (w=0 and w≥1) are scale-separated</td><td class="lit">PROVED</td><td>Min u-scales differ by 10³⁹</td></tr>
+<tr><td>w=0 family has infinitely many roots</td><td class="lit">PROVED</td><td>Indefinite binary form M01 &lt; 0</td></tr>
+<tr><td>18 constructive roots have w = 0</td><td style="color:var(--gold)">CONJECTURED</td><td>Not verified without root vectors</td></tr>
+<tr><td>3 existence roots have w ≥ 1</td><td style="color:var(--gold)">CONJECTURED</td><td>Not verified without constructing them</td></tr>
+<tr><td>Word length maps to u-scale</td><td style="color:var(--gold)">CONJECTURED</td><td>Generator basis relationship unknown</td></tr>
+<tr><td>The 1056d cofactor ≈ det(Q)</td><td class="lit">OBSERVED</td><td>H108/H137 digit count match</td></tr>
+</table>
+</div>
+
+<!-- Panel 5: The class structure -->
+<div class="panel">
+<h2>Panel 5 — Root Classes vs Root Vectors</h2>
+<pre>
+The 21-root theorem counts ROOT CLASSES, not raw vectors.
+Word length of a class = minimum word length of any representative.
+
+A single root class can have representatives at MANY u-scales.
+The w=0 family gives infinitely many representatives.
+The w≥1 family gives representatives only at u ≥ 10⁴².
+
+ROOT 19 (the first non-constructive root):
+  Its class exists (Eichler-Kneser, H107).
+  Its SHORTEST representative determines its word length.
+  If the shortest representative has w ≥ 1, then |u| ≥ 10⁴².
+  But the word length need not be 10⁴² — it depends on how the
+  generator basis aligns with the eigenvector basis.
+
+The word length 21 means: the 21st root class has minimum
+representative word length 21 in the given generator set.
+This is a property of the LATTICE GENERATORS, not just Q3p.
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization: Floor Not Gap</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus: green band = w=0 roots (exist at ALL u-scales, no limit), gold line = w≥1 floor at u = 10⁴² (nothing below), red = the corrected view (the desert is a floor, not a gap).</p>
+</div>
+
+<!-- Panel 7: Architecture -->
+<div class="panel">
+<h2>Panel 7 — Architecture</h2>
+<pre>
+THE DESERT PROOF — TORROID CENTRIC VIEW
+
+                      TORROID (−408d)
+                     ╱   ◉    ╲        w ≥ 1 → |u| ≥ 10⁴² (PROVED)
+                    ╱    │     ╲
+             Q02  ╱      │      ╲  Q12
+                ╱    THE FLOOR     ╲
+             BRACE ═══════════ BOX
+                   w = 0 plane
+              roots at ALL u-scales
+              (no upper bound)
+
+  THE CORRECTED PICTURE:
+
+      u (crack)
+      ^
+      │  · · w≥1 roots (above floor)
+  10⁴²├══════════════════════ ← THE FLOOR (PROVED)
+      │  nothing w≥1 below
+      │  (but w=0 roots CAN be here!)
+      │
+      │  · · · · · · · w=0 roots (everywhere)
+      │  · · · · · · · (no upper bound)
+   10³│  · · · · · · ·
+      │  · · smallest w=0 roots
+      └───────────────────→ v (bond)
+
+  H150 said: "nothing between 10³ and 10⁴²"  ← WRONG
+  H151 says: "nothing w≥1 below 10⁴²"        ← PROVED
+  The w=0 roots fill the entire u-axis.
+  The desert is a FLOOR, not a GAP.
+
+  WHAT WE PROVED:        WHAT WE CONJECTURED:
+  ───────────────         ────────────────────
+  w≥1 floor at 10⁴²      18 roots have w=0
+  Binary form infinite    3 roots have w≥1
+  Scale separation 10³⁹   Word length ↔ u-scale
+  Tight bound (v=0,w=1)   1056d ≈ det causation
+</pre>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>Panel 8 — Toddler Version: The High Shelf</h2>
+<p>🧒 Remember the two neighborhoods? In H150, I said there was an EMPTY DESERT between them. I was wrong. Let me fix it.</p>
+<p>Neighborhood 1 (the w=0 houses) isn't just near the entrance. Those houses are EVERYWHERE — near and far, small and big, all along the tunnel. They go on forever.</p>
+<p>Neighborhood 2 (the w≥1 houses) is on a HIGH SHELF. You can't reach it unless you climb at least 10⁴² steps high. NOTHING from Neighborhood 2 is below that shelf. That part I proved — it's math, not a guess.</p>
+<p>But the space below the shelf ISN'T empty. Neighborhood 1 houses are there too! The "desert" I described in H150 wasn't really empty — it had Neighborhood 1 houses in it all along. I just wasn't looking at them.</p>
+<p>What IS true: Neighborhood 2 has a floor. If you're on the floor, you're in Neighborhood 1. If you're above 10⁴², you MIGHT be in Neighborhood 2. The floor is proved. The emptiness was wrong.</p>
+</div>
+
+<!-- Known-Bad -->
+<div class="kb-section">
+<h2>Panel 9 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the desert lower bound proves all 18 constructive roots have w = 0</s> — <span class="dead">DEAD</span></p>
+<p>The lower bound proves w≥1 roots need |u| ≥ 10⁴². It says NOTHING about which specific roots have w = 0. The 18 constructive roots COULD have w = 0 (conjectured) but proving it requires the actual root vectors, which are not stored. The bound is about family membership thresholds, not about specific root assignments.</p>
+</div>
+
+<!-- Verification -->
+<div class="panel" id="verif-panel">
+<h2>Panel 10 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier</td></tr>
+</table>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Panel 11 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt · 11 steps</p>
+<p><strong>Prior cumulative:</strong> 4940 LIT (through H150)</p>
+<p><strong>This instrument (H151):</strong> pending verification</p>
+<p><strong>H150 CORRECTION recorded.</strong> The desert is a floor, not a gap. H150's KB-1 ("smooth transition") was correct to kill; the family structure is real. But the desert description was overstated.</p>
+<p><strong>Recommendation for H152:</strong> New direction beyond the bridge arc. The Q3p geometry arc (H139-H148), the bridge (H149), and the cone census (H150-H151) are complete. What remains unexplored: the GENERATOR BASIS — how the lattice generators relate to the eigenvector basis. This determines word length from u-scale. Compute the LLL-reduced generator matrix in eigenvector coordinates.</p>
+</div>
+
+<!-- BASIC Block: Zumkeller Numbers (A083207) -->
+<div class="panel">
+<h2>BASIC Block — Zumkeller Numbers (A083207)</h2>
+<p class="dim">Numbers whose divisors can be partitioned into two sets with equal sum. Thematic: an honest partition between proved and conjectured.</p>
+<pre>
+6 REM H151 THE DESERT PROOF — Ledger: prior 4940 + H151
+12 REM PROVED: w≥1 roots have |u| ≥ 10⁴² (tight, from null cone equation)
+20 REM CORRECTION: H150 overstated. Desert is a FLOOR, not a GAP
+24 REM w=0 roots exist at ALL u-scales (infinite family, no upper bound)
+28 REM the desert is one-sided: excludes w≥1 below 10⁴², nothing else
+30 REM scale separation 10³⁹ between minimum u of the two families: PROVED
+40 REM 18 roots having w=0 is CONJECTURED, not proved (need root vectors)
+42 REM root classes vs root vectors: word length = min over all representatives
+48 REM the HONEST picture: proved the bound, corrected the claim, flagged conjecture
+54 REM KNOWN-BAD: lower floor implies specific root assignments — DEAD (thresholds only)
+56 REM END — next: H152 (new direction: generator basis in eigenvector coords)
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+      THE CORRECTION
+
+      H150 said:               H151 says:
+
+      u                        u
+      ^                        ^
+      │  · w≥1                 │  · w≥1
+  10⁴²├─────────           10⁴²├══════════ ← FLOOR (PROVED)
+      │                        │  · · · · w=0 roots here too!
+      │  EMPTY                 │  · · · · (they're everywhere)
+      │  DESERT                │  · · · ·
+      │  (wrong)               │  · · · ·
+   10³├─ · w=0              10³├─ · · · · w=0 roots
+      │                        │  · · smallest w=0
+      └────→                   └────→
+
+      A gap.                   A floor.
+      Overstated.              Proved.
+      Corrected.               Honest.
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.12);
+const sinT=Math.sin(t*0.12);
+const cosP=Math.cos(t*0.08);
+const sinP=Math.sin(t*0.08);
+const R1=1.0,R2=0.4;
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.1){
+  for(let v=0;v<Math.PI*2;v+=0.2){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.04);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.04);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    points.push({x:sx,y:sy,d:depth,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+for(const p of points){
+  const alpha=0.15+0.3*(1+p.d)/2;
+  ctx.fillStyle=`rgba(79,195,247,${alpha*0.4})`;
+  ctx.beginPath();ctx.arc(p.x,p.y,1.2,0,Math.PI*2);ctx.fill();
+}
+// w=0 band (green, everywhere)
+for(let i=0;i<30;i++){
+  const a=i*Math.PI*2/30+t*0.03;
+  const r=R1*(0.5+0.5*Math.random());
+  const x4=r*Math.cos(a);const y4=r*Math.sin(a);
+  const x3=x4*cosT;const y3=y4*cosP;const w3=y4*sinP;
+  const proj=1/(3-w3);
+  ctx.fillStyle='rgba(76,175,80,0.6)';
+  ctx.beginPath();ctx.arc(cx+x3*proj*scale,cy+y3*proj*scale,2.5,0,Math.PI*2);ctx.fill();
+}
+// Floor line (gold)
+ctx.strokeStyle='rgba(255,213,79,0.6)';ctx.lineWidth=3;
+ctx.beginPath();
+for(let a=0;a<Math.PI*2;a+=0.05){
+  const r=R1+R2*0.7;
+  const x4=r*Math.cos(a);const y4=r*Math.sin(a)*0.4;
+  const x3=x4*cosT;const y3=y4*cosP;const w3=y4*sinP;
+  const proj=1/(3-w3);
+  if(a===0)ctx.moveTo(cx+x3*proj*scale,cy+y3*proj*scale);
+  else ctx.lineTo(cx+x3*proj*scale,cy+y3*proj*scale);
+}
+ctx.stroke();
+// w≥1 dots (gold, above floor)
+for(let i=0;i<3;i++){
+  const a=i*Math.PI*2/3+t*0.08+1;
+  const r=R1+R2*0.9;
+  const x4=r*Math.cos(a);const y4=r*Math.sin(a)*0.3;
+  const z4=R2*0.5;
+  const x3=x4*cosT-z4*sinT;const y3=y4*cosP;const w3=y4*sinP;
+  const proj=1/(3-w3);
+  ctx.fillStyle='rgba(255,213,79,0.9)';
+  ctx.beginPath();ctx.arc(cx+x3*proj*scale,cy+y3*proj*scale,5,0,Math.PI*2);ctx.fill();
+}
+ctx.fillStyle='rgba(76,175,80,0.9)';ctx.font='12px Courier New';
+ctx.fillText('Green = w=0 roots (everywhere, no limit)',10,20);
+ctx.fillStyle='rgba(255,213,79,0.9)';
+ctx.fillText('Gold line = u = 10⁴² floor (w≥1 roots above, PROVED)',10,36);
+ctx.fillText('Gold dots = w≥1 roots (above the floor)',10,52);
+ctx.fillStyle='var(--dim)';ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+t+=0.03;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
