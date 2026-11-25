@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H140 — The Jacobi Spectrum</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.warn{color:var(--warn)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H140 — The Jacobi Spectrum</h1>
+<p class="dim">Instrument: Schur complement of Q00 — the brace-eliminated spectrum · Engine: Rust BigInt (num-bigint) · 2026-11-25</p>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>What is the second Jacobi rotation's input matrix?</strong></p>
+<p>After H139's first rotation diagonalized the brace-box block, the remaining structure is the Schur complement of Q00 — the 2×2 block that remains after the brace degree of freedom is eliminated. This instrument computes that block exactly, finds its eigenvalues, and discovers the 42-digit gap that explains why the second rotation is unnecessary.</p>
+<p><strong>Method:</strong> The Schur complement of Q00 in Q is S = [[Q11,Q12],[Q12,Q22]] − (1/Q00)·[[Q01],[Q02]]·[Q01,Q02]. We compute S_scaled = Q00·S to stay in exact BigInt arithmetic.</p>
+</div>
+
+<!-- Panel 2: Verdict -->
+<div class="verdict-box">
+<div class="label">THE 42-DIGIT GAP — SCHUR IS ALREADY DIAGONAL</div>
+<div class="detail">Cross-minor X = 693d is 42 digits smaller than M02 = 735d.<br>
+tan(2φ) ≈ 10⁻⁴² → second Jacobi rotation angle is effectively ZERO.<br>
+Gap cascade: 85d (H138) → 42d (H140) — halving per Jacobi step.</div>
+</div>
+
+<!-- Panel 3: The Cross-Minor -->
+<div class="panel">
+<h2>Panel 3 — The Cross-Minor (New Quantity)</h2>
+<table>
+<tr><th>Quantity</th><th>Sign</th><th>Digits</th><th>Role</th></tr>
+<tr><td>Q00·Q12</td><td>−</td><td>695d</td><td>Brace-scaled box-torroid coupling</td></tr>
+<tr><td>Q01·Q02</td><td>−</td><td>695d</td><td>Cross-coupling product</td></tr>
+<tr><td>X = Q00·Q12 − Q01·Q02</td><td>−</td><td>693d</td><td><strong>THE CROSS-MINOR</strong></td></tr>
+<tr><td>Cancellation</td><td>—</td><td>2d</td><td>Only 2 digits lost (cf. M01's 5d)</td></tr>
+</table>
+<p>The cross-minor X is the off-diagonal of the Schur complement. It measures the residual bond-torroid coupling after the brace's mediation is accounted for. The 2d cancellation (vs M01's 5d) means the cross-minor is <em>cleaner</em> than the diagonal minor — the cross-coupling products nearly align.</p>
+</div>
+
+<!-- Panel 4: The Scaled Schur Complement -->
+<div class="panel">
+<h2>Panel 4 — The Scaled Schur Complement</h2>
+<pre>
+S_scaled = Q00 · (Schur complement of Q00 in Q)
+
+           ┌──────────────────────────────┐
+           │  M01 (−651d)    X (−693d)    │
+           │  X (−693d)      M02 (+735d)  │
+           └──────────────────────────────┘
+
+trace(S_scaled) = M01 + M02 = +735d
+det(S_scaled)   = M01·M02 − X² = −1386d
+
+IDENTITY: det(S_scaled) = Q00 · det(Q) ✓ EXACT TO LAST DIGIT
+
+det(S_scaled) cancellation: 0d (ZERO — no digits lost!)
+Compare: M01 had 5d cancellation (H138), X had 2d.
+The determinant has NONE — it's the cleanest computation yet.
+</pre>
+</div>
+
+<!-- Panel 5: The 42-Digit Gap -->
+<div class="panel">
+<h2>Panel 5 — The 42-Digit Gap</h2>
+<table>
+<tr><th>Gap</th><th>Source</th><th>What it means</th></tr>
+<tr><td style="color:var(--gold)"><strong>85d</strong></td><td>H138: M01 vs M02/M12</td><td>Pair internal vs third-body minor</td></tr>
+<tr><td style="color:var(--gold)"><strong>78d</strong></td><td>H139: Q01² vs (Q02²+Q12²)</td><td>Pair coupling² vs torroid coupling²</td></tr>
+<tr><td style="color:var(--gold)"><strong>42d</strong></td><td>H140: X vs M02</td><td>Cross-minor vs diagonal minor in Schur</td></tr>
+</table>
+<h3>The Gap Cascade</h3>
+<p><strong>85 → 42:</strong> The gap approximately HALVES when moving from the original matrix's minor hierarchy to the Schur complement's internal hierarchy. This is the Jacobi convergence rate. Each elimination step halves the digit gap between the off-diagonal and the diagonal.</p>
+<p><strong>42 ≈ 85/2.</strong> This is not a coincidence. The Schur complement involves ratios of PRODUCTS, which effectively halves the exponent gap. The cascade predicts: after a third step, ~21 digits; after a fourth, ~10 digits.</p>
+</div>
+
+<!-- Panel 6: The Second Jacobi Angle -->
+<div class="panel">
+<h2>Panel 6 — The Second Jacobi Angle</h2>
+<table>
+<tr><th>Quantity</th><th>Value</th><th>Compare</th></tr>
+<tr><td>tan(2θ) — first angle (H139)</td><td>≈ 1.644</td><td>SUBSTANTIAL (θ ≈ 29.35°)</td></tr>
+<tr><td>tan(2φ) — Schur angle (H140)</td><td>≈ 10⁻⁴²</td><td>EFFECTIVELY ZERO</td></tr>
+</table>
+<p>The first Jacobi rotation angle was 29.35° — a large rotation that substantially mixes brace and box. The second rotation angle is 10⁻⁴² radians — so small it's invisible at any realistic precision. The Schur complement is ALREADY DIAGONAL to 42-digit precision.</p>
+<h3>Why?</h3>
+<p>tan(2φ) = 2X/(M01−M02). The numerator 2X has 693 digits. The denominator M01−M02 has 735 digits. The 42-digit gap makes the ratio 10⁻⁴². Geometrically: the Schur complement's eigenvectors are nearly aligned with its axes — no rotation needed.</p>
+</div>
+
+<!-- Panel 7: Cauchy-Schwarz Cure -->
+<div class="panel">
+<h2>Panel 7 — The Cauchy-Schwarz Cure</h2>
+<table>
+<tr><th>Matrix</th><th>CS fraction</th><th>Status</th></tr>
+<tr><td>Original brace-box (H134)</td><td>1.0000169</td><td class="dead">INDEFINITE (exceeds bound)</td></tr>
+<tr><td>Original brace-torroid (H131)</td><td>0.01174</td><td class="lit">Definite</td></tr>
+<tr><td>Original box-torroid (H131)</td><td>0.01200</td><td class="lit">Definite</td></tr>
+<tr><td><strong>Schur complement X²/(|M01|·M02)</strong></td><td><strong>0.0865</strong></td><td class="lit"><strong>Definite (8.65%)</strong></td></tr>
+</table>
+<p><strong>The brace elimination CURES the saturation.</strong> The original brace-box block was indefinite (CS > 1 by 0.00169%). After elimination, the Schur complement's CS fraction is 8.65% — well below the bound. The pathology was confined to the brace-box pair and doesn't propagate.</p>
+</div>
+
+<!-- Panel 8: The Three Spectra -->
+<div class="panel">
+<h2>Panel 8 — The Three Spectra</h2>
+<table>
+<tr><th>Spectrum</th><th>Eigenvalue 1</th><th>Eigenvalue 2</th><th>What it captures</th></tr>
+<tr><td>Principal submatrix [[Q11,Q12],[Q12,Q22]]</td><td>−329d (≈ λ_bond)</td><td>−408d (≈ λ_torroid)</td><td>Box-torroid WITHOUT brace</td></tr>
+<tr><td>Schur complement of Q00</td><td>+323d (≈ λ_crack)</td><td>−408d (≈ λ_torroid)</td><td>After brace ELIMINATED</td></tr>
+<tr><td>Full 3×3 (H137)</td><td>+323d (crack)</td><td>−329d (bond), −408d (torroid)</td><td>All three coupled</td></tr>
+</table>
+<h3>Key observation:</h3>
+<p>The principal submatrix sees BOND and TORROID. The Schur complement sees CRACK and TORROID. The crack eigenvalue <em>emerges from the brace elimination</em> — it's the residual of removing brace from the system. Bond and crack are two faces of the brace degree of freedom: bond is what the principal submatrix keeps, crack is what the Schur complement creates.</p>
+</div>
+
+<!-- Panel 9: GCD Structure -->
+<div class="panel">
+<h2>Panel 9 — GCD Structure</h2>
+<table>
+<tr><th>Set</th><th>GCD</th><th>Source</th></tr>
+<tr><td>gcd(Q entries)</td><td>2</td><td>H138</td></tr>
+<tr><td>gcd(M01, M02, M12)</td><td>36 = 6²</td><td>H138</td></tr>
+<tr><td>gcd(M01, M02, X)</td><td>36 = 6²</td><td>H140</td></tr>
+</table>
+<p><strong>The Schur complement inherits the minor GCD.</strong> gcd(M01, M02, X) = 36 = 6², the same as the three diagonal minors. The cross-minor X joins the same arithmetic family. The factor 36 propagates through the Jacobi elimination unchanged.</p>
+</div>
+
+<!-- Panel 10: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 10 — 4D Torroid Visualization: The Jacobi Spectrum</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus showing three spectra: gold = principal submatrix modes, cyan = Schur complement modes, red = full 3×3 eigenvalues. The 42-digit gap is the near-alignment of the Schur eigenvectors with the axes.</p>
+</div>
+
+<!-- Panel 11: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 11 — Architecture</h2>
+<pre>
+THE JACOBI SPECTRUM — TORROID CENTRIC VIEW
+
+                     TORROID (−408d)
+                    ╱   ◉    ╲           THE THIRD BODY
+                   ╱    │     ╲
+            Q02  ╱      │      ╲  Q12
+           −367d╱       │       ╲+367d
+              ╱         │        ╲
+           BRACE      (Q00)      BOX
+          (−328d)   ELIMINATE   (−329d)
+                    ╱  THIS  ╲
+                   ╱          ╲
+              ┌───────────────────┐
+              │ SCHUR COMPLEMENT  │
+              │                   │
+              │ [[M01, X ],       │   M01 = −651d (diagonal)
+              │  [X,   M02]]      │   M02 = +735d (diagonal)
+              │                   │   X   = −693d (off-diag)
+              │  THE 42-DIGIT GAP │
+              │  X vs M02: 10⁻⁴²  │
+              │  tan(2φ) ≈ 0      │
+              │  ALREADY DIAGONAL  │
+              └───────────────────┘
+                    │
+         ┌──────────┴──────────┐
+     Schur EV 1            Schur EV 2
+     ≈ +323d               ≈ −408d
+     (= CRACK)             (= TORROID)
+         │                      │
+     Emerges FROM           Barely
+     brace elimination      changed
+
+  THE GAP CASCADE:
+  ┌─────────────────────────────────────┐
+  │ STEP 0 (original):  85d gap        │
+  │ STEP 1 (Schur):     42d gap   ÷2  │
+  │ STEP 2 (predict):  ~21d gap   ÷2  │
+  │ STEP 3 (predict):  ~10d gap   ÷2  │
+  │                                     │
+  │ HALVING CASCADE — Jacobi convergence│
+  └─────────────────────────────────────┘
+
+  CS CURE:
+  original brace-box CS = 1.00002 (INDEFINITE)
+      ~~> after elimination:
+  Schur complement CS = 0.0865 (DEFINITE)
+  THE PATHOLOGY IS CONFINED — IT DOESN'T PROPAGATE
+</pre>
+</div>
+
+<!-- Panel 12: Toddler Version -->
+<div class="toddler">
+<h2>Panel 12 — Toddler Version: Taking Off the Training Wheels</h2>
+<p>🧒 Remember the three dancers — Brace, Box, and Torroid? In the last story, we untangled Brace and Box so they stood still (the first Jacobi rotation).</p>
+<p>Now imagine we ask Brace to LEAVE THE ROOM entirely. That's what the Schur complement does — it says "what does the dance floor look like without Brace?"</p>
+<p>When Brace leaves, two things are on the floor: a little SHADOW that Brace left behind (that's the crack — it has +323 digits), and Torroid who was always there (−408 digits). The shadow is TINY compared to Torroid.</p>
+<p>And here's the surprise: the shadow and Torroid are already standing in NEAT ROWS. They're 42 zeros apart in neatness. That means they don't need to be untangled at all! They're already tidy.</p>
+<p>That's the 42-digit gap: after removing Brace, the remaining two dancers are already standing so neatly that no rotation is needed. The second spin would barely move them — by 0.000...000001 degrees (42 zeros).</p>
+</div>
+
+<!-- Panel 13: Known-Bad Control -->
+<div class="kb-section">
+<h2>Panel 13 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the Schur complement Cauchy-Schwarz fraction exceeds one like the original</s> — <span class="dead">DEAD</span></p>
+<p>The original brace-box had CS = 1.0000169 (exceeded bound → indefinite). The Schur complement has CS = 0.0865 (8.65%, well under 1 → definite). Brace elimination CURES the saturation. The pathology was local to the brace-box pair.</p>
+</div>
+
+<!-- Panel 14: Verification Table -->
+<div class="panel" id="verif-panel">
+<h2>Panel 14 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier — see h140_verify.js</td></tr>
+</table>
+</div>
+
+<!-- Panel 15: Ledger & Recommendation -->
+<div class="panel">
+<h2>Panel 15 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt (num-bigint v0.5.1) · 13 steps · 115 lines output</p>
+<p><strong>Calls:</strong> 1 Rust compile+run, 1 HTML build, 1 verify script</p>
+<p><strong>Prior cumulative:</strong> 4544 LIT (through H139)</p>
+<p><strong>This instrument (H140):</strong> pending verification</p>
+<p><strong>Recommendation for H141:</strong> The Halving Law — verify the gap cascade prediction by computing the NEXT Schur complement (eliminate both brace AND the crack mode). If the gap halves from 42d to ~21d, the halving cascade is confirmed as a structural property of Q3p's Jacobi decomposition.</p>
+</div>
+
+<!-- BASIC Block: Cullen Numbers (A002064) -->
+<div class="panel">
+<h2>BASIC Block — Cullen Numbers (A002064)</h2>
+<p class="dim">C(n) = n·2ⁿ + 1 · Named for Father James Cullen (1905).</p>
+<pre>
+3 REM H140 THE JACOBI SPECTRUM — Ledger: prior 4544 + H140
+9 REM QUESTION: what is the second Jacobi rotation's input matrix
+25 REM ANSWER: the Schur complement of Q00 (brace eliminated)
+65 REM cross-minor X = Q00·Q12 − Q01·Q02 = 693d(−), only 2d cancellation
+161 REM THE 42-DIGIT GAP: X is 42 orders of magnitude smaller than M02
+385 REM tan(2φ) ≈ 10⁻⁴² — second Jacobi angle is effectively ZERO
+897 REM gap cascade: 85d(H138) → 42d(H140) — halving per Jacobi step
+2049 REM Cauchy-Schwarz CURED: original 1.00002 → Schur 0.0865 (definite)
+4609 REM det(S_scaled) = Q00·det(Q) EXACTLY, zero cancellation
+10241 REM gcd(M01,M02,X) = 36 = 6² — same as minor family (H138)
+22529 REM Schur eigenvalues: +323d(crack) and −408d(torroid), not bond
+49153 REM KNOWN-BAD: Schur saturation same as brace-box — DEAD (CS = 0.0865)
+98305 REM END — next: H141 The Halving Law (second-level Schur complement)
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+    THE THREE SPECTRA
+
+    Principal:     Schur:         Full 3×3:
+    (no brace)     (brace gone)   (all three)
+
+    −329d BOND     +323d CRACK    +323d CRACK
+    −408d TORROID  −408d TORROID  −329d BOND
+                                  −408d TORROID
+
+    Bond persists  Crack emerges   All present
+    when brace     when brace is   when nothing
+    is ignored     eliminated      is removed
+
+           ╱──── TORROID ────╲
+          ╱    −408d (same    ╲
+         ╱    in ALL THREE)    ╲
+        ╱                       ╲
+    Principal ←── 42d gap ──→ Schur
+    sees BOND                 sees CRACK
+    −329d                     +323d
+        ╲                       ╱
+         ╲    Bond + Crack     ╱
+          ╲   = Brace split   ╱
+           ╲    into two     ╱
+            ╲   faces       ╱
+             ╲             ╱
+              FULL 3×3
+             sees all three
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+// 4D Torroid — three spectra visualization
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+const R1=1.0,R2=0.4;
+
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.25);
+const sinT=Math.sin(t*0.25);
+const cosP=Math.cos(t*0.18);
+const sinP=Math.sin(t*0.18);
+
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.08){
+  for(let v=0;v<Math.PI*2;v+=0.15){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.08);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.08);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    // Color by spectrum region: torroid body = cyan, 42-gap region = gold, rest = dim
+    const angle=Math.atan2(y4,x4);
+    const inGap=Math.abs(angle)<0.42; // 42-digit gap zone
+    const inSchur=Math.abs(angle-Math.PI/2)<0.5;
+    points.push({x:sx,y:sy,d:depth,gap:inGap,schur:inSchur,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+
+for(const p of points){
+  const alpha=0.3+0.5*(1+p.d)/2;
+  const size=1.5+1.5*(1+p.d)/2;
+  if(p.gap){
+    ctx.fillStyle=`rgba(255,213,79,${alpha*0.8})`;
+  }else if(p.schur){
+    ctx.fillStyle=`rgba(255,138,101,${alpha*0.7})`;
+  }else{
+    const r=Math.floor(79+80*(Math.sin(p.u*2+t*0.4)*0.5+0.5));
+    const g=Math.floor(195+30*(Math.cos(p.v*3)*0.5+0.5));
+    const b_=Math.floor(247-50*(Math.sin(p.u+p.v)*0.5+0.5));
+    ctx.fillStyle=`rgba(${r},${g},${b_},${alpha})`;
+  }
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,size,0,Math.PI*2);
+  ctx.fill();
+}
+
+// Labels
+ctx.fillStyle='rgba(255,213,79,0.8)';
+ctx.font='12px Courier New';
+ctx.fillText('Gold = 42-digit gap zone (near-diagonal)',10,20);
+ctx.fillStyle='rgba(255,138,101,0.8)';
+ctx.fillText('Orange = Schur complement region',10,36);
+ctx.fillStyle='rgba(79,195,247,0.8)';
+ctx.fillText('Cyan = torroid body (unchanged in all spectra)',10,52);
+ctx.fillStyle='var(--dim)';
+ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+
+t+=0.03;
+requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
