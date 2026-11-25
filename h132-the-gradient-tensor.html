@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H132 — The Gradient Tensor</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8ccd0;--accent:#00e5ff;--gold:#ffd700;--red:#ff4444;
+--green:#00ff88;--dim:#555;--panel:#111118;--border:#222;--thin:#ff6b9d;--wide:#4fc3f7}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:12px;margin:8px 0}
+.verdict-box{background:#1a0505;border:2px solid var(--thin);padding:16px;text-align:center;margin:12px 0;border-radius:4px}
+.verdict-box .label{color:var(--thin);font-size:1.6em;font-weight:bold}
+.verdict-box .sub{color:var(--fg);font-size:0.9em;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:0.85em;margin:6px 0}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2e;color:var(--accent)}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}
+.bar-container{background:#1a1a2e;height:18px;border-radius:3px;overflow:hidden;margin:3px 0}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.3s}
+pre{background:#060610;padding:8px;border-radius:3px;overflow-x:auto;font-size:0.82em;line-height:1.4}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.ornament{color:var(--dim);font-size:0.75em;text-align:center;margin:4px 0}
+.split{display:flex;gap:10px;flex-wrap:wrap}
+.split>div{flex:1;min-width:280px}
+.energy-bar{display:flex;height:28px;border-radius:4px;overflow:hidden;margin:6px 0;border:1px solid var(--border)}
+.energy-thin{background:var(--thin);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#000;font-size:0.85em}
+.energy-wide{background:var(--wide);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#000;font-size:0.85em}
+</style>
+</head>
+<body>
+
+<h1>H132 — The Gradient Tensor</h1>
+<p class="dim">Where does the torroid point? Decompose the non-conformal residual into eigenvector coordinates.</p>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament">&#9674; &#9674; &#9674; gradient &#9674; &#9674; &#9674;</div>
+<!-- [ /ORNAMENT ] -->
+
+<!-- Panel 1: The Question -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H131 found the torroid correction is NOT conformal. It forms a linear gradient:
+brace (1.174%) &rarr; cross (1.187%) &rarr; box (1.200%). A gradient has a <strong>direction</strong>.
+In which direction does the torroid push — toward the thin (collapse) axis or the wide (stable) axis?
+Decompose the rank-1 correction into eigenvector coordinates from H122.</p>
+</div>
+
+<!-- Panel 2: The Torroid Coupling Vector -->
+<div class="panel">
+<h2>Panel 2 — The Torroid Coupling Vector</h2>
+<p>The Schur correction &Delta;Q = (1/Q<sub>22</sub>) &middot; [Q<sub>02</sub>, Q<sub>12</sub>]<sup>T</sup> &middot; [Q<sub>02</sub>, Q<sub>12</sub>] is a <strong>RANK-1</strong> outer product.
+Its direction is the torroid coupling vector <strong>v = [Q<sub>02</sub>, Q<sub>12</sub>]</strong>.</p>
+<table>
+<tr><th>Component</th><th>Digits</th><th>Sign</th><th>Coupling</th></tr>
+<tr><td>Q<sub>02</sub> (brace⊗torroid)</td><td>367d</td><td>&minus;</td><td>brace-torroid</td></tr>
+<tr><td>Q<sub>12</sub> (box⊗torroid)</td><td>367d</td><td>+</td><td>box-torroid</td></tr>
+</table>
+<p style="margin-top:8px"><strong>|Q<sub>02</sub>|/|Q<sub>12</sub>| = 0.5561</strong> &mdash; box-torroid coupling is 1.80&times; STRONGER than brace-torroid.</p>
+<p><strong>Direction: &phi; = 60.92&deg; from brace axis</strong> (= 29.08&deg; from box axis).</p>
+</div>
+
+<!-- Panel 3: Eigenvector Projection -->
+<div class="panel">
+<h2>Panel 3 — Eigenvector Projection</h2>
+<p>H122 found the eigenvectors of the 2&times;2 block at angle &theta; = 29.35&deg; from brace.
+The torroid vector at &phi; = 60.92&deg; makes angle &phi;&minus;&theta; = 31.57&deg; from the thin (collapse) eigenvector.</p>
+<div class="split">
+<div>
+<table>
+<tr><th>Projection</th><th>Value</th><th>Energy fraction</th></tr>
+<tr><td style="color:var(--thin)">cos(&phi;&minus;&theta;) &rarr; THIN axis</td><td>0.8520</td><td><strong>cos&sup2; = 72.59%</strong></td></tr>
+<tr><td style="color:var(--wide)">sin(&phi;&minus;&theta;) &rarr; WIDE axis</td><td>0.5236</td><td><strong>sin&sup2; = 27.41%</strong></td></tr>
+</table>
+</div>
+<div>
+<p style="font-size:0.9em;color:var(--thin)"><strong>THIN-DOMINATED</strong>: the torroid preferentially couples to the collapse direction.</p>
+<p style="font-size:0.9em">The torroid pushes <strong>2.65&times;</strong> harder on thin than on wide.</p>
+</div>
+</div>
+<div class="energy-bar">
+<div class="energy-thin" style="width:72.59%">THIN 72.59%</div>
+<div class="energy-wide" style="width:27.41%">WIDE 27.41%</div>
+</div>
+</div>
+
+<!-- VERDICT BOX -->
+<div class="verdict-box">
+<div class="label">THIN-DOMINATED GRADIENT</div>
+<div class="sub">The torroid pushes 2.65&times; harder on the collapse direction than on the stable direction.<br>
+&phi;&minus;&theta; = 31.57&deg; &mdash; not aligned to either eigenvector, but closer to thin.<br>
+The correction is RANK-1 and MAXIMALLY ANISOTROPIC &mdash; near-conformality is a coincidence.</div>
+</div>
+
+<!-- Panel 4: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 4 — 4D Torroid with Gradient Direction</h2>
+<canvas id="torroid4D" width="580" height="420"></canvas>
+<p class="dim" style="text-align:center">Clifford torus in 4D with gradient vector (magenta arrow = torroid coupling direction, cyan = thin eigenvector, blue = wide eigenvector)</p>
+</div>
+
+<!-- Panel 5: The Angle Diagram -->
+<div class="panel">
+<h2>Panel 5 — The Angle Diagram</h2>
+<canvas id="angleCanvas" width="580" height="300"></canvas>
+<p class="dim" style="text-align:center">Three directions in {brace, box} space: thin eigenvector (&theta;=29.35&deg;), wide eigenvector (&theta;+90&deg;), torroid gradient (&phi;=60.92&deg;)</p>
+</div>
+
+<!-- Panel 6: Anisotropy Certificate -->
+<div class="panel">
+<h2>Panel 6 — The Anisotropy Certificate</h2>
+<p>For ANY rank-1 2&times;2 matrix:</p>
+<table>
+<tr><th>Property</th><th>Value</th><th>Meaning</th></tr>
+<tr><td>Eigenvalues</td><td>{0, trace}</td><td>One zero eigenvalue always</td></tr>
+<tr><td>Isotropic part</td><td>trace/2 &middot; I</td><td>Half the trace on each diagonal</td></tr>
+<tr><td>Traceless eigenvalues</td><td>&pm;trace/2</td><td>Equal and opposite</td></tr>
+<tr><td>|traceless|/|isotropic|</td><td><strong>1.000</strong></td><td>MAXIMALLY ANISOTROPIC always</td></tr>
+</table>
+<p style="margin-top:8px">The &Delta;Q correction is an outer product of [Q<sub>02</sub>, Q<sub>12</sub>] &mdash; it is rank-1 BY CONSTRUCTION.
+Therefore it is maximally anisotropic BY CONSTRUCTION. The ~1.2% &plusmn; 0.03% spread from H131 is NOT
+"almost conformal" &mdash; it is a fully anisotropic correction that happens to produce similar f-values
+because the coupling angle and the Q magnitudes nearly cancel.</p>
+</div>
+
+<!-- Panel 7: Why It Looks Conformal -->
+<div class="panel">
+<h2>Panel 7 — Why It Looks Conformal (But Isn't)</h2>
+<p>The correction fractions f<sub>ij</sub> = |&Delta;Q<sub>ij</sub>|/|Q<sub>ij</sub>| depend on BOTH the numerator (rank-1 structure)
+and the denominator (Q magnitudes). The near-equality f<sub>00</sub> &asymp; f<sub>01</sub> &asymp; f<sub>11</sub> comes from a
+cancellation between these two independent structures:</p>
+<table>
+<tr><th>Quantity</th><th>Value</th><th>Would need for exact conformality</th></tr>
+<tr><td>|Q<sub>02</sub>|&sup2;/|Q<sub>12</sub>|&sup2;</td><td><strong>0.3092</strong></td><td>Would need Q<sub>00</sub>/Q<sub>11</sub> = 0.3092</td></tr>
+<tr><td>|Q<sub>00</sub>|/|Q<sub>11</sub>|</td><td><strong>0.3162</strong></td><td>Would need = 0.3092</td></tr>
+<tr><td>Deviation</td><td><strong>2.2%</strong></td><td>Would need 0%</td></tr>
+</table>
+<p style="margin-top:8px">The 2.2% mismatch between these ratios produces the 0.03% spread in f-values.
+The near-conformality is a <strong>numerical coincidence</strong>, not a structural property.</p>
+</div>
+
+<!-- Panel 8: Traceless Residual -->
+<div class="panel">
+<h2>Panel 8 — The Traceless Residual</h2>
+<table>
+<tr><th>Entry</th><th>Value (sign)</th><th>Digits</th><th>Meaning</th></tr>
+<tr><td>2&middot;R<sub>00</sub> = Q<sub>02</sub>&sup2;&minus;Q<sub>12</sub>&sup2;</td><td>&minus;</td><td>734d</td><td>|Q<sub>12</sub>| &gt; |Q<sub>02</sub>|: box coupling dominates</td></tr>
+<tr><td>2&middot;R<sub>11</sub> = Q<sub>12</sub>&sup2;&minus;Q<sub>02</sub>&sup2;</td><td>+</td><td>734d</td><td>Opposite of R<sub>00</sub> (traceless)</td></tr>
+<tr><td>R<sub>01</sub> = Q<sub>02</sub>&middot;Q<sub>12</sub></td><td>&minus;</td><td>734d</td><td>Cross-coupling</td></tr>
+</table>
+<p style="margin-top:8px">The traceless residual direction: &alpha; = 29.08&deg; from brace axis.
+Note: &alpha; + &phi; = 90&deg; always (the traceless eigenvector of a rank-1 matrix is perpendicular to the rank-1 vector).</p>
+</div>
+
+<!-- Panel 9: Verification Table -->
+<div class="panel">
+<h2>Panel 9 — Verification Table</h2>
+<table>
+<tr><th>#</th><th>Check</th><th>Expected</th><th>Got</th><th>Status</th></tr>
+<tr><td>1</td><td>|Q02|/|Q12|</td><td>&lt;1 (box dominates)</td><td>0.5561</td><td class="lit">LIT</td></tr>
+<tr><td>2</td><td>&phi; from brace</td><td>&gt;45&deg;</td><td>60.92&deg;</td><td class="lit">LIT</td></tr>
+<tr><td>3</td><td>&phi;&minus;&theta;</td><td>Angle in eigenvector space</td><td>31.57&deg;</td><td class="lit">LIT</td></tr>
+<tr><td>4</td><td>cos&sup2;(&phi;&minus;&theta;)</td><td>Thin fraction</td><td>72.59%</td><td class="lit">LIT</td></tr>
+<tr><td>5</td><td>sin&sup2;(&phi;&minus;&theta;)</td><td>Wide fraction</td><td>27.41%</td><td class="lit">LIT</td></tr>
+<tr><td>6</td><td>Thin + Wide</td><td>100%</td><td>100.00%</td><td class="lit">LIT</td></tr>
+<tr><td>7</td><td>Thin/Wide ratio</td><td>&gt;1 (thin-dominated)</td><td>2.65</td><td class="lit">LIT</td></tr>
+<tr><td>8</td><td>&Delta;Q rank</td><td>1 (outer product)</td><td>rank-1</td><td class="lit">LIT</td></tr>
+<tr><td>9</td><td>|traceless|/|isotropic|</td><td>1.000 (max anisotropy)</td><td>1.000</td><td class="lit">LIT</td></tr>
+<tr><td>10</td><td>|Q02|&sup2;/|Q12|&sup2;</td><td>&ne;1</td><td>0.3092</td><td class="lit">LIT</td></tr>
+<tr><td>11</td><td>Deviation from conformal</td><td>&gt;0</td><td>2.2%</td><td class="lit">LIT</td></tr>
+<tr><td>12</td><td>&phi;+&phi;'=90&deg;</td><td>Complementary angles</td><td>90.00&deg;</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament">&#9674; &#9674; &#9674;</div>
+<!-- [ /ORNAMENT ] -->
+
+<!-- Toddler Version -->
+<div class="panel" style="border-color:var(--gold)">
+<h2 style="color:var(--gold)">&#127868; Toddler Version &#127868;</h2>
+<p>Imagine you have a ball (the torroid) and it's pushing on a wobbly table.</p>
+<p>The table can wobble two ways: it can SQUISH (the thin direction, like pressing a pancake flatter)
+or it can STRETCH (the wide direction, like pulling taffy).</p>
+<p>We found out that when the ball pushes, it pushes <strong>mostly toward SQUISHING</strong> &mdash;
+about 73% squish and only 27% stretch!</p>
+<p>So the ball is trying to make things flatter, not wider. It's like a heavy book sitting
+on a sandwich &mdash; it squishes down more than it pushes sideways.</p>
+<p>But it's not pushing STRAIGHT down &mdash; it's tilted a little bit (31.57 degrees).
+So some sandwich squishes out the sides too.</p>
+<p>And the really sneaky part? The push LOOKS almost the same in every direction (1.17% vs 1.20%),
+but that's just a coincidence! The push is actually as one-directional as it can possibly be &mdash;
+it just happens that the numbers almost cancel out when you look at the percentages.</p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel">
+<h2>ASCII Architecture</h2>
+<pre>
+  GRADIENT TENSOR ARCHITECTURE
+
+  {brace, box} space             {thin, wide} eigenvector space
+  =================             ==============================
+
+         box                           wide (stable)
+          |                              |
+          |  &phi;=60.92&deg;                  |
+          | /                            |      &phi;-&theta;=31.57&deg;
+          |/ torroid                     |     /
+          +--------brace                +----/ torroid
+          |                            |   /
+          |  &theta;=29.35&deg;                 |  / cos&sup2;=72.59%
+          | /                          | /
+          |/ thin                      |/
+          +                            + -------- thin (collapse)
+                                            sin&sup2;=27.41%
+
+  THE ENERGY SPLIT:
+  ╔══════════════════════════════════════════════════╗
+  ║ ████████████████████████████▓▓▓▓▓▓▓▓▓▓▓        ║
+  ║ ◄── THIN 72.59% ──►◄─ WIDE 27.41% ─►          ║
+  ╚══════════════════════════════════════════════════╝
+  Torroid pushes 2.65&times; harder on COLLAPSE than on STABLE
+
+  WHY IT LOOKS CONFORMAL (BUT ISN'T):
+  ┌────────────────────────────┐
+  │ |Q02|&sup2;/|Q12|&sup2; = 0.3092      │ ← coupling ratio
+  │ |Q00|/|Q11| = 0.3162      │ ← magnitude ratio
+  │ Deviation = 2.2%          │ ← produces 0.03% spread
+  │ MAXIMALLY ANISOTROPIC     │ ← rank-1 BY CONSTRUCTION
+  └────────────────────────────┘
+</pre>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th></tr>
+<tr><td>Cumulative through H131</td><td>4251</td><td>0</td></tr>
+<tr><td>H132 The Gradient Tensor</td><td>36</td><td>0</td></tr>
+<tr><td><strong>Running total</strong></td><td><strong>4287</strong></td><td><strong>0</strong></td></tr>
+</table>
+<p class="dim">KB-1 per instrument (not counted in total): "the torroid gradient is exactly along one eigenvector axis" — DEAD (31.57&deg; off both).</p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>IMPROVEMENT RECOMMENDATION &rarr; H133: The Coupling Asymmetry</h2>
+<p>H132 found |Q<sub>12</sub>| &gt; |Q<sub>02</sub>| — the box-torroid coupling is 1.80&times; stronger than
+brace-torroid. WHY? The box axis (Q<sub>11</sub>) has 329 digits; the brace axis (Q<sub>00</sub>) has 328 digits.
+The torroid axis (Q<sub>22</sub>) has 408 digits. Does the coupling strength follow from the eigenvalue magnitudes?
+Compute the coupling-to-eigenvalue ratio for each axis. Is there a selection rule? Does the
+torroid preferentially couple to the LARGER 2&times;2 eigenvalue?</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — Blum Integers (A016105) / Centered Cube (A005898) line numbers</h2>
+<pre>
+1 REM === H132: THE GRADIENT TENSOR ===
+9 REM Blum integers = p*q where p,q are distinct primes both = 3 (mod 4)
+35 LET PHI = 60.92: REM torroid vector angle from brace axis (degrees)
+91 LET THETA = 29.35: REM thin eigenvector angle from H122 (degrees)
+189 LET DELTA = PHI - THETA: REM = 31.57 degrees from thin axis
+341 LET THIN_FRAC = COS(DELTA)^2: REM = 0.7259 = 72.59 percent
+559 LET WIDE_FRAC = SIN(DELTA)^2: REM = 0.2741 = 27.41 percent
+855 LET RATIO = THIN_FRAC / WIDE_FRAC: REM = 2.65x harder on collapse
+1241 PRINT "BLUM INTEGERS: 21 33 57 69 77 93 129 133 141 161"
+1729 PRINT "TORROID PUSHES"; RATIO; "x HARDER ON THIN THAN WIDE"
+2457 PRINT "RANK-1 MEANS MAXIMALLY ANISOTROPIC BY CONSTRUCTION"
+3433 PRINT "NEAR-CONFORMALITY IS A NUMERICAL COINCIDENCE"
+4697 PRINT "THE GRADIENT IS REAL. THE DIRECTION IS FOUND."
+6281 END
+</pre>
+</div>
+
+<script>
+// 4D Torroid with Gradient Direction
+(function(){
+const c=document.getElementById('torroid4D');
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+const cx=W/2,cy=H/2;
+let t=0;
+const R1=100,R2=40;
+
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+
+// 4D rotation angles
+const a4=t*0.3;
+const a1=t*0.7;
+const a2=t*0.5;
+
+// Draw torroid as Clifford torus projection from 4D
+const points=[];
+for(let i=0;i<80;i++){
+  const u=i*Math.PI*2/80;
+  for(let j=0;j<40;j++){
+    const v=j*Math.PI*2/40;
+    // 4D Clifford torus: (cos u, sin u, cos v, sin v) scaled
+    let x4=R1*Math.cos(u);
+    let y4=R1*Math.sin(u);
+    let z4=R2*Math.cos(v);
+    let w4=R2*Math.sin(v);
+
+    // 4D rotation in xw plane
+    let nx=x4*Math.cos(a4)-w4*Math.sin(a4);
+    let nw=x4*Math.sin(a4)+w4*Math.cos(a4);
+    x4=nx; w4=nw;
+
+    // 4D rotation in yz plane
+    let ny=y4*Math.cos(a4*0.6)-z4*Math.sin(a4*0.6);
+    let nz=y4*Math.sin(a4*0.6)+z4*Math.cos(a4*0.6);
+    y4=ny; z4=nz;
+
+    // Project 4D→3D (perspective)
+    const d4=300/(300+w4);
+    const x3=x4*d4;
+    const y3=y4*d4;
+    const z3=z4*d4;
+
+    // 3D rotation
+    const rx=x3*Math.cos(a1)-z3*Math.sin(a1);
+    const rz=x3*Math.sin(a1)+z3*Math.cos(a1);
+    const ry=y3*Math.cos(a2)-rz*Math.sin(a2);
+    const rz2=y3*Math.sin(a2)+rz*Math.cos(a2);
+
+    // Project 3D→2D
+    const d3=400/(400+rz2);
+    const sx=cx+rx*d3;
+    const sy=cy+ry*d3;
+
+    // Color by gradient direction: mix thin (pink) and wide (cyan) based on u angle
+    const gradAngle=60.92*Math.PI/180;
+    const thinAngle=29.35*Math.PI/180;
+    const proj=Math.cos(u-gradAngle);
+    const alpha=0.3+0.4*d3*d4;
+
+    if(proj>0){
+      // Thin-dominated region
+      const intensity=proj;
+      ctx.fillStyle=`rgba(255,107,157,${alpha*intensity})`;
+    } else {
+      // Wide-dominated region
+      const intensity=-proj;
+      ctx.fillStyle=`rgba(79,195,247,${alpha*intensity})`;
+    }
+
+    const size=Math.max(1,2.5*d3*d4);
+    ctx.beginPath();
+    ctx.arc(sx,sy,size,0,Math.PI*2);
+    ctx.fill();
+
+    points.push({sx,sy,rz2,u,v});
+  }
+}
+
+// Draw gradient direction arrow
+const phi=60.92*Math.PI/180;
+const arrowLen=130;
+const ax1=cx;const ay1=cy;
+const ax2=cx+arrowLen*Math.cos(-phi+a1);
+const ay2=cy+arrowLen*Math.sin(-phi+a1)*Math.cos(a2);
+
+ctx.strokeStyle='#ff6b9d';
+ctx.lineWidth=3;
+ctx.beginPath();
+ctx.moveTo(ax1,ay1);ctx.lineTo(ax2,ay2);ctx.stroke();
+// Arrowhead
+const aAngle=Math.atan2(ay2-ay1,ax2-ax1);
+ctx.beginPath();
+ctx.moveTo(ax2,ay2);
+ctx.lineTo(ax2-12*Math.cos(aAngle-0.4),ay2-12*Math.sin(aAngle-0.4));
+ctx.lineTo(ax2-12*Math.cos(aAngle+0.4),ay2-12*Math.sin(aAngle+0.4));
+ctx.closePath();ctx.fillStyle='#ff6b9d';ctx.fill();
+ctx.fillStyle='#ff6b9d';ctx.font='bold 11px monospace';
+ctx.fillText('φ=60.92° GRADIENT',ax2+5,ay2-5);
+
+// Draw thin eigenvector
+const theta=29.35*Math.PI/180;
+const tx2=cx+110*Math.cos(-theta+a1);
+const ty2=cy+110*Math.sin(-theta+a1)*Math.cos(a2);
+ctx.strokeStyle='#00e5ff';ctx.lineWidth=2;ctx.setLineDash([5,3]);
+ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(tx2,ty2);ctx.stroke();
+ctx.setLineDash([]);
+ctx.fillStyle='#00e5ff';ctx.font='10px monospace';
+ctx.fillText('θ=29.35° THIN',tx2+5,ty2+12);
+
+// Draw wide eigenvector
+const wx2=cx+90*Math.cos(-(theta+Math.PI/2)+a1);
+const wy2=cy+90*Math.sin(-(theta+Math.PI/2)+a1)*Math.cos(a2);
+ctx.strokeStyle='#4fc3f7';ctx.lineWidth=2;ctx.setLineDash([5,3]);
+ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(wx2,wy2);ctx.stroke();
+ctx.setLineDash([]);
+ctx.fillStyle='#4fc3f7';ctx.font='10px monospace';
+ctx.fillText('WIDE',wx2+5,wy2+12);
+
+// Label
+ctx.fillStyle='#ffd700';ctx.font='bold 12px monospace';
+ctx.fillText('4D TORROID + GRADIENT VECTOR',10,18);
+ctx.fillStyle='#888';ctx.font='10px monospace';
+ctx.fillText('Pink = thin-coupled | Cyan = wide-coupled',10,H-8);
+
+t+=0.008;
+requestAnimationFrame(draw);
+}
+draw();
+})();
+
+// Angle Diagram
+(function(){
+const c=document.getElementById('angleCanvas');
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+const cx=W/2,cy=H*0.6;
+const R=120;
+
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+
+// Title
+ctx.fillStyle='#ffd700';ctx.font='bold 12px monospace';
+ctx.fillText('THREE DIRECTIONS IN {BRACE, BOX} SPACE',W/2-180,20);
+
+// Axes
+ctx.strokeStyle='#333';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(cx-R-40,cy);ctx.lineTo(cx+R+40,cy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(cx,cy+40);ctx.lineTo(cx,cy-R-40);ctx.stroke();
+ctx.fillStyle='#888';ctx.font='11px monospace';
+ctx.fillText('BRACE →',cx+R+5,cy+15);
+ctx.fillText('BOX ↑',cx+5,cy-R-25);
+
+// Draw arcs and angles
+function drawDir(angle,color,label,len,lw){
+  const rad=angle*Math.PI/180;
+  ctx.strokeStyle=color;ctx.lineWidth=lw||2;
+  ctx.beginPath();ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+len*Math.cos(rad),cy-len*Math.sin(rad));
+  ctx.stroke();
+  // Arrowhead
+  const ax=cx+len*Math.cos(rad);
+  const ay=cy-len*Math.sin(rad);
+  const aA=Math.atan2(-(ay-cy),ax-cx);
+  ctx.beginPath();
+  ctx.moveTo(ax,ay);
+  ctx.lineTo(ax-10*Math.cos(aA-0.3),ay+10*Math.sin(aA-0.3));
+  ctx.lineTo(ax-10*Math.cos(aA+0.3),ay+10*Math.sin(aA+0.3));
+  ctx.closePath();ctx.fillStyle=color;ctx.fill();
+  // Label
+  ctx.fillStyle=color;ctx.font='bold 11px monospace';
+  const lx=cx+(len+15)*Math.cos(rad);
+  const ly=cy-(len+15)*Math.sin(rad);
+  ctx.fillText(label,lx,ly);
+}
+
+// Arc for theta (brace to thin)
+ctx.strokeStyle='#00e5ff55';ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,50,0,-29.35*Math.PI/180,true);ctx.stroke();
+ctx.fillStyle='#00e5ff';ctx.font='9px monospace';
+ctx.fillText('θ=29.35°',cx+35,cy-18);
+
+// Arc for phi (brace to gradient)
+ctx.strokeStyle='#ff6b9d55';ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,70,0,-60.92*Math.PI/180,true);ctx.stroke();
+ctx.fillStyle='#ff6b9d';ctx.font='9px monospace';
+ctx.fillText('φ=60.92°',cx+50,cy-45);
+
+// Arc for delta (thin to gradient)
+ctx.strokeStyle='#ffd70055';ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,90,-29.35*Math.PI/180,-60.92*Math.PI/180,true);ctx.stroke();
+ctx.fillStyle='#ffd700';ctx.font='9px monospace';
+ctx.fillText('Δ=31.57°',cx+60,cy-72);
+
+drawDir(29.35,'#00e5ff','THIN (θ)',R,2);
+drawDir(119.35,'#4fc3f7','WIDE (θ+90)',R-20,1.5);
+drawDir(60.92,'#ff6b9d','GRADIENT (φ)',R+15,3);
+
+// Energy fractions
+ctx.fillStyle='#ff6b9d';ctx.font='bold 11px monospace';
+ctx.fillText('72.59% → THIN',20,H-40);
+ctx.fillStyle='#4fc3f7';
+ctx.fillText('27.41% → WIDE',20,H-22);
+ctx.fillStyle='#ffd700';
+ctx.fillText('2.65× ratio',200,H-30);
+})();
+</script>
+
+</body>
+</html>
