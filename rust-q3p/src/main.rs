@@ -1,7 +1,18 @@
-//! H135: The Residual Eigenvalue
-//! Compute exact eigenvectors of the 2×2 brace-box block.
-//! Find the "crack direction" — the small eigenvalue's eigenvector.
-//! Compare to torroid coupling direction φ = 60.92° from H132.
+//! H136: The Antiparallel Analysis
+//! Exact perturbation theory: how much does the torroid shift each eigenvalue?
+//!
+//! Physics: The 3×3 Q3p matrix has a 2×2 brace-box block with eigenvalues
+//! λ_bond and λ_crack, and a torroid entry Q22 on the diagonal.
+//! The off-diagonal coupling [Q02, Q12] connects torroid to brace-box.
+//!
+//! Second-order perturbation theory:
+//!   Δλ_i = |<v_i|torroid>|² / (λ_i - Q22) for each 2×2 eigenvector v_i
+//!
+//! H135 showed: torroid is 99.998% along bond, 0.002% along crack.
+//! Now: with λ_bond < 0 and c²>0 and (λ_bond - Q22) < 0:
+//!   the correction c²/(λ_bond - Q22) is NEGATIVE → DEEPENS the bond
+//!
+//! This instrument computes exact BigInt perturbation corrections.
 
 use num_bigint::BigInt;
 use num_traits::{Zero, One, Signed};
@@ -69,219 +80,434 @@ fn main() {
     let q11 = &q[1][1];
     let q02 = &q[0][2];
     let q12 = &q[1][2];
+    let q22 = &q[2][2];
 
-    println!("=== H135: THE RESIDUAL EIGENVALUE (Rust BigInt) ===\n");
+    println!("=== H136: THE ANTIPARALLEL ANALYSIS (Rust BigInt) ===\n");
 
-    // --- Step 1: 2x2 eigenvalue decomposition ---
-    println!("=== STEP 1: 2x2 BRACE-BOX BLOCK ===");
-    println!("|Q00| = {}d", digit_count(q00));
-    println!("|Q01| = {}d", digit_count(q01));
-    println!("|Q11| = {}d", digit_count(q11));
+    // =====================================================
+    // STEP 1: Recompute 2×2 eigendecomposition from H135
+    // =====================================================
+    println!("=== STEP 1: 2×2 EIGENDECOMPOSITION (from H135) ===");
 
     let trace = q00 + q11;
     let det = q00 * q11 - q01 * q01;
-    println!("\ntrace = Q00 + Q11");
-    println!("trace sign: {}", if trace.is_negative() { "NEGATIVE" } else { "POSITIVE" });
-    println!("|trace| = {}d", digit_count(&trace));
-    println!("det = Q00*Q11 - Q01^2");
-    println!("det sign: {}", if det.is_negative() { "NEGATIVE" } else { "POSITIVE" });
-    println!("|det| = {}d", digit_count(&det));
-
-    // --- Step 2: discriminant = (Q00-Q11)^2 + 4*Q01^2 ---
-    println!("\n=== STEP 2: DISCRIMINANT ===");
     let diff = q00 - q11;
     let disc = &diff * &diff + BigInt::from(4) * q01 * q01;
-    println!("disc = (Q00-Q11)^2 + 4*Q01^2");
-    println!("disc sign: {}", if disc.is_negative() { "NEGATIVE (impossible!)" } else { "POSITIVE -> two real eigenvalues" });
-    println!("|disc| = {}d", digit_count(&disc));
-
-    // --- Step 3: integer sqrt of discriminant ---
-    println!("\n=== STEP 3: INTEGER SQUARE ROOT OF DISCRIMINANT ===");
     let sqrt_disc = integer_sqrt(&disc);
-    let check = &sqrt_disc * &sqrt_disc;
-    let sqrt_error = &disc - &check;
-    println!("|sqrt_disc| = {}d", digit_count(&sqrt_disc));
-    println!("disc - (sqrt_disc)^2 = {} ({}d residual)",
-        if sqrt_error.is_zero() { "0" } else { "nonzero" }, digit_count(&sqrt_error));
-    println!("Perfect square? {}", if sqrt_error.is_zero() { "YES" } else { "NO" });
+    let sqrt_error = &disc - &sqrt_disc * &sqrt_disc;
 
-    // --- Step 4: eigenvector components ---
-    // For symmetric 2x2 [[a,b],[b,c]]:
-    // eigenvalues: lam = (a+c)/2 +/- sqrt((a-c)^2+4b^2)/2
-    // eigenvector for lam: [b, lam-a] = [2b, (c-a) +/- sqrt_disc]
-    println!("\n=== STEP 4: EIGENVECTOR COMPONENTS ===");
+    // Eigenvalues: λ = (trace ± sqrt_disc) / 2
+    // NOTE: "lambda_plus" = (trace+sqrt_disc)/2 is the ALGEBRAICALLY LARGER eigenvalue
+    // For this indefinite matrix: lambda_plus is POSITIVE (smaller magnitude, 323d) = CRACK
+    // lambda_minus is NEGATIVE (larger magnitude, 329d) = BOND
+    let lambda_plus = (&trace + &sqrt_disc) / BigInt::from(2);  // crack eigenvalue
+    let lambda_minus = (&trace - &sqrt_disc) / BigInt::from(2);  // bond eigenvalue
+
+    println!("λ_crack = (trace+sqrt_disc)/2 = {} sign, {}d",
+        if lambda_plus.is_negative() { "-" } else { "+" }, digit_count(&lambda_plus));
+    println!("λ_bond  = (trace-sqrt_disc)/2 = {} sign, {}d",
+        if lambda_minus.is_negative() { "-" } else { "+" }, digit_count(&lambda_minus));
+    println!("Q22 (torroid self-energy) = {} sign, {}d",
+        if q22.is_negative() { "-" } else { "+" }, digit_count(q22));
+    println!("sqrt_disc residual: {}d (not perfect square)", digit_count(&sqrt_error));
+
+    // Eigenvectors
     let two_q01 = BigInt::from(2) * q01;
     let q11_minus_q00 = q11 - q00;
 
-    // Large eigenvalue eigenvector: [2*Q01, (Q11-Q00) + sqrt_disc]
-    let v_large_x = two_q01.clone();
-    let v_large_y = &q11_minus_q00 + &sqrt_disc;
+    // crack eigenvector: [2*Q01, (Q11-Q00)+sqrt_disc]
+    let v_crack_x = two_q01.clone();
+    let v_crack_y = &q11_minus_q00 + &sqrt_disc;
 
-    // Small eigenvalue eigenvector: [2*Q01, (Q11-Q00) - sqrt_disc]
-    let v_small_x = two_q01.clone();
-    let v_small_y = &q11_minus_q00 - &sqrt_disc;
+    // bond eigenvector: [2*Q01, (Q11-Q00)-sqrt_disc]
+    let v_bond_x = two_q01.clone();
+    let v_bond_y = &q11_minus_q00 - &sqrt_disc;
 
-    println!("LARGE eigenvector (dominant bond):");
-    println!("  v+ = [2*Q01, (Q11-Q00)+sqrt_disc]");
-    println!("  v+_x sign: {}, {}d", if v_large_x.is_negative() { "-" } else { "+" }, digit_count(&v_large_x));
-    println!("  v+_y sign: {}, {}d", if v_large_y.is_negative() { "-" } else { "+" }, digit_count(&v_large_y));
-
-    println!("\nSMALL eigenvector (crack direction):");
-    println!("  v- = [2*Q01, (Q11-Q00)-sqrt_disc]");
-    println!("  v-_x sign: {}, {}d", if v_small_x.is_negative() { "-" } else { "+" }, digit_count(&v_small_x));
-    println!("  v-_y sign: {}, {}d", if v_small_y.is_negative() { "-" } else { "+" }, digit_count(&v_small_y));
-
-    // --- Step 5: angle computation ---
-    println!("\n=== STEP 5: EIGENVECTOR ANGLES ===");
+    // Verify angles match H135
     let prec = 40u32;
-    let tan_large = fp_div(&v_large_y, &v_large_x, prec);
-    let tan_small = fp_div(&v_small_y, &v_small_x, prec);
-    println!("tan(theta_large) = v+_y/v+_x = {}", &tan_large[..50.min(tan_large.len())]);
-    println!("tan(theta_small) = v-_y/v-_x = {}", &tan_small[..50.min(tan_small.len())]);
+    let tan_crack_str = fp_div(&v_crack_y, &v_crack_x, prec);
+    let tan_bond_str = fp_div(&v_bond_y, &v_bond_x, prec);
+    let tan_crack_f = tan_crack_str.parse::<f64>().unwrap_or(0.0);
+    let tan_bond_f = tan_bond_str.parse::<f64>().unwrap_or(0.0);
+    let theta_crack = tan_crack_f.atan() * 180.0 / std::f64::consts::PI;
+    let theta_bond = tan_bond_f.atan() * 180.0 / std::f64::consts::PI;
 
-    let tan_large_f = tan_large.parse::<f64>().unwrap_or(0.0);
-    let tan_small_f = tan_small.parse::<f64>().unwrap_or(0.0);
-    let theta_large_deg = tan_large_f.atan() * 180.0 / std::f64::consts::PI;
-    let theta_small_deg = tan_small_f.atan() * 180.0 / std::f64::consts::PI;
-    println!("\ntheta_large = {:.6} deg from brace axis (dominant bond direction)", theta_large_deg);
-    println!("theta_small = {:.6} deg from brace axis (crack direction)", theta_small_deg);
-    println!("theta_large + theta_small = {:.6} deg (should be +/-90 for orthogonal)", theta_large_deg + theta_small_deg);
+    println!("\nCrack direction: {:.4}° from brace axis (H135: +29.3473°)", theta_crack);
+    println!("Bond direction:  {:.4}° from brace axis (H135: -60.6527°)", theta_bond);
+    println!("Orthogonality: |θ_crack − θ_bond| = {:.4}° (should be 90.0000°)",
+        (theta_crack - theta_bond).abs());
 
-    // --- Step 6: comparison to H122 and H132 ---
-    println!("\n=== STEP 6: COMPARISON TO PRIOR INSTRUMENTS ===");
-    let phi_torroid = 60.92_f64;
-    let theta_h122 = 29.35_f64;
+    // =====================================================
+    // STEP 2: Torroid coupling projections (from H135)
+    // =====================================================
+    println!("\n=== STEP 2: TORROID COUPLING PROJECTIONS ===");
 
-    println!("H122 Q3p thin eigenvector (collapse): theta1 = {:.2} deg", theta_h122);
-    println!("H122 Q3p wide eigenvector (stable):   theta2 = {:.2} deg", theta_h122 - 90.0);
-    println!("H132 torroid coupling direction:        phi   = {:.2} deg", phi_torroid);
-    println!("H135 2x2 large (bond) direction:        thetaL = {:.4} deg", theta_large_deg);
-    println!("H135 2x2 small (crack) direction:       thetaS = {:.4} deg", theta_small_deg);
+    // c_bond = torroid · v_bond = Q02 * v_bond_x + Q12 * v_bond_y
+    let c_bond = q02 * &v_bond_x + q12 * &v_bond_y;
+    // c_crack = torroid · v_crack = Q02 * v_crack_x + Q12 * v_crack_y
+    let c_crack = q02 * &v_crack_x + q12 * &v_crack_y;
 
-    let crack_vs_torroid = (theta_small_deg - phi_torroid).abs();
-    let crack_vs_thin = (theta_small_deg - theta_h122).abs();
-    let crack_vs_wide = (theta_small_deg - (theta_h122 - 90.0)).abs();
-    let bond_vs_thin = (theta_large_deg - theta_h122).abs();
+    println!("c_bond  = torroid·v_bond  = {} sign, {}d",
+        if c_bond.is_negative() { "-" } else { "+" }, digit_count(&c_bond));
+    println!("c_crack = torroid·v_crack = {} sign, {}d",
+        if c_crack.is_negative() { "-" } else { "+" }, digit_count(&c_crack));
 
-    println!("\n=== ANGULAR RELATIONSHIPS ===");
-    println!("|crack - torroid| = {:.4} deg", crack_vs_torroid);
-    println!("|crack - thin|    = {:.4} deg", crack_vs_thin);
-    println!("|crack - wide|    = {:.4} deg", crack_vs_wide);
-    println!("|bond  - thin|    = {:.4} deg", bond_vs_thin);
+    // Squared projections
+    let c_bond_sq = &c_bond * &c_bond;
+    let c_crack_sq = &c_crack * &c_crack;
+    println!("\nc_bond²  = {}d (always positive)", digit_count(&c_bond_sq));
+    println!("c_crack² = {}d (always positive)", digit_count(&c_crack_sq));
 
-    // --- Step 7: torroid-crack alignment ---
-    println!("\n=== STEP 7: TORROID-CRACK ALIGNMENT ===");
-    let phi_rad = phi_torroid.to_radians();
-    let crack_rad = theta_small_deg.to_radians();
-    let cos_diff = (phi_rad - crack_rad).cos();
-    let sin_diff = (phi_rad - crack_rad).sin();
-    println!("cos^2(phi - theta_crack) = {:.6} ({:.2}% along crack)", cos_diff*cos_diff, cos_diff*cos_diff*100.0);
-    println!("sin^2(phi - theta_crack) = {:.6} ({:.2}% along bond)", sin_diff*sin_diff, sin_diff*sin_diff*100.0);
+    // Norms of eigenvectors
+    let norm_bond_sq = &v_bond_x * &v_bond_x + &v_bond_y * &v_bond_y;
+    let norm_crack_sq = &v_crack_x * &v_crack_x + &v_crack_y * &v_crack_y;
 
-    if cos_diff*cos_diff > 0.5 {
-        println!("-> TORROID COUPLES PREFERENTIALLY ALONG THE CRACK DIRECTION");
+    // Normalized c²: c²/|v|²
+    // For comparison: (c_bond²/norm_bond²) vs (c_crack²/norm_crack²)
+    let c_bond_norm = &c_bond_sq * &norm_crack_sq;
+    let c_crack_norm = &c_crack_sq * &norm_bond_sq;
+    let c_total = &c_bond_norm + &c_crack_norm;
+    let pct_bond = fp_div(&c_bond_norm, &c_total, 20);
+    let pct_crack = fp_div(&c_crack_norm, &c_total, 20);
+    println!("\nNormalized coupling: {:.6}% bond / {:.6}% crack (H135 confirmation)",
+        pct_bond.parse::<f64>().unwrap_or(0.0) * 100.0,
+        pct_crack.parse::<f64>().unwrap_or(0.0) * 100.0);
+
+    // =====================================================
+    // STEP 3: PERTURBATION DENOMINATORS
+    // =====================================================
+    println!("\n=== STEP 3: PERTURBATION DENOMINATORS ===");
+    println!("Second-order perturbation: Δλ_i = c_i² / (|v_i|² × (λ_i − Q22))");
+    println!("where c_i = torroid·v_i (unnormalized dot product)\n");
+
+    // Denominators: λ_i - Q22
+    let denom_crack = &lambda_plus - q22;   // λ_crack - Q22
+    let denom_bond = &lambda_minus - q22;    // λ_bond - Q22
+
+    println!("λ_crack − Q22:");
+    println!("  λ_crack = {} sign, {}d", if lambda_plus.is_negative() { "-" } else { "+" }, digit_count(&lambda_plus));
+    println!("  Q22     = {} sign, {}d", if q22.is_negative() { "-" } else { "+" }, digit_count(q22));
+    println!("  λ_crack − Q22 = {} sign, {}d",
+        if denom_crack.is_negative() { "-" } else { "+" }, digit_count(&denom_crack));
+
+    println!("\nλ_bond − Q22:");
+    println!("  λ_bond  = {} sign, {}d", if lambda_minus.is_negative() { "-" } else { "+" }, digit_count(&lambda_minus));
+    println!("  Q22     = {} sign, {}d", if q22.is_negative() { "-" } else { "+" }, digit_count(q22));
+    println!("  λ_bond − Q22 = {} sign, {}d",
+        if denom_bond.is_negative() { "-" } else { "+" }, digit_count(&denom_bond));
+
+    // Physical interpretation of signs
+    println!("\n--- SIGN ANALYSIS ---");
+    println!("λ_crack (+, 323d) − Q22 (−, 408d) = POSITIVE ({}d)", digit_count(&denom_crack));
+    println!("  → (+)−(−) = (+) → denominator is POSITIVE");
+    println!("  → c_crack² (always +) / POSITIVE = POSITIVE correction");
+    println!("  → torroid RAISES the crack eigenvalue (makes it more positive)");
+
+    println!("\nλ_bond (−, 329d) − Q22 (−, 408d):", );
+    if denom_bond.is_positive() {
+        println!("  = POSITIVE ({}d)", digit_count(&denom_bond));
+        println!("  → (−)−(−): Q22 is more negative than λ_bond");
+        println!("  → c_bond² / POSITIVE = POSITIVE correction");
+        println!("  → torroid RAISES the bond eigenvalue (makes it less negative)");
+        println!("  *** SURPRISE: torroid WEAKENS the bond, not deepens it! ***");
     } else {
-        println!("-> TORROID COUPLES PREFERENTIALLY ALONG THE BOND DIRECTION");
+        println!("  = NEGATIVE ({}d)", digit_count(&denom_bond));
+        println!("  → (−)−(−): Q22 is less negative than λ_bond");
+        println!("  → c_bond² / NEGATIVE = NEGATIVE correction");
+        println!("  → torroid DEEPENS the bond (makes it more negative)");
     }
 
-    // --- Step 8: exact eigenvalues ---
-    println!("\n=== STEP 8: EXACT EIGENVALUES ===");
-    // lam = (trace +/- sqrt_disc) / 2
-    let lambda_large = (&trace + &sqrt_disc) / BigInt::from(2);
-    let lambda_small = (&trace - &sqrt_disc) / BigInt::from(2);
-    println!("lambda_large = (trace + sqrt_disc)/2");
-    println!("  sign: {}, {}d", if lambda_large.is_negative() { "-" } else { "+" }, digit_count(&lambda_large));
-    println!("lambda_small = (trace - sqrt_disc)/2");
-    println!("  sign: {}, {}d", if lambda_small.is_negative() { "-" } else { "+" }, digit_count(&lambda_small));
+    // =====================================================
+    // STEP 4: EXACT PERTURBATION CORRECTIONS
+    // =====================================================
+    println!("\n=== STEP 4: EXACT PERTURBATION CORRECTIONS ===");
+    println!("Δλ_i = c_i² / (|v_i|² × (λ_i − Q22))");
+    println!("Using unnormalized: Δλ_i = (torroid·v_i)² / (|v_i|² × (λ_i − Q22))\n");
 
-    let ratio_str = fp_div(&lambda_small.abs(), &lambda_large.abs(), 20);
-    println!("|lambda_small|/|lambda_large| = {}", &ratio_str[..30.min(ratio_str.len())]);
+    // Full denominator for each correction
+    let full_denom_crack = &norm_crack_sq * &denom_crack;
+    let full_denom_bond = &norm_bond_sq * &denom_bond;
 
-    // Verify: lam_large + lam_small = trace
-    let eig_sum = &lambda_large + &lambda_small;
-    println!("\nVerify: lam_large + lam_small = trace? {}", if eig_sum == trace { "YES" } else { "NO" });
+    println!("Crack correction:");
+    println!("  numerator   = c_crack² = {}d", digit_count(&c_crack_sq));
+    println!("  denominator = |v_crack|² × (λ_crack − Q22) = {}d, sign {}",
+        digit_count(&full_denom_crack),
+        if full_denom_crack.is_negative() { "-" } else { "+" });
 
-    // Verify: lam_large * lam_small = det (up to sqrt rounding)
-    let eig_prod = &lambda_large * &lambda_small;
-    // det_exact = (trace^2 - disc)/4 but disc might not be perfect square
-    // so eig_prod = (trace^2 - sqrt_disc^2)/4
-    // error = eig_prod - det = (trace^2 - sqrt_disc^2)/4 - (Q00*Q11 - Q01^2)
-    //       = (trace^2 - sqrt_disc^2 - 4*det)/4
-    //       = (trace^2 - 4*det - sqrt_disc^2)/4
-    //       = (disc - sqrt_disc^2)/4
-    let det_error = &eig_prod - &det;
-    println!("lambda_large * lambda_small - det has {}d (should be ~0 or from sqrt rounding)", digit_count(&det_error));
+    // Compute Δλ_crack as a rational approximation
+    // We want c_crack_sq / full_denom_crack
+    let delta_crack_str = fp_div(&c_crack_sq, &full_denom_crack, 40);
+    println!("  Δλ_crack = {}", &delta_crack_str[..60.min(delta_crack_str.len())]);
+    println!("  Δλ_crack sign: {}", if full_denom_crack.is_negative() {
+        "NEGATIVE (c²>0 / neg = neg)" } else { "POSITIVE (c²>0 / pos = pos)" });
 
-    // --- Step 9: torroid coupling in eigenbasis ---
-    println!("\n=== STEP 9: TORROID COUPLING DECOMPOSITION IN EIGENBASIS ===");
-    // Torroid coupling vector is [Q02, Q12] in {brace, box} basis.
-    // Project onto eigenvectors of the 2x2 block.
-    let dot_large = q02 * &v_large_x + q12 * &v_large_y;
-    let dot_small = q02 * &v_small_x + q12 * &v_small_y;
-    println!("Torroid dot v_large (bond): {}d, sign {}", digit_count(&dot_large), if dot_large.is_negative() { "-" } else { "+" });
-    println!("Torroid dot v_small (crack): {}d, sign {}", digit_count(&dot_small), if dot_small.is_negative() { "-" } else { "+" });
+    println!("\nBond correction:");
+    println!("  numerator   = c_bond² = {}d", digit_count(&c_bond_sq));
+    println!("  denominator = |v_bond|² × (λ_bond − Q22) = {}d, sign {}",
+        digit_count(&full_denom_bond),
+        if full_denom_bond.is_negative() { "-" } else { "+" });
 
-    let norm_large_sq = &v_large_x * &v_large_x + &v_large_y * &v_large_y;
-    let norm_small_sq = &v_small_x * &v_small_x + &v_small_y * &v_small_y;
+    let delta_bond_str = fp_div(&c_bond_sq, &full_denom_bond, 40);
+    println!("  Δλ_bond = {}", &delta_bond_str[..60.min(delta_bond_str.len())]);
+    println!("  Δλ_bond sign: {}", if full_denom_bond.is_negative() {
+        "NEGATIVE (c²>0 / neg = neg) → DEEPENS bond" } else {
+        "POSITIVE (c²>0 / pos = pos) → WEAKENS bond" });
 
-    // Normalized projection magnitudes: (dot)^2 / norm^2
-    // Compare: f_L / f_S = (dot_L^2 / norm_L_sq) / (dot_S^2 / norm_S_sq)
-    //                     = (dot_L^2 * norm_S_sq) / (dot_S^2 * norm_L_sq)
-    let f_large = &dot_large * &dot_large * &norm_small_sq;
-    let f_small = &dot_small * &dot_small * &norm_large_sq;
-    let f_total = &f_large + &f_small;
-    let pct_large = fp_div(&f_large, &f_total, 20);
-    let pct_small = fp_div(&f_small, &f_total, 20);
-    println!("\nTorroid coupling energy split (in 2x2 eigenbasis):");
-    println!("  Along BOND (large lam): {}", &pct_large[..20.min(pct_large.len())]);
-    println!("  Along CRACK (small lam): {}", &pct_small[..20.min(pct_small.len())]);
+    // =====================================================
+    // STEP 5: MAGNITUDE COMPARISON
+    // =====================================================
+    println!("\n=== STEP 5: MAGNITUDE COMPARISON ===");
 
-    let pct_large_f = pct_large.parse::<f64>().unwrap_or(0.0) * 100.0;
-    let pct_small_f = pct_small.parse::<f64>().unwrap_or(0.0) * 100.0;
-    println!("  -> {:.2}% bond / {:.2}% crack", pct_large_f, pct_small_f);
+    // |Δλ_bond| / |Δλ_crack| = (c_bond² / |full_denom_bond|) / (c_crack² / |full_denom_crack|)
+    //                         = (c_bond² × |full_denom_crack|) / (c_crack² × |full_denom_bond|)
+    let ratio_num = &c_bond_sq * &full_denom_crack.abs();
+    let ratio_den = &c_crack_sq * &full_denom_bond.abs();
+    let ratio_str = fp_div(&ratio_num, &ratio_den, 20);
+    println!("|Δλ_bond| / |Δλ_crack| = {}", &ratio_str[..40.min(ratio_str.len())]);
 
-    if pct_small_f > pct_large_f {
-        println!("  -> TORROID PREFERENTIALLY COUPLES ALONG THE CRACK");
-    } else {
-        println!("  -> TORROID PREFERENTIALLY COUPLES ALONG THE BOND");
+    let ratio_f = ratio_str.parse::<f64>().unwrap_or(0.0);
+    println!("Bond correction is {:.1}× larger than crack correction", ratio_f);
+
+    // Relative to eigenvalues themselves:
+    // |Δλ_crack| / |λ_crack| and |Δλ_bond| / |λ_bond|
+    // |Δλ_crack|/|λ_crack| = c_crack_sq / (|full_denom_crack| × ... nah, easier with fp_div
+    // Actually: Δλ_crack/λ_crack = c_crack²/(norm_crack²×denom_crack×λ_crack)
+    // But we can use the decimal strings
+    let delta_crack_f = delta_crack_str.parse::<f64>().unwrap_or(0.0);
+    let delta_bond_f = delta_bond_str.parse::<f64>().unwrap_or(0.0);
+
+    // We need λ values as f64 too
+    let lam_crack_str = fp_div(&lambda_plus, &BigInt::one(), 20);
+    let lam_bond_str = fp_div(&lambda_minus, &BigInt::one(), 20);
+
+    // These will overflow f64, so let's compute ratios via BigInt
+    // |Δλ_crack|/|λ_crack| = c_crack²/(|norm_crack²×denom_crack|) / |λ_crack|
+    //                       = c_crack² / (|norm_crack²×denom_crack×λ_crack|)
+    let rel_crack_denom = (&full_denom_crack * &lambda_plus).abs();
+    let rel_crack_str = fp_div(&c_crack_sq, &rel_crack_denom, 20);
+    println!("\n|Δλ_crack| / |λ_crack| = {}", &rel_crack_str[..30.min(rel_crack_str.len())]);
+
+    let rel_bond_denom = (&full_denom_bond * &lambda_minus).abs();
+    let rel_bond_str = fp_div(&c_bond_sq, &rel_bond_denom, 20);
+    println!("|Δλ_bond|  / |λ_bond|  = {}", &rel_bond_str[..30.min(rel_bond_str.len())]);
+
+    // =====================================================
+    // STEP 6: CORRECTED EIGENVALUES
+    // =====================================================
+    println!("\n=== STEP 6: CORRECTED EIGENVALUES ===");
+    println!("λ_crack_corrected = λ_crack + Δλ_crack");
+    println!("λ_bond_corrected  = λ_bond  + Δλ_bond\n");
+
+    // We can't add f64 to 323-digit BigInt directly.
+    // Instead: Δλ_i = c_i² / (norm_i² × denom_i)
+    // As a fraction: Δλ_i_num / Δλ_i_den = c_i² / (norm_i² × denom_i)
+    // λ_corrected = λ_i + c_i²/(norm_i² × denom_i)
+    //             = (λ_i × norm_i² × denom_i + c_i²) / (norm_i² × denom_i)
+
+    let corrected_crack_num = &lambda_plus * &full_denom_crack + &c_crack_sq;
+    let corrected_crack_den = full_denom_crack.clone();
+    println!("λ_crack_corrected = (λ_crack×|v|²×Δ + c²) / (|v|²×Δ)");
+    println!("  numerator:   {} sign, {}d",
+        if corrected_crack_num.is_negative() { "-" } else { "+" }, digit_count(&corrected_crack_num));
+    println!("  denominator: {} sign, {}d",
+        if corrected_crack_den.is_negative() { "-" } else { "+" }, digit_count(&corrected_crack_den));
+
+    let corrected_bond_num = &lambda_minus * &full_denom_bond + &c_bond_sq;
+    let corrected_bond_den = full_denom_bond.clone();
+    println!("\nλ_bond_corrected = (λ_bond×|v|²×Δ + c²) / (|v|²×Δ)");
+    println!("  numerator:   {} sign, {}d",
+        if corrected_bond_num.is_negative() { "-" } else { "+" }, digit_count(&corrected_bond_num));
+    println!("  denominator: {} sign, {}d",
+        if corrected_bond_den.is_negative() { "-" } else { "+" }, digit_count(&corrected_bond_den));
+
+    // =====================================================
+    // STEP 7: CORRECTED EIGENVALUE RATIO
+    // =====================================================
+    println!("\n=== STEP 7: CORRECTED EIGENVALUE RATIO ===");
+
+    // Original ratio: |λ_crack| / |λ_bond| ≈ 3.09×10⁻⁶ (from H134/H135)
+    let orig_ratio = fp_div(&lambda_plus.abs(), &lambda_minus.abs(), 20);
+    println!("ORIGINAL: |λ_crack|/|λ_bond| = {}", &orig_ratio[..30.min(orig_ratio.len())]);
+
+    // Corrected ratio: |λ_crack_corrected| / |λ_bond_corrected|
+    // = |corrected_crack_num/corrected_crack_den| / |corrected_bond_num/corrected_bond_den|
+    // = |corrected_crack_num × corrected_bond_den| / |corrected_bond_num × corrected_crack_den|
+    let corr_ratio_num = (&corrected_crack_num * &corrected_bond_den).abs();
+    let corr_ratio_den = (&corrected_bond_num * &corrected_crack_den).abs();
+    let corr_ratio = fp_div(&corr_ratio_num, &corr_ratio_den, 20);
+    println!("CORRECTED: |λ_crack_corr|/|λ_bond_corr| = {}", &corr_ratio[..30.min(corr_ratio.len())]);
+
+    let orig_f = orig_ratio.parse::<f64>().unwrap_or(0.0);
+    let corr_f = corr_ratio.parse::<f64>().unwrap_or(0.0);
+    if corr_f > 0.0 && orig_f > 0.0 {
+        let change_pct = (corr_f - orig_f) / orig_f * 100.0;
+        println!("Change in ratio: {:.6}%", change_pct);
+        if change_pct.abs() < 0.001 {
+            println!("→ NEGLIGIBLE: torroid barely changes the eigenvalue ratio");
+        } else if change_pct > 0.0 {
+            println!("→ Ratio INCREASED: gap between eigenvalues widened");
+        } else {
+            println!("→ Ratio DECREASED: gap between eigenvalues narrowed");
+        }
     }
 
-    // --- Step 10: The crack eigenvector's exact ratio ---
-    println!("\n=== STEP 10: CRACK EIGENVECTOR EXACT RATIO ===");
-    // v_small = [2*Q01, (Q11-Q00) - sqrt_disc]
-    // The ratio v_small_y / v_small_x tells us the exact tilt
-    let crack_ratio = fp_div(&v_small_y, &v_small_x, 40);
-    println!("v_small_y / v_small_x = {}", &crack_ratio[..50.min(crack_ratio.len())]);
-    println!("This is tan(theta_crack) to 40 decimal places");
+    // =====================================================
+    // STEP 8: SCHUR COMPLEMENT (EXACT)
+    // =====================================================
+    println!("\n=== STEP 8: SCHUR COMPLEMENT ===");
+    println!("The 'effective 2×2' after eliminating the torroid degree of freedom.");
+    println!("Schur(2×2 | torroid) = M_bb − col × Q22⁻¹ × row");
+    println!("where col = [Q02, Q12]^T, row = [Q02, Q12], M_bb = [[Q00,Q01],[Q01,Q11]]\n");
 
-    // Also compute for large eigenvector
-    let bond_ratio = fp_div(&v_large_y, &v_large_x, 40);
-    println!("v_large_y / v_large_x = {}", &bond_ratio[..50.min(bond_ratio.len())]);
+    // Schur complement of Q22 in the full 3×3:
+    // S[i][j] = Q[i][j] - Q[i][2]*Q[j][2]/Q22  for i,j in {0,1}
+    // As exact fraction: S[i][j] = (Q[i][j]*Q22 - Q[i][2]*Q[j][2]) / Q22
 
-    // --- Step 11: Exact digit counts for all intermediate values ---
-    println!("\n=== STEP 11: DIGIT COUNT SUMMARY ===");
-    println!("trace:       {}d", digit_count(&trace));
-    println!("det:         {}d", digit_count(&det));
-    println!("disc:        {}d", digit_count(&disc));
-    println!("sqrt_disc:   {}d", digit_count(&sqrt_disc));
-    println!("sqrt_error:  {}d", digit_count(&sqrt_error));
-    println!("v_large_x:   {}d", digit_count(&v_large_x));
-    println!("v_large_y:   {}d", digit_count(&v_large_y));
-    println!("v_small_x:   {}d", digit_count(&v_small_x));
-    println!("v_small_y:   {}d", digit_count(&v_small_y));
-    println!("lam_large:   {}d", digit_count(&lambda_large));
-    println!("lam_small:   {}d", digit_count(&lambda_small));
-    println!("dot_large:   {}d", digit_count(&dot_large));
-    println!("dot_small:   {}d", digit_count(&dot_small));
+    let s00_num = q00 * q22 - q02 * q02;
+    let s01_num = q01 * q22 - q02 * q12;
+    let s11_num = q11 * q22 - q12 * q12;
+    // All divided by Q22 (which is negative)
+
+    println!("S00_num = Q00×Q22 − Q02² = {} sign, {}d",
+        if s00_num.is_negative() { "-" } else { "+" }, digit_count(&s00_num));
+    println!("S01_num = Q01×Q22 − Q02×Q12 = {} sign, {}d",
+        if s01_num.is_negative() { "-" } else { "+" }, digit_count(&s01_num));
+    println!("S11_num = Q11×Q22 − Q12² = {} sign, {}d",
+        if s11_num.is_negative() { "-" } else { "+" }, digit_count(&s11_num));
+    println!("All divided by Q22 ({} sign, {}d)", if q22.is_negative() { "-" } else { "+" }, digit_count(q22));
+
+    // Effective eigenvalues of Schur complement:
+    let s_trace_num = &s00_num + &s11_num;
+    let s_det_num = &s00_num * &s11_num - &s01_num * &s01_num;
+    // s_trace = s_trace_num / Q22
+    // s_det = s_det_num / Q22²
+
+    println!("\nSchur trace_num = {} sign, {}d",
+        if s_trace_num.is_negative() { "-" } else { "+" }, digit_count(&s_trace_num));
+    println!("Schur det_num = {} sign, {}d",
+        if s_det_num.is_negative() { "-" } else { "+" }, digit_count(&s_det_num));
+
+    // Discriminant of Schur complement (times Q22²):
+    // disc_S_num = (S00_num - S11_num)² + 4×S01_num²
+    let s_diff = &s00_num - &s11_num;
+    let s_disc_num = &s_diff * &s_diff + BigInt::from(4) * &s01_num * &s01_num;
+    println!("Schur disc_num = {} sign, {}d",
+        if s_disc_num.is_negative() { "-" } else { "+" }, digit_count(&s_disc_num));
+
+    let s_sqrt_disc = integer_sqrt(&s_disc_num);
+    let s_sqrt_err = &s_disc_num - &s_sqrt_disc * &s_sqrt_disc;
+    println!("sqrt(Schur disc_num) = {}d, residual = {}d",
+        digit_count(&s_sqrt_disc), digit_count(&s_sqrt_err));
+
+    // Schur eigenvalues (times Q22): λ_S × Q22 = (trace_num ± sqrt(disc_num)) / 2
+    let schur_lam_plus_times_q22 = (&s_trace_num + &s_sqrt_disc) / BigInt::from(2);
+    let schur_lam_minus_times_q22 = (&s_trace_num - &s_sqrt_disc) / BigInt::from(2);
+    // Actual Schur eigenvalues = above / Q22
+
+    println!("\nSchur eigenvalues (each × Q22, before dividing):");
+    println!("  λ_S+ × Q22 = {} sign, {}d",
+        if schur_lam_plus_times_q22.is_negative() { "-" } else { "+" },
+        digit_count(&schur_lam_plus_times_q22));
+    println!("  λ_S− × Q22 = {} sign, {}d",
+        if schur_lam_minus_times_q22.is_negative() { "-" } else { "+" },
+        digit_count(&schur_lam_minus_times_q22));
+    println!("  Divide each by Q22 ({}) to get actual Schur eigenvalues",
+        if q22.is_negative() { "negative" } else { "positive" });
+    println!("  Sign of λ_S+: {} / {} = {}",
+        if schur_lam_plus_times_q22.is_negative() { "-" } else { "+" },
+        if q22.is_negative() { "-" } else { "+" },
+        if (schur_lam_plus_times_q22.is_negative()) == (q22.is_negative()) { "POSITIVE" } else { "NEGATIVE" });
+    println!("  Sign of λ_S−: {} / {} = {}",
+        if schur_lam_minus_times_q22.is_negative() { "-" } else { "+" },
+        if q22.is_negative() { "-" } else { "+" },
+        if (schur_lam_minus_times_q22.is_negative()) == (q22.is_negative()) { "POSITIVE" } else { "NEGATIVE" });
+
+    // Compare Schur eigenvalues to corrected eigenvalues
+    // Schur eigenvalue ratio
+    let schur_ratio = fp_div(&schur_lam_plus_times_q22.abs(), &schur_lam_minus_times_q22.abs(), 20);
+    println!("\nSchur eigenvalue ratio |λ_S+|/|λ_S−| = {}", &schur_ratio[..30.min(schur_ratio.len())]);
+    println!("(should match corrected ratio to second order)");
+
+    // =====================================================
+    // STEP 9: PHYSICAL INTERPRETATION
+    // =====================================================
+    println!("\n=== STEP 9: PHYSICAL INTERPRETATION ===");
+
+    let rel_crack_f = rel_crack_str.parse::<f64>().unwrap_or(0.0);
+    let rel_bond_f = rel_bond_str.parse::<f64>().unwrap_or(0.0);
+
+    println!("The torroid is ANTIPARALLEL to the bond eigenvector (179.73°).");
+    println!("It couples 99.998% along bond, 0.002% along crack.\n");
+
+    println!("PERTURBATION CORRECTIONS:");
+    if denom_crack.is_positive() {
+        println!("  Crack: Δλ_crack is POSITIVE → torroid RAISES crack eigenvalue");
+    } else {
+        println!("  Crack: Δλ_crack is NEGATIVE → torroid LOWERS crack eigenvalue");
+    }
+    if denom_bond.is_positive() {
+        println!("  Bond:  Δλ_bond is POSITIVE → torroid WEAKENS bond (makes less negative)");
+        println!("\n  *** KEY FINDING: THE TORROID DOES NOT DEEPEN THE BOND ***");
+        println!("  The initial hypothesis was: c²/λ with λ<0 → negative correction → deepens.");
+        println!("  But the denominator is (λ_bond − Q22), and |Q22| > |λ_bond|.");
+        println!("  So λ_bond − Q22 = (−329d) − (−408d) = +(408−329)d = POSITIVE.");
+        println!("  Therefore c²/POSITIVE = POSITIVE → the bond gets LESS negative.");
+        println!("  The torroid WEAKENS the bond (by a tiny amount).\n");
+        println!("  PHYSICAL PICTURE:");
+        println!("  Q22 (torroid self-energy) is MORE negative than λ_bond.");
+        println!("  The torroid is a deeper well than the bond eigenvalue.");
+        println!("  Coupling to a deeper well pulls eigenvalues TOWARD that well.");
+        println!("  For the bond (above Q22): pulled down → toward Q22 → more negative?");
+        println!("  NO — level repulsion: the bond eigenvalue is REPELLED from Q22.");
+        println!("  Since Q22 is below λ_bond, repulsion pushes λ_bond UP.");
+    } else {
+        println!("  Bond:  Δλ_bond is NEGATIVE → torroid DEEPENS bond (makes more negative)");
+        println!("\n  CONFIRMS HYPOTHESIS: torroid deepens the bond.");
+        println!("  λ_bond − Q22 < 0, so |Q22| < |λ_bond| and c²/negative → negative correction.");
+    }
+
+    println!("\n--- RELATIVE SIZES ---");
+    println!("|Δλ_crack|/|λ_crack| ≈ {}", &rel_crack_str[..20.min(rel_crack_str.len())]);
+    println!("|Δλ_bond|/|λ_bond|   ≈ {}", &rel_bond_str[..20.min(rel_bond_str.len())]);
+    println!("Bond correction is {:.1}× larger than crack correction in absolute terms", ratio_f);
+
+    // =====================================================
+    // STEP 10: DIGIT COUNT SUMMARY
+    // =====================================================
+    println!("\n=== STEP 10: DIGIT COUNT SUMMARY ===");
+    println!("λ_crack:            {} sign, {}d", if lambda_plus.is_negative() { "-" } else { "+" }, digit_count(&lambda_plus));
+    println!("λ_bond:             {} sign, {}d", if lambda_minus.is_negative() { "-" } else { "+" }, digit_count(&lambda_minus));
+    println!("Q22:                {} sign, {}d", if q22.is_negative() { "-" } else { "+" }, digit_count(q22));
+    println!("c_bond:             {} sign, {}d", if c_bond.is_negative() { "-" } else { "+" }, digit_count(&c_bond));
+    println!("c_crack:            {} sign, {}d", if c_crack.is_negative() { "-" } else { "+" }, digit_count(&c_crack));
+    println!("c_bond²:            {}d", digit_count(&c_bond_sq));
+    println!("c_crack²:           {}d", digit_count(&c_crack_sq));
+    println!("λ_crack − Q22:      {} sign, {}d", if denom_crack.is_negative() { "-" } else { "+" }, digit_count(&denom_crack));
+    println!("λ_bond − Q22:       {} sign, {}d", if denom_bond.is_negative() { "-" } else { "+" }, digit_count(&denom_bond));
+    println!("Schur S00_num:      {} sign, {}d", if s00_num.is_negative() { "-" } else { "+" }, digit_count(&s00_num));
+    println!("Schur S01_num:      {} sign, {}d", if s01_num.is_negative() { "-" } else { "+" }, digit_count(&s01_num));
+    println!("Schur S11_num:      {} sign, {}d", if s11_num.is_negative() { "-" } else { "+" }, digit_count(&s11_num));
+    println!("sqrt_disc residual: {}d", digit_count(&sqrt_error));
 
     println!("\n=== SUMMARY ===");
-    println!("2x2 block eigenvectors:");
-    println!("  Bond direction:  {:.4} deg from brace axis", theta_large_deg);
-    println!("  Crack direction: {:.4} deg from brace axis", theta_small_deg);
-    println!("  Orthogonal check: sum = {:.4} deg (should be ~-90)", theta_large_deg + theta_small_deg);
-    println!("Torroid coupling direction (H132): {:.2} deg", phi_torroid);
-    println!("Crack-to-torroid angle: {:.4} deg", crack_vs_torroid);
-    println!("Torroid energy: {:.2}% bond / {:.2}% crack", pct_large_f, pct_small_f);
-    println!("VERDICT: torroid couples preferentially along the {}",
-        if pct_small_f > pct_large_f { "CRACK (unlocked direction)" } else { "BOND (locked direction)" });
+    println!("H136: THE ANTIPARALLEL ANALYSIS");
+    println!("1. λ_crack = +, {}d | λ_bond = −, {}d | Q22 = −, {}d",
+        digit_count(&lambda_plus), digit_count(&lambda_minus), digit_count(q22));
+    println!("2. λ_crack − Q22 = {} | λ_bond − Q22 = {}",
+        if denom_crack.is_positive() { "POSITIVE" } else { "NEGATIVE" },
+        if denom_bond.is_positive() { "POSITIVE" } else { "NEGATIVE" });
+    println!("3. Δλ_crack {} | Δλ_bond {}",
+        if full_denom_crack.is_positive() { "POSITIVE (raises crack)" } else { "NEGATIVE (lowers crack)" },
+        if full_denom_bond.is_positive() { "POSITIVE (weakens bond)" } else { "NEGATIVE (deepens bond)" });
+    println!("4. |Δλ_bond|/|Δλ_crack| ≈ {:.1}×", ratio_f);
+    println!("5. Original eigenvalue ratio: {}", &orig_ratio[..20.min(orig_ratio.len())]);
+    println!("6. Corrected eigenvalue ratio: {}", &corr_ratio[..20.min(corr_ratio.len())]);
+    println!("7. Schur eigenvalue ratio: {}", &schur_ratio[..20.min(schur_ratio.len())]);
+    if denom_bond.is_positive() {
+        println!("8. VERDICT: LEVEL REPULSION — torroid weakens bond, raises crack");
+        println!("   The initial hypothesis (torroid deepens bond) was WRONG.");
+        println!("   Q22 is a deeper well than λ_bond. Level repulsion pushes them apart.");
+    } else {
+        println!("8. VERDICT: torroid deepens bond, raises crack");
+    }
 }
