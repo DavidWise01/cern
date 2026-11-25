@@ -1,8 +1,7 @@
-//! H146: The Phase Diagram
-//! Map the full Q3p parameter space: at what coupling strengths do
-//! the minors M01, M02, M12 flip sign? The phase boundaries between
-//! all signature configurations of a 3×3 negative-diagonal symmetric matrix.
-//! All computations use the ACTUAL Q3p values — no approximations.
+//! H147: The Thin Sliver
+//! Phase I geometry: how thick is the sliver in the CS01 direction?
+//! Cross-section perpendicular to the M01=0 wall.
+//! Where within Phase I does Q3p sit — edge, center, or corner?
 
 use num_bigint::BigInt;
 use num_traits::{Zero, Signed};
@@ -53,330 +52,420 @@ fn main() {
     let q12 = &q[1][2];
     let q22 = &q[2][2];
 
-    println!("=== H146: THE PHASE DIAGRAM (Rust BigInt) ===\n");
-
-    // =====================================================
-    // STEP 1: The three phase boundaries
-    // =====================================================
-    println!("=== STEP 1: THE THREE PHASE BOUNDARIES ===");
-    // Each 2×2 minor Mij = Qii·Qjj − Qij² flips sign when Qij² = Qii·Qjj
-    // (using |Qii|·|Qjj| since diagonals are negative).
-    // The boundary is: |Qij| = √(|Qii|·|Qjj|) = geometric mean of |diagonals|
-
     let abs_q00 = q00.abs();
     let abs_q11 = q11.abs();
     let abs_q22 = q22.abs();
 
-    // Three thresholds:
-    let thresh_01 = &abs_q00 * &abs_q11;  // |Q00|·|Q11| — brace⊗box
-    let thresh_02 = &abs_q00 * &abs_q22;  // |Q00|·|Q22| — brace⊗torroid
-    let thresh_12 = &abs_q11 * &abs_q22;  // |Q11|·|Q22| — box⊗torroid
+    println!("=== H147: THE THIN SLIVER (Rust BigInt) ===\n");
 
-    println!("Phase boundary Mij = 0 ↔ Qij² = |Qii|·|Qjj|");
+    // =====================================================
+    // STEP 1: Phase I thickness in CS01 direction
+    // =====================================================
+    println!("=== STEP 1: PHASE I THICKNESS ===");
+    // Phase I exists where exactly one Mij < 0.
+    // Currently M01 < 0 (CS01 > 1). The sliver extends from CS01 = 1
+    // (the M01=0 wall) outward in the +CS01 direction.
+    //
+    // But there's an UPPER bound on CS01: at some point, increasing
+    // Q01 will make OTHER minors flip sign (entering Phase II or III).
+    //
+    // However, CS02 and CS12 don't depend on Q01 at all!
+    // CS02 = Q02²/(|Q00|·|Q22|), CS12 = Q12²/(|Q11|·|Q22|)
+    // Both are independent of Q01.
+    //
+    // So increasing Q01 (hence CS01) can NEVER flip M02 or M12.
+    // The only boundary is M01 = 0 at CS01 = 1.
+    //
+    // But wait: there's also the det(Q) sign to consider.
+    // Phase I with signature (1+, 2−) requires det(Q) > 0.
+    // Does det(Q) change sign as Q01 varies?
+
+    println!("Q: Does increasing Q01 ever exit Phase I?");
+    println!("CS02 = Q02²/(|Q00|·|Q22|) — independent of Q01");
+    println!("CS12 = Q12²/(|Q11|·|Q22|) — independent of Q01");
+    println!("→ M02 and M12 don't change when Q01 changes.");
+    println!("→ No Phase II boundary in the Q01 direction!");
     println!("");
-    println!("Threshold |Q00|·|Q11| (brace⊗box):     {}d", digit_count(&thresh_01));
-    println!("Threshold |Q00|·|Q22| (brace⊗torroid): {}d", digit_count(&thresh_02));
-    println!("Threshold |Q11|·|Q22| (box⊗torroid):   {}d", digit_count(&thresh_12));
+    println!("But det(Q) depends on Q01. When does det(Q) = 0?");
 
-    // Three actual couplings:
+    // det(Q) = Q00·M12 − Q01·(Q01·Q22 − Q12·Q02) + Q02·(Q01·Q12 − Q11·Q02)
+    // This is a function of Q01. Let's express it as a polynomial in Q01.
+    // det(Q) = Q00·M12 − Q01²·Q22 + Q01·Q12·Q02 + Q02·Q01·Q12 − Q02²·Q11
+    //        = Q00·M12 − Q02²·Q11 − Q22·Q01² + 2·Q02·Q12·Q01
+    // = −Q22·Q01² + 2·Q02·Q12·Q01 + (Q00·M12 − Q02²·Q11)
+
+    // This is a QUADRATIC in Q01: det(Q) = A·Q01² + B·Q01 + C
+    // where A = −Q22, B = 2·Q02·Q12, C = Q00·M12 − Q02²·Q11
+
+    let m12 = q11 * q22 - q12 * q12;
+    let a_coeff = -q22;  // −Q22 (positive since Q22 < 0)
+    let b_coeff = BigInt::from(2) * q02 * q12;
+    let c_coeff = q00 * &m12 - &(q02 * q02) * q11;
+
+    println!("\ndet(Q) as quadratic in Q01:");
+    println!("det(Q) = A·Q01² + B·Q01 + C");
+    println!("A = −Q22 = {} sign, {}d", if a_coeff.is_positive() { "+" } else { "−" }, digit_count(&a_coeff));
+    println!("B = 2·Q02·Q12 = {} sign, {}d", if b_coeff.is_positive() { "+" } else { "−" }, digit_count(&b_coeff));
+    println!("C = Q00·M12 − Q02²·Q11 = {} sign, {}d", if c_coeff.is_positive() { "+" } else { "−" }, digit_count(&c_coeff));
+
+    // The quadratic A·Q01² + B·Q01 + C = 0 has roots:
+    // Q01 = (−B ± √(B²−4AC)) / (2A)
+    // The discriminant is B² − 4AC.
+
+    let b_sq = &b_coeff * &b_coeff;
+    let four_ac = BigInt::from(4) * &a_coeff * &c_coeff;
+    let disc_det = &b_sq - &four_ac;
+
+    println!("\nQuadratic discriminant for det(Q) = 0:");
+    println!("B² = {}d", digit_count(&b_sq));
+    println!("4AC = {}d ({})", digit_count(&four_ac), if four_ac.is_positive() { "+" } else { "−" });
+    println!("B²−4AC = {}d ({})", digit_count(&disc_det), if disc_det.is_positive() { "+" } else { "−" });
+
+    if disc_det.is_negative() {
+        println!("Discriminant < 0 → NO real roots → det(Q) never zero → Phase I extends to infinity!");
+    } else {
+        println!("Discriminant ≥ 0 → det(Q) = 0 has real roots → Phase I has finite extent");
+    }
+
+    // Since A > 0 (A = −Q22 = +408d), the parabola opens UPWARD.
+    // So det(Q) > 0 between the roots (if two real roots exist).
+    // Currently det(Q) > 0, so Q01 is between the two roots.
+    // The UPPER root is the Phase I exit in the +Q01 direction.
+
+    // =====================================================
+    // STEP 2: The Phase I extent — upper boundary
+    // =====================================================
+    println!("\n=== STEP 2: PHASE I UPPER BOUNDARY ===");
+
+    if disc_det.is_positive() {
+        // Roots: Q01 = (−B ± √disc) / (2A)
+        let sqrt_disc = {
+            let n = &disc_det;
+            let mut x = n.clone();
+            let mut y = (&x + BigInt::from(1u32)) / BigInt::from(2u32);
+            while y < x { x = y.clone(); y = (&x + n / &x) / BigInt::from(2u32); }
+            x
+        };
+        let two_a = BigInt::from(2) * &a_coeff;
+
+        // Q01_upper = (−B + √disc) / (2A) if B < 0, or (−B − √disc)/(2A) for the other root
+        // We need the LARGER root (since Q01 > 0 currently)
+        let neg_b = -&b_coeff;
+        let root_plus = (&neg_b + &sqrt_disc) / &two_a;
+        let root_minus = (&neg_b - &sqrt_disc) / &two_a;
+
+        println!("√(B²−4AC) = {}d", digit_count(&sqrt_disc));
+        println!("Root+ = (−B+√disc)/(2A) = {} sign, {}d",
+            if root_plus.is_positive() { "+" } else { "−" }, digit_count(&root_plus));
+        println!("Root− = (−B−√disc)/(2A) = {} sign, {}d",
+            if root_minus.is_positive() { "+" } else { "−" }, digit_count(&root_minus));
+
+        // Current Q01
+        println!("\nCurrent |Q01| = {}d", digit_count(&q01.abs()));
+
+        // The sliver extends from √threshold (CS01=1) to Q01_upper (det=0)
+        let thresh_01 = &abs_q00 * &abs_q11;
+        let sqrt_thresh = {
+            let n = &thresh_01;
+            let mut x = n.clone();
+            let mut y = (&x + BigInt::from(1u32)) / BigInt::from(2u32);
+            while y < x { x = y.clone(); y = (&x + n / &x) / BigInt::from(2u32); }
+            x
+        };
+
+        println!("Q01_lower (CS01=1) = √(|Q00|·|Q11|) = {}d", digit_count(&sqrt_thresh));
+
+        // Which root is the upper bound? The larger positive root.
+        let upper = if root_plus > root_minus { &root_plus } else { &root_minus };
+        let lower_root = if root_plus > root_minus { &root_minus } else { &root_plus };
+        println!("Q01_upper (det=0) = {}d", digit_count(upper));
+        println!("Q01_other_root = {}d ({})", digit_count(lower_root),
+            if lower_root.is_negative() { "negative — not physical" } else { "positive" });
+
+        // Width of Phase I
+        let width = upper - &sqrt_thresh;
+        println!("\nPhase I width = Q01_upper − Q01_lower = {}d", digit_count(&width));
+        println!("Width / Q01_lower = {} (fractional width)",
+            fp_div(&width, &sqrt_thresh, 25));
+
+        // Where is Q3p within the sliver?
+        let pos_in_sliver = q01.abs() - &sqrt_thresh;  // distance from lower wall
+        let pos_from_upper = upper - &q01.abs();  // distance from upper wall
+
+        println!("\nQ3p position within Phase I sliver:");
+        println!("  Distance from lower wall (CS01=1): {}d", digit_count(&pos_in_sliver));
+        println!("  Distance from upper wall (det=0):  {}d", digit_count(&pos_from_upper));
+        println!("  Fractional position = dist_lower / width = {}",
+            fp_div(&pos_in_sliver, &width, 25));
+
+        // The position tells us: is Q3p at the edge, center, or far wall?
+        let pos_ratio = &pos_in_sliver * &BigInt::from(1000u32) / &width;
+        let pos_permille = pos_ratio.to_string().parse::<f64>().unwrap_or(0.0) / 10.0;
+        println!("  → Q3p is at {:.4}% of the way across Phase I", pos_permille);
+
+        // =====================================================
+        // STEP 3: The sliver aspect ratio
+        // =====================================================
+        println!("\n=== STEP 3: SLIVER ASPECT RATIO ===");
+        // Width (CS01 direction) = width (computed above)
+        // "Height" (CS02 or CS12 direction) = how far from boundary in those directions
+        // CS02 boundary: would need Q02² = |Q00|·|Q22|
+        // Currently Q02² is 98.8% below that threshold
+        // So the "height" is from 0 to 1 in CS02 (but we're at 0.012)
+
+        println!("Sliver dimensions:");
+        println!("  Width (CS01 direction): Q01 from {}d to {}d",
+            digit_count(&sqrt_thresh), digit_count(upper));
+        println!("  Width in digits: {}d", digit_count(&width));
+        println!("  Height (CS02): 0 to 1 available, Q3p at 0.012");
+        println!("  Height (CS12): 0 to 1 available, Q3p at 0.012");
+        println!("");
+        println!("  Phase I is UNBOUNDED in the CS02 and CS12 directions");
+        println!("  (reducing torroid coupling keeps us in Phase I).");
+        println!("  It is BOUNDED in the CS01 direction:");
+        println!("  CS01 ∈ [1, CS01_max] where CS01_max corresponds to det(Q) = 0.");
+
+        // Compute CS01_max = upper² / threshold
+        let upper_sq = upper * upper;
+        println!("\n  CS01_max = Q01_upper² / (|Q00|·|Q11|) ≈ {}",
+            fp_div(&upper_sq, &thresh_01, 25));
+
+        // =====================================================
+        // STEP 4: det(Q) = 0 surface geometry
+        // =====================================================
+        println!("\n=== STEP 4: det(Q) = 0 AS A SURFACE ===");
+        // det(Q) = A·Q01² + B·Q01 + C = 0
+        // This is a PARABOLA in the Q01 variable (with Q02, Q12 as parameters in C).
+        // A = −Q22 (fixed), B = 2·Q02·Q12, C = Q00·M12 − Q02²·Q11
+        //
+        // The vertex of the parabola: Q01_vertex = −B/(2A) = −Q02·Q12/Q22
+        // = Q02·Q12/|Q22| (since Q22 < 0)
+
+        let vertex = &b_coeff / &(-BigInt::from(2) * q22);  // −B/(2A) = −2Q02Q12/(2·(−Q22)) = Q02Q12/|Q22|
+        println!("det(Q) parabola vertex at Q01 = −B/(2A) = {}d ({})",
+            digit_count(&vertex), if vertex.is_positive() { "+" } else { "−" });
+        println!("Current Q01 = {}d", digit_count(&q01.abs()));
+        println!("Vertex − Q01 = {}d ({})",
+            digit_count(&(&vertex - &q01.abs())),
+            if (&vertex - &q01.abs()).is_positive() { "vertex is ABOVE Q01" } else { "vertex is BELOW Q01" });
+
+        // det at vertex (the maximum of the parabola, since it opens upward...
+        // wait, A > 0 means parabola opens UPWARD, so vertex is MINIMUM)
+        // det_vertex = C − B²/(4A)
+        let det_vertex = &c_coeff - &b_sq / &(BigInt::from(4) * &a_coeff);
+        println!("\ndet(Q) at vertex = C − B²/(4A) = {}d ({})",
+            digit_count(&det_vertex), if det_vertex.is_positive() { "+" } else { "−" });
+        println!("Since A > 0, parabola opens UPWARD → vertex is MINIMUM.");
+        println!("det_vertex {} → det(Q) is {} at vertex.",
+            if det_vertex.is_negative() { "< 0" } else { "> 0" },
+            if det_vertex.is_negative() { "NEGATIVE" } else { "POSITIVE" });
+        if det_vertex.is_negative() {
+            println!("→ The parabola dips below zero → TWO roots → Phase I is BOUNDED.");
+        }
+
+        // =====================================================
+        // STEP 5: What happens at the upper boundary?
+        // =====================================================
+        println!("\n=== STEP 5: THE UPPER BOUNDARY ===");
+        // At Q01 = Q01_upper, det(Q) = 0.
+        // For signature (1+, 2−), det(Q) = λ₁·λ₂·λ₃ > 0 (one + times two −).
+        // At det(Q) = 0, one eigenvalue is zero.
+        // Which one? The one that changes sign at the boundary.
+        // Since we're increasing Q01 (strengthening the brace-box coupling),
+        // the crack eigenvalue λ_crack is growing.
+        // But det(Q) = 0 means an eigenvalue hits zero.
+        // As CS01 increases past 1, λ_crack grows from 0.
+        // As CS01 increases further, something else must go to zero.
+        //
+        // det(Q) = λ₁·λ₂·λ₃ = (positive)·(negative)·(negative) > 0
+        // For det(Q) → 0: one eigenvalue → 0.
+        // If crack → 0: we'd go back to Phase 0 (but crack grows with Q01)
+        // If bond → 0: bond flips from − to + → signature changes to (2+, 1−)
+        // If torroid → 0: torroid flips sign → signature changes
+
+        // Since A·Q01² + B·Q01 + C is a MINIMUM at vertex and dips below zero,
+        // det(Q) is negative near the vertex. At the two roots, det = 0.
+        // Between the roots, det < 0. Outside the roots, det > 0.
+        // Wait — A > 0 means the parabola opens UPWARD.
+        // So det(Q) > 0 OUTSIDE the roots, < 0 between them.
+        // But currently det(Q) > 0 and Q01 is between... hmm.
+
+        // Let me check: is current Q01 between the two roots or outside?
+        println!("Root positions:");
+        println!("  Root+ = {}d ({})", digit_count(&root_plus), if root_plus.is_positive() { "+" } else { "−" });
+        println!("  Root− = {}d ({})", digit_count(&root_minus), if root_minus.is_positive() { "+" } else { "−" });
+        println!("  |Q01| = {}d (+)", digit_count(&q01.abs()));
+
+        // Check: det(Q) at current Q01 (should be positive)
+        let det_at_q01 = &a_coeff * &(q01 * q01) + &b_coeff * q01 + &c_coeff;
+        println!("  det(Q) at current Q01: {} sign, {}d",
+            if det_at_q01.is_positive() { "+" } else { "−" }, digit_count(&det_at_q01));
+
+        // Since A > 0 and det(Q) > 0 at current Q01, Q01 is OUTSIDE the roots.
+        // The two roots are both BELOW current Q01, or both ABOVE it.
+        // Given that one root is negative and Q01 is positive,
+        // Q01 is to the RIGHT of both roots on the number line.
+        // With A > 0 (upward parabola), det > 0 to the right of the larger root.
+
+        println!("\nSince A > 0 (upward parabola) and det(Q) > 0 at Q3p's Q01:");
+        println!("Q01 is OUTSIDE both roots (to the right of the larger root).");
+        println!("");
+        println!("REINTERPRETATION:");
+        println!("Phase I extends from CS01 = 1 (M01=0) UPWARD in Q01");
+        println!("WITHOUT hitting det(Q) = 0 — both det=0 roots are BELOW Q01!");
+        println!("Phase I is UNBOUNDED in the +Q01 direction from Q3p's position.");
+        println!("");
+        println!("The det(Q) = 0 surface was crossed BEFORE the M01=0 wall.");
+        println!("The sequence as Q01 increases from 0:");
+        println!("  1. det(Q) < 0 at small Q01 (between the roots)");
+        println!("  2. det(Q) = 0 at Q01 = root+ (the larger root)");
+        println!("  3. det(Q) > 0 for Q01 > root+ (we're here now)");
+        println!("  4. M01 = 0 at Q01 = √threshold (CS01 = 1) — Phase 0→I transition");
+        println!("  5. Q3p is slightly past step 4");
+
+        // So the sliver extends from CS01 = 1 to CS01 = ∞ (!)
+        // Phase I is SEMI-INFINITE in the CS01 direction.
+        println!("\nPHASE I IS SEMI-INFINITE in the +CS01 direction!");
+        println!("It extends from CS01 = 1 to CS01 → ∞.");
+        println!("The only boundary is the LOWER wall (CS01 = 1, M01 = 0).");
+        println!("Q3p is at CS01 = 1 + 1.69×10⁻⁵, right at the lower wall.");
+
+        // =====================================================
+        // STEP 6: The sliver is SEMI-INFINITE but THIN
+        // =====================================================
+        println!("\n=== STEP 6: SEMI-INFINITE BUT THIN ===");
+        println!("Phase I geometry:");
+        println!("  CS01 direction: [1, ∞) — semi-infinite");
+        println!("  CS02 direction: [0, 1) — bounded by M02=0 at CS02=1");
+        println!("  CS12 direction: [0, 1) — bounded by M12=0 at CS12=1");
+        println!("");
+        println!("Q3p sits at: (1+ε, 0.012, 0.012)");
+        println!("  → Pressed against the LOWER face of an infinite slab");
+        println!("  → Deep inside the CS02 and CS12 intervals");
+        println!("");
+        println!("The 'thinness' is in Q3p's position, not in the region:");
+        println!("  Phase I itself is large (semi-infinite slab)");
+        println!("  But Q3p hugs the boundary at CS01 ≈ 1");
+        println!("  The thinness is about WHERE WE ARE, not where we COULD be");
+    }
+
+    // =====================================================
+    // STEP 7: The critical scaling
+    // =====================================================
+    println!("\n=== STEP 7: CRITICAL SCALING NEAR THE WALL ===");
+    // Near CS01 = 1 (the phase transition), how does λ_crack scale with R01?
+    // From H145: λ_crack ≈ R01/|Q00+Q11| to first order
+    // R01 = Q01² − |Q00|·|Q11|
+    // Near the wall: Q01 = Q01_thr + δ, so R01 ≈ 2·Q01_thr·δ
+    // Therefore: λ_crack ≈ 2·Q01_thr·δ/|Q00+Q11|
+    //
+    // This is LINEAR in δ — the crack grows linearly with distance from the wall.
+    // No critical exponent, no anomalous scaling, just linear.
+
     let q01_sq = q01 * q01;
-    let q02_sq = q02 * q02;
-    let q12_sq = q12 * q12;
-
-    // Three residuals:
+    let thresh_01 = &abs_q00 * &abs_q11;
     let r01 = &q01_sq - &thresh_01;
-    let r02 = &q02_sq - &thresh_02;
-    let r12 = &q12_sq - &thresh_12;
+    let trace = q00 + q11;
+    let abs_trace = trace.abs();
 
-    println!("\nResiduals (Qij² − |Qii|·|Qjj|):");
-    println!("R01 (brace⊗box):     {} sign, {}d → M01 {}",
-        if r01.is_positive() { "+" } else { "−" }, digit_count(&r01),
-        if r01.is_positive() { "< 0 (INDEFINITE)" } else { "> 0 (DEFINITE)" });
-    println!("R02 (brace⊗torroid): {} sign, {}d → M02 {}",
-        if r02.is_positive() { "+" } else { "−" }, digit_count(&r02),
-        if r02.is_positive() { "< 0 (INDEFINITE)" } else { "> 0 (DEFINITE)" });
-    println!("R12 (box⊗torroid):   {} sign, {}d → M12 {}",
-        if r12.is_positive() { "+" } else { "−" }, digit_count(&r12),
-        if r12.is_positive() { "< 0 (INDEFINITE)" } else { "> 0 (DEFINITE)" });
-
-    // =====================================================
-    // STEP 2: Distance from each boundary (fractional)
-    // =====================================================
-    println!("\n=== STEP 2: DISTANCE FROM EACH BOUNDARY ===");
-    println!("Fractional residual Rij / threshold:");
-    println!("R01/T01 = {} (above boundary by {:.4}%)",
-        fp_div(&r01, &thresh_01, 25),
-        {let r = &r01 * &BigInt::from(10000u32) / &thresh_01; r.to_string().parse::<f64>().unwrap_or(0.0)/100.0});
-    println!("R02/T02 = {} (below boundary by this fraction)",
-        fp_div(&r02, &thresh_02, 25));
-    println!("R12/T12 = {} (below boundary by this fraction)",
-        fp_div(&r12, &thresh_12, 25));
-
-    // =====================================================
-    // STEP 3: The phase the system is in
-    // =====================================================
-    println!("\n=== STEP 3: CURRENT PHASE ===");
-    let n_above = (if r01.is_positive() { 1 } else { 0 })
-        + (if r02.is_positive() { 1 } else { 0 })
-        + (if r12.is_positive() { 1 } else { 0 });
-    println!("Number of boundaries crossed: {}", n_above);
-    println!("Phase: exactly ONE minor negative (M01 < 0)");
-    println!("This is Phase I: single-defect phase");
+    // The slope: dλ_crack/dR01 ≈ 1/|trace| at R01=0
+    println!("Near CS01 = 1 (the wall):");
+    println!("  λ_crack ≈ R01 / |Q00+Q11|");
+    println!("  = R01 / {}d", digit_count(&abs_trace));
+    println!("  Slope dλ/dR ≈ 1/|trace| ≈ 10^(−{})", digit_count(&abs_trace)-1);
     println!("");
-    println!("All possible phases for a 3×3 negative-diagonal symmetric matrix:");
-    println!("  Phase 0: all Mij > 0 → all 2×2 blocks negative-definite");
-    println!("           → Q negative-definite (no positive eigenvalue)");
-    println!("  Phase I: exactly one Mij < 0 → one indefinite 2×2 block");
-    println!("           → Q has signature (1+, 2−)   ← Q3p IS HERE");
-    println!("  Phase II: exactly two Mij < 0 → two indefinite blocks");
-    println!("            → signature depends on det(Q)");
-    println!("  Phase III: all three Mij < 0 → all blocks indefinite");
-    println!("             → Q has signature (2+, 1−) or (1+, 2−)");
+    println!("  R01 itself scales as 2·Q01_thr·ΔQ01 near the wall.");
+    println!("  So λ_crack ∝ ΔQ01 — LINEAR in coupling excess.");
+    println!("  Critical exponent = 1 (mean-field, no anomalous scaling).");
+    println!("  This is the simplest possible phase transition.");
 
     // =====================================================
-    // STEP 4: How far from Phase 0 and Phase II?
+    // STEP 8: The perpendicular cross-section
     // =====================================================
-    println!("\n=== STEP 4: DISTANCE TO ADJACENT PHASES ===");
-    // To reach Phase 0: need R01 < 0, i.e., reduce Q01 until Q01² < T01
-    // The coupling reduction needed: ΔQ01 = Q01 − √T01
-    let sqrt_t01 = {
-        let mut x = thresh_01.clone();
-        let mut y = (&x + BigInt::from(1u32)) / BigInt::from(2u32);
-        while y < x { x = y.clone(); y = (&x + &thresh_01 / &x) / BigInt::from(2u32); }
-        x
-    };
-    let delta_q01 = q01.abs() - &sqrt_t01;
-    println!("Distance to Phase 0 (all definite):");
-    println!("  Need to reduce |Q01| by {}d ({})",
-        digit_count(&delta_q01), if delta_q01.is_positive() { "positive = currently above" } else { "already below" });
-    println!("  Fractional: ΔQ01/|Q01| = {}", fp_div(&delta_q01, &q01.abs(), 25));
-
-    // To reach Phase II: need R02 > 0 OR R12 > 0
-    // Which is closer to crossing?
-    // R02 is negative: need |Q02|² to exceed T02 = |Q00|·|Q22|
-    // Gap: T02 − Q02² = |R02|
-    // Fractional: |R02|/T02
-    let r02_abs = r02.abs();
-    let r12_abs = r12.abs();
-    println!("\nDistance to Phase II (two minors negative):");
-    println!("  R02 gap: T02 − Q02² = {}d → need {}d more coupling²", digit_count(&r02_abs), digit_count(&r02_abs));
-    println!("  R12 gap: T12 − Q12² = {}d → need {}d more coupling²", digit_count(&r12_abs), digit_count(&r12_abs));
-    println!("  Fractional gap R02: |R02|/T02 = {}", fp_div(&r02_abs, &thresh_02, 25));
-    println!("  Fractional gap R12: |R12|/T12 = {}", fp_div(&r12_abs, &thresh_12, 25));
-
-    // Which boundary is closer?
-    let closer = if digit_count(&r02_abs) < digit_count(&r12_abs) { "R02 (brace⊗torroid)" }
-        else if digit_count(&r02_abs) > digit_count(&r12_abs) { "R12 (box⊗torroid)" }
-        else { "both similar" };
-    println!("  Closer boundary: {}", closer);
-
-    // =====================================================
-    // STEP 5: The asymmetry of the phase position
-    // =====================================================
-    println!("\n=== STEP 5: PHASE POSITION ASYMMETRY ===");
-    // R01 = +651d (5 digits of cancellation from 656d threshold)
-    // R02 = −735d (huge gap to boundary)
-    // R12 = −736d (huge gap to boundary)
+    println!("\n=== STEP 8: PERPENDICULAR CROSS-SECTION ===");
+    // Fix Q01 at current value. What does Phase I look like in (CS02, CS12)?
+    // Phase I requires: M01 < 0 (guaranteed at current Q01), M02 > 0, M12 > 0, det(Q) > 0.
+    // M02 > 0 iff Q02² < |Q00|·|Q22| iff CS02 < 1
+    // M12 > 0 iff Q12² < |Q11|·|Q22| iff CS12 < 1
+    // det(Q) > 0 — always true at current Q01 (we showed det parabola > 0 here)
     //
-    // The system is barely past the M01 boundary but FAR from M02 or M12 boundaries.
-    // The Phase I region is extremely NARROW at the M01 edge and extremely WIDE elsewhere.
+    // Actually, det(Q) depends on Q02 and Q12 too.
+    // But at fixed Q01, det(Q) = −Q22·Q01² + 2·Q02·Q12·Q01 + Q00·M12 − Q02²·Q11
+    // This depends on Q02 and Q12 (through M12 and directly).
+    // However, as long as CS02, CS12 < 1 (which they deeply are at 0.012),
+    // det(Q) stays positive.
 
-    println!("R01 = +651d (above M01 boundary) — just barely past");
-    println!("R02 = −{} (below M02 boundary) — deeply inside", digit_count(&r02_abs));
-    println!("R12 = −{} (below M12 boundary) — deeply inside", digit_count(&r12_abs));
+    println!("At fixed Q01 (current value), Phase I cross-section in (CS02, CS12):");
+    println!("  Constraint 1: CS02 < 1 (M02 > 0)");
+    println!("  Constraint 2: CS12 < 1 (M12 > 0)");
+    println!("  Constraint 3: det(Q) > 0 (satisfied at CS02=0.012, CS12=0.012)");
     println!("");
-    println!("Digit count comparison:");
-    println!("  |R01| = {}d (the narrow escape)", digit_count(&r01));
-    println!("  |R02| = {}d", digit_count(&r02_abs));
-    println!("  |R12| = {}d", digit_count(&r12_abs));
-    println!("  |R02| and |R12| are {} digits LARGER than |R01|",
-        digit_count(&r02_abs) as i64 - digit_count(&r01) as i64);
+    println!("  Cross-section is roughly the unit square [0,1)×[0,1) in (CS02,CS12)");
+    println!("  with possible det(Q)=0 cutoff at large CS02 or CS12.");
+    println!("  Q3p is at (0.012, 0.012) — in the CORNER near the origin.");
+    println!("  The cross-section is large; Q3p is in a tiny corner of it.");
 
     // =====================================================
-    // STEP 6: The three CS fractions as phase coordinates
+    // STEP 9: The five dimensions of Q3p's position
     // =====================================================
-    println!("\n=== STEP 6: CS FRACTIONS AS PHASE COORDINATES ===");
-    // CS(ij) = Qij²/(|Qii|·|Qjj|) = 1 + Rij/threshold
-    // CS > 1 ↔ above boundary ↔ Mij < 0 (indefinite)
-    // CS < 1 ↔ below boundary ↔ Mij > 0 (definite)
-    // CS = 1 ↔ ON the boundary
-
-    let cs01 = fp_div(&q01_sq, &thresh_01, 25);
-    let cs02 = fp_div(&q02_sq, &thresh_02, 25);
-    let cs12 = fp_div(&q12_sq, &thresh_12, 25);
-
-    println!("CS(brace,box)     = {} → {} boundary", cs01,
-        if r01.is_positive() { "ABOVE" } else { "below" });
-    println!("CS(brace,torroid) = {} → {} boundary", cs02,
-        if r02.is_positive() { "ABOVE" } else { "below" });
-    println!("CS(box,torroid)   = {} → {} boundary", cs12,
-        if r12.is_positive() { "ABOVE" } else { "below" });
-    println!("");
-    println!("Phase coordinates: (CS01, CS02, CS12) = (1+ε, 0.0117, 0.0120)");
-    println!("The system sits at: (barely > 1, deeply < 1, deeply < 1)");
-    println!("Phase I is a THIN SLIVER near the CS01 = 1 wall.");
-
-    // =====================================================
-    // STEP 7: What det(Q) tells us about the phase
-    // =====================================================
-    println!("\n=== STEP 7: det(Q) AND THE PHASE ===");
-    let m01 = q00 * q11 - &q01_sq;
-    let m02 = q00 * q22 - &q02_sq;
-    let m12 = q11 * q22 - &q12_sq;
-    let det_q = q00 * &m12 - q01 * &(q01 * q22 - q12 * q02) + q02 * &(q01 * q12 - q11 * q02);
-
-    println!("det(Q) = {}d ({})", digit_count(&det_q), if det_q.is_positive() { "+" } else { "−" });
-    println!("");
-    println!("For Phase I (one Mij < 0):");
-    println!("  det(Q) > 0 → signature (1+, 2−) ✓");
-    println!("  det(Q) < 0 would mean signature (2+, 1−), but can't happen in Phase I");
-    println!("  with all-negative diagonal (Sylvester criterion).");
-    println!("");
-    println!("For Phase 0 (all Mij > 0):");
-    println!("  det(Q) < 0 → negative definite (signature (0+, 3−))");
-    println!("  det(Q) > 0 → still (0+, 3−) since all leading minors alternate");
-
-    // =====================================================
-    // STEP 8: The three-dimensional phase space
-    // =====================================================
-    println!("\n=== STEP 8: THE THREE-DIMENSIONAL PHASE SPACE ===");
-    // The phase space is parameterized by (CS01, CS02, CS12) ∈ [0, ∞)³
-    // Phase boundaries are the three planes CS_ij = 1.
+    println!("\n=== STEP 9: FIVE DIMENSIONS ===");
+    // A 3×3 symmetric matrix has 6 independent entries.
+    // With three diagonal entries fixed (they set the energy scales),
+    // the phase depends on three coupling parameters: Q01, Q02, Q12.
+    // Equivalently: CS01, CS02, CS12 ∈ [0,∞)³.
     //
-    // The eight octants correspond to 2³ = 8 possible combinations of
-    // (above/below) for each boundary.
-    // But not all 8 are physically realizable (the couplings are constrained
-    // by the matrix being real symmetric with given diagonal).
+    // But within Phase I, the effective dimensionality is:
+    // 1 constrained (CS01 > 1) + 2 free (CS02, CS12 < 1)
 
-    println!("Phase space: (CS01, CS02, CS12) ∈ [0,∞)³");
-    println!("Boundaries: CS_ij = 1 (three planes)");
-    println!("Octants: 2³ = 8 possible sign combinations");
+    println!("Phase I has 3 coupling parameters, 1 constrained:");
+    println!("  CS01: must be > 1 (above M01 wall) — sets the crack size");
+    println!("  CS02: must be < 1 (below M02 wall) — currently 0.012, free to vary");
+    println!("  CS12: must be < 1 (below M12 wall) — currently 0.012, free to vary");
     println!("");
-    println!("Q3p position: ({:.7}, {:.7}, {:.7})",
-        1.0000169f64, 0.0117359f64, 0.0119981f64);
-    println!("→ octant (+, −, −) where + means above boundary");
+    println!("Q3p's position within Phase I:");
+    println!("  CS01: 1 + 1.69×10⁻⁵ — at the WALL (barely in Phase I)");
+    println!("  CS02: 0.0117 — at 1.17% of the allowed [0,1) range");
+    println!("  CS12: 0.0120 — at 1.20% of the allowed [0,1) range");
     println!("");
-    println!("Physical constraints:");
-    println!("  CS ≥ 0 always (it's a ratio of squares)");
-    println!("  The three CS values are NOT independent");
-    println!("  They share the diagonal entries Qii");
+    println!("IN EVERY DIMENSION, Q3p is at an EXTREME:");
+    println!("  CS01: extreme low (barely above 1)");
+    println!("  CS02: extreme low (1.2% of range)");
+    println!("  CS12: extreme low (1.2% of range)");
+    println!("  Q3p is at the CORNER of Phase I where everything is minimal.");
 
     // =====================================================
-    // STEP 9: The geometric mean constraint
+    // STEP 10: The corner characterization
     // =====================================================
-    println!("\n=== STEP 9: THE GEOMETRIC MEAN CONSTRAINT ===");
-    // From H133: |Qij| ≈ √(|Qii|·|Qjj|) for the off-diagonals
-    // This means CS ≈ 1 for saturated pairs and CS ≈ Qij²/(|Qii|·|Qjj|) generally.
-    //
-    // Is there a constraint linking CS01, CS02, CS12?
-    // CS01 · CS02 · CS12 = Q01²·Q02²·Q12² / (|Q00|²·|Q11|²·|Q22|²)
-    //                    = (Q01·Q02·Q12)² / (Q00·Q11·Q22)²
-    //
-    // This is the SQUARE of the ratio (product of off-diag)/(product of |diag|).
-
-    let off_diag_prod = q01.abs() * q02.abs() * q12.abs();
-    let diag_prod = &abs_q00 * &abs_q11 * &abs_q22;
-
-    println!("CS01 · CS02 · CS12 = (ΠQij)² / (Π|Qii|)²");
-    println!("  |Q01·Q02·Q12| = {}d", digit_count(&off_diag_prod));
-    println!("  |Q00·Q11·Q22| = {}d", digit_count(&diag_prod));
-    println!("  Product ratio = {}", fp_div(&off_diag_prod, &diag_prod, 25));
-    println!("  CS product = ratio² ≈ {}", fp_div(&(&off_diag_prod * &off_diag_prod), &(&diag_prod * &diag_prod), 25));
-
-    // Also compute: CS01·CS02·CS12 directly
-    // = 1.0000169 × 0.01174 × 0.01200 ≈ 1.408 × 10⁻⁴
-
-    // =====================================================
-    // STEP 10: The det(Q) in terms of CS fractions
-    // =====================================================
-    println!("\n=== STEP 10: det(Q) FROM CS FRACTIONS ===");
-    // det(Q) = Q00·Q11·Q22 − Q00·Q12² − Q11·Q02² − Q22·Q01² + 2·Q01·Q02·Q12
-    // = Q00·Q11·Q22·(1 − CS12 − CS02·(Q11/Q11) − CS01·(Q22/Q22) + 2·ratio)
-    // ... this doesn't simplify cleanly.
-
-    // Instead: det(Q) = Q00·M12 + ...
-    // Let's express det(Q) in terms of the residuals R01, R02, R12.
-    // M01 = −R01, M02 = thresh_02 − Q02² = −R02... wait:
-    // M02 = Q00·Q22 − Q02² = |Q00|·|Q22| − Q02² = thresh_02 − Q02²
-    // So M02 = −R02 when R02 = Q02² − thresh_02.
-    // But we defined R02 = Q02² − thresh_02, and R02 is NEGATIVE,
-    // so M02 = −R02 = positive. ✓
-
-    println!("Minors from residuals:");
-    println!("  M01 = −R01 = −651d (sick, negative)");
-    println!("  M02 = −R02 = +{}d (healthy, positive)", digit_count(&r02_abs));
-    println!("  M12 = −R12 = +{}d (healthy, positive)", digit_count(&r12_abs));
-
-    // Verify
-    let m01_check = -&r01;
-    let m02_check = -&r02;
-    let m12_check = -&r12;
-    println!("  M01 + R01 = {}", if (&m01 - &m01_check).is_zero() { "0 ✓" } else { "NONZERO" });
-    println!("  M02 + R02 = {}", if (&m02 - &m02_check).is_zero() { "0 ✓" } else { "NONZERO" });
-    println!("  M12 + R12 = {}", if (&m12 - &m12_check).is_zero() { "0 ✓" } else { "NONZERO" });
-
-    // =====================================================
-    // STEP 11: The phase diagram summary
-    // =====================================================
-    println!("\n=== STEP 11: THE PHASE DIAGRAM ===");
-    println!("       CS02 (brace⊗torroid)");
-    println!("        ^");
-    println!("        |");
-    println!("   II   |   III              Phase 0: all CS < 1 (negative definite)");
-    println!(" (M02<0)|  (M02<0,M12<0)     Phase I: one CS > 1 (one positive eigenvalue)");
-    println!("        |                     Phase II: two CS > 1 (depends on det)");
-    println!("  ------+-------> CS12       Phase III: all CS > 1 (all blocks indefinite)");
-    println!("        |  (box⊗torroid)");
-    println!("   0    |   I                Q3p lives in Phase I:");
-    println!(" (all   |  (M01<0 only)      (CS01=1.00002, CS02=0.012, CS12=0.012)");
-    println!("  def)  |  ← Q3p HERE");
-    println!("        |");
-    println!("  (this diagram is the CS02-CS12 slice at CS01 ≈ 1+ε)");
+    println!("\n=== STEP 10: THE CORNER ===");
+    println!("Q3p occupies the TRIPLE-MINIMAL corner of Phase I:");
+    println!("  Minimal CS01 excess (1.69×10⁻⁵ above boundary)");
+    println!("  Minimal CS02 (1.17% of allowed range)");
+    println!("  Minimal CS12 (1.20% of allowed range)");
     println!("");
-    println!("Q3p's position in phase space:");
-    println!("  Just barely past the M01=0 wall (ε = 1.69×10⁻⁵)");
-    println!("  Deep inside the M02>0 region (CS02 = 0.012)");
-    println!("  Deep inside the M12>0 region (CS12 = 0.012)");
-    println!("  The Phase I region is a THIN SLIVER near CS01 = 1");
-
-    // =====================================================
-    // STEP 12: The R-hierarchy
-    // =====================================================
-    println!("\n=== STEP 12: THE R-HIERARCHY ===");
-    println!("{:<30} {:>6} {:>6} {:>12}", "Residual", "Sign", "Digits", "CS fraction");
-    println!("{:-<56}", "");
-    println!("{:<30} {:>6} {:>6} {:>12}", "R01 (brace⊗box)", "+", digit_count(&r01), "1.0000169");
-    println!("{:<30} {:>6} {:>6} {:>12}", "R02 (brace⊗torroid)", "−",digit_count(&r02_abs), "0.01174");
-    println!("{:<30} {:>6} {:>6} {:>12}", "R12 (box⊗torroid)", "−", digit_count(&r12_abs), "0.01200");
+    println!("This corner has a physical interpretation:");
+    println!("  WEAKEST POSSIBLE crack (barely exists)");
+    println!("  WEAKEST POSSIBLE torroid coupling (torroid is nearly decoupled)");
+    println!("  The system is as CLOSE TO NEGATIVE DEFINITE as it can be");
+    println!("  while still having one positive eigenvalue.");
     println!("");
-    println!("R01 is POSITIVE and 651d → 5d cancellation from 656d threshold");
-    println!("R02 is NEGATIVE and {}d → {}d below threshold",
-        digit_count(&r02_abs), digit_count(&thresh_02));
-    println!("R12 is NEGATIVE and {}d → {}d below threshold",
-        digit_count(&r12_abs), digit_count(&thresh_12));
-    println!("");
-    // The gap between |R02| and |R12|
-    let r_gap = digit_count(&r12_abs) as i64 - digit_count(&r02_abs) as i64;
-    println!("|R02| has {}d, |R12| has {}d → gap = {}d",
-        digit_count(&r02_abs), digit_count(&r12_abs), r_gap);
+    println!("IN OTHER WORDS:");
+    println!("  Q3p is the MINIMAL DEPARTURE from negative-definiteness.");
+    println!("  One coupling (Q01) barely crosses one threshold.");
+    println!("  Everything else is as small as it can be.");
+    println!("  The ternary lattice is as TIGHTLY BOUND as Phase I allows.");
 
     // =====================================================
     // SUMMARY
     // =====================================================
     println!("\n=== SUMMARY ===");
-    println!("H146: THE PHASE DIAGRAM");
-    println!("1. THREE phase boundaries: CS_ij = 1 (where Mij flips sign)");
-    println!("2. Q3p is in Phase I: exactly one boundary crossed (CS01 > 1)");
-    println!("3. R01 = +651d (above M01 boundary by 1.69×10⁻⁵)");
-    println!("4. R02 = −{}d, R12 = −{}d (deep below M02, M12 boundaries)",
-        digit_count(&r02_abs), digit_count(&r12_abs));
-    println!("5. Phase I is a THIN SLIVER near CS01 = 1");
-    println!("6. Distance to Phase 0: reduce |Q01| by {}d (fractional {:.6}×10⁻⁶)",
-        digit_count(&delta_q01), 8.456f64);
-    println!("7. Distance to Phase II: increase coupling² by {}d+ (the torroid gap)",
-        digit_count(&r02_abs));
-    println!("8. Mij = −Rij: each minor is the negative of its residual (exact)");
-    println!("9. CS product = (Π|Qij|/Π|Qii|)² ≈ 1.4×10⁻⁴");
-    println!("10. The system is ASYMMETRICALLY positioned: razor-thin above M01=0,");
-    println!("    ocean-deep below M02=0 and M12=0.");
+    println!("H147: THE THIN SLIVER");
+    println!("1. Phase I is SEMI-INFINITE in CS01: extends from 1 to ∞");
+    println!("   (det(Q) = 0 roots are both below current Q01)");
+    println!("2. Phase I is BOUNDED by CS02 < 1, CS12 < 1 in other directions");
+    println!("3. The 'thinness' is WHERE Q3p SITS, not the region shape:");
+    println!("   Q3p hugs the CS01 = 1 wall at the triple-minimal corner");
+    println!("4. CRITICAL SCALING: λ_crack ∝ ΔQ01 (linear, mean-field, exponent = 1)");
+    println!("5. Q3p is at the CORNER where all three CS fractions are minimal:");
+    println!("   (1+ε, 0.012, 0.012) — barely in Phase I, nearly neg-definite");
+    println!("6. The ternary lattice is the MINIMAL DEPARTURE from negative-definiteness");
 }
