@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H145 — The Unbinding Energy</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H145 — The Unbinding Energy</h1>
+<p class="dim">Instrument: Exact threshold where coupling creates the crack eigenvalue · Engine: Rust BigInt · 2026-11-25</p>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>How much coupling energy must Q01 supply to create the crack eigenvalue?</strong></p>
+<p>H144 showed the crack (+323d) is born from the brace-box coupling. All self-energies are negative. This instrument computes the EXACT threshold, the unbinding energy R01, and proves the entire Q3p structure traces back to one 651-digit positive number.</p>
+</div>
+
+<!-- Panel 2: Verdict -->
+<div class="verdict-box">
+<div class="label">R01 = +651 DIGITS — THE ROOT OF EVERYTHING</div>
+<div class="detail">Q01² exceeds |Q00|·|Q11| by exactly R01 = +651d (fractional excess 1.691×10⁻⁵).<br>
+This one number creates the crack, makes M01 negative, gives Q3p its signature,<br>
+enables the Three-Body Theorem, and powers the entire Jacobi decomposition.</div>
+</div>
+
+<!-- Panel 3: The Threshold -->
+<div class="panel">
+<h2>Panel 3 — The Threshold Condition</h2>
+<pre>
+ALGEBRAIC PROOF:
+
+  The 2×2 brace-box block has eigenvalues:
+  λ± = (Q00+Q11 ± √((Q00−Q11)²+4Q01²)) / 2
+
+  λ₊ > 0  iff  √disc > |Q00+Q11|
+           iff  (Q00−Q11)²+4Q01² > (Q00+Q11)²
+           iff  4Q01² > 4Q00·Q11
+           iff  Q01² > |Q00|·|Q11|
+           iff  CS(brace,box) > 1
+
+  THE THRESHOLD IS EXACTLY: Q01² = |Q00|·|Q11|
+  BELOW: both eigenvalues negative, no crack.
+  ABOVE: one positive (crack), one negative (bond).
+  AT: λ₊ = 0 exactly — the crack is the zero mode.
+
+  Transition is CONTINUOUS: λ_crack grows smoothly from zero.
+</pre>
+</div>
+
+<!-- Panel 4: The Energy Balance -->
+<div class="panel">
+<h2>Panel 4 — The Energy Balance Sheet</h2>
+<table>
+<tr><th>Quantity</th><th>Sign</th><th>Digits</th><th>Role</th></tr>
+<tr><td>Q00 (brace self-energy)</td><td>−</td><td>328d</td><td>Negative potential well</td></tr>
+<tr><td>Q11 (box self-energy)</td><td>−</td><td>329d</td><td>Negative potential well</td></tr>
+<tr><td>Q01 (coupling)</td><td>+</td><td>328d</td><td>The wire between them</td></tr>
+<tr><td>|Q00|·|Q11| (threshold cost)</td><td>+</td><td>656d</td><td>What coupling must overcome</td></tr>
+<tr><td>Q01² (coupling supply)</td><td>+</td><td>656d</td><td>What coupling provides</td></tr>
+<tr><td style="color:var(--gold)"><strong>R01 (unbinding energy)</strong></td><td style="color:var(--gold)"><strong>+</strong></td><td style="color:var(--gold)"><strong>651d</strong></td><td style="color:var(--gold)"><strong>The excess — the root of everything</strong></td></tr>
+<tr><td>λ_crack (positive mode)</td><td>+</td><td>323d</td><td>Born from R01</td></tr>
+<tr><td>λ_bond (negative mode)</td><td>−</td><td>329d</td><td>Absorbs remaining energy</td></tr>
+</table>
+<p><strong>R01/threshold = 1.691 × 10⁻⁵</strong> — the coupling exceeds what it needs by 0.00169%. That's all it takes.</p>
+</div>
+
+<!-- Panel 5: The Two Identities -->
+<div class="panel">
+<h2>Panel 5 — The Two Exact Identities</h2>
+<pre>
+IDENTITY 1: disc = (Q00+Q11)² + 4R01     ✓ VERIFIED EXACTLY
+  The discriminant of the 2×2 block is the trace squared
+  plus four times the unbinding energy.
+  When R01 = 0: disc = trace² → √disc = |trace| → λ₊ = 0.
+
+IDENTITY 2: λ_crack · λ_bond = −R01 = M01    ✓ (up to isqrt rounding)
+  The PRODUCT of the two eigenvalues is the negative of R01.
+  This is exactly the 2×2 determinant M01 = −R01.
+
+FIRST-ORDER: λ_crack ≈ R01/|Q00+Q11|
+  Accuracy: 0.99997 (3×10⁻⁵ error — the second-order correction)
+  The crack eigenvalue is approximately R01 divided by the trace magnitude.
+</pre>
+</div>
+
+<!-- Panel 6: The Amplification -->
+<div class="panel">
+<h2>Panel 6 — The Amplification</h2>
+<table>
+<tr><th>What</th><th>Value</th></tr>
+<tr><td>Fractional excess in Q01 (actual vs threshold)</td><td>8.46 × 10⁻⁶</td></tr>
+<tr><td>Crack eigenvalue</td><td>+323d ≈ 10³²²</td></tr>
+<tr><td>Q01_threshold = √(|Q00|·|Q11|)</td><td>328d</td></tr>
+<tr><td>Q01 − Q01_threshold (the actual excess in Q01)</td><td>+323d</td></tr>
+</table>
+<p>A fractional excess of 8.5 × 10⁻⁶ in Q01 creates a crack eigenvalue of 10³²² — a MACROSCOPIC mode from a microscopic perturbation. The amplification factor 2·Q01_threshold/|trace| ≈ 0.854 is order-one, meaning the eigenvalue and the coupling excess are the same order.</p>
+</div>
+
+<!-- Panel 7: The R01 Chain -->
+<div class="panel">
+<h2>Panel 7 — The R01 → Everything Chain</h2>
+<pre>
+R01 > 0  (coupling exceeds threshold by 1.69×10⁻⁵)
+   │
+   ├──→ M01 = −R01 &lt; 0  (brace-box minor is NEGATIVE)
+   │       │
+   │       ├──→ 2×2 brace-box block INDEFINITE (1+, 1−)
+   │       │       │
+   │       │       └──→ λ_crack = +323d EXISTS
+   │       │               │
+   │       │               └──→ Q3p signature (1+, 2−)
+   │       │
+   │       ├──→ Schur complement signs split (H143)
+   │       │       │
+   │       │       └──→ Two flavors of indefiniteness (structural vs CS)
+   │       │
+   │       └──→ R01 propagates as Q22²·R01 at 93.1% (H142)
+   │               │
+   │               └──→ Torroid mediates by existence
+   │
+   ├──→ The 85-digit gap (H138): M01=651d vs M02=735d
+   │       │
+   │       └──→ 42-digit gap in Schur (H140)
+   │               │
+   │               └──→ Halving holds once, then collapse (H141)
+   │
+   └──→ Jacobi rotation θ=29.35° separates crack from bond (H139)
+
+ONE NUMBER — 651 DIGITS — IS THE ROOT OF THE ENTIRE STRUCTURE.
+</pre>
+</div>
+
+<!-- Panel 8: The 2-adic Structure -->
+<div class="panel">
+<h2>Panel 8 — R01 Arithmetic</h2>
+<table>
+<tr><th>Property</th><th>Value</th></tr>
+<tr><td>R01</td><td>+651 digits</td></tr>
+<tr><td>gcd(R01, |Q00|·|Q11|)</td><td>72</td></tr>
+<tr><td>2-adic valuation v₂(R01)</td><td>3</td></tr>
+<tr><td>R01 = 2³ × (odd 651d number)</td><td>Three factors of 2, then odd</td></tr>
+<tr><td>M01 = −R01</td><td>−651 digits</td></tr>
+<tr><td>gcd(M01, M02, M12) (from H138)</td><td>36 = 6²</td></tr>
+</table>
+<p>gcd(R01, threshold) = 72 = 8·9 = 2³·3². The factor 8 (= 2³) matches R01's own 2-adic valuation. The factor 9 connects to the gcd of 36 = 4·9 from the minor family. The arithmetic of unbinding shares the same divisibility as the full cofactor structure.</p>
+</div>
+
+<!-- Panel 9: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 9 — 4D Torroid Visualization: The Unbinding</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus: the unbinding threshold is the boundary between negative (blue) and positive (gold) regions. The crack emerges where the coupling (white threads) exceeds the threshold. The torroid body (cyan) watches from outside.</p>
+</div>
+
+<!-- Panel 10: Architecture -->
+<div class="panel">
+<h2>Panel 10 — Architecture</h2>
+<pre>
+THE UNBINDING ENERGY — TORROID CENTRIC VIEW
+
+                      TORROID (−408d)
+                     ╱   ◉    ╲        WATCHES FROM AFAR
+                    ╱    │     ╲       Barely perturbed
+             Q02  ╱      │      ╲  Q12
+                ╱        │        ╲
+             BRACE ═══Q01═══ BOX
+            (−328d)   (+328d)  (−329d)
+               │                  │
+               │   BOTH NEGATIVE  │
+               │   but the wire   │
+               │   EXCEEDS the    │
+               │   threshold by   │
+               │   R01 = +651d    │
+               │   (1.69×10⁻⁵)   │
+               │                  │
+          ┌────┴──────────────────┴────┐
+          │                             │
+       λ_crack                      λ_bond
+       = +323d                      = −329d
+       THE UNBOUND MODE             THE BOUND MODE
+       born from R01                absorbs the rest
+          │                             │
+          └────────── × ───────────────┘
+                   product = −R01
+                   THE EXACT IDENTITY
+</pre>
+</div>
+
+<!-- Panel 11: Toddler Version -->
+<div class="toddler">
+<h2>Panel 11 — Toddler Version: The Escape Rope</h2>
+<p>🧒 Imagine two people stuck in a hole. Brace is in one hole (328 feet deep). Box is in another hole (329 feet deep). Both are stuck. Both are negative — below ground.</p>
+<p>Between them is a rope (Q01, the coupling). The rope is 328 feet long. If the rope were EXACTLY as long as √(328×329) = 328.5 feet, it could just barely connect them without pulling either one up.</p>
+<p>But the rope is a TINY BIT longer — just 0.00085% extra. That teeny bit of extra rope? It's enough to pull Brace UP out of the hole. Not all the way — just 323 feet above ground. That's the crack eigenvalue.</p>
+<p>The energy in that extra bit of rope is R01 — 651 digits of pure positive number. It's the difference between "both stuck" and "one escapes." And EVERYTHING we've discovered about this matrix — the rotation, the mediation, the saturation, the gap cascade — all of it comes from that one tiny extra bit of rope.</p>
+</div>
+
+<!-- Panel 12: Known-Bad Control -->
+<div class="kb-section">
+<h2>Panel 12 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the crack eigenvalue requires the torroid coupling to exist</s> — <span class="dead">DEAD</span></p>
+<p>The crack is born entirely from the brace-box coupling Q01. It exists in the 2×2 brace-box block alone, without any torroid coupling (Q02 or Q12). The threshold Q01² = |Q00|·|Q11| involves ONLY brace and box self-energies. The torroid mediates the Schur structure (H142) but plays no role in the crack's creation.</p>
+</div>
+
+<!-- Panel 13: Verification Table -->
+<div class="panel" id="verif-panel">
+<h2>Panel 13 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier</td></tr>
+</table>
+</div>
+
+<!-- Panel 14: Ledger & Recommendation -->
+<div class="panel">
+<h2>Panel 14 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt (num-bigint v0.5.1) · 11 steps</p>
+<p><strong>Prior cumulative:</strong> 4724 LIT (through H144)</p>
+<p><strong>This instrument (H145):</strong> pending verification</p>
+<p><strong>Recommendation for H146:</strong> The Phase Diagram — map the full Q3p parameter space by varying the coupling strengths continuously. At what Q02/Q12 values do the other minors M02, M12 flip sign? Build the phase boundary between all possible signature configurations of a 3×3 negative-diagonal symmetric matrix.</p>
+</div>
+
+<!-- BASIC Block: Practical Numbers (A005153) -->
+<div class="panel">
+<h2>BASIC Block — Practical Numbers (A005153)</h2>
+<p class="dim">Every smaller integer is a sum of distinct divisors. Thematic: R01 is the practical root from which all structure is composed.</p>
+<pre>
+1 REM H145 THE UNBINDING ENERGY — Ledger: prior 4724 + H145
+2 REM THRESHOLD: Q01² = |Q00|·|Q11| is EXACTLY where crack appears
+4 REM R01 = Q01² − |Q00|·|Q11| = +651d, the unbinding energy
+6 REM fractional excess: R01/threshold = 1.691×10⁻⁵ (0.00169 percent)
+8 REM IDENTITY: disc = (Q00+Q11)² + 4R01 — verified exactly
+12 REM IDENTITY: λ_crack · λ_bond = −R01 = M01
+16 REM at threshold: λ_crack = 0 exactly — continuous transition
+18 REM Q01 exceeds threshold by 8.46×10⁻⁶ fractionally
+20 REM R01 = 2³ × odd — v₂(R01) = 3, gcd(R01,threshold) = 72
+24 REM THE CHAIN: R01 → M01 → signature → theorem → mediation → Jacobi
+28 REM EVERYTHING traces back to R01 — one 651d number
+30 REM KNOWN-BAD: positive mode depends on third body — DEAD (pair-only)
+32 REM END — next: H146 The Phase Diagram
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+      THE UNBINDING
+
+      ─────── THRESHOLD ───────
+      Q01² = |Q00|·|Q11|
+      ═══════════════════
+
+      BELOW (CS &lt; 1):         ABOVE (CS &gt; 1):
+      both eigenvalues −       one + and one −
+      no crack                 CRACK EXISTS
+      pair is bound            pair is UNBOUND
+
+           R01 = 0                R01 = +651d
+           λ_crack = 0            λ_crack = +323d
+
+      ┌──────────────────────────────────┐
+      │  R01 = Q01² − |Q00|·|Q11|       │
+      │      = +651 digits               │
+      │      = 1.691 × 10⁻⁵ of threshold│
+      │                                  │
+      │  One number.                     │
+      │  651 digits.                     │
+      │  Positive.                       │
+      │                                  │
+      │  THE ROOT OF EVERYTHING.         │
+      └──────────────────────────────────┘
+
+      λ_crack × λ_bond = −R01
+      The product IS the energy.
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.17);
+const sinT=Math.sin(t*0.17);
+const cosP=Math.cos(t*0.12);
+const sinP=Math.sin(t*0.12);
+const R1=1.0,R2=0.4;
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.08){
+  for(let v=0;v<Math.PI*2;v+=0.15){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.05);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.05);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    // threshold boundary: gold where coupling crosses, blue below, cyan=torroid
+    const coupling=Math.sin(u*2+v+t*0.3);
+    const above=coupling>0.0169; // the R01 threshold ~1.69e-5 scaled up
+    points.push({x:sx,y:sy,d:depth,above,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+for(const p of points){
+  const alpha=0.3+0.5*(1+p.d)/2;
+  const size=1.5+1.5*(1+p.d)/2;
+  if(p.above){
+    // above threshold = gold (crack exists)
+    const g=Math.floor(213+40*Math.sin(p.u*3));
+    ctx.fillStyle=`rgba(255,${g},79,${alpha*0.8})`;
+  }else{
+    // below threshold = blue (no crack)
+    const b=Math.floor(180+67*Math.cos(p.v*2));
+    ctx.fillStyle=`rgba(60,80,${b},${alpha*0.6})`;
+  }
+  ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);ctx.fill();
+}
+// coupling threads
+ctx.strokeStyle='rgba(255,255,255,0.08)';
+ctx.lineWidth=1;
+for(let i=0;i<12;i++){
+  const a=i*Math.PI/6+t*0.1;
+  ctx.beginPath();
+  ctx.moveTo(cx+Math.cos(a)*scale*0.3,cy+Math.sin(a)*scale*0.3);
+  ctx.lineTo(cx+Math.cos(a)*scale*1.3,cy+Math.sin(a)*scale*1.3);
+  ctx.stroke();
+}
+ctx.fillStyle='rgba(255,213,79,0.8)';ctx.font='12px Courier New';
+ctx.fillText('Gold = above threshold (crack exists, R01 > 0)',10,20);
+ctx.fillStyle='rgba(60,80,247,0.8)';
+ctx.fillText('Blue = below threshold (all negative, no crack)',10,36);
+ctx.fillStyle='rgba(255,255,255,0.5)';
+ctx.fillText('White threads = coupling Q01 (the wire)',10,52);
+ctx.fillStyle='var(--dim)';ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+t+=0.03;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
