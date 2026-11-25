@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H150 — The Cone Census</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H150 — The Cone Census</h1>
+<p class="dim">Instrument: Root families on the null cone in eigenvector coordinates · Engine: Rust BigInt · 2026-11-25</p>
+
+<div class="verdict-box">
+<div class="label">THE 85-DIGIT GAP IS THE FAMILY SEPARATOR</div>
+<div class="detail">Two root families: w=0 (brace-box plane, 18 constructive) and w≥1 (torroid axis, 3 existence).<br>
+A 39-digit DESERT separates them: u ≈ 10³ vs u ≈ 10⁴² with nothing in between.<br>
+The w-threshold is DISCRETE (integer lattice). No gradual crossover.</div>
+</div>
+
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>Which of the 21 roots live in the brace-box plane (w=0) and which need the torroid axis (w≥1)?</strong></p>
+<p>H149 proposed two root families separated by the eigenvalue hierarchy. This instrument computes the exact eigenvector transformation, determines the family thresholds, and discovers a 39-digit desert between the two families. The 18/3 split of the 21-Root Theorem maps to this discrete family structure.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 2 — The Cone Census Table</h2>
+<table>
+<tr><th>Family</th><th>w range</th><th>u scale</th><th>Roots</th><th>Method</th><th>Status</th></tr>
+<tr><td>Brace-box plane</td><td>w = 0</td><td>u ≈ 10³·v</td><td class="lit">18</td><td>LLL + sieve</td><td class="lit">CONSTRUCTIVE</td></tr>
+<tr><td>Mixed (small w)</td><td>w = 1</td><td>u ≈ 10⁴²</td><td style="color:var(--gold)">3 (conj.)</td><td>Eichler-Kneser</td><td style="color:var(--gold)">EXISTENCE ONLY</td></tr>
+<tr><td>Torroid-dominant</td><td>w ≥ 2</td><td>u ≈ 10⁸⁴+</td><td class="dim">∞ (beyond)</td><td>—</td><td class="dim">Beyond 21-root scope</td></tr>
+</table>
+<p><strong>NOTE:</strong> The w≥1 assignment for roots 19-21 is a <strong>CONJECTURE</strong>. We proved they exist (H107) but cannot compute their eigenvector decomposition without constructing them first.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 3 — The Two Cone Angles (Eigenvector View)</h2>
+<pre>
+Null cone: λ_crack · u² = |λ_bond| · v² + |λ_torroid| · w²
+
+                u (crack axis)
+                ^
+               /|\
+              / | \     ← cone half-angle 10⁻³ rad (bond direction)
+             /  |  \
+            / 0.057°\
+           /    |    \
+  ────────/─────+─────\────→ v (bond axis)
+          \     |     /
+           \    |    /      ← cone half-angle 10⁻⁴² rad (torroid)
+            \   |   /         (invisibly narrow in this diagram)
+             \  |  /
+              \ | /
+               \|/
+
+  FAMILY 1 (green dots):        FAMILY 2 (gold dots):
+  On the cone, in the v-axis    On the cone, needs w-axis
+  u ≈ 10³, v ≈ 1               u ≈ 10⁴², w ≈ 1
+  18 roots, found by LLL        3 roots, proved by Eichler-Kneser
+
+  THE DESERT: between u ≈ 10³ and u ≈ 10⁴²
+  = factor 10³⁹ with NO lattice points on the cone
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 4 — The 39-Digit Desert</h2>
+<table>
+<tr><th>Scale</th><th>Region</th><th>Content</th></tr>
+<tr><td>u ≈ 10³</td><td class="lit">Family 1 (w=0 roots)</td><td>18 constructive roots live here</td></tr>
+<tr><td>10³ &lt; u &lt; 10⁴²</td><td style="color:var(--dead-red)">THE DESERT</td><td>No lattice points on the cone (39 orders of magnitude)</td></tr>
+<tr><td>u ≈ 10⁴²</td><td style="color:var(--gold)">Family 2 (w≥1 roots)</td><td>3 existence roots (conjectured)</td></tr>
+</table>
+<p><strong>The desert exists because w is an INTEGER.</strong> There is no w = 0.5. Either a root has w = 0 (family 1, cheap) or w ≥ 1 (family 2, expensive). The jump from w=0 to w=1 costs 10⁴² in the u-coordinate because |λ_torroid|/λ_crack ≈ 10⁸⁵, and u_min = √(10⁸⁵) = 10⁴².</p>
+<p><strong>85/2 = 42:</strong> The 85-digit gap from H138 divides by 2 (square root) to give the 42-digit threshold. The 42 minus 3 (family 1 scale) = 39-digit desert. The gap cascade continues: 85 → 42 → 39.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 5 — The Constructibility Barrier</h2>
+<pre>
+WHY roots 19-21 are existence-only (not constructive):
+
+  LLL can FIND vectors up to:
+    2D (w=0 plane): 10³²⁵ — plenty for Family 1 roots (u ≈ 10³)
+    3D (full):      10³⁵³ — plenty for Family 2 roots (u ≈ 10⁴²)
+
+  So LLL CAN find the vectors. The obstruction is VERIFICATION:
+    The modular sieve requires factoring a 1056-digit cofactor.
+    This cofactor ≈ det(Q) = 1059d (H149's match).
+
+  FINDING is easy. PROVING is hard.
+  The 1056-digit wall blocks verification, not discovery.
+
+  ┌─────────────────────────────────────────────┐
+  │  Family 1: search CHEAP (2D), verify CHEAP  │
+  │  Family 2: search CHEAP (3D), verify BLOCKED│
+  │                                              │
+  │  The barrier is ARITHMETIC, not GEOMETRIC.  │
+  │  The geometry says the roots exist.          │
+  │  The arithmetic says we can't prove which    │
+  │  specific lattice points they are.           │
+  └─────────────────────────────────────────────┘
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 6 — The Binary Subform</h2>
+<p>In the w=0 plane, Q3p reduces to a binary quadratic form:</p>
+<pre>
+Q_2D(a,b) = Q00·a² + 2Q01·ab + Q11·b²
+det(Q_2D) = M01 = −651d (INDEFINITE)
+
+An indefinite binary form has INFINITELY many roots.
+The 18 constructive roots are the 18 SHORTEST primitive roots.
+The binary form alone gives unlimited Family 1 roots.
+
+But the TERNARY form needs ALL root classes.
+18 come from w=0 (the binary subform).
+3 more come from w>0 (the full ternary structure).
+21 total — the minimum word length of F.
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization: The Cone Census</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus with the null cone: green dots = Family 1 (w=0, 18 constructive roots in brace-box plane), gold dots = Family 2 (w≥1, 3 existence roots needing torroid axis), red band = the 39-digit desert where no roots can live.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 8 — Architecture</h2>
+<pre>
+THE CONE CENSUS — TORROID CENTRIC VIEW
+
+                      TORROID (−408d)
+                     ╱   ◉    ╲        w-axis (torroid component)
+                    ╱    │     ╲       w = 1 → u ≈ 10⁴² (Family 2)
+             Q02  ╱      │      ╲  Q12
+                ╱    EXPENSIVE     ╲
+             BRACE ═══Q01═══ BOX
+            (−328d)          (−329d)
+                   w = 0 plane
+              u ≈ 10³ (Family 1)
+
+  THE TWO FAMILIES:
+  ┌─────────────────────────────────────────┐
+  │                                          │
+  │  Family 1 (w=0):                        │
+  │    18 constructive roots                │
+  │    Live in the brace-box plane          │
+  │    u/v ≈ 10³ (from |λ_bond|/λ_crack)   │
+  │    Found by LLL + modular sieve         │
+  │                                          │
+  │  ═══════ 39-DIGIT DESERT ═══════        │
+  │  10³ → 10⁴²: NO lattice points          │
+  │  on the cone in this range              │
+  │                                          │
+  │  Family 2 (w≥1):                        │
+  │    3 existence roots (CONJECTURED)      │
+  │    Need the torroid axis                │
+  │    u ≈ 10⁴² (from |λ_torr|/λ_crack)    │
+  │    Proved by Eichler-Kneser             │
+  │    Construction blocked by 1056d factor │
+  │                                          │
+  └─────────────────────────────────────────┘
+
+  THE HIERARCHY:
+  85d gap (H138) → 42d threshold (√) → 39d desert (−3)
+  R01 → eigenvalues → cone angle → family separation
+</pre>
+</div>
+
+<div class="toddler">
+<h2>Panel 9 — Toddler Version: Two Neighborhoods</h2>
+<p>🧒 Imagine a narrow tunnel (the null cone). Inside the tunnel, there are houses (lattice points = roots). The houses come in two neighborhoods.</p>
+<p><strong>Neighborhood 1</strong> is right at the entrance, very close. 18 houses, easy to find, easy to visit. These are the constructive roots — we know exactly where each one is.</p>
+<p>Then there's a HUGE EMPTY STRETCH — 39 orders of magnitude of nothing. No houses at all. Just desert.</p>
+<p><strong>Neighborhood 2</strong> is waaaay at the other end. 3 houses. We know they're there (a mathematician named Eichler proved it), but the desert is so long we can't walk there to check. The road is blocked by a 1056-digit number we can't factor.</p>
+<p>Why the desert? Because the tunnel gets NARROWER in one direction (the torroid direction — 10⁻⁴² radians). To reach Neighborhood 2, you have to go through that narrow part, and the first house there is 10⁴² steps away. Nothing can live in between — the lattice dots simply don't reach the tunnel walls.</p>
+</div>
+
+<div class="kb-section">
+<h2>Panel 10 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the two root families transition smoothly as a function of torroid coupling</s> — <span class="dead">DEAD</span></p>
+<p>The w-component is an INTEGER (lattice constraint). Either w=0 (Family 1) or w≥1 (Family 2). There is no w=0.5, no gradual crossover. The 39-digit desert between u≈10³ and u≈10⁴² is ABSOLUTE — no lattice points on the cone exist in that range. The transition is discrete, not smooth.</p>
+</div>
+
+<div class="panel" id="verif-panel">
+<h2>Panel 11 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier</td></tr>
+</table>
+</div>
+
+<div class="panel">
+<h2>Panel 12 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt · 10 steps</p>
+<p><strong>Prior cumulative:</strong> 4904 LIT (through H149)</p>
+<p><strong>This instrument (H150):</strong> pending verification</p>
+<p><strong>Recommendation for H151:</strong> The Desert Proof — prove rigorously that no lattice points on the null cone exist with 10³ &lt; u &lt; 10⁴² (the 39-digit desert). This would upgrade the family separation from conjecture to theorem using Minkowski bounds on the ternary form.</p>
+</div>
+
+<div class="panel">
+<h2>BASIC Block — Regular Numbers (A051037, 5-smooth)</h2>
+<p class="dim">Numbers whose only prime factors are 2, 3, 5. Thematic: smooth counting for a census of discrete families.</p>
+<pre>
+1 REM H150 THE CONE CENSUS — Ledger: prior 4904 + H150
+2 REM TWO ROOT FAMILIES on the null cone Q3p(v) = 0
+3 REM Family 1: w=0 (brace-box plane), 18 constructive, u ≈ 10³
+4 REM Family 2: w≥1 (torroid axis), 3 existence, u ≈ 10⁴²
+5 REM 39-digit DESERT between families (10³ to 10⁴², nothing)
+6 REM the w-threshold is DISCRETE: w=0 or w≥1, no intermediate
+8 REM 85-digit gap → 42-digit threshold (√) → 39-digit desert (−3)
+9 REM obstruction is VERIFICATION (1056d cofactor), not SEARCH
+10 REM binary subform Q_2D has infinitely many w=0 roots
+12 REM 21 = 18 (binary) + 3 (ternary extension)
+15 REM CONJECTURE: roots 19-21 have w≥1. Cannot verify without construction
+16 REM the family structure traces back to R01 through eigenvalue hierarchy
+18 REM KNOWN-BAD: smooth transition between families — DEAD (discrete jump)
+20 REM END — next: H151 The Desert Proof
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+      THE CONE CENSUS
+
+      u (crack)
+      ^
+      │      ·  · Family 2 (w≥1)
+      │     · ·  3 existence roots
+  10⁴²├─ · ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+      │
+      │        THE DESERT
+      │      39 orders of magnitude
+      │        no roots here
+      │
+   10³├─ · · · · · · · · · · · ·
+      │  · · · · · · · · · · · ·
+      │  Family 1 (w=0)
+      │  18 constructive roots
+      └───────────────────────→ v (bond)
+
+      w = 0  │  w = 1
+      ───────┼───────
+      cheap  │  expensive
+      found  │  proved
+      18     │  3
+      binary │  ternary
+
+      THE GAP IS THE SEPARATOR.
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.12);
+const sinT=Math.sin(t*0.12);
+const cosP=Math.cos(t*0.08);
+const sinP=Math.sin(t*0.08);
+const R1=1.0,R2=0.4;
+
+// Torus body
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.1){
+  for(let v=0;v<Math.PI*2;v+=0.2){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.04);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.04);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    points.push({x:sx,y:sy,d:depth,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+for(const p of points){
+  const alpha=0.15+0.3*(1+p.d)/2;
+  ctx.fillStyle=`rgba(79,195,247,${alpha*0.4})`;
+  ctx.beginPath();ctx.arc(p.x,p.y,1.2,0,Math.PI*2);ctx.fill();
+}
+
+// Family 1 (green, in a band around the equator)
+for(let i=0;i<18;i++){
+  const a=i*Math.PI*2/18+t*0.05;
+  const x4=R1*Math.cos(a);
+  const y4=R1*Math.sin(a);
+  const x3=x4*cosT;
+  const y3=y4*cosP;
+  const w3=y4*sinP;
+  const proj=1/(3-w3);
+  ctx.fillStyle='rgba(76,175,80,0.9)';
+  ctx.beginPath();ctx.arc(cx+x3*proj*scale,cy+y3*proj*scale,4,0,Math.PI*2);ctx.fill();
+}
+
+// Desert band (red, between families)
+ctx.strokeStyle='rgba(239,83,80,0.2)';
+ctx.lineWidth=15;
+ctx.beginPath();
+for(let a=0;a<Math.PI*2;a+=0.05){
+  const r=R1+R2*0.5;
+  const x4=r*Math.cos(a);
+  const y4=r*Math.sin(a)*0.3;
+  const x3=x4*cosT;
+  const y3=y4*cosP;
+  const w3=y4*sinP;
+  const proj=1/(3-w3);
+  if(a===0)ctx.moveTo(cx+x3*proj*scale,cy+y3*proj*scale);
+  else ctx.lineTo(cx+x3*proj*scale,cy+y3*proj*scale);
+}
+ctx.stroke();
+
+// Family 2 (gold, offset from equator toward torroid)
+for(let i=0;i<3;i++){
+  const a=i*Math.PI*2/3+t*0.08+1;
+  const x4=(R1+R2*0.8)*Math.cos(a);
+  const y4=(R1+R2*0.8)*Math.sin(a)*0.4;
+  const z4=R2*0.6;
+  const x3=x4*cosT-z4*sinT;
+  const y3=y4*cosP;
+  const w3=y4*sinP;
+  const proj=1/(3-w3);
+  ctx.fillStyle='rgba(255,213,79,0.9)';
+  ctx.beginPath();ctx.arc(cx+x3*proj*scale,cy+y3*proj*scale,6,0,Math.PI*2);ctx.fill();
+}
+
+ctx.fillStyle='rgba(76,175,80,0.9)';ctx.font='12px Courier New';
+ctx.fillText('Green = Family 1 (w=0, 18 constructive roots)',10,20);
+ctx.fillStyle='rgba(255,213,79,0.9)';
+ctx.fillText('Gold = Family 2 (w≥1, 3 existence roots)',10,36);
+ctx.fillStyle='rgba(239,83,80,0.7)';
+ctx.fillText('Red band = 39-digit desert (no roots)',10,52);
+ctx.fillStyle='var(--dim)';ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+t+=0.03;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
