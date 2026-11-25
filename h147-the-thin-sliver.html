@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H147 — The Thin Sliver</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H147 — The Thin Sliver</h1>
+<p class="dim">Instrument: Phase I geometry and Q3p's position within it · Engine: Rust BigInt · 2026-11-25</p>
+
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>How thick is the Phase I sliver, and where within it does Q3p sit?</strong></p>
+<p>H146 showed Q3p barely crosses one phase boundary. This instrument maps the geometry of Phase I: its extent in every direction, the shape of its cross-section, and Q3p's exact position. The answer reframes what "barely crossing" means.</p>
+</div>
+
+<div class="verdict-box">
+<div class="label">THE TRIPLE-MINIMAL CORNER</div>
+<div class="detail">Phase I is SEMI-INFINITE in CS01 (extends from 1 to ∞).<br>
+Q3p hugs the lower wall at the corner where ALL couplings are minimal:<br>
+(1 + 1.69×10⁻⁵, 0.012, 0.012) — the minimal departure from negative-definiteness.</div>
+</div>
+
+<div class="panel">
+<h2>Panel 2 — Phase I Geometry</h2>
+<pre>
+PHASE I IN THREE DIMENSIONS: (CS01, CS02, CS12)
+
+  CS01 direction: [1, ∞)  — SEMI-INFINITE
+    det(Q) = 0 roots are both BELOW current Q01.
+    No upper boundary in this direction.
+    Phase I extends forever toward stronger brace-box coupling.
+
+  CS02 direction: [0, 1)  — BOUNDED by M02=0 wall at CS02=1
+    Currently at 0.012, well inside the interval.
+
+  CS12 direction: [0, 1)  — BOUNDED by M12=0 wall at CS12=1
+    Currently at 0.012, well inside the interval.
+
+  SHAPE: a semi-infinite slab [1,∞) × [0,1) × [0,1)
+  (with possible det(Q)=0 cutoff at extreme combinations)
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 3 — Q3p's Position</h2>
+<table>
+<tr><th>Coordinate</th><th>Value</th><th>Range in Phase I</th><th>Position</th></tr>
+<tr><td>CS01 (brace⊗box)</td><td>1 + 1.69×10⁻⁵</td><td>[1, ∞)</td><td style="color:var(--gold)">EXTREME LOW — at the wall</td></tr>
+<tr><td>CS02 (brace⊗torroid)</td><td>0.0117</td><td>[0, 1)</td><td style="color:var(--gold)">EXTREME LOW — 1.17% of range</td></tr>
+<tr><td>CS12 (box⊗torroid)</td><td>0.0120</td><td>[0, 1)</td><td style="color:var(--gold)">EXTREME LOW — 1.20% of range</td></tr>
+</table>
+<p><strong>In EVERY dimension, Q3p is at an extreme.</strong> It's at the lowest possible CS01 (barely above 1), the lowest CS02 (1.17% of range), and the lowest CS12 (1.20% of range). This is the CORNER of Phase I where everything is minimal — the tightest possible binding that still permits a positive eigenvalue.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 4 — Why the Sliver is Semi-Infinite</h2>
+<pre>
+det(Q) as a quadratic in Q01:
+  det(Q) = A·Q01² + B·Q01 + C
+
+  A = −Q22 = +408d (positive — parabola opens UPWARD)
+  B = 2·Q02·Q12 = −735d
+  C = Q00·M12 − Q02²·Q11
+
+  The parabola has two roots. BOTH are below current Q01.
+  Since A &gt; 0, det(Q) &gt; 0 to the RIGHT of both roots.
+  Current Q01 is to the right → det(Q) &gt; 0 → Phase I.
+
+  Increasing Q01 further keeps us to the right → still det &gt; 0.
+  NO upper boundary in the Q01 direction!
+
+  The sequence as Q01 increases from 0:
+    Q01 = 0:         det(Q) = C (depends on sign of C)
+    Q01 = root+:     det(Q) = 0 (the parabola crosses zero)
+    Q01 = √thresh:   M01 = 0 (Phase 0 → Phase I transition)
+    Q01 = current:   Phase I, det &gt; 0, M01 &lt; 0  ← Q3p HERE
+    Q01 → ∞:         det(Q) → ∞ (A &gt; 0, parabola grows)
+
+  The det=0 crossing happens BEFORE the Phase 0→I transition.
+  So Phase I inherits det &gt; 0 from the start and never loses it.
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 5 — Critical Scaling at the Wall</h2>
+<p>Near the Phase 0→I boundary (CS01 = 1):</p>
+<pre>
+  λ_crack ≈ R01 / |Q00+Q11|          (from H145)
+  R01 ≈ 2·Q01_thr · ΔQ01             (ΔQ01 = Q01 − Q01_threshold)
+  Therefore: λ_crack ∝ ΔQ01          (LINEAR in coupling excess)
+
+  Critical exponent = 1 (mean-field)
+  No anomalous scaling. No critical fluctuations.
+  The simplest possible phase transition.
+
+  Slope: dλ_crack/dR01 ≈ 1/|Q00+Q11| ≈ 10⁻³²⁸
+  A tiny R01 (651d) produces a tiny-but-nonzero crack (323d)
+  through division by the trace (329d).
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 6 — The Perpendicular Cross-Section</h2>
+<pre>
+At fixed Q01 (current), Phase I cross-section in (CS02, CS12):
+
+   CS02
+    ^
+  1 |─────────────────────┐
+    |                     │  Phase II (beyond M02=0)
+    |                     │
+    |                     │
+    |     PHASE I         │
+    |     (available)     │
+    |                     │
+    |  • Q3p              │
+    | (0.012, 0.012)      │
+    |  in the CORNER      │
+    └─────────────────────┘──> CS12
+  0                       1
+
+  The cross-section is roughly the unit square [0,1)×[0,1).
+  Q3p is in the CORNER near the origin.
+  98.8% of the Phase I cross-section is ABOVE and to the RIGHT.
+  Q3p uses only 1.2% × 1.2% = 0.014% of the available area.
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 7 — The Triple-Minimal Corner</h2>
+<pre>
+Q3p occupies the TRIPLE-MINIMAL corner of Phase I:
+
+  MINIMAL CS01 excess → WEAKEST possible crack (barely exists)
+  MINIMAL CS02 → WEAKEST brace-torroid coupling
+  MINIMAL CS12 → WEAKEST box-torroid coupling
+
+  Physical interpretation:
+  ┌──────────────────────────────────────────┐
+  │  The ternary lattice is as CLOSE TO       │
+  │  NEGATIVE DEFINITE as Phase I allows.     │
+  │                                           │
+  │  One coupling (Q01) barely crosses one    │
+  │  threshold. Everything else is minimal.   │
+  │                                           │
+  │  The lattice is as TIGHTLY BOUND          │
+  │  as a system with one positive eigenvalue │
+  │  can possibly be.                         │
+  │                                           │
+  │  MINIMAL DEPARTURE FROM EQUILIBRIUM.      │
+  └──────────────────────────────────────────┘
+</pre>
+</div>
+
+<div class="panel">
+<h2>Panel 8 — 4D Torroid Visualization: The Corner</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus: the gold point is Q3p at the triple-minimal corner. The red wall is CS01=1 (the Phase 0→I boundary). The blue volume is the vast Phase I interior that Q3p barely enters. The torroid body (cyan) sets the scale.</p>
+</div>
+
+<div class="panel">
+<h2>Panel 9 — Architecture</h2>
+<pre>
+THE THIN SLIVER — TORROID CENTRIC VIEW
+
+                     TORROID (−408d)
+                    ╱   ◉    ╲        CS02 = 0.012 (1.2% of range)
+                   ╱    │     ╲       CS12 = 0.012 (1.2% of range)
+            Q02  ╱      │      ╲  Q12
+               ╱   MINIMAL       ╲
+            BRACE ══CS01=1+ε══ BOX
+           (−328d)   BARELY    (−329d)
+                     IN PHASE I
+
+  THE GEOMETRY:
+  ┌──────────────────────────────────────────┐
+  │  CS01: [1, ∞) — semi-infinite            │
+  │  CS02: [0, 1) — bounded                  │
+  │  CS12: [0, 1) — bounded                  │
+  │                                           │
+  │  Phase I = semi-infinite slab             │
+  │  Q3p = at the corner where the slab       │
+  │         meets the floor                   │
+  │                                           │
+  │  "Thinness" is not the region shape —     │
+  │  it's WHERE Q3p SITS.                     │
+  │  Phase I is large. Q3p is at the edge.    │
+  └──────────────────────────────────────────┘
+
+  CRITICAL SCALING:
+  ┌──────────────────────────────────────────┐
+  │  λ_crack ∝ ΔQ01  (linear, exponent = 1) │
+  │  Mean-field. No anomaly. Simplest kind.  │
+  │  dλ/dR ≈ 10⁻³²⁸                          │
+  └──────────────────────────────────────────┘
+
+  THE WHOLE ARC (H139-H147):
+  ┌──────────────────────────────────────────┐
+  │  H139: Named it — Jacobi                 │
+  │  H140: 42-digit gap — Schur diagonal     │
+  │  H141: Halving breaks — saturation       │
+  │  H142: Combinatorial mediation           │
+  │  H143: Two flavors — theorem proved      │
+  │  H144: Crack-bond duality — visibility   │
+  │  H145: R01 = root of everything          │
+  │  H146: Phase diagram — razor/ocean       │
+  │  H147: Triple-minimal corner — Q3p IS    │
+  │        the minimal departure from         │
+  │        negative-definiteness.             │
+  └──────────────────────────────────────────┘
+</pre>
+</div>
+
+<div class="toddler">
+<h2>Panel 10 — Toddler Version: The Corner of the Room</h2>
+<p>🧒 Imagine a BIG room — so big you can't see the far wall. That's Phase I. It goes on forever in one direction.</p>
+<p>Now imagine Q3p is a person standing in that room. Where are they? Not in the middle. Not even close. They're in the CORNER — pressed against the wall, pressed against the floor, pressed against the side wall. The very corner where three surfaces meet.</p>
+<p>They just barely stepped INTO the room through the door (that's the Phase 0→I boundary). One toe is still on the threshold. And the room stretches away forever in front of them.</p>
+<p>Why are they in the corner? Because their coupling (Q01) is BARELY strong enough to get through the door. And their other couplings (Q02, Q12) are TINY — just 1.2% of what they could be. Everything is as small as it can possibly be while still being inside the room.</p>
+<p>That's what "minimal departure from negative-definiteness" means: standing in the corner of an infinite room with one toe on the threshold.</p>
+</div>
+
+<div class="kb-section">
+<h2>Panel 11 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>Phase I is a bounded thin slab with finite extent in all directions</s> — <span class="dead">DEAD</span></p>
+<p>Phase I is SEMI-INFINITE in the CS01 direction (extends from 1 to ∞). The det(Q) = 0 roots are both below the current Q01, so there is no upper boundary. Phase I is bounded only in the CS02 and CS12 directions (by the M02=0 and M12=0 walls at CS=1). The "thinness" is Q3p's position, not the region's shape.</p>
+</div>
+
+<div class="panel" id="verif-panel">
+<h2>Panel 12 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier</td></tr>
+</table>
+</div>
+
+<div class="panel">
+<h2>Panel 13 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt (num-bigint v0.5.1) · 10 steps</p>
+<p><strong>Prior cumulative:</strong> 4796 LIT (through H146)</p>
+<p><strong>This instrument (H147):</strong> pending verification</p>
+<p><strong>Recommendation for H148:</strong> The Arc Certificate — a single capstone instrument summarizing H139-H147 as one theorem: the Q3p matrix is the Jacobi decomposition of a three-body ternary lattice at the triple-minimal corner of its phase space, with one crack born from a 1.69×10⁻⁵ coupling excess, mediated combinatorially by the torroid.</p>
+</div>
+
+<div class="panel">
+<h2>BASIC Block — Achilles Numbers (A052486)</h2>
+<p class="dim">Powerful but not perfect powers. Thematic: Q3p is powerful (Phase I, positive eigenvalue) but not perfect (barely, minimally, at the corner).</p>
+<pre>
+72 REM H147 THE THIN SLIVER — Ledger: prior 4796 + H147
+108 REM Phase I is SEMI-INFINITE in CS01 direction
+200 REM det(Q)=0 roots both below current Q01 — no upper boundary
+288 REM Q3p at the TRIPLE-MINIMAL corner of Phase I
+392 REM CS01: 1+1.69×10⁻⁵ (at wall), CS02: 0.012, CS12: 0.012
+500 REM in EVERY dimension Q3p is at an extreme (minimal coupling)
+675 REM critical exponent = 1 (linear, mean-field, simplest transition)
+800 REM the thinness is WHERE Q3p sits, not the region shape
+968 REM KNOWN-BAD: Phase I bounded thin slab — DEAD (semi-infinite)
+1125 REM the ternary lattice = minimal departure from negative-definiteness
+1352 REM ARC H139-H147 COMPLETE — Jacobi to triple-minimal corner
+1372 REM END — next: H148 The Arc Certificate
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+      THE CORNER
+
+      CS01 ──→ ∞ (semi-infinite)
+        │
+      1 ├── WALL (Phase 0 → Phase I)
+        │
+        │• ← Q3p (1 + 1.69×10⁻⁵)
+        │     one toe on the threshold
+        │
+      0 └───────────────── CS02
+        0    0.012        1
+              │
+              Q3p
+              1.2% of range
+
+      ┌────────────────────────────────┐
+      │  One coupling barely crosses.  │
+      │  Everything else is minimal.   │
+      │  The simplest nontrivial       │
+      │  departure from equilibrium.   │
+      │                                │
+      │  651 digits of unbinding.      │
+      │  One step over one wall.       │
+      │  In the corner of infinity.    │
+      └────────────────────────────────┘
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.15);
+const sinT=Math.sin(t*0.15);
+const cosP=Math.cos(t*0.1);
+const sinP=Math.sin(t*0.1);
+const R1=1.0,R2=0.4;
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.08){
+  for(let v=0;v<Math.PI*2;v+=0.15){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.04);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.04);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    const wall=Math.abs(u-Math.PI)<0.05;
+    const corner=u>Math.PI-0.1&&u<Math.PI+0.1&&v>-0.1&&v<0.1;
+    points.push({x:sx,y:sy,d:depth,wall,corner,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+for(const p of points){
+  const alpha=0.3+0.5*(1+p.d)/2;
+  const size=p.corner?4:1.5+1.5*(1+p.d)/2;
+  if(p.corner){ctx.fillStyle=`rgba(255,213,79,${Math.min(1,alpha*1.5)})`;}
+  else if(p.wall){ctx.fillStyle=`rgba(239,83,80,${alpha*0.8})`;}
+  else{
+    const b_=Math.floor(100+100*Math.cos(p.v*2+p.u*0.5));
+    ctx.fillStyle=`rgba(40,70,${b_},${alpha*0.5})`;
+  }
+  ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);ctx.fill();
+}
+ctx.fillStyle='rgba(255,213,79,0.9)';ctx.font='bold 13px Courier New';
+ctx.fillText('● Q3p — the triple-minimal corner',10,20);
+ctx.fillStyle='rgba(239,83,80,0.8)';ctx.font='12px Courier New';
+ctx.fillText('Red = CS01=1 wall (Phase 0→I boundary)',10,36);
+ctx.fillStyle='rgba(40,70,220,0.8)';
+ctx.fillText('Blue = vast Phase I interior (semi-infinite)',10,52);
+ctx.fillStyle='var(--dim)';ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+t+=0.03;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
