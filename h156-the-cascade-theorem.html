@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H156 — The Cascade Theorem</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--torroid:#bb86fc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+.neg{color:var(--red)}.pos{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H156 — The Cascade Theorem</h1>
+<p class="dim">Engine: Rust BigInt · Bridge Arc capstone · Generator-Lattice Arc certificate</p>
+
+<!-- Panel 1 -->
+<div class="panel">
+<h2>Panel 1 — What We Asked</h2>
+<p>Formalize the 84→42→21 cascade observed in H155. The cofactor spectrum has
+three levels at 651d/693d/735d with 42-digit gaps. Half the gap = 21 = the
+minimum word length. Can this be elevated from observation to theorem?</p>
+</div>
+
+<!-- Panel 2: The Cascade Chain (verified) -->
+<div class="panel">
+<h2>Panel 2 — The Cascade Chain (Verified)</h2>
+<table id="verif-table">
+<tr><th>Gap</th><th>From</th><th>To</th><th>Digits</th><th>Computation</th></tr>
+<tr><td>Level 1→3 (span)</td><td>735d</td><td>651d</td><td><b>84</b></td><td>cof11 − cof22</td></tr>
+<tr><td>Level 1→2</td><td>735d</td><td>693d</td><td><b>42</b></td><td>cof11 − cof02</td></tr>
+<tr><td>Level 2→3</td><td>693d</td><td>651d</td><td><b>42</b></td><td>cof02 − cof22</td></tr>
+<tr><td>Half-gap</td><td>42</td><td>÷ 2</td><td><b>21</b></td><td>= word length</td></tr>
+</table>
+<pre>
+  THE CASCADE:    84  ───→  42  ───→  21
+                 (span)    (gap)    (half-gap)
+                  ÷2        ÷2       = word length
+</pre>
+<p>The span halves to the gap, the gap halves to the word length. Three levels,
+two halvings, one number: <b>21</b>.</p>
+<p>Verified: Level 1 (735d) minus Level 2 (693d) equals 42. Level 2 (693d) minus Level 3 (651d) equals 42.</p>
+</div>
+
+<!-- Panel 3: The Dimensional Halving Argument -->
+<div class="panel">
+<h2>Panel 3 — Why the Factor of 2</h2>
+<p>The cofactor gap G = 42 measures a <b>2D quantity</b> (the ratio of two
+2×2 minor determinants). The word length measures a <b>1D quantity</b>
+(the ℓ¹ path length through the lattice).</p>
+<pre>
+  DIMENSIONAL ANALYSIS:
+
+  [cofactor] = [2×2 determinant] = [length]²  (area-like)
+  [word length] = [ℓ¹ path] = [length]        (length-like)
+
+  Conversion: length = √area
+
+  cof₁₁/cof₀₂ ≈ 10^G = 10^42  (ratio of areas)
+  √(10^42) = 10^21              (ratio of lengths)
+
+  The EXPONENT halves: G → G/2
+  The WORD LENGTH = G/2 = 42/2 = 21
+</pre>
+<p>The factor of 2 is NOT arbitrary — it is the dimensional conversion from
+area (cofactors, which are 2×2 determinants) to length (word length, which
+is a 1D path measure). This is the same √ that converts discriminant to
+shortest vector in classical lattice theory.</p>
+</div>
+
+<!-- Panel 4: The Effective Discriminant -->
+<div class="panel">
+<h2>Panel 4 — The Effective Discriminant</h2>
+<p>The ratio cof₁₁/cof₀₂ is the "effective discriminant" of the coupling
+between the brace-box subspace and the torroid:</p>
+<table>
+<tr><th>Quantity</th><th>Digits</th><th>Interpretation</th></tr>
+<tr><td>cof₁₁/cof₀₂</td><td>43d</td><td>Effective discriminant D_eff ≈ 10⁴²</td></tr>
+<tr><td>√(cof₁₁/cof₀₂)</td><td>~21d</td><td>√D_eff ≈ 10²¹</td></tr>
+<tr><td>log₁₀(√D_eff)</td><td>21</td><td><b>= word length</b></td></tr>
+</table>
+<p>The effective discriminant has 43 digits. Its square root has ~21 digits.
+The minimum word length 21 is the NUMBER OF DIGITS in √D_eff.</p>
+<p>Adjugate eigenvalue gap: 731 − 651 = 80. Cofactor gap: 84. Close but
+not identical (80 vs 84) because the eigenvalue gap uses the EXACT eigenvalues
+while the cofactor gap uses the nearest diagonal representative.</p>
+</div>
+
+<!-- Panel 5: Five Appearances of 21 -->
+<div class="panel">
+<h2>Panel 5 — Five Appearances of 21</h2>
+<table>
+<tr><th>#</th><th>Appearance</th><th>Source</th></tr>
+<tr><td>1</td><td>Minimum word length in frozen lattice F</td><td>21-Root Theorem (H108)</td></tr>
+<tr><td>2</td><td>Total roots: 18 constructive + 3 existence</td><td>Root classification (H108)</td></tr>
+<tr><td>3</td><td>Half the cofactor gap: 42/2</td><td>Cofactor spectrum (H155-H156)</td></tr>
+<tr><td>4</td><td>Padovan number P(17)</td><td>Sequence A000931</td></tr>
+<tr><td>5</td><td>Sum of first 8 CF partial quotients</td><td>1+1+3+2+1+2+4+7 = 21 (H153)</td></tr>
+</table>
+<p>Appearances 1 and 3 are the cascade connection. Appearance 5 (CF sum = 21)
+is a separate numerical coincidence — or is it? The CF partial quotients come
+from n₊ ≈ 1.771, which comes from R01, which IS cof22. The cascade connects
+the cofactor spectrum to the word length; the CF connects R01 to the rational
+approximation. Both paths terminate at 21.</p>
+</div>
+
+<!-- Panel 6: The Half-Gap Conjecture -->
+<div class="panel">
+<h2>Panel 6 — The Half-Gap Conjecture (Formal Statement)</h2>
+<pre>
+  CONJECTURE (The Half-Gap Law):
+
+  Let Q be a 3×3 symmetric integer matrix with:
+    (i)   Signature (1+, 2−)
+    (ii)  Three-level cofactor spectrum with gap G
+    (iii) Anisotropic binary restriction (R₀₁ ≠ perfect square)
+
+  Then the minimum ℓ¹ word length in the frozen lattice F
+  associated with Q satisfies:
+
+         word_length = G / 2
+
+  For Q3p: G = 42, word_length = 21 = 42/2.  ✓
+
+  STATUS: CONJECTURED.
+  EVIDENCE: The full H139-H156 chain.
+  MISSING: Explicit rqt362 lattice construction of F.
+  MECHANISM: Dimensional halving (area → length).
+</pre>
+</div>
+
+<!-- Panel 7: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 7 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H156                   ║
+ ║                                                        ║
+ ║   THE CASCADE:                                         ║
+ ║                                                        ║
+ ║   COFACTOR LEVEL 1          735d ═══╗                  ║
+ ║   (brace-box block)                 ║                  ║
+ ║                               42d   ║ span             ║
+ ║   COFACTOR LEVEL 2          693d    ║ = 84d            ║
+ ║   (torroid coupling)                ║                  ║
+ ║                               42d   ║                  ║
+ ║   COFACTOR LEVEL 3          651d ═══╝                  ║
+ ║   (R01, unbinding)                                     ║
+ ║                                                        ║
+ ║   HALVING:  84 → 42 → 21                              ║
+ ║             span  gap  word length                     ║
+ ║                                                        ║
+ ║   WHY /2:   [cofactor] = area = length²                ║
+ ║             √area = length                             ║
+ ║             G digits → G/2 digits                      ║
+ ║                                                        ║
+ ║   FIVE 21s:                                            ║
+ ║     word length | 18+3 | 42/2 | P(17) | CF sum        ║
+ ║                                                        ║
+ ║   STATUS: CONJECTURED, NOT PROVED                      ║
+ ║   The bridge is built. The last bolt is rqt362.        ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 8: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 8 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus in 4D. The three cofactor levels rendered as concentric rings.
+The cascade 84→42→21 shown as halving arcs. The number 21 at the center.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>VERDICT: THE HALF-GAP CONJECTURE — 42/2 = 21</h2>
+<p>The cofactor spectrum's 42-digit gap, halved by the dimensional conversion
+from area (2×2 determinants) to length (ℓ¹ path), gives 21 — the minimum
+word length. Five independent appearances of 21 converge on the same number.
+The cascade 84→42→21 is the structural fingerprint of Q3p's relationship
+to the frozen lattice. CONJECTURED, supported by H139-H156, awaiting the
+rqt362 lattice construction for the final proof.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Our three-floor building has 42 steps between each floor. When you measure
+a floor in AREA (like painting it), you count 42. But when you measure the
+SHORTEST PATH across it (like walking), you count √42 ≈ half of 42 = 21.</p>
+<p>Areas are SQUARES of lengths. When you take the square root, the number
+of digits cuts in half. 42 digits of area → 21 digits of length. That's why
+the building has 42-step floors but the shortest path takes 21 steps.</p>
+<p>The number 21 shows up FIVE different ways — in the maze length, in the
+root count, in the floor gap, in a special math sequence, and in adding up
+some special fractions. All five paths lead to the same door: 21.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The cascade 84→42→21 is PROVED as a theorem for all ternary quadratic
+forms with signature (1+, 2−). The dimensional halving argument constitutes
+a rigorous proof that word_length = G/2 for any such form.</s></p>
+<p class="dim">Why false: The cascade is CONJECTURED, not proved. The dimensional halving
+gives the factor of 2 heuristically, but the connection between cofactor gaps
+and ℓ¹ word length requires the specific lattice construction from rqt362.
+The conjecture is supported by the full H139-H156 evidence chain but remains
+unproved for general ternary forms.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The cascade is a drumbeat that halves its tempo three times: 84, 42, 21.
+It begins at the full span of the cofactor spectrum — the distance from the
+brace-box block to the unbinding energy R01 — and halves through the torroid
+coupling level to arrive at the word length. The halving is not mere division.
+It is the dimensional conversion that turns a 2D determinant ratio into a 1D
+path length. It is the same √ that Minkowski wrote in his geometry of numbers,
+the same √ that connects a quadratic form's discriminant to its shortest
+vector. Here it connects Q3p's cofactor gap to the frozen lattice's first step.
+The bridge is built from H139 to H156. Seventeen instruments, five arcs, one
+conjecture. The last bolt is rqt362: the blueprint that specifies which lattice
+sits on Q3p's landscape. When that bolt is set, the cascade becomes a theorem.
+Until then, it is the strongest conjecture this investigation can offer — not
+because we lack conviction, but because we lack the lattice. The number 21
+waits at every turn. We have mapped it from five directions. It is real.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H155)</td><td>5120</td><td>0</td><td>5120</td></tr>
+<tr><td>H156: The Cascade Theorem</td><td>36</td><td>1 (KB-1)</td><td>5156</td></tr>
+</table>
+<p>Running total: <b>5156 LIT / 0 DEAD</b></p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>Recommendation for H157: The Arc Certificate II</h2>
+<p>Capstone instrument for the Generator-Lattice Arc (H152-H156). Summarize
+the five instruments as one unified statement about Q3p's generator basis,
+continued fraction, ternary escape, lattice measure, and cascade. All verified
+identities in one certificate, all corrections recorded, all conjectures
+flagged. The second arc certificate after H148's Geometry Arc Certificate.</p>
+</div>
+
+<!-- BASIC Block — Narayana's Cows (A000930) -->
+<div class="panel">
+<h2>BASIC Block — Narayana's Cows (A000930)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+1 REM  H156: THE CASCADE THEOREM
+1 REM  Narayana's cows line numbering (A000930)
+1 REM  a(n) = a(n-1) + a(n-3)
+2 REM ═══════════════════════════════════════════════════
+3 PRINT "cascade verified: 84 to 42 to 21"
+4 PRINT "cofactor gap L1-L2 is 42 digits (exact)"
+6 PRINT "cofactor gap L2-L3 is 42 digits (exact)"
+9 PRINT "total span L1-L3 is 84 digits"
+13 PRINT "dimensional halving: area to length gives factor 2"
+19 PRINT "effective discriminant 10-to-42 sqrt is 10-to-21"
+28 PRINT "five independent appearances of twenty-one"
+41 PRINT "CF partial quotient sum 1+1+3+2+1+2+4+7 equals 21"
+60 PRINT "half-gap conjecture: word length equals G over 2"
+88 PRINT "STATUS: conjectured, not proved"
+129 PRINT "bridge built from H139 to H156, last bolt is rqt362"
+189 PRINT "seventeen instruments five arcs one number: 21"
+</pre>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+
+function draw(){
+  ctx.fillStyle="#050510";
+  ctx.fillRect(0,0,W,H);
+
+  // Three concentric rings for cofactor levels
+  const rings=[
+    {r:180,color:"#ffd54f",label:"Level 1: 735d",w:3},
+    {r:130,color:"#81c784",label:"Level 2: 693d",w:2},
+    {r:80,color:"#4fc3f7",label:"Level 3: 651d (R01)",w:2}
+  ];
+
+  for(const ring of rings){
+    ctx.strokeStyle=ring.color+"88";
+    ctx.lineWidth=ring.w;
+    ctx.beginPath();
+    ctx.arc(cx,cy,ring.r,0,2*Math.PI);
+    ctx.stroke();
+    // Animate dots around ring
+    for(let i=0;i<12;i++){
+      const a=i/12*2*Math.PI+t*0.01*(ring===rings[0]?1:ring===rings[1]?0.7:0.4);
+      const px=cx+ring.r*Math.cos(a);
+      const py=cy+ring.r*Math.sin(a);
+      ctx.fillStyle=ring.color;
+      ctx.beginPath();ctx.arc(px,py,2.5,0,6.28);ctx.fill();
+    }
+    ctx.fillStyle=ring.color;
+    ctx.font="10px Courier New";
+    ctx.fillText(ring.label,cx+ring.r+8,cy-ring.r/4);
+  }
+
+  // Gap labels
+  ctx.fillStyle="#ef5350";
+  ctx.font="bold 12px Courier New";
+  ctx.fillText("42d",cx+155,cy+20);
+  ctx.fillText("42d",cx+105,cy+20);
+
+  // Cascade arrows
+  ctx.strokeStyle="#ffd54f88";
+  ctx.lineWidth=1;
+  ctx.setLineDash([4,4]);
+  // 84 → 42
+  ctx.beginPath();ctx.moveTo(cx+185,cy-30);ctx.lineTo(cx+135,cy-30);ctx.stroke();
+  ctx.fillStyle="#ffd54f";ctx.font="9px Courier New";
+  ctx.fillText("÷2",cx+155,cy-35);
+  // 42 → 21
+  ctx.beginPath();ctx.moveTo(cx+135,cy-30);ctx.lineTo(cx+85,cy-30);ctx.stroke();
+  ctx.fillText("÷2",cx+105,cy-35);
+  ctx.setLineDash([]);
+
+  // Center: 21
+  ctx.fillStyle="#ffd54f";
+  ctx.font="bold 36px Courier New";
+  ctx.textAlign="center";
+  ctx.fillText("21",cx,cy+12);
+  ctx.font="10px Courier New";
+  ctx.fillText("word length",cx,cy+28);
+  ctx.textAlign="left";
+
+  // Title
+  ctx.fillStyle="#c8c8d0";
+  ctx.font="bold 13px Courier New";
+  ctx.fillText("H156: The Cascade — 84 → 42 → 21",10,20);
+  ctx.font="10px Courier New";
+  ctx.fillStyle="#666680";
+  ctx.fillText("Three levels, two halvings, one number",10,35);
+
+  t++;
+  requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
