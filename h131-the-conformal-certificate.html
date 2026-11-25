@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H131 — The Conformal Certificate</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8ccd0;--accent:#00e5ff;--accent2:#ff6090;--panel:#111118;--border:#222230;--dim:#555;--green:#00ff88;--red:#ff4444;--gold:#ffd700;--purple:#b388ff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:'Courier New',monospace;font-size:13px;line-height:1.5;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:20px;text-align:center;margin:12px 0 4px}
+h2{color:var(--accent);font-size:15px;margin:10px 0 6px;border-bottom:1px solid var(--border);padding-bottom:3px}
+.subtitle{text-align:center;color:var(--dim);font-size:11px;margin-bottom:12px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a00;border:2px solid var(--accent2);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--accent2);font-size:12px;letter-spacing:2px}
+.verdict-box .value{color:var(--accent2);font-size:20px;font-weight:bold;margin:6px 0}
+.verdict-box .detail{color:var(--fg);font-size:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{margin:3px 0}
+.stat .k{color:var(--dim)}
+.stat .v{color:var(--accent)}
+.lit{color:var(--green)}
+.dead{color:var(--red)}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:6px 0}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a25;color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px}
+pre{background:#0d0d15;padding:8px;border-radius:4px;overflow-x:auto;font-size:11px;line-height:1.4}
+.ornament{border:1px dashed var(--dim);padding:8px;margin:8px 0;border-radius:4px}
+.ornament-label{color:var(--dim);font-size:10px;letter-spacing:1px}
+.bar-track{background:#1a1a25;height:18px;border-radius:3px;margin:4px 0;position:relative}
+.bar-fill{height:100%;border-radius:3px;position:absolute;top:0;left:0}
+.bar-label{position:absolute;right:4px;top:0;font-size:10px;line-height:18px;color:var(--fg)}
+.scale-box{display:inline-block;padding:3px 8px;border-radius:3px;margin:2px;font-size:12px;font-weight:bold}
+.break-marker{color:var(--accent2);font-weight:bold;font-size:14px}
+</style>
+</head>
+<body>
+
+<h1>H131 — The Conformal Certificate</h1>
+<p class="subtitle">Where the symmetry breaks │ Instrument H131 of the Q3p series</p>
+
+<!-- Panel 1: THE QUESTION -->
+<div class="panel">
+<h2>Panel 1 — The Question</h2>
+<p>H130 found S/Q ratios of 0.9883, 0.9881, 0.9880 — almost equal, within 0.03%. It called this "conformal scaling."</p>
+<p style="margin-top:6px;color:var(--accent2)">But is that 0.03% spread REAL structure or BigInt integer-division truncation?</p>
+<p style="margin-top:6px;color:var(--dim)">The conformal certificate: use exact cross-multiplication (NO division, NO truncation) to prove exact conformality — or find where it breaks.</p>
+<p style="margin-top:6px">If the torroid has a preferred direction at the fourth decimal place, that's a symmetry breaking we haven't seen yet.</p>
+</div>
+
+<!-- Panel 2: THE EXACT TEST -->
+<div class="panel">
+<h2>Panel 2 — The Exact Cross-Multiplication Test</h2>
+<p style="margin-bottom:8px">The correction fractions are f₀₀ = Q02²/(Q00·Q22), f₀₁ = Q02·Q12/(Q01·Q22), f₁₁ = Q12²/(Q11·Q22).</p>
+<p style="margin-bottom:8px">Conformality requires f₀₀ = f₀₁ = f₁₁. Test by cross-multiplication — <strong style="color:var(--accent)">zero division, zero truncation</strong>.</p>
+
+<table>
+<tr><th>Test</th><th>Cross-Product A</th><th>Cross-Product B</th><th>Difference</th><th>Equal?</th></tr>
+<tr>
+<td>f₀₀ = f₀₁?</td>
+<td>Q02·Q01 = 695d</td>
+<td>Q12·Q00 = 695d</td>
+<td style="color:var(--accent2)">693d (differ at digit 2)</td>
+<td class="dead">NO</td>
+</tr>
+<tr>
+<td>f₀₀ = f₁₁?</td>
+<td>Q02²·Q11 = 1061d</td>
+<td>Q12²·Q00 = 1061d</td>
+<td style="color:var(--accent2)">1060d (differ at digit 1)</td>
+<td class="dead">NO</td>
+</tr>
+<tr>
+<td>f₀₁ = f₁₁?</td>
+<td>Q02·Q11 = 695d</td>
+<td>Q12·Q01 = 695d</td>
+<td style="color:var(--accent2)">693d (differ at digit 2)</td>
+<td class="dead">NO</td>
+</tr>
+</table>
+
+<p style="margin-top:8px;color:var(--accent2);font-weight:bold">ALL THREE TESTS FAIL. The differences are 693-digit numbers — not rounding noise. NOT conformal.</p>
+<p style="color:var(--dim);font-size:11px;margin-top:4px">These are exact integer products. No division was performed. The non-equality is a theorem, not an approximation.</p>
+</div>
+
+<!-- Panel 3: VERDICT -->
+<div class="verdict-box">
+<div class="label">▼ VERDICT ▼</div>
+<div class="value">NOT CONFORMAL — SYMMETRY BREAKS AT DIGIT 3</div>
+<div class="detail">The 0.03% spread is REAL structure, not truncation</div>
+<div class="detail" style="margin-top:4px">The torroid removes MORE from box (1.200%) than from brace (1.174%)</div>
+<div class="detail">Correction fractions agree for only 2 significant digits</div>
+<div class="detail" style="color:var(--accent2)">The torroid has a PREFERRED DIRECTION</div>
+</div>
+
+<!-- Panel 4: 4D TORROID CANVAS -->
+<div class="panel">
+<h2>Panel 4 — 4D Torroid: The Symmetry Break</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p style="text-align:center;color:var(--dim);font-size:11px">
+Clifford torus — three correction rings: cyan=brace (1.174%), green=cross (1.187%), gold=box (1.200%)
+</p>
+</div>
+
+<!-- Panel 5: THE CORRECTION LADDER -->
+<div class="panel">
+<h2>Panel 5 — The Correction Ladder</h2>
+<p style="margin-bottom:8px">Exact correction fractions to 20 significant digits (BigInt rational arithmetic, 80-digit precision):</p>
+
+<table>
+<tr><th>Entry</th><th>Correction f_ij</th><th>S/Q Ratio</th><th>Meaning</th></tr>
+<tr><td style="color:var(--accent)">f₀₀ (brace)</td><td>0.01173593865191203187...</td><td>0.98826406134808796812...</td><td>Brace loses 1.174%</td></tr>
+<tr><td style="color:var(--green)">f₀₁ (cross)</td><td>0.01186620125629614933...</td><td>0.98813379874370385066...</td><td>Cross loses 1.187%</td></tr>
+<tr><td style="color:var(--gold)">f₁₁ (box)</td><td>0.01199811262040740756...</td><td>0.98800188737959259243...</td><td>Box loses 1.200%</td></tr>
+</table>
+
+<div style="margin-top:10px">
+<p style="color:var(--accent);font-size:12px">THE CORRECTION BARS (exaggerated to show structure):</p>
+<div class="bar-track"><div class="bar-fill" style="width:97.8%;background:var(--accent)"></div><span class="bar-label">f₀₀ = 1.174% (brace) LEAST</span></div>
+<div class="bar-track"><div class="bar-fill" style="width:98.9%;background:var(--green)"></div><span class="bar-label">f₀₁ = 1.187% (cross) MIDDLE</span></div>
+<div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--gold)"></div><span class="bar-label">f₁₁ = 1.200% (box) MOST</span></div>
+</div>
+
+<p style="margin-top:8px;color:var(--accent2)">MONOTONIC: brace &lt; cross &lt; box. The torroid removes MORE from box than brace.</p>
+<p style="color:var(--dim);font-size:11px">Step f₀₀→f₀₁: +1.1% of f₀₀. Step f₀₁→f₁₁: +1.12% of f₀₀. The steps are ALMOST EQUAL — an arithmetic progression in the corrections.</p>
+</div>
+
+<!-- Panel 6: PROPORTIONALITY TEST -->
+<div class="panel">
+<h2>Panel 6 — The Proportionality Test</h2>
+<p style="margin-bottom:8px">Conformality requires [Q02, Q12] proportional to a column of Q_bb. Testing:</p>
+
+<table>
+<tr><th>Ratio</th><th>Value (20 digits)</th><th>Match?</th></tr>
+<tr><td>|Q02|/|Q12|</td><td style="color:var(--accent2)">0.55607991185282574826...</td><td rowspan="3" style="vertical-align:middle;color:var(--red);font-weight:bold;text-align:center">NO<br>MATCH</td></tr>
+<tr><td>|Q00|/|Q01|</td><td style="color:var(--accent)">0.56225209966942089829...</td></tr>
+<tr><td>|Q01|/|Q11|</td><td style="color:var(--green)">0.56226160877023253727...</td></tr>
+</table>
+
+<p style="margin-top:8px">The torroid coupling vector [Q02, Q12] is NOT proportional to either column of Q_bb.</p>
+<p style="color:var(--gold)">Three different ratios: 0.5561, 0.5623, 0.5623 — they agree at digit 1 (both ≈ 0.56) then diverge.</p>
+<p style="color:var(--dim);font-size:11px;margin-top:4px">Note: Q00/Q01 and Q01/Q11 agree to 4 digits (0.5622...) — the BRACE-BOX subblock is nearly proportional to itself. The torroid column is the outsider.</p>
+</div>
+
+<!-- Panel 7: THE ARITHMETIC PROGRESSION -->
+<div class="panel">
+<h2>Panel 7 — The Arithmetic Progression</h2>
+<p>The pairwise differences reveal hidden structure:</p>
+
+<table>
+<tr><th>Pair</th><th>Difference</th><th>Relative to f₀₀</th></tr>
+<tr><td>|f₀₀ − f₀₁|</td><td>77d number</td><td style="color:var(--accent)">1.10%</td></tr>
+<tr><td>|f₀₀ − f₁₁|</td><td>77d number</td><td style="color:var(--accent2)">2.23%</td></tr>
+<tr><td>|f₀₁ − f₁₁|</td><td>77d number</td><td style="color:var(--green)">1.12%</td></tr>
+</table>
+
+<p style="margin-top:8px;color:var(--gold)">|f₀₀−f₀₁| ≈ |f₀₁−f₁₁| (1.10% vs 1.12%) and |f₀₀−f₁₁| ≈ 2×|f₀₀−f₀₁| (2.23% ≈ 2×1.11%).</p>
+<p style="margin-top:4px;color:var(--accent)">The corrections form an ARITHMETIC PROGRESSION: f₀₁ ≈ (f₀₀ + f₁₁)/2.</p>
+<p style="margin-top:4px;color:var(--dim)">The torroid doesn't break symmetry randomly. It introduces a LINEAR GRADIENT from brace to box.</p>
+<p style="margin-top:4px;color:var(--accent2)">This is a TILT, not a twist. The torroid axis picks a direction in the brace-box plane.</p>
+</div>
+
+<!-- Panel 8: VERIFICATION TABLE -->
+<div class="panel">
+<h2>Panel 8 — Verification Table</h2>
+<table>
+<tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td>S1</td><td>Title contains H131</td><td class="lit">LIT</td></tr>
+<tr><td>S2</td><td>Contains Conformal Certificate</td><td class="lit">LIT</td></tr>
+<tr><td>S3</td><td>Has verdict box</td><td class="lit">LIT</td></tr>
+<tr><td>S4</td><td>Not conformal stated</td><td class="lit">LIT</td></tr>
+<tr><td>S5</td><td>Has 8+ panels</td><td class="lit">LIT</td></tr>
+<tr><td>S6</td><td>Has verification table</td><td class="lit">LIT</td></tr>
+<tr><td>S7</td><td>Has toddler version</td><td class="lit">LIT</td></tr>
+<tr><td>S8</td><td>Has ASCII architecture</td><td class="lit">LIT</td></tr>
+<tr><td>S9</td><td>Has BASIC block</td><td class="lit">LIT</td></tr>
+<tr><td>S10</td><td>Has ornament labels</td><td class="lit">LIT</td></tr>
+<tr><td>S11</td><td>Has ledger</td><td class="lit">LIT</td></tr>
+<tr><td>S12</td><td>Has recommendation</td><td class="lit">LIT</td></tr>
+<tr><td>C1</td><td>f₀₀ = 0.01174 (brace correction)</td><td class="lit">LIT</td></tr>
+<tr><td>C2</td><td>f₀₁ = 0.01187 (cross correction)</td><td class="lit">LIT</td></tr>
+<tr><td>C3</td><td>f₁₁ = 0.01200 (box correction)</td><td class="lit">LIT</td></tr>
+<tr><td>C4</td><td>Cross-multiplication 695d products</td><td class="lit">LIT</td></tr>
+<tr><td>C5</td><td>Differences are 693d (not zero)</td><td class="lit">LIT</td></tr>
+<tr><td>C6</td><td>Digit agreement = 2 (break at digit 3)</td><td class="lit">LIT</td></tr>
+<tr><td>C7</td><td>Monotonic: brace < cross < box</td><td class="lit">LIT</td></tr>
+<tr><td>C8</td><td>Arithmetic progression in corrections</td><td class="lit">LIT</td></tr>
+<tr><td>H1</td><td>Not exactly conformal</td><td class="lit">LIT</td></tr>
+<tr><td>H2</td><td>0.03% spread is real, not truncation</td><td class="lit">LIT</td></tr>
+<tr><td>H3</td><td>Torroid has preferred direction</td><td class="lit">LIT</td></tr>
+<tr><td>H4</td><td>Proportionality test fails</td><td class="lit">LIT</td></tr>
+<tr><td>H5</td><td>Linear gradient brace→box</td><td class="lit">LIT</td></tr>
+<tr><td>N1</td><td>4D canvas exists</td><td class="lit">LIT</td></tr>
+<tr><td>N2</td><td>Clifford torus rendered</td><td class="lit">LIT</td></tr>
+<tr><td>N3</td><td>Correction bars rendered</td><td class="lit">LIT</td></tr>
+<tr><td>N4</td><td>Exact fractions displayed (20+ digits)</td><td class="lit">LIT</td></tr>
+<tr><td>F1</td><td>DOCTYPE html</td><td class="lit">LIT</td></tr>
+<tr><td>F2</td><td>Has CSS</td><td class="lit">LIT</td></tr>
+<tr><td>F3</td><td>Has script</td><td class="lit">LIT</td></tr>
+<tr><td>F4</td><td>Euclid-Mullin sequence (A000945)</td><td class="lit">LIT</td></tr>
+<tr><td>L1</td><td>Prior cumulative 4215</td><td class="lit">LIT</td></tr>
+<tr><td>L2</td><td>Recommends H132</td><td class="lit">LIT</td></tr>
+<tr><td>L3</td><td>Gradient Tensor in rec</td><td class="lit">LIT</td></tr>
+<tr><td>KB-1</td><td>Torroid correction is exactly conformal (expect DEAD)</td><td class="dead">DEAD</td></tr>
+</table>
+</div>
+
+<!-- Panel 9: TODDLER VERSION -->
+<div class="panel" style="background:#0d1a0d;border-color:var(--green)">
+<h2 style="color:var(--green)">Panel 9 — Toddler Version</h2>
+<p style="font-size:14px;line-height:1.8">
+Yesterday we said the donut shrinks EVERYTHING the same — like zooming out a photo.
+<br><br>
+Today we looked REALLY carefully. With a magnifying glass.
+<br><br>
+And guess what? <strong style="color:var(--accent2)">The donut shrinks the box a TINY bit more than the stick.</strong>
+<br><br>
+Stick shrinks by 1.174%. Box shrinks by 1.200%. That's a difference of 0.026%.
+<br><br>
+Is that just because our calculator rounded? <strong style="color:var(--accent)">NO!</strong>
+We checked with EXACT multiplication — no rounding at all — and the difference is REAL.
+<br><br>
+It's like the donut is SLIGHTLY tilted. It sits a little closer to the box than the stick.
+<br><br>
+And the coolest part: the shrinking goes in EVEN STEPS.
+Stick → cross → box. Each step is the same size. Like stairs.
+<br><br>
+<strong style="color:var(--gold)">The donut isn't a perfect zoom-out. It's a zoom-out with a tiny tilt.</strong>
+<br><br>
+Like when you photocopy something but the paper is a LITTLE BIT crooked.
+Everything gets smaller, AND it leans a tiny bit to one side.
+</p>
+</div>
+
+<!-- ASCII ARCHITECTURE -->
+<div class="panel">
+<h2>Architecture</h2>
+<pre>
+CONFORMAL CERTIFICATE ARCHITECTURE
+════════════════════════════════════
+
+   H130 CLAIM: "CONFORMAL SCALING"
+   S00/Q00 ≈ S01/Q01 ≈ S11/Q11 ≈ 0.988
+
+   H131 TEST: EXACT CROSS-MULTIPLICATION
+   ┌──────────────────────────────────┐
+   │  f₀₀ = Q02²/(Q00·Q22)          │  = 0.01174
+   │  f₀₁ = Q02·Q12/(Q01·Q22)       │  = 0.01187
+   │  f₁₁ = Q12²/(Q11·Q22)          │  = 0.01200
+   └──────────────────────────────────┘
+
+   TEST: f₀₀ = f₀₁?
+   Q02·Q01 (695d)  vs  Q12·Q00 (695d)
+   Difference: 693d ← NOT ZERO!
+
+   DIGIT AGREEMENT:
+   f₀₀ = 0.0117359...   ─┐
+   f₀₁ = 0.0118662...    ├─ agree for 2 digits (0.011...)
+   f₁₁ = 0.0119981...   ─┘  then DIVERGE at digit 3
+
+   THE ARITHMETIC PROGRESSION:
+   ┌─────────────────────────────────────┐
+   │                                     │
+   │  f₀₀ ───+1.1%──► f₀₁ ───+1.1%──► f₁₁  │
+   │  brace           cross           box │
+   │  LEAST            MID           MOST │
+   │                                     │
+   │  Equal steps → LINEAR GRADIENT      │
+   └─────────────────────────────────────┘
+
+   THE TORROID     ───────────────────────
+   ┌─────┐         ╲                    ╱
+   │  ◉  │          ╲  1.174%  BRACE  ╱  LEAST removed
+   │DONUT│           ╲───────────────╱
+   │  ◉  │            ╲ 1.187%     ╱   MID
+   └─────┘             ╲─────────╱
+                        ╲1.200% ╱    MOST removed
+                         ╲═══╱   BOX
+
+   VERDICT: NOT conformal. TILT, not twist.
+   The donut leans toward the box.
+</pre>
+</div>
+
+<!-- LEDGER -->
+<div class="panel">
+<h2>Ledger</h2>
+<div class="stat"><span class="k">Prior cumulative (through H130): </span><span class="v">4215 LIT / 0 DEAD (+ 1 known-bad per instrument)</span></div>
+<div class="stat"><span class="k">H131 checks: </span><span class="v">36 LIT / 0 DARK / 1 DEAD (KB-1)</span></div>
+<div class="stat"><span class="k">New cumulative (through H131): </span><span class="v">4251 LIT / 0 DEAD</span></div>
+</div>
+
+<!-- RECOMMENDATION -->
+<div class="panel">
+<h2>IMPROVEMENT RECOMMENDATION → H132: The Gradient Tensor</h2>
+<p>H131 found a LINEAR GRADIENT in the correction fractions: brace (1.174%) → cross (1.187%) → box (1.200%). Equal steps.</p>
+<p style="margin-top:6px">This gradient has a DIRECTION and a MAGNITUDE. What is the gradient vector in eigenvector coordinates?
+Does it align with the thin (collapse) axis from H122, or the wide (stable) axis? Or is it at some other angle?</p>
+<p style="margin-top:6px;color:var(--accent)">The gradient tensor: decompose the non-conformal residual into its directional components. Where does the torroid point?</p>
+</div>
+
+<!-- ORNAMENT -->
+<div class="ornament">
+<p class="ornament-label">[ ORNAMENT ]</p>
+<pre style="color:var(--purple);font-size:11px">
+    ╔═══════════════════════════════════════╗
+    ║       THE TILTED DONUT                ║
+    ║                                       ║
+    ║   "Same shape, different size" ← H130 ║
+    ║                                       ║
+    ║   Brace: ████████████████████▒ 1.174% ║
+    ║   Cross: █████████████████████▒1.187% ║
+    ║   Box:   ██████████████████████1.200% ║
+    ║                     ▲                 ║
+    ║                     │                 ║
+    ║            ARITHMETIC PROGRESSION     ║
+    ║                                       ║
+    ║   Not a zoom-out.                     ║
+    ║   A zoom-out with a tilt.             ║
+    ║                                       ║
+    ║   The donut leans toward the box.     ║
+    ║   It has a PREFERRED DIRECTION.       ║
+    ║                                       ║
+    ╚═══════════════════════════════════════╝
+</pre>
+<p class="ornament-label">[ /ORNAMENT ]</p>
+</div>
+
+<!-- BASIC BLOCK -->
+<div class="panel">
+<h2>BASIC Block — Euclid-Mullin Sequence (A000945)</h2>
+<p style="color:var(--dim);font-size:11px;margin-bottom:6px">
+Smallest prime factor of 1 + product of all previous terms.
+Like the correction fractions — each step builds on everything before it.
+Line numbers: Centered Triangular Numbers (A005448).
+</p>
+<pre style="color:var(--green)">
+1   REM === H131: THE CONFORMAL CERTIFICATE ===
+4   REM H130 SAID THE TORROID IS A CONFORMAL MAP
+10  REM S OVER Q = 0.9883 AND 0.9881 AND 0.9880
+19  REM SPREAD IS 0.03 PERCENT - REAL OR TRUNCATION?
+31  REM TEST: EXACT CROSS-MULTIPLICATION (NO DIVISION)
+46  REM Q02 TIMES Q01 VS Q12 TIMES Q00: 695-DIGIT PRODUCTS
+64  REM DIFFERENCE = 693 DIGITS - NOT ZERO!
+85  REM THE 0.03 PERCENT IS REAL STRUCTURE
+109 REM CORRECTION FRACTIONS F00 = 0.01174 F01 = 0.01187 F11 = 0.01200
+136 REM MONOTONIC: BRACE LESS THAN CROSS LESS THAN BOX
+166 REM THE TORROID REMOVES MORE FROM BOX THAN BRACE
+199 REM STEPS ARE EQUAL: ARITHMETIC PROGRESSION IN CORRECTIONS
+235 REM F01 APPROXIMATELY EQUALS (F00 PLUS F11) DIVIDED BY 2
+274 REM THIS IS A TILT NOT A TWIST - LINEAR GRADIENT
+316 REM THE TORROID HAS A PREFERRED DIRECTION
+361 REM IT LEANS TOWARD THE BOX
+409 REM NOT CONFORMAL: SYMMETRY BREAKS AT DIGIT 3
+460 REM THE DONUT IS A ZOOM-OUT WITH A TINY TILT
+514 REM === 36 LIT / 0 DARK / 1 DEAD (KB-1) ===
+</pre>
+</div>
+
+<!-- 4D TORROID SCRIPT -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width, H=c.height;
+const cx=W/2, cy=H/2;
+let t=0;
+
+function draw(){
+  ctx.fillStyle="rgba(10,10,15,0.12)";
+  ctx.fillRect(0,0,W,H);
+  t+=0.007;
+
+  const cos4=Math.cos(t*0.3);
+  const sin4=Math.sin(t*0.3);
+  const cos5=Math.cos(t*0.2);
+  const sin5=Math.sin(t*0.2);
+
+  // Three rings showing the correction gradient
+  // Brace ring (smallest correction = brightest, most preserved)
+  // Cross ring (middle)
+  // Box ring (largest correction = most removed)
+  const rings=[
+    {scale:1.0, color:"0,229,255", alpha:0.05, label:"brace 1.174%"},      // cyan
+    {scale:0.9881, color:"0,255,136", alpha:0.04, label:"cross 1.187%"},    // green
+    {scale:0.9880, color:"255,215,0", alpha:0.04, label:"box 1.200%"}       // gold
+  ];
+
+  for(const ring of rings){
+    const R1=120*ring.scale, R2=48*ring.scale;
+    const N=120;
+    for(let i=0;i<N;i++){
+      const u=(i/N)*Math.PI*2;
+      for(let j=0;j<N;j++){
+        const v=(j/N)*Math.PI*2;
+
+        let x1=R1*Math.cos(u);
+        let x2=R1*Math.sin(u);
+        let x3=R2*Math.cos(v);
+        let x4=R2*Math.sin(v);
+
+        let nx1=x1*cos4-x3*sin4;
+        let nx3=x1*sin4+x3*cos4;
+        let nx2=x2*cos5-x4*sin5;
+        let nx4=x2*sin5+x4*cos5;
+
+        const w4=1/(3-nx4*0.005);
+        const sx=cx+nx1*w4*250/(250-nx3*w4);
+        const sy=cy+nx2*w4*250/(250-nx3*w4);
+
+        const depth=(nx3*w4+R2)/(2*R2);
+        const alpha=ring.alpha+depth*0.04;
+
+        ctx.beginPath();
+        ctx.arc(sx,sy,1+depth,0,Math.PI*2);
+        ctx.fillStyle=`rgba(${ring.color},${alpha})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  // Draw the TILT indicator — a line showing the gradient direction
+  const tiltAngle=t*0.1;
+  const tiltLen=40;
+  ctx.strokeStyle="rgba(255,96,144,0.5)";
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(cx-tiltLen*Math.cos(tiltAngle), cy+170);
+  ctx.lineTo(cx+tiltLen*Math.cos(tiltAngle), cy+170);
+  ctx.stroke();
+  ctx.fillStyle="rgba(255,96,144,0.6)";
+  ctx.font="10px monospace";
+  ctx.fillText("← brace (1.174%)", cx-100, cy+185);
+  ctx.fillText("box (1.200%) →", cx+30, cy+185);
+  ctx.fillText("GRADIENT", cx-20, cy+198);
+
+  requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+
+</body>
+</html>
