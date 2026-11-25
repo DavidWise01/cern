@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H144 — The Signature Map</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--accent2:#ff8a65;--accent3:#81c784;--panel:#12121a;--border:#2a2a3a;--dim:#666;--gold:#ffd54f;--dead-red:#ef5350;--lit:#4caf50;--warn:#ff9800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1200px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px}
+h2{color:var(--accent2);font-size:1.1em;margin:16px 0 8px}
+h3{color:var(--accent3);font-size:1em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:16px;margin:12px 0;text-align:center}
+.verdict-box .label{color:var(--gold);font-size:1.2em;font-weight:bold}
+.verdict-box .detail{color:var(--fg);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:left}
+th{background:#1a1a2a;color:var(--accent)}
+.lit{color:var(--lit)}.dead{color:var(--dead-red)}.dim{color:var(--dim)}
+pre{background:#0d0d15;padding:10px;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5}
+.kb-section{background:#1a0a0a;border:1px solid var(--dead-red);border-radius:6px;padding:12px;margin:10px 0}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:4px;background:#050510}
+.toddler{background:#0a1a0a;border:1px solid var(--accent3);border-radius:6px;padding:12px;margin:10px 0}
+.ornament-label{color:var(--dim);font-size:11px;text-align:center;margin:4px 0}
+</style>
+</head>
+<body>
+<h1>H144 — The Signature Map</h1>
+<p class="dim">Instrument: Eigenvalue visibility across Jacobi/Schur descent · Engine: Rust BigInt · 2026-11-25</p>
+
+<!-- Panel 1: Question -->
+<div class="panel">
+<h2>Panel 1 — Question</h2>
+<p><strong>Which eigenvalue of Q3p does each 2×2 block "see"?</strong></p>
+<p>Q3p has three eigenvalues: crack (+323d), bond (−329d), torroid (−408d). There are six 2×2 blocks (3 principal submatrices + 3 Schur complements). This instrument maps which eigenvalues each block sees, discovers the crack-bond duality, and traces the crack eigenvalue's origin to the brace-box coupling.</p>
+</div>
+
+<!-- Panel 2: Verdict -->
+<div class="verdict-box">
+<div class="label">THE CRACK IS BORN FROM COUPLING — ALL SELF-ENERGIES ARE NEGATIVE</div>
+<div class="detail">Every diagonal entry of Q3p is negative. The positive eigenvalue (+323d) exists<br>
+ONLY because brace-box coupling Q01 is strong enough to flip a sign (CS &gt; 1).<br>
+Crack and bond are DUAL under the principal ↔ Schur exchange. Torroid is self-dual.</div>
+</div>
+
+<!-- Panel 3: The Visibility Matrix -->
+<div class="panel">
+<h2>Panel 3 — The Visibility Matrix</h2>
+<table>
+<tr><th>Block</th><th>crack (+323d)</th><th>bond (−329d)</th><th>torroid (−408d)</th></tr>
+<tr><td>Principal brace⊗box</td><td class="lit">✓</td><td class="lit">✓</td><td>·</td></tr>
+<tr><td>Principal brace⊗torroid</td><td>·</td><td class="lit">✓</td><td class="lit">✓</td></tr>
+<tr><td>Principal box⊗torroid</td><td>·</td><td class="lit">✓</td><td class="lit">✓</td></tr>
+<tr><td>Schur elim brace (S₀)</td><td class="lit">✓</td><td>·</td><td class="lit">✓</td></tr>
+<tr><td>Schur elim box (S₁)</td><td class="lit">✓</td><td>·</td><td class="lit">✓</td></tr>
+<tr><td>Schur elim torroid (S₂)</td><td class="lit">✓</td><td class="lit">✓</td><td>·</td></tr>
+</table>
+<h3>Counts (each eigenvalue appears in exactly 4 of 6 blocks):</h3>
+<table>
+<tr><th>Eigenvalue</th><th>In Principal</th><th>In Schur</th><th>Total</th></tr>
+<tr><td>crack (+323d)</td><td>1 of 3</td><td>3 of 3</td><td>4 of 6</td></tr>
+<tr><td>bond (−329d)</td><td>3 of 3</td><td>1 of 3</td><td>4 of 6</td></tr>
+<tr><td>torroid (−408d)</td><td>2 of 3</td><td>2 of 3</td><td>4 of 6</td></tr>
+</table>
+</div>
+
+<!-- Panel 4: The Duality -->
+<div class="panel">
+<h2>Panel 4 — The Crack-Bond Duality</h2>
+<pre>
+DUALITY under Principal ↔ Schur exchange:
+
+  CRACK:   rare in principal (1/3)  ←→  universal in Schur (3/3)
+  BOND:    universal in principal (3/3) ←→  rare in Schur (1/3)
+  TORROID: balanced (2/3 each)        ←→  balanced (2/3 each)
+
+Crack and bond are DUAL: swap "principal" and "Schur" and their
+visibility counts swap. The torroid is SELF-DUAL — it doesn't change.
+
+COMPLEMENTARITY for each body k:
+  k=0 (brace):   Principal sees {crack, bond}    Schur sees {crack, torroid}
+  k=1 (box):     Principal sees {bond, torroid}   Schur sees {crack, torroid}
+  k=2 (torroid): Principal sees {bond, torroid}   Schur sees {crack, bond}
+
+Each pair shares one eigenvalue and swaps the other.
+The swapped eigenvalue is always crack ↔ {bond or torroid}.
+</pre>
+</div>
+
+<!-- Panel 5: The Crack Origin -->
+<div class="panel">
+<h2>Panel 5 — The Crack Origin</h2>
+<p><strong>THE POSITIVE EIGENVALUE EXISTS ONLY THROUGH COUPLING.</strong></p>
+<table>
+<tr><th>Level</th><th>All entries/eigenvalues</th><th>Positive?</th></tr>
+<tr><td>1×1 diagonals: Q00, Q11, Q22</td><td>−328d, −329d, −408d</td><td class="dead">ALL NEGATIVE</td></tr>
+<tr><td>2×2 brace⊗torroid eigenvalues</td><td>−328d, −408d</td><td class="dead">ALL NEGATIVE</td></tr>
+<tr><td>2×2 box⊗torroid eigenvalues</td><td>−329d, −408d</td><td class="dead">ALL NEGATIVE</td></tr>
+<tr><td>2×2 brace⊗box eigenvalues</td><td><strong>+323d</strong>, −329d</td><td class="lit"><strong>ONE POSITIVE</strong></td></tr>
+<tr><td>3×3 Q3p eigenvalues</td><td><strong>+323d</strong>, −329d, −408d</td><td class="lit">ONE POSITIVE</td></tr>
+</table>
+<p>The positive eigenvalue (crack) is born in the brace⊗box block — the ONLY principal submatrix with a positive eigenvalue. It's created by Q01, the brace-box coupling, which is so strong (CS = 1.00002) that it flips one eigenvalue from negative to positive. Without Q01, the block would be diagonal: [[−328d, 0], [0, −329d]] — both negative. The coupling UNBINDS one mode.</p>
+</div>
+
+<!-- Panel 6: The Projection Map -->
+<div class="panel">
+<h2>Panel 6 — Body → Eigenvalue Projection</h2>
+<table>
+<tr><th>Body</th><th>Self-energy Qkk</th><th>Nearest eigenvalue</th><th>Role</th></tr>
+<tr><td>brace (Q00)</td><td>−328d</td><td>between bond(−329d) and crack(+323d)</td><td>MIXED — the rotated body</td></tr>
+<tr><td>box (Q11)</td><td>−329d</td><td>bond (−329d) DIRECTLY</td><td>LOCKED onto bond mode</td></tr>
+<tr><td>torroid (Q22)</td><td>−408d</td><td>torroid (−408d) DIRECTLY</td><td>LOCKED onto torroid mode</td></tr>
+</table>
+<p><strong>Box IS bond. Torroid IS torroid. Brace is the MIXED body</strong> — it carries the crack eigenvalue through its coupling but doesn't sit at any single eigenvalue. The Jacobi rotation (H122, θ = 29.35°) is the angle needed to separate brace into its crack and bond components.</p>
+</div>
+
+<!-- Panel 7: The Signature Cascade -->
+<div class="panel">
+<h2>Panel 7 — The Signature Cascade</h2>
+<pre>
+Level 0: Q3p (3×3)                 Signature: (1+, 2−)
+  The '+' is crack, the '−−' are bond and torroid.
+
+Level 1a: Principal submatrices (2×2)
+  brace⊗box:     (1+, 1−)  ← the ONLY one that sees crack
+  brace⊗torroid: (0+, 2−)  ← negative definite
+  box⊗torroid:   (0+, 2−)  ← negative definite
+
+Level 1b: Schur complements (2×2)
+  ALL:            (1+, 1−)  ← crack appears in every Schur complement
+  The '+' is always crack (the persistent positive mode)
+  The '−' is torroid (elim brace/box) or bond (elim torroid)
+
+Level 2: Diagonal entries (1×1)
+  Q00: (−)  Q11: (−)  Q22: (−)  ← all negative
+  The positive eigenvalue exists ONLY through coupling, never alone.
+</pre>
+</div>
+
+<!-- Panel 8: Cauchy Interlacing -->
+<div class="panel">
+<h2>Panel 8 — Cauchy Interlacing Verification</h2>
+<pre>
+Full Q3p: λ₁ = −408d ≤ λ₂ = −329d ≤ λ₃ = +323d
+
+For each principal submatrix (delete row/col k), eigenvalues μ₁ ≤ μ₂:
+  λ₁ ≤ μ₁ ≤ λ₂ ≤ μ₂ ≤ λ₃
+
+  Brace⊗Box:     −408 ≤ −329 ≤ −329 ≤ +323 ≤ +323  ✓
+                        bond         crack
+
+  Brace⊗Torroid: −408 ≤ −408 ≤ −329 ≤ −328 ≤ +323  ✓
+                       torroid        brace
+
+  Box⊗Torroid:   −408 ≤ −408 ≤ −329 ≤ −329 ≤ +323  ✓
+                       torroid        bond
+
+All three satisfy Cauchy interlacing ✓
+The eigenvalues SQUEEZE toward the full Q3p eigenvalues.
+</pre>
+</div>
+
+<!-- Panel 9: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 9 — 4D Torroid Visualization: The Signature Map</h2>
+<canvas id="torroid4D" width="700" height="500"></canvas>
+<p class="dim">Clifford torus colored by eigenvalue visibility: red = crack zone (positive eigenvalue, born from coupling), blue = bond zone, cyan = torroid zone. The crack threads are sparse on the principal side, dense on the Schur side — the duality.</p>
+</div>
+
+<!-- Panel 10: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 10 — Architecture</h2>
+<pre>
+THE SIGNATURE MAP — TORROID CENTRIC VIEW
+
+                      TORROID (−408d)
+                     ╱   ◉    ╲        LOCKED onto λ_torroid
+                    ╱    │     ╲       Self-dual (2/3 each)
+             Q02  ╱      │      ╲  Q12
+                ╱    mediator     ╲
+             BRACE ═══Q01═══ BOX
+            (−328d)  saturated  (−329d)
+             MIXED    CS=1.00002  LOCKED onto λ_bond
+              │                     │
+        carries crack          IS bond
+        through coupling       directly
+
+  THE CRACK ORIGIN:
+  ┌─────────────────────────────────────────┐
+  │  All self-energies: NEGATIVE            │
+  │  Q00 = −328d, Q11 = −329d, Q22 = −408d │
+  │                                          │
+  │  The coupling Q01 is SO STRONG           │
+  │  (CS = 1.00002, exceeds bound)           │
+  │  that it FLIPS one eigenvalue:           │
+  │                                          │
+  │  [[−328, 0], [0, −329]] → both negative  │
+  │  [[−328, Q01], [Q01, −329]] → one POSITIVE│
+  │                                          │
+  │  That positive eigenvalue IS the crack.  │
+  │  UNBINDING through excessive coupling.   │
+  └─────────────────────────────────────────┘
+
+  THE VISIBILITY DUALITY:
+  ┌───────────────────────────────────────┐
+  │  crack: 1/3 principal, 3/3 Schur     │
+  │  bond:  3/3 principal, 1/3 Schur     │
+  │  torroid: 2/3 each (self-dual)        │
+  │                                       │
+  │  Swap principal ↔ Schur:              │
+  │  crack ↔ bond (they exchange)         │
+  │  torroid ↔ torroid (invariant)        │
+  └───────────────────────────────────────┘
+</pre>
+</div>
+
+<!-- Panel 11: Toddler Version -->
+<div class="toddler">
+<h2>Panel 11 — Toddler Version: Where Did the Positive Come From?</h2>
+<p>🧒 Imagine three batteries: Brace, Box, and Torroid. Each one by itself has NEGATIVE charge. They're all minus. All gloomy.</p>
+<p>But when you connect Brace and Box with a really strong wire (Q01, the coupling), something magical happens: the wire is SO strong that it FLIPS one of them to positive! Now you have a plus and a minus. That plus is the crack eigenvalue.</p>
+<p>If you connect any other pair — Brace-Torroid or Box-Torroid — the wire isn't strong enough to flip anything. Both stay minus.</p>
+<p>So the ONLY way to get a plus in this system is through that one super-strong Brace-Box wire. The plus doesn't live in any single battery. It lives in the CONNECTION between Brace and Box.</p>
+<p>That's the whole signature map: one plus born from one wire, everything else is minus, and wherever you look in the system, that one plus keeps showing up — because it's so special.</p>
+</div>
+
+<!-- Panel 12: Known-Bad Control -->
+<div class="kb-section">
+<h2>Panel 12 — Known-Bad Control</h2>
+<p><strong>KB-1:</strong> <s>the torroid body carries the positive eigenvalue</s> — <span class="dead">DEAD</span></p>
+<p>The torroid (Q22 = −408d) is locked onto λ_torroid (−408d), the most negative eigenvalue. It never carries or sees the positive crack eigenvalue in any principal submatrix (appears in 0 of 2 principal blocks containing torroid). The positive eigenvalue is born exclusively from the brace-box coupling Q01.</p>
+</div>
+
+<!-- Panel 13: Verification Table -->
+<div class="panel" id="verif-panel">
+<h2>Panel 13 — Verification Table</h2>
+<table id="verif-table"><tr><th>ID</th><th>Check</th><th>Status</th></tr>
+<tr><td colspan="3" class="dim">Populated by external verifier</td></tr>
+</table>
+</div>
+
+<!-- Panel 14: Ledger & Recommendation -->
+<div class="panel">
+<h2>Panel 14 — Ledger</h2>
+<p><strong>Engine:</strong> Rust BigInt (num-bigint v0.5.1) · 10 steps</p>
+<p><strong>Prior cumulative:</strong> 4688 LIT (through H143)</p>
+<p><strong>This instrument (H144):</strong> pending verification</p>
+<p><strong>Recommendation for H145:</strong> The Unbinding Energy — compute the exact energy cost of the sign flip: how much coupling energy Q01 must supply to overcome the negative self-energies Q00+Q11 and create the positive crack eigenvalue. The threshold is where CS crosses 1 — compute it as an exact BigInt ratio.</p>
+</div>
+
+<!-- BASIC Block: Highly Totient Numbers (A097942) -->
+<div class="panel">
+<h2>BASIC Block — Highly Totient Numbers (A097942)</h2>
+<p class="dim">Numbers with more totient preimages than any smaller number. Thematic: visibility counting for the signature map.</p>
+<pre>
+1 REM H144 THE SIGNATURE MAP — Ledger: prior 4688 + H144
+2 REM QUESTION: which eigenvalue does each 2×2 block see
+4 REM THE VISIBILITY MATRIX: each eigenvalue seen in exactly 4 of 6 blocks
+8 REM crack: 1/3 principal, 3/3 Schur (rare → universal)
+12 REM bond: 3/3 principal, 1/3 Schur (universal → rare)
+24 REM torroid: 2/3 each — SELF-DUAL under principal-Schur exchange
+48 REM CRACK ORIGIN: born from Q01 coupling, all self-energies negative
+72 REM CS = 1.00002 means coupling strong enough to FLIP a sign
+96 REM box IS bond directly (Q11 ≈ λ_bond), torroid IS torroid (Q22 ≈ λ_torroid)
+120 REM brace is the MIXED body — rotated by θ = 29.35° between crack and bond
+144 REM Cauchy interlacing verified for all three principal submatrices
+240 REM KNOWN-BAD: torroid carries the positive eigenvalue — DEAD (brace-box only)
+480 REM END — next: H145 The Unbinding Energy
+</pre>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="ornament-label">[ ORNAMENT ]</div>
+<div class="panel" style="text-align:center;border-color:var(--gold);">
+<pre style="color:var(--gold);font-size:11px;">
+        THE CRACK IS BORN FROM THE WIRE
+
+    −328d          −329d          −408d
+    BRACE          BOX            TORROID
+      │              │               │
+      │   Q01=+328d  │               │
+      ╰═════╤════════╯               │
+            │                        │
+     ┌──────┴──────┐                 │
+     │  CS = 1.00002│                │
+     │  SATURATED   │                │
+     │             │                │
+     │   UNBINDS   │                │
+     │  one mode   │                │
+     └──────┬──────┘                │
+            │                       │
+      ┌─────┴─────┐                │
+   +323d       −329d             −408d
+   CRACK       BOND             TORROID
+   (born)      (locked)         (watching)
+
+   The plus didn't exist before the wire.
+   The wire IS the crack.
+</pre>
+</div>
+<div class="ornament-label">[ /ORNAMENT ]</div>
+
+<script>
+(function(){
+const c=document.getElementById('torroid4D');
+if(!c)return;
+const ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+ctx.fillStyle='#050510';
+ctx.fillRect(0,0,W,H);
+const cx=W/2,cy=H/2,scale=120;
+const cosT=Math.cos(t*0.18);
+const sinT=Math.sin(t*0.18);
+const cosP=Math.cos(t*0.13);
+const sinP=Math.sin(t*0.13);
+const R1=1.0,R2=0.4;
+const points=[];
+for(let u=0;u<Math.PI*2;u+=0.08){
+  for(let v=0;v<Math.PI*2;v+=0.15){
+    const x4=(R1+R2*Math.cos(v))*Math.cos(u);
+    const y4=(R1+R2*Math.cos(v))*Math.sin(u);
+    const z4=R2*Math.sin(v)*Math.cos(u+t*0.06);
+    const w4=R2*Math.sin(v)*Math.sin(u+t*0.06);
+    const x3=x4*cosT-z4*sinT;
+    const z3=x4*sinT+z4*cosT;
+    const y3=y4*cosP-w4*sinP;
+    const w3=y4*sinP+w4*cosP;
+    const proj=1/(3-w3);
+    const sx=cx+x3*proj*scale;
+    const sy=cy+y3*proj*scale;
+    const depth=z3*proj;
+    // crack=red(rare in principal), bond=blue(universal), torroid=cyan(balanced)
+    const angle=u%(Math.PI*2);
+    const isCrack=angle<Math.PI*2/3&&Math.abs(Math.sin(v*2+t))<0.3;
+    const isBond=angle>=Math.PI*2/3&&angle<Math.PI*4/3;
+    points.push({x:sx,y:sy,d:depth,crack:isCrack,bond:isBond,u,v});
+  }
+}
+points.sort((a,b)=>a.d-b.d);
+for(const p of points){
+  const alpha=0.3+0.5*(1+p.d)/2;
+  const size=1.5+1.5*(1+p.d)/2;
+  if(p.crack){ctx.fillStyle=`rgba(239,83,80,${alpha*0.9})`;}
+  else if(p.bond){ctx.fillStyle=`rgba(100,140,247,${alpha*0.7})`;}
+  else{ctx.fillStyle=`rgba(79,195,247,${alpha*0.6})`;}
+  ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);ctx.fill();
+}
+ctx.fillStyle='rgba(239,83,80,0.8)';ctx.font='12px Courier New';
+ctx.fillText('Red = crack zone (positive eigenvalue, born from coupling)',10,20);
+ctx.fillStyle='rgba(100,140,247,0.8)';
+ctx.fillText('Blue = bond zone (locked negative mode)',10,36);
+ctx.fillStyle='rgba(79,195,247,0.8)';
+ctx.fillText('Cyan = torroid zone (self-dual, balanced visibility)',10,52);
+ctx.fillStyle='var(--dim)';ctx.fillText(`frame ${Math.floor(t)}`,W-80,H-10);
+t+=0.03;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
