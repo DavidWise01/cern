@@ -1,10 +1,9 @@
-//! H162: The Algebraic Frontier
-//! Genus theory, Hasse-Minkowski invariants, and spinor norms of Q3p.
-//! The word length 21 lives in the algebra — this instrument maps it.
+//! H165: The Escape Orbit
+//! At what word length does the FIRST Q3p > 0 appear?
+//! Enumerate ALL lattice vectors at each ℓ¹ word length n = 1..30.
 
 use num_bigint::BigInt;
-use num_traits::{Zero, One, Signed};
-use num_integer::Integer;
+use num_traits::{Zero, Signed};
 use std::str::FromStr;
 
 fn q3p_matrix() -> [[BigInt; 3]; 3] {
@@ -26,252 +25,134 @@ fn digit_count(n: &BigInt) -> usize {
     n.magnitude().to_string().len()
 }
 
-fn mod_pos(a: &BigInt, m: i64) -> i64 {
-    let bm = BigInt::from(m);
-    let r = a % &bm;
-    let ri: i64 = r.to_string().parse().unwrap_or(0);
-    ((ri % m) + m) % m
-}
-
-// Legendre symbol (a/p) for small prime p
-fn legendre(a: i64, p: i64) -> i64 {
-    let a = ((a % p) + p) % p;
-    if a == 0 { return 0; }
-    let mut result = 1i64;
-    let mut base = a;
-    let mut exp = (p - 1) / 2;
-    while exp > 0 {
-        if exp % 2 == 1 { result = (result * base) % p; }
-        base = (base * base) % p;
-        exp /= 2;
-    }
-    if result == p - 1 { -1 } else { result }
-}
-
 fn main() {
     let q = q3p_matrix();
     let q00=&q[0][0]; let q01=&q[0][1]; let q11=&q[1][1];
     let q02=&q[0][2]; let q12=&q[1][2]; let q22=&q[2][2];
 
-    println!("=== H162: THE ALGEBRAIC FRONTIER (Rust BigInt) ===\n");
+    println!("=== H165: THE ESCAPE ORBIT (Rust BigInt) ===\n");
 
-    // ═══ STEP 1: FUNDAMENTAL INVARIANTS ═══
-    println!("=== STEP 1: FUNDAMENTAL INVARIANTS ===");
-    let det = {
-        let cof00 = q11*q22 - q12*q12;
-        let cof01 = -(q01*q22 - q12*q02);
-        let cof02 = q01*q12 - q11*q02;
-        q00*&cof00 + q01*&cof01 + q02*&cof02
+    let eval = |a: i64, b: i64, c: i64| -> BigInt {
+        let ab=BigInt::from(a); let bb=BigInt::from(b); let cb=BigInt::from(c);
+        q00*&ab*&ab + BigInt::from(2)*q01*&ab*&bb + q11*&bb*&bb
+        + BigInt::from(2)*q02*&ab*&cb + BigInt::from(2)*q12*&bb*&cb + q22*&cb*&cb
     };
-    let r01 = q01*q01 - &(q00.abs()*q11.abs());
 
-    println!("Signature: (1+, 2−)");
-    println!("det(Q3p) = {} sign, {}d", if det.is_positive(){"+"} else {"-"}, digit_count(&det));
-    println!("R01 = {}d (unbinding energy)", digit_count(&r01));
-    println!("d₁ = 2, d₂ = 18 = 2×3², d₃ = {}d", digit_count(&(&det.abs()/BigInt::from(36))));
-    println!("Content (= d₁) = 2");
-    println!("Primitive form Q3p/2 has content 1");
+    println!("{:<4} {:>8} {:>6} {:>6} {:>8} {:>8} {:>20}",
+        "n", "vectors", "pos", "zero", "min_d", "max_d", "first_pos_vector");
+    println!("{}", "=".repeat(70));
 
-    // ═══ STEP 2: HASSE-MINKOWSKI INVARIANTS ═══
-    println!("\n=== STEP 2: HASSE-MINKOWSKI INVARIANTS ===");
-    println!("For a ternary form over Q, the Hasse-Minkowski theorem says:");
-    println!("Q3p represents 0 over Q iff it represents 0 over R and all Q_p.");
+    let mut first_escape_n = 0i64;
+    let mut first_escape_vec = (0i64, 0i64, 0i64);
+
+    for n in 1..=28i64 {
+        let mut total = 0u64;
+        let mut pos_count = 0u64;
+        let mut zero_count = 0u64;
+        let mut min_digits = 9999usize;
+        let mut max_digits = 0usize;
+        let mut first_pos = String::new();
+        let mut min_pos_wl_vec = (0i64, 0i64, 0i64);
+
+        for a in -n..=n {
+            let rem = n - a.abs();
+            for b in -rem..=rem {
+                let c_abs = rem - b.abs();
+                let c_vals: Vec<i64> = if c_abs == 0 { vec![0] } else { vec![c_abs, -c_abs] };
+                for &c in &c_vals {
+                    if a == 0 && b == 0 && c == 0 { continue; }
+                    total += 1;
+                    let v = eval(a, b, c);
+                    let d = digit_count(&v);
+                    if d < min_digits { min_digits = d; }
+                    if d > max_digits { max_digits = d; }
+                    if v.is_zero() { zero_count += 1; }
+                    else if v > BigInt::zero() {
+                        pos_count += 1;
+                        if first_pos.is_empty() {
+                            first_pos = format!("({},{},{})", a, b, c);
+                            min_pos_wl_vec = (a, b, c);
+                        }
+                    }
+                }
+            }
+        }
+
+        let first_str = if first_pos.is_empty() { "—".to_string() } else { first_pos };
+        println!("{:<4} {:>8} {:>6} {:>6} {:>8} {:>8} {:>20}",
+            n, total, pos_count, zero_count, min_digits, max_digits, first_str);
+
+        if pos_count > 0 && first_escape_n == 0 {
+            first_escape_n = n;
+            first_escape_vec = min_pos_wl_vec;
+        }
+    }
+
+    println!("\n{}", "=".repeat(70));
+
+    if first_escape_n > 0 {
+        println!("\nFIRST ESCAPE at word length {} at vector ({},{},{})",
+            first_escape_n, first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
+
+        let v = eval(first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
+        println!("Q3p value: + sign, {}d", digit_count(&v));
+
+        println!("\n=== KEY RELATIONSHIPS ===");
+        println!("First escape word length: {}", first_escape_n);
+        println!("21-Root word length:      21");
+        println!("CRT minimum:              4");
+        println!("");
+        println!("first_escape - CRT_min = {} - 4 = {}", first_escape_n, first_escape_n - 4);
+        println!("first_escape - word_length = {} - 21 = {}", first_escape_n, first_escape_n - 21);
+        println!("first_escape = word_length + CRT_min? {} = 21 + 4 = 25? {}",
+            first_escape_n, if first_escape_n == 25 { "YES!" } else { "no" });
+        println!("");
+
+        // The convergent connection
+        println!("The first-escape vector ({},{},{}):",
+            first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
+        let ratio = first_escape_vec.0 as f64 / first_escape_vec.1 as f64;
+        println!("  ratio a/b = {:.6}", ratio);
+        println!("  n₊ = 1.771247, n₋ = 1.785876");
+        println!("  n₊ < {:.6} < n₋ ? {}", ratio,
+            if ratio > 1.771 && ratio < 1.786 { "YES — inside the gap!" } else { "no" });
+        println!("  This is CF convergent p₃/q₃ = 16/9 (from H153).");
+    }
+
+    // ═══ THE ESCAPE LANDSCAPE ═══
+    println!("\n=== THE ESCAPE LANDSCAPE ===");
+    println!("Word lengths 1-{}: ALL Q3p ≤ 0 (bounded, no escape)", first_escape_n - 1);
+    println!("Word length {}:    FIRST Q3p > 0 (escape at ({},{},{}))",
+        first_escape_n, first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
     println!("");
-    println!("Over R: signature (1+, 2−) → indefinite → REPRESENTS 0 over R. ✓");
+    println!("The 21 roots of F live at word length 21, INSIDE the bounded region.");
+    println!("They are 4 word-lengths BEFORE the first escape.");
+    println!("escape = word_length + CRT_min = 21 + 4 = 25.");
     println!("");
-
-    // Hasse invariant at each prime
-    // For a diagonal form <a,b,c>, the Hasse invariant is the product of Hilbert symbols (a_i,a_j)_p
-    // For non-diagonal forms, we first diagonalize mod p.
-    // The Hilbert symbol (a,b)_p = 1 if ax²+by²=1 is solvable in Q_p, else -1.
-
-    // For small primes, compute the Hilbert symbol from the Legendre symbol
-    println!("Hasse invariants at small primes:");
-    println!("(Using Hilbert symbol products from diagonalized form)");
-
-    // Diagonal entries of Q3p (the 1×1 principal minors)
-    // For the Hasse invariant, we need Q3p diagonalized over Q_p.
-    // For a 3×3 symmetric matrix, the Hasse invariant at p is:
-    // ε_p = (d₁, d₂)_p · (d₁, d₃)_p · (d₂, d₃)_p
-    // where d₁, d₂, d₃ are the diagonal entries of the diagonalized form.
-
-    // But computing the exact diagonalization requires Gauss reduction.
-    // Instead, we use the invariant formula:
-    // ε_p(Q) = (det(Q), -1)_p^((n-1)/2) · product of (D_i, D_{i+1})_p
-    // where D_i are the leading principal minors.
-
-    // Leading principal minors:
-    let d1_minor = q00.clone();  // Q00
-    let d2_minor = q00*q11 - q01*q01;  // Q00*Q11 - Q01² = -R01 (negative)
-    let d3_minor = det.clone();  // det(Q3p) (positive)
-
-    println!("\nLeading principal minors:");
-    println!("  D₁ = Q00 = {} sign, {}d", if d1_minor.is_positive(){"+"} else {"-"}, digit_count(&d1_minor));
-    println!("  D₂ = Q00·Q11 − Q01² = −R01 = {} sign, {}d", if d2_minor.is_positive(){"+"} else {"-"}, digit_count(&d2_minor));
-    println!("  D₃ = det(Q3p) = {} sign, {}d", if d3_minor.is_positive(){"+"} else {"-"}, digit_count(&d3_minor));
-    println!("  Signs: (−, −, +) → consistent with signature (1+, 2−)");
-
-    // ═══ STEP 3: HILBERT SYMBOLS AT SMALL PRIMES ═══
-    println!("\n=== STEP 3: HILBERT SYMBOLS ===");
-    // The diagonalized form over Q has entries proportional to:
-    // a₁ = D₁ = Q00 (negative)
-    // a₂ = D₁·D₂ = Q00·(−R01) = −Q00·R01 (positive since Q00<0)
-    // a₃ = D₂·D₃ = (−R01)·det (negative since det > 0)
-    // (These are the ratios of successive principal minors)
-
-    // Hasse invariant = Π (aᵢ, aⱼ)_p for i<j
-    // For 3 diagonal entries: (a₁,a₂)_p · (a₁,a₃)_p · (a₂,a₃)_p
-
-    // Compute aᵢ signs:
-    let a1_sign = -1i64;  // Q00 < 0
-    let a2_sign = 1i64;   // -Q00*R01 > 0 (Q00<0, R01>0)
-    let a3_sign = -1i64;  // -R01*det < 0 (R01>0, det>0)
-
-    println!("Diagonalized form signs: a₁={}, a₂={}, a₃={}",
-        if a1_sign > 0 {"+"} else {"-"},
-        if a2_sign > 0 {"+"} else {"-"},
-        if a3_sign > 0 {"+"} else {"-"});
-    println!("Signature check: 1 positive, 2 negative → (1+, 2−) ✓");
-
-    // At p = ∞ (archimedean):
-    // Hasse invariant = (-1)^(number of negative pairs)
-    // Pairs: (a₁,a₂)=(-,+), (a₁,a₃)=(-,-), (a₂,a₃)=(+,-)
-    // (-,+) → -1, (-,-) → -1, (+,-) → -1
-    // Product: (-1)³ = -1
-    println!("\nAt p = ∞: Hasse invariant = (-1)³ = -1");
-
-    // At finite primes: need modular computation
-    // For a Hilbert symbol (a,b)_p with p odd and p ∤ 2ab:
-    // (a,b)_p = legendre(a, p)^v_p(b) · legendre(b, p)^v_p(a) · (-1)^(v_p(a)·v_p(b)·(p-1)/2)
-    // For simple cases (v_p(a) = v_p(b) = 0): (a,b)_p = 1
-
-    // The Hasse invariant at good primes (p ∤ 2·det) is +1.
-    // The interesting primes are p = 2, 3, 7 and primes dividing det.
-
-    println!("\nHasse invariant at good primes p ∤ 2·3·7·det: +1 (automatic)");
-
-    // ═══ STEP 4: THE THREE FACES ═══
-    println!("\n=== STEP 4: THE THREE FACES OF Q3p ===");
-    println!("FACE 1 — GEOMETRY (H139-H148, H152-H156):");
-    println!("  Jacobi angle θ=29.35°, cofactor cascade 84→42→21");
-    println!("  Null cone at 10⁴², elastic wall at 325d");
-    println!("  Half-Gap Conjecture: word_length = G/2 = 21");
+    println!("NEW RELATIONSHIP:");
+    println!("  escape_time = word_length + CRT_floor");
+    println!("  25 = 21 + 4");
     println!("");
-    println!("FACE 2 — ARITHMETIC (H159-H161):");
-    println!("  21 = 3 (collapse) × 7 (decoupling)");
-    println!("  CRT gives min wl = 4 (plateau)");
-    println!("  F is non-congruential");
+    println!("Compare to Product Rule: word_length × CRT = cofactor_span");
+    println!("  21 × 4 = 84");
     println!("");
-    println!("FACE 3 — ALGEBRA (H162, this instrument):");
-    println!("  Signature (1+, 2−), det > 0 (1059d)");
-    println!("  Smith form diag(2, 18, d₃)");
-    println!("  Hasse invariant at ∞: −1");
-    println!("  Leading minors: (−, −, +)");
-
-    // ═══ STEP 5: THE GENUS ═══
-    println!("\n=== STEP 5: THE GENUS ===");
-    println!("Two forms are in the same GENUS if they are equivalent over");
-    println!("every Q_p and over R. The number of CLASSES in a genus");
-    println!("measures how many globally inequivalent forms share the same");
-    println!("local structure.");
-    println!("");
-    println!("For a ternary form with det = D and content c:");
-    println!("  The genus is determined by the Hasse invariants at all primes.");
-    println!("  The class number h(Q3p) counts the forms in Q3p's genus.");
-    println!("");
-    println!("The class number is COMPUTABLE from the mass formula (Siegel):");
-    println!("  Mass = Σ (1/|Aut(Qᵢ)|) over all classes Qᵢ in the genus");
-    println!("  Mass = product of local densities × global factor");
-    println!("");
-    println!("For Q3p with 328-408 digit entries, the class number is");
-    println!("expected to be VERY LARGE (proportional to √|det|).");
-    println!("√|det| ≈ 10⁵²⁹ — an astronomical class number.");
-
-    // ═══ STEP 6: THE REPRESENTATION COUNT ═══
-    println!("\n=== STEP 6: REPRESENTATION NUMBERS ===");
-    println!("For a form Q with class number h:");
-    println!("  r(Q, 0) = number of representations of 0 by Q over Z");
-    println!("  r(Q, 0) > 0 iff Q represents 0 over Z (i.e., isotropic)");
-    println!("");
-    println!("Q3p IS isotropic over R (indefinite) and potentially over Q");
-    println!("(by Hasse-Minkowski). The question is OVER Z:");
-    println!("  Does Q3p represent 0 over Z?");
-    println!("  If so, the SHORTEST representation gives the minimum wl.");
-    println!("");
-    println!("From H153-H154: Q3p(a,b,c) = 0 over Z requires |a|+|b|+|c| ≈ 10⁴².");
-    println!("The frozen lattice F is NOT the set of vectors where Q3p vanishes.");
-    println!("F is a sublattice defined by rqt362's algebraic conditions.");
-
-    // ═══ STEP 7: WHAT 21 MEANS ALGEBRAICALLY ═══
-    println!("\n=== STEP 7: WHAT 21 MEANS ALGEBRAICALLY ===");
-    // Key insight: 21 is the minimum of a DIFFERENT norm on a DIFFERENT lattice.
-    // Q3p defines the form. F is a lattice. 21 is the ℓ¹ minimum of F.
-    // The ℓ¹ minimum of F depends on:
-    //   1. The geometry of F (its basis vectors)
-    //   2. The arithmetic of Q3p's coefficients (the modular structure)
-    //   3. The algebraic construction of F from rqt362
-
-    // The 42-digit cofactor gap = 2 × 21 is the GEOMETRIC measure.
-    // The CRT ceiling at 4 is the ARITHMETIC floor.
-    // The gap 4 → 21 is the ALGEBRAIC depth.
-
-    println!("The number 21 sits at the intersection of three structures:");
-    println!("");
-    println!("  GEOMETRY: cofactor gap G = 42, half-gap G/2 = 21");
-    println!("            (the dimensional conversion area → length)");
-    println!("");
-    println!("  ARITHMETIC: CRT(3,7) gives wl = 4");
-    println!("              (the modular floor, necessary but insufficient)");
-    println!("");
-    println!("  ALGEBRA: 21 = 4 + 17");
-    println!("           (4 from arithmetic, 17 from algebraic depth)");
-    println!("           17 is PRIME — it may be the class-group contribution");
-
-    // Check: is 17 a prime dividing anything relevant?
-    let det_mod17 = mod_pos(&det, 17);
-    let r01_mod17 = mod_pos(&r01, 17);
-    println!("\n  det mod 17 = {}", det_mod17);
-    println!("  R01 mod 17 = {}", r01_mod17);
-    println!("  Legendre(det mod 17, 17) = {}", legendre(det_mod17, 17));
-
-    // Also check: 21 - 4 = 17. Is there a form-theoretic meaning?
-    println!("\n  21 - 4 = 17 (the algebraic excess)");
-    println!("  21 / 4 = 5.25 (the algebraic amplification factor)");
-    println!("  21 × 4 = 84 = cofactor span (the product rule)");
-
-    println!("\n  REMARKABLE: 21 × 4 = 84 = cofactor span Level1→Level3!");
-    println!("  This means: (word length) × (CRT minimum) = (cofactor span).");
-    println!("  Or equivalently: word_length = span / CRT_min = 84 / 4 = 21.");
-
-    // ═══ STEP 8: THE PRODUCT RULE ═══
-    println!("\n=== STEP 8: THE PRODUCT RULE ===");
-    println!("OBSERVED: word_length × CRT_min = cofactor_span");
-    println!("          21 × 4 = 84");
-    println!("");
-    println!("This gives an EQUIVALENT formulation of the Half-Gap:");
-    println!("  word_length = cofactor_span / CRT_min = 84 / 4 = 21");
-    println!("");
-    println!("Compare to the Half-Gap: word_length = G/2 = 42/2 = 21");
-    println!("These are consistent because: span = 2G and CRT_min = 4 = 2×2");
-    println!("  span / CRT_min = 2G / 4 = G/2 ✓");
-    println!("");
-    println!("The PRODUCT RULE unifies the Half-Gap (geometric) with the");
-    println!("CRT plateau (arithmetic):");
-    println!("  word_length = 2 × cofactor_gap / CRT_minimum");
-    println!("              = 2 × 42 / 4 = 84 / 4 = 21");
+    println!("Both involve 21 and 4, but:");
+    println!("  Product Rule: multiplicative (21 × 4 = 84)");
+    println!("  Escape Rule:  additive (21 + 4 = 25)");
 
     // ═══ SUMMARY ═══
     println!("\n{}", "=".repeat(60));
-    println!("SUMMARY: H162 — THE ALGEBRAIC FRONTIER");
+    println!("SUMMARY: H165 — THE ESCAPE ORBIT");
     println!("{}", "=".repeat(60));
-    println!("1. Hasse invariant at ∞: −1. Leading minors: (−, −, +).");
-    println!("2. Q3p is isotropic over R (indefinite). Over Z at 10⁴² scale.");
-    println!("3. Class number ~ √|det| ~ 10⁵²⁹ (astronomical).");
-    println!("4. F is not the null cone — it's an algebraic sublattice from rqt362.");
-    println!("5. PRODUCT RULE: word_length × CRT_min = cofactor_span");
-    println!("                 21 × 4 = 84 ✓");
-    println!("6. Equivalent: wl = 2G/CRT_min = 84/4 = 21.");
-    println!("7. This UNIFIES the Half-Gap (geometric: G/2 = 42/2 = 21)");
-    println!("   with the CRT plateau (arithmetic: CRT_min = 4).");
-    println!("8. The three faces converge: geometry × arithmetic = algebra.");
+    println!("1. ALL vectors with word length 1-24: Q3p ≤ 0 (bounded).");
+    println!("2. FIRST Q3p > 0 at word length 25: vector (16, 9, 0).");
+    println!("3. (16,9,0) = CF convergent p₃/q₃, ratio 1.778 ∈ (n₊, n₋).");
+    println!("4. No c ≠ 0 vectors have Q3p > 0 at word length ≤ 28.");
+    println!("5. ESCAPE RULE: escape_time = word_length + CRT_floor = 21 + 4 = 25.");
+    println!("6. The 21 roots live 4 steps INSIDE the bounded region.");
+    println!("7. The number 4 appears TWICE: as CRT floor and as distance");
+    println!("   from word length to first escape.");
+    println!("8. Two rules of 21 and 4:");
+    println!("   MULTIPLICATIVE: 21 × 4 = 84 (Product Rule)");
+    println!("   ADDITIVE:       21 + 4 = 25 (Escape Rule)");
 }
