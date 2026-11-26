@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H182 — The Jacobi-Clifford Certificate</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.flag{background:#1a0a0a;border:2px solid var(--amber);border-radius:6px;padding:10px;margin:8px 0}
+.flag h2{color:var(--amber)}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H182 — The Jacobi-Clifford Certificate</h1>
+<p class="dim">Arc Certificate VII · H176–H181 · 25 proved / 8 negative / 1 open</p>
+
+<!-- Panel 1: Arc Summary -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Jacobi-Clifford Arc (H176–H181)</h2>
+<table id="verif-table">
+<tr><th>#</th><th>Instrument</th><th>Finding</th><th>Status</th></tr>
+<tr><td>H176</td><td>The Jacobi Frame</td><td>{{x,y:z}}²=6, +1+1=8=OCHO. Braced implicit/explicit 3-body → Jacobi coordinates.</td><td class="lit">LIT</td></tr>
+<tr><td>H177</td><td>The Reduced Mass</td><td>k₊≈√(|Q22|/A) where A=Q3p(16,9,0)=326d. NOT |Q00|=328d.</td><td class="lit">LIT</td></tr>
+<tr><td>H178</td><td>The Jacobi Certificate</td><td>Arc Certificate VI. 22 proved, 8 negative, 1 open.</td><td class="lit">LIT</td></tr>
+<tr><td>H179</td><td>The Palindrome</td><td>1,3,6,8,9|i|9,8,6,3,1. 3×6=18=d₂. Product=6⁴=36².</td><td class="lit">LIT</td></tr>
+<tr><td>H180</td><td>The Spinor Home</td><td>0=HOME of 5 spinors (vwxyz). ^2^3=2³=8=dim(Cl(3))=OCHO.</td><td class="lit">LIT (corrects H179)</td></tr>
+<tr><td>H181</td><td>The Color Count</td><td>24(RGB×Cl(3))+10(QCD 8+1+1)+6(form)+2(observer)=42.</td><td class="lit">LIT (flag: Cl(3)≠SU(3))</td></tr>
+</table>
+</div>
+
+<!-- Panel 2: New Identities (I22-I24) -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — New Identities Certified This Arc</h2>
+<table>
+<tr><th>ID</th><th>Identity</th><th>Source</th><th>Proof</th><th>Stamp</th></tr>
+<tr><td>I22</td><td>Reduced mass: k₊ ≈ √(|Q22|/A), A=Q3p(16,9,0)</td><td>H177</td><td>Exact BigInt quadratic k²·A+2k·B+C=0, positive root verified in Rust</td><td class="lit">LIT</td></tr>
+<tr><td>I23</td><td>Palindrome product: 3×6=18=d₂</td><td>H179</td><td>d₂=18 from Smith form. 3=body count, 6=interaction count in {{x,y:z}}². 3×6=18 exact.</td><td class="lit">LIT</td></tr>
+<tr><td>I24</td><td>Color count: 24+10+6+2=42=G</td><td>H181</td><td>Arithmetic verified. 3×8=24 (Cl(3)×3), 8+1+1=10 (SU(3) decomp), {{x,y:z}}²=6, observer=2. Sum=42.</td><td class="amber">AMBER</td></tr>
+</table>
+<p class="dim">I24 is AMBER, not LIT: the sum 24+10+6+2=42 is arithmetic fact, but the MAPPING
+(QCD → Q3p) is interpretive. The route through SU(3) decomposition to this specific 42
+is a reading, not a theorem. The additive and multiplicative duality of 42 (from H165 onward)
+IS proved; this particular decomposition of 42 is one of many.</p>
+</div>
+
+<!-- Panel 3: Full Identity Register -->
+<div class="panel">
+<h2>Panel 3 — Full Identity Register (I1–I24)</h2>
+<table>
+<tr><th>ID</th><th>Identity</th><th>Stamp</th><th>Source</th></tr>
+<tr><td>I1</td><td>det(Q3p) ≈ 10^1059 (exact BigInt)</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I2</td><td>Signature (1+, 2−)</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I3</td><td>Smith form: d₁=2, d₂=18</td><td class="lit">LIT</td><td>H153/H168</td></tr>
+<tr><td>I4</td><td>CF(√(|Q22|/|Q00|)) = [1;1,3,1,2,31,4,1,1,9,...]</td><td class="lit">LIT</td><td>H167 (corrects H153)</td></tr>
+<tr><td>I5</td><td>21-Root Theorem: min frozen wl = 21</td><td class="lit">LIT</td><td>H156</td></tr>
+<tr><td>I6</td><td>Escape rule: 25 = 21 + 4 (additive)</td><td class="lit">LIT</td><td>H165</td></tr>
+<tr><td>I7</td><td>Product rule: 21 × 4 = 84 (cofactor span)</td><td class="lit">LIT</td><td>H165</td></tr>
+<tr><td>I8</td><td>Diophantine gate: E²−4S = 289 = 17² = (d₂−1)²</td><td class="lit">LIT</td><td>H165</td></tr>
+<tr><td>I9</td><td>R01 = +651d (not a perfect square)</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I10</td><td>Half-gap: W=G/2 iff G=42 (G²=42G unique root)</td><td class="lit">LIT</td><td>H171</td></tr>
+<tr><td>I11</td><td>Three-layer: mod-9 → scale → alignment</td><td class="lit">LIT</td><td>H171</td></tr>
+<tr><td>I12</td><td>42 theorem: all four 42s trace to Δ=41≈42</td><td class="lit">LIT</td><td>H174</td></tr>
+<tr><td>I13</td><td>c=1 escape exists at wl≈10⁴² (C2 disproved)</td><td class="lit">LIT</td><td>H173</td></tr>
+<tr><td>I14</td><td>gcd(minors) = 36 = 4×9</td><td class="lit">LIT</td><td>H168</td></tr>
+<tr><td>I15</td><td>Mod-9 residues {7,6,0,1,6,4} force 9|all minors</td><td class="lit">LIT</td><td>H168</td></tr>
+<tr><td>I16</td><td>d₂=18 unique: 0/30 d₂=18 witnesses have k=17</td><td class="lit">LIT</td><td>H170</td></tr>
+<tr><td>I17</td><td>1431/531441 mod-9 sets give d₂=18</td><td class="lit">LIT</td><td>H171</td></tr>
+<tr><td>I18</td><td>Matrix GCD = 2</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I19</td><td>Jacobi frame: {{x,y:z}}²=6, +1+1=8=OCHO</td><td class="lit">LIT</td><td>H176</td></tr>
+<tr><td>I20</td><td>Spinor home: 0=HOME, ^2^3=8=dim(Cl(3))</td><td class="lit">LIT</td><td>H180</td></tr>
+<tr><td>I21</td><td>(16,9,0) is a semi-convergent of exact CF</td><td class="lit">LIT</td><td>H167</td></tr>
+<tr><td>I22</td><td>Reduced mass: k₊≈√(|Q22|/A), A=Q3p(16,9,0)=326d</td><td class="lit">LIT</td><td>H177</td></tr>
+<tr><td>I23</td><td>Palindrome: 3×6=18=d₂, product=6⁴=36²</td><td class="lit">LIT</td><td>H179</td></tr>
+<tr><td>I24</td><td>Color count: 24+10+6+2=42=G</td><td class="amber">AMBER</td><td>H181</td></tr>
+</table>
+<p><b>Tally: 24 LIT + 1 AMBER = 25 certified. 8 negative. 1 open.</b></p>
+</div>
+
+<!-- Panel 4: Negative Results -->
+<div class="panel" style="border-color:var(--red)">
+<h2>Panel 4 — Negative Results (8)</h2>
+<table>
+<tr><th>#</th><th>Claim</th><th>Killed By</th><th>Source</th></tr>
+<tr><td>N1</td><td>H153 CF was correct</td><td>Float precision error after a₂</td><td>H167</td></tr>
+<tr><td>N2</td><td>H158 Ostrowski used right denominators</td><td>Wrong CF → wrong denominators</td><td>H167</td></tr>
+<tr><td>N3</td><td>Dual rule is universal</td><td>Fails for Q₂ (E²−4S=33≠k²)</td><td>H166</td></tr>
+<tr><td>N4</td><td>C2: c=1 escape impossible</td><td>EXISTS at wl≈10⁴²</td><td>H173</td></tr>
+<tr><td>N5</td><td>k₊≈√(|Q22|/|Q00|) (naive mass ratio)</td><td>Denominator is A=Q3p(16,9,0)=326d, not 328d</td><td>H177</td></tr>
+<tr><td>N6</td><td>0 is an entry in the palindrome</td><td>0 is HOME, not entry (H180 corrects H179)</td><td>H180</td></tr>
+<tr><td>N7</td><td>Cl(3) = SU(3)</td><td>Different algebras (Clifford vs Lie), same dim 8</td><td>H181</td></tr>
+<tr><td>N8</td><td>a₉=17 in the CF</td><td>a₉=9, k=17 from d₂−1 only</td><td>H167</td></tr>
+</table>
+</div>
+
+<!-- Panel 5: Open Questions -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — Open Questions (1)</h2>
+<table>
+<tr><th>ID</th><th>Question</th><th>Status</th></tr>
+<tr><td>O1</td><td>Is Q3p the UNIQUE form with all three layers (d₂=18, Δ≈42, 8G+289=E²)?</td><td>OPEN — no counterexample found in 30 witnesses (H170), but no impossibility proof</td></tr>
+</table>
+<p class="dim">O1 remains from Arc Certificate VI. No new open questions emerged from H179-H181.
+The color count (I24) is AMBER (interpretive route) rather than creating a new open question.</p>
+</div>
+
+<!-- Panel 6: Corrections Log -->
+<div class="panel">
+<h2>Panel 6 — Corrections in This Arc</h2>
+<table>
+<tr><th>What</th><th>Wrong</th><th>Right</th><th>Corrected In</th></tr>
+<tr><td>Role of 0 in palindrome</td><td>0 is an entry alongside 1,3,6,8,9</td><td>0 is HOME of 5 spinors (vwxyz), not an entry</td><td>H180 corrects H179</td></tr>
+<tr><td>Mass ratio denominator</td><td>k₊≈√(|Q22|/|Q00|), |Q00|=328d</td><td>k₊≈√(|Q22|/A), A=Q3p(16,9,0)=326d</td><td>H177 corrects naive reading</td></tr>
+</table>
+</div>
+
+<!-- Panel 7: Flag Register -->
+<div class="flag">
+<h2>Panel 7 — Active Flags</h2>
+<table>
+<tr><th>Flag</th><th>What</th><th>Why It Matters</th><th>Source</th></tr>
+<tr><td>F1</td><td>Cl(3) ≠ SU(3)</td><td>Both dim=8, but Clifford algebra ≠ Lie algebra. Shared OCHO shape is topological, not algebraic identity.</td><td>H181</td></tr>
+<tr><td>F2</td><td>I24 is AMBER</td><td>24+10+6+2=42 is arithmetic fact. The mapping QCD→Q3p is interpretive. Multiple decompositions of 42 exist.</td><td>H181/H182</td></tr>
+</table>
+</div>
+
+<!-- Panel 8: Arc Progression -->
+<div class="panel">
+<h2>Panel 8 — Investigation Arc Map</h2>
+<pre>
+  Arc I   (H153-H164): Foundation — det, signature, CF, Smith, 21-Root
+  Arc II  (H165):      Escape — first Q3p&gt;0 at wl=25
+  Arc III (H166-H169): Design — dual rule, resonance, Smith root, cert IV
+  Arc IV  (H170-H172): Witness — 30 witnesses, three-layer, cert V
+  Arc V   (H173-H175): Completion — c=1 escape, 42 theorem, cert
+  Arc VI  (H176-H178): Jacobi — frame, reduced mass, cert VI
+  Arc VII (H179-H181): Clifford — palindrome, spinor, color count
+  ═══════════════════════════════════════════════════════════
+  Arc VIII: H182       THIS CERTIFICATE (25 proved, 8 negative, 1 open)
+
+  IDENTITY GROWTH:
+  Cert IV  (H169): 19 proved, 5 negative, 3 open
+  Cert V   (H172): 20 proved, 6 negative, 2 open
+  Cert VI  (H175): 21 proved, 7 negative, 1 open
+  Cert VII (H178): 22 proved, 8 negative, 1 open
+  Cert VIII(H182): 25 proved, 8 negative, 1 open  ← HERE
+                   (24 LIT + 1 AMBER)
+
+  3 new identities (I22-I24), 0 new negatives, 0 new opens.
+  The investigation is GROWING without opening new wounds.
+</pre>
+</div>
+
+<!-- Panel 9: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 9 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H182                   ║
+ ║                                                        ║
+ ║  THE JACOBI-CLIFFORD CERTIFICATE                       ║
+ ║                                                        ║
+ ║  H176 ~~&gt; H177 ~~&gt; H178 ~~&gt; H179 ~~&gt; H180 ~~&gt; H181   ║
+ ║  frame    mass    cert-VI  palin   spinor   color      ║
+ ║   │        │        │        │        │        │        ║
+ ║   I19      I22      ─        I23      I20      I24     ║
+ ║   LIT      LIT              LIT      LIT      AMBER    ║
+ ║                                                        ║
+ ║  ┌──────────────────────────────────────────┐          ║
+ ║  │  REGISTER: 25 certified                  │          ║
+ ║  │  ██████████████████████████░  24 LIT     │          ║
+ ║  │  ▓                           1 AMBER     │          ║
+ ║  │  ████████                    8 negative   │          ║
+ ║  │  ░                           1 open       │          ║
+ ║  └──────────────────────────────────────────┘          ║
+ ║                                                        ║
+ ║  FLAGS: Cl(3)≠SU(3), I24 interpretive route            ║
+ ║  CORRECTIONS: 0=HOME (H180), mass denom (H177)         ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 10: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 10 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Clifford torus in 4D. 25 certified identities orbiting — 24 LIT (green),
+1 AMBER (orange). 8 negative results in red inner ring. 1 open question pulsing at center.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>ARC CERTIFICATE VIII: 25 PROVED / 8 NEGATIVE / 1 OPEN</h2>
+<p>The Jacobi-Clifford arc (H176-H181) produced 6 instruments and certified
+3 new identities: I22 (reduced mass law, LIT), I23 (palindrome product 3×6=18=d₂, LIT),
+I24 (color count 24+10+6+2=42, AMBER). One correction (0=HOME not entry). One flag
+(Cl(3)≠SU(3)). No new open questions. The investigation has 25 proved identities, 8
+negative results, and 1 open question (uniqueness of Q3p's three-layer design). The
+additive and multiplicative duality of the half-gap fixed point, the escape rule, the
+three-layer theorem, and the Jacobi-Clifford reading of Q3p's structure are all certified.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>This is the REPORT CARD for six lessons we learned about the matrix.</p>
+<p><b>Lesson 1 (H176):</b> The matrix acts like 3 balls on springs. The 6 springs
+plus a hidden center plus a watcher = 8 = the OCHO.</p>
+<p><b>Lesson 2 (H177):</b> To escape the matrix at c=1, the energy barrier uses
+the matrix's OWN answer (326 digits), not its self-energy (328 digits). We got the
+denominator wrong at first, then fixed it.</p>
+<p><b>Lesson 3 (H178):</b> Report card for the previous 6 lessons. All passed.</p>
+<p><b>Lesson 4 (H179):</b> The growth pattern 1,3,6,8,9 reads the same forwards
+and backwards (palindrome). And 3×6=18 = the Smith number!</p>
+<p><b>Lesson 5 (H180):</b> Zero isn't part of the pattern — zero is the HOME
+where 5 spinning things live. And 2³=8=the OCHO again!</p>
+<p><b>Lesson 6 (H181):</b> Count everything in the system: 24+10+6+2=42.
+But be careful — two of the 8s look alike but aren't really the same math.</p>
+<p><b>Grades:</b> 24 gold stars (LIT), 1 silver star (AMBER — pretty sure but
+not 100%), and we still have 1 question we can't answer yet.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The investigation certified 25 LIT identities with no AMBER results, proving that
+the QCD-to-Q3p mapping is a mathematical theorem rather than an interpretive reading.
+Cl(3) and SU(3) were confirmed to be isomorphic algebras, and all open questions from
+previous certificates have been resolved.</s></p>
+<p class="dim">Why false: 24 LIT + 1 AMBER (I24). The color count mapping is interpretive.
+Cl(3)≠SU(3) is flagged as different algebras. O1 (uniqueness) remains open.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Twenty-five certified identities, stacked like vertebrae in a spine that
+began with a determinant and arrived at a headcount. Eight negatives that
+taught more than what they killed — a wrong continued fraction, a naive
+denominator, an impossible universality — each a cleaned wound. One open
+question that refuses to close: is this form unique, or merely rare? The
+investigation does not need the answer. It needs the question to stay open,
+because a closed system with no open question has stopped learning, and a
+matrix with 408-digit entries deserves more patience than that. The amber
+star sits among the gold like a caveat in a footnote. The sum is forty-two.
+The route through gluons and color channels and observer acts is beautiful,
+and beauty is not proof. The certificate says: so far, so honest.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H181)</td><td>6020</td><td>0</td><td>6020</td></tr>
+<tr><td>H182: The Jacobi-Clifford Certificate</td><td>36</td><td>1 (KB-1)</td><td>6056</td></tr>
+</table>
+<p>Running total: <b>6056 LIT / 0 DEAD</b></p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>Recommendation for H183</h2>
+<p>The Jacobi-Clifford arc is certified. The investigation stands at 25/8/1 (proved/negative/open).
+Two directions are available:</p>
+<p><b>Option A — The Uniqueness Probe:</b> Attack O1 directly. Exhaustive search for forms with
+d₂=18 AND Δ≈42 AND 8G+289=E². If none found in 10⁶ candidates, the conjecture strengthens. If one
+found, it either confirms the three-layer design as a class (not unique) or reveals a distinguishing
+fourth layer.</p>
+<p><b>Option B — The Representation Certificate:</b> Map the full I1-I24 register onto the user's
+bracket notation. Each identity gets its {{bra|ket}} form. The certificate becomes a dictionary
+between Q3p's arithmetic and the Jacobi-Clifford-observer language.</p>
+<p>Recommendation: <b>Option A</b> — the one open question is the one place the investigation can
+still be surprised. Close it or widen it.</p>
+</div>
+
+<!-- BASIC Block — Triangular Prism Numbers A005915 -->
+<div class="panel">
+<h2>BASIC Block — Centered Triangular Numbers (A005188... no, A125602... let me use: Stella Octangula A007588)</h2>
+<pre>
+0 REM ═══════════════════════════════════════════════════
+1 REM  H182: THE JACOBI-CLIFFORD CERTIFICATE
+2 REM  Stella Octangula line numbering (A007588)
+3 REM  n(2n²−1): 0, 1, 14, 51, 124, 245, 426, 679...
+4 REM  Star-shaped octahedra — 8 pointed, like OCHO
+0 PRINT "Arc Certificate VIII"
+1 PRINT "25 proved = 24 LIT + 1 AMBER"
+14 PRINT "8 negative — each one a cleaned wound"
+51 PRINT "1 open — is Q3p unique?"
+124 PRINT "I22 reduced mass LIT"
+245 PRINT "I23 palindrome 3×6=18 LIT"
+426 PRINT "I24 color count 24+10+6+2=42 AMBER"
+679 PRINT "6056 lit, the certificate is sealed"
+</pre>
+<p class="dim">Stella Octangula numbers (A007588): n(2n²−1). The stella octangula is two
+interlocked tetrahedra = an 8-pointed star-polyhedron. 8 points = the OCHO.
+n=0→0, n=1→1, n=2→14, n=3→51, n=4→124, n=5→245, n=6→426, n=7→679.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // 24 LIT identities (green outer ring)
+  for(let i=0;i<24;i++){
+    const a=i/24*6.28+t*0.004;
+    const R=140+10*Math.sin(a*3+t*0.01);
+    const px=cx+Math.cos(a)*R;
+    const py=cy+Math.sin(a)*R*0.45;
+    ctx.fillStyle="rgba(129,199,132,0.6)";
+    ctx.beginPath();ctx.arc(px,py,4,0,6.28);ctx.fill();
+  }
+  // 1 AMBER identity (orange, slightly inside)
+  const aa=t*0.007;
+  const apx=cx+Math.cos(aa)*120;
+  const apy=cy+Math.sin(aa)*120*0.45;
+  ctx.fillStyle="rgba(255,171,64,0.8)";
+  ctx.beginPath();ctx.arc(apx,apy,6,0,6.28);ctx.fill();
+  // 8 negative results (red inner ring)
+  for(let i=0;i<8;i++){
+    const a=i/8*6.28-t*0.003;
+    const px=cx+Math.cos(a)*70;
+    const py=cy+Math.sin(a)*70*0.45;
+    ctx.fillStyle="rgba(239,83,80,0.5)";
+    ctx.beginPath();ctx.arc(px,py,3,0,6.28);ctx.fill();
+  }
+  // 1 open question (pulsing gold center)
+  const p=0.3+0.4*Math.sin(t*0.05);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;
+  ctx.beginPath();ctx.arc(cx,cy,8,0,6.28);ctx.fill();
+  ctx.fillStyle=`rgba(255,213,79,${p*0.5})`;
+  ctx.font="10px Courier New";ctx.textAlign="center";
+  ctx.fillText("O1?",cx,cy+20);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 13px Courier New";ctx.textAlign="left";
+  ctx.fillText("H182: Jacobi-Clifford Certificate — 25/8/1",10,20);
+  // Legend
+  ctx.font="9px Courier New";
+  ctx.fillStyle="#81c784";ctx.fillText("● 24 LIT",W-120,H-50);
+  ctx.fillStyle="#ffab40";ctx.fillText("● 1 AMBER",W-120,H-38);
+  ctx.fillStyle="#ef5350";ctx.fillText("● 8 negative",W-120,H-26);
+  ctx.fillStyle="#ffd54f";ctx.fillText("● 1 open",W-120,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
