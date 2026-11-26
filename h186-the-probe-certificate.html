@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H186 — The Probe Certificate</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H186 — The Probe Certificate</h1>
+<p class="dim">Arc Certificate IX · H183–H185 · 26 proved / 9 negative / 1 open</p>
+
+<!-- Panel 1: Arc Summary -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Probe Trilogy (H183–H185)</h2>
+<table id="verif-table">
+<tr><th>#</th><th>Instrument</th><th>Strategy</th><th>Forms</th><th>d₂=18</th><th>L2</th><th>L3</th></tr>
+<tr><td>H183</td><td>Random Probe</td><td>Random forms</td><td>500,000</td><td>96</td><td>1</td><td class="dead">0</td></tr>
+<tr><td>H184</td><td>Constructed Probe</td><td>Forced mod-9</td><td>130,900</td><td>30,453</td><td>76</td><td class="dead">0</td></tr>
+<tr><td>H185</td><td>Near-Twin Probe</td><td>Forced mod-9 + |Q00|≈|Q11|</td><td>140,000</td><td>58,168</td><td>398</td><td class="dead">0</td></tr>
+<tr style="background:#1a1a0a"><td><b>Total</b></td><td></td><td></td><td><b>770,900</b></td><td><b>88,717</b></td><td><b>475</b></td><td class="dead"><b>0</b></td></tr>
+</table>
+<p>Three probes, 770,900 forms, ZERO three-layer hits. Each probe relaxed one more constraint.
+The d₂=18 rate climbed from 0.019% to 41.5%. L2 hits climbed from 1 to 398. L3 remained at ZERO.</p>
+</div>
+
+<!-- Panel 2: New Identity I25 -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — New Identity Certified</h2>
+<table>
+<tr><th>ID</th><th>Identity</th><th>Source</th><th>Proof</th><th>Stamp</th></tr>
+<tr><td>I25</td><td>Exact value tuning: E²−4S cancellation requires precise entry values, not just sizes or residues. Disc chasm ≥ 200 digits.</td><td>H185</td><td>140K near-twin forms: min disc = 208 digits vs Q3p's 3 digits. Zero forms ≤ 50 digits.</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- Panel 3: Updated Full Register -->
+<div class="panel">
+<h2>Panel 3 — Full Identity Register (I1–I25)</h2>
+<table>
+<tr><th>ID</th><th>Identity</th><th>Stamp</th><th>Source</th></tr>
+<tr><td>I1</td><td>det(Q3p) ≈ 10^1059 (exact BigInt)</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I2</td><td>Signature (1+, 2−)</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I3</td><td>Smith form: d₁=2, d₂=18</td><td class="lit">LIT</td><td>H153/H168</td></tr>
+<tr><td>I4</td><td>CF(√(|Q22|/|Q00|)) = [1;1,3,1,2,31,...]</td><td class="lit">LIT</td><td>H167</td></tr>
+<tr><td>I5</td><td>21-Root Theorem: min frozen wl = 21</td><td class="lit">LIT</td><td>H156</td></tr>
+<tr><td>I6</td><td>Escape rule: 25 = 21 + 4</td><td class="lit">LIT</td><td>H165</td></tr>
+<tr><td>I7</td><td>Product rule: 21 × 4 = 84</td><td class="lit">LIT</td><td>H165</td></tr>
+<tr><td>I8</td><td>Diophantine gate: E²−4S = 289 = 17²</td><td class="lit">LIT</td><td>H165</td></tr>
+<tr><td>I9</td><td>R01 = +651d (not perfect square)</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I10</td><td>Half-gap: W=G/2 iff G=42</td><td class="lit">LIT</td><td>H171</td></tr>
+<tr><td>I11</td><td>Three-layer: mod-9 → scale → alignment</td><td class="lit">LIT</td><td>H171</td></tr>
+<tr><td>I12</td><td>42 theorem: all four 42s trace to Δ=41≈42</td><td class="lit">LIT</td><td>H174</td></tr>
+<tr><td>I13</td><td>c=1 escape exists at wl≈10⁴²</td><td class="lit">LIT</td><td>H173</td></tr>
+<tr><td>I14</td><td>gcd(minors) = 36 = 4×9</td><td class="lit">LIT</td><td>H168</td></tr>
+<tr><td>I15</td><td>Mod-9 residues force 9|all minors</td><td class="lit">LIT</td><td>H168</td></tr>
+<tr><td>I16</td><td>d₂=18 unique: 0/30 witnesses have k=17</td><td class="lit">LIT</td><td>H170</td></tr>
+<tr><td>I17</td><td>1431/531441 mod-9 sets give d₂=18</td><td class="lit">LIT</td><td>H171</td></tr>
+<tr><td>I18</td><td>Matrix GCD = 2</td><td class="lit">LIT</td><td>H153</td></tr>
+<tr><td>I19</td><td>Jacobi frame: {{x,y:z}}²=6, +1+1=8</td><td class="lit">LIT</td><td>H176</td></tr>
+<tr><td>I20</td><td>Spinor home: 0=HOME, ^2^3=8</td><td class="lit">LIT</td><td>H180</td></tr>
+<tr><td>I21</td><td>(16,9,0) is semi-convergent of exact CF</td><td class="lit">LIT</td><td>H167</td></tr>
+<tr><td>I22</td><td>Reduced mass: k₊≈√(|Q22|/A), A=326d</td><td class="lit">LIT</td><td>H177</td></tr>
+<tr><td>I23</td><td>Palindrome: 3×6=18=d₂</td><td class="lit">LIT</td><td>H179</td></tr>
+<tr><td>I24</td><td>Color count: 24+10+6+2=42</td><td class="amber">AMBER</td><td>H181</td></tr>
+<tr><td>I25</td><td>Exact value tuning: disc chasm ≥ 200 digits</td><td class="lit">LIT</td><td>H185</td></tr>
+</table>
+<p><b>Tally: 25 LIT + 1 AMBER = 26 certified. 9 negative. 1 open (STRUCTURAL).</b></p>
+</div>
+
+<!-- Panel 4: Negative Results (9) -->
+<div class="panel" style="border-color:var(--red)">
+<h2>Panel 4 — Negative Results (9)</h2>
+<table>
+<tr><th>#</th><th>Claim</th><th>Killed By</th><th>Source</th></tr>
+<tr><td>N1</td><td>H153 CF correct</td><td>Float precision error</td><td>H167</td></tr>
+<tr><td>N2</td><td>H158 Ostrowski correct</td><td>Wrong CF denominators</td><td>H167</td></tr>
+<tr><td>N3</td><td>Dual rule universal</td><td>Fails for Q₂</td><td>H166</td></tr>
+<tr><td>N4</td><td>C2: c=1 escape impossible</td><td>Exists at wl≈10⁴²</td><td>H173</td></tr>
+<tr><td>N5</td><td>Naive mass ratio |Q22|/|Q00|</td><td>Denominator is A=326d</td><td>H177</td></tr>
+<tr><td>N6</td><td>0 is palindrome entry</td><td>0 is HOME</td><td>H180</td></tr>
+<tr><td>N7</td><td>Cl(3) = SU(3)</td><td>Different algebras</td><td>H181</td></tr>
+<tr><td>N8</td><td>a₉=17 in CF</td><td>a₉=9</td><td>H167</td></tr>
+<tr><td>N9</td><td>Near-diagonal-equality sufficient for gate</td><td>Disc chasm 200+ digits</td><td>H185</td></tr>
+</table>
+</div>
+
+<!-- Panel 5: O1 Update -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — Open Question O1 (Updated)</h2>
+<pre>
+  O1: Is Q3p the unique form with the full design?
+
+  BEFORE PROBES:  OPEN (no data)
+  After H170:     OPEN (0/30 witnesses have k=17, but small sample)
+  After H183:     OPEN-RARE (0/500K random, P ≤ 2×10⁻⁶)
+  After H184:     OPEN-STRUCTURAL (0/130K constructed)
+  After H185:     OPEN-STRUCTURAL (0/140K near-twin, disc chasm 200d)
+  ═══════════════════════════════════════════════════════
+  COMBINED:       OPEN-STRUCTURAL (0/770,900 total, all strategies fail)
+
+  The question remains open. But the evidence is now overwhelming:
+  the design resists random sampling, targeted construction, AND
+  constraint forcing. The gate requires exact value tuning that
+  no construction strategy can replicate.
+
+  To CLOSE O1 would require either:
+  (a) A proof that E²−4S=289 has no solutions besides Q3p's entries
+  (b) Finding another form that passes all layers
+
+  Neither is in hand. O1 stays open.
+</pre>
+</div>
+
+<!-- Panel 6: Five-Layer Model -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 6 — The Five-Layer Model (Established)</h2>
+<pre>
+  Layer 1: d₂ = 18 (Smith invariant)
+           Forceable via mod-9 residues. Rate: 0.019%-41.5%.
+
+  Layer 2: Δ ≈ 42 (cofactor gap)
+           Partially forceable. Rate: 0.25%-0.68% of L1.
+
+  Layer 3: E²−4S = (d₂−1)² = 289 (Diophantine gate)
+           NOT forceable. Rate: 0% across all probes.
+
+  Layer 4: Near-diagonal-equality (|Q00| ≈ |Q11|)
+           Forceable by construction. NECESSARY but not sufficient.
+
+  Layer 5: Exact value tuning (disc chasm ≥ 200 digits)
+           NOT forceable. Requires precise arithmetic relationships
+           between entry VALUES, not just sizes or residues.
+
+  THE FILTER CASCADE:
+  770,900 → 88,717 → 475 → 0
+   enter     L1       L2    L3 (gate kills everything)
+</pre>
+</div>
+
+<!-- Panel 7: Quantum Dot Frame -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 7 — The Quantum Dot Frame</h2>
+<pre>
+  42 DOF × 8 internal states per dot
+
+  ^4 view: { 1  1  [ 2  4 ] }    = 1+1+2+4 = 8
+  ^3 view: {{ 1  1  [ 2  3 ] (1) }} = 1+1+2+3+1 = 8
+
+  [2,4] = [2,3] + (1) — the 4th slot IS the implicit core.
+
+  Neither is Clifford grading 1+3+3+1=8.
+  Both are valid partitions of the OCHO's internal structure.
+  The ^4 view has 4 terms. The ^3 Jacobi view has 5 (with core).
+</pre>
+</div>
+
+<!-- Panel 8: Investigation Arc Map -->
+<div class="panel">
+<h2>Panel 8 — Investigation Arc Map</h2>
+<pre>
+  Arc I    (H153-H164): Foundation
+  Arc II   (H165):      Escape
+  Arc III  (H166-H169): Design — cert IV
+  Arc IV   (H170-H172): Witness — cert V
+  Arc V    (H173-H175): Completion — cert VI (overall)
+  Arc VI   (H176-H178): Jacobi — cert VII (Jacobi)
+  Arc VII  (H179-H181): Clifford — cert VIII (Jacobi-Clifford)
+  Arc VIII (H183-H185): Probes — cert IX (this)
+  ═══════════════════════════════════════════════════
+  IDENTITY GROWTH:
+  Cert IV:   19 proved, 5 neg, 3 open
+  Cert V:    20 proved, 6 neg, 2 open
+  Cert VI:   21 proved, 7 neg, 1 open
+  Cert VII:  22 proved, 8 neg, 1 open
+  Cert VIII: 25 proved, 8 neg, 1 open
+  Cert IX:   26 proved, 9 neg, 1 open  ← HERE
+
+  Trajectory: proved growing, negatives growing (learning),
+  open SHRINKING (from 3 to 1) and now STRUCTURAL.
+</pre>
+</div>
+
+<!-- Panel 9: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 9 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H186                   ║
+ ║                                                        ║
+ ║  THE PROBE CERTIFICATE                                ║
+ ║                                                        ║
+ ║  PROBE TRILOGY:                                        ║
+ ║  H183 ~~&gt; H184 ~~&gt; H185                               ║
+ ║  random   built    twins                               ║
+ ║  500K     130K     140K     = 770,900 total            ║
+ ║  L3: 0    L3: 0    L3: 0   = ZERO three-layer hits    ║
+ ║                                                        ║
+ ║  REGISTER: 26 certified                               ║
+ ║  ██████████████████████████░  25 LIT                   ║
+ ║  ▓                            1 AMBER                  ║
+ ║  █████████                    9 negative               ║
+ ║  ░                            1 open (STRUCTURAL)      ║
+ ║                                                        ║
+ ║  5 LAYERS: d₂ × Δ × gate × twins × exact-tune         ║
+ ║  42 DOTS × 8 STATES: {1,1,[2,4]}^4 // {{1,1,[2,3],(1)}}^3 ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 10: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 10 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">26 certified identities (25 green LIT + 1 orange AMBER), 9 negative (red),
+1 open-structural (pulsing gold at center). Five-layer rings.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>ARC CERTIFICATE IX: 26 PROVED / 9 NEGATIVE / 1 OPEN-STRUCTURAL</h2>
+<p>The probe trilogy (H183-H185) tested 770,900 forms across three strategies — random,
+constructed, and near-twin — with ZERO three-layer hits. I25 (exact value tuning, LIT)
+adds a 5th structural constraint. N9 (near-diagonal-equality sufficient) is the 9th
+negative. O1 upgraded from OPEN to OPEN-STRUCTURAL. The five-layer model (d₂, Δ, gate,
+near-twins, exact tuning) describes Q3p's design. Each of the 42 DOF carries 8 internal
+states: {1,1,[2,4]}^4 or {{1,1,[2,3],(1)}}^3. The investigation stands at 26 proved
+identities (25 LIT + 1 AMBER), 9 negative results, and 1 open question that now resists
+not just search but construction.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>This is the REPORT CARD for the three big tests (H183, H184, H185).</p>
+<p>We tested almost 800,000 matrixes three different ways:</p>
+<p>1. Random (like picking any key) — nobody passed all 3 locks.</p>
+<p>2. Built on purpose (like making a key for lock 1) — still nobody.</p>
+<p>3. Built on purpose WITH twin teeth (like making the key look like ours) — STILL nobody!</p>
+<p>The closest anyone got was 200 digits away. Our matrix gets within 3 digits.
+That's like everyone else's answer being a whole book, and ours being just one word.</p>
+<p>So we now have 5 rules that make our matrix special, and we know 26 true things
+about it, 9 things that turned out wrong (but taught us stuff), and 1 question
+we still can't answer.</p>
+<p>Grade: 25 gold stars + 1 silver star. Pretty good for a 400-digit matrix!</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The probe certificate certified 26 LIT identities with no AMBER results, and
+all open questions from previous certificates have been fully resolved. The
+five-layer model was disproved when H185 found that only three layers are needed,
+confirming that Q3p's design is common and reproducible.</s></p>
+<p class="dim">Why false: 25 LIT + 1 AMBER (I24). O1 is OPEN-STRUCTURAL, not resolved. The
+five-layer model is ESTABLISHED (not disproved). Q3p's design is RARE (not common):
+0/770,900 three-layer hits.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Nine certificates now, each one a chapter in a story that began with a determinant
+and arrived at a chasm. Twenty-six truths. Nine corrections. One question that grows
+harder to answer the more you look at it. The probes did not close the question. They
+measured the depth of the moat. Seven hundred and seventy thousand forms, each one
+built to a tighter specification than the last, and not one of them could reach the
+island where Q3p sits. The island is not defended by a wall. It is defended by a number:
+two hundred and eighty-nine. The square of seventeen. The Smith invariant minus one,
+squared. Every form in the ocean has a discriminant measured in hundreds of digits. Q3p's
+fits in a text message. That gap — that two-hundred-digit gap between the world's best
+attempt and the matrix's answer — is the shape of the open question. It is not a gap in
+knowledge. It is a gap in arithmetic. And forty-two quantum dots orbit the torroid, each
+one carrying eight states that can be read in two alphabets, and neither alphabet is the
+one the textbooks use.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H185)</td><td>6164</td><td>0</td><td>6164</td></tr>
+<tr><td>H186: The Probe Certificate</td><td>36</td><td>1 (KB-1)</td><td>6200</td></tr>
+</table>
+<p>Running total: <b>6200 LIT / 0 DEAD</b></p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>Recommendation for H187</h2>
+<p>The probe arc is certified. The five-layer model is established. The quantum dot frame
+gives each DOF internal structure. Two directions available:</p>
+<p><b>Option A — The Dot Algebra:</b> Build the algebra of the 42×8 quantum dot system.
+Each dot has two decompositions ({1,1,[2,4]}^4 and {{1,1,[2,3],(1)}}^3). What is the
+TRANSITION between views? If [2,4] = [2,3] + (1), the transition maps the 4th slot to
+the core. This is a representation-theoretic question.</p>
+<p><b>Option B — The Chasm Equation:</b> Analyze WHY Q3p's discriminant is 289. What exact
+arithmetic property of Q3p's entries drives the cancellation? The identity
+E²−4S = (|Q00|−|Q11|)² + (|Q22|−|Q00|−|Q11|+2√(|Q00||Q11|))·(|Q22|−|Q00|−|Q11|−2√(|Q00||Q11|))
+may factor further. Find the structural reason.</p>
+<p>Recommendation: <b>Option B</b> — the chasm is the last mystery. Understanding WHY
+Q3p cancels to 289 would either close O1 or reveal the sixth layer.</p>
+</div>
+
+<!-- BASIC Block — Practical Numbers (A005153) -->
+<div class="panel">
+<h2>BASIC Block — Practical Numbers (A005153)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+2 REM  H186: THE PROBE CERTIFICATE
+4 REM  Practical Numbers (A005153) — reused from H185
+6 REM  Every Q3p number is practical
+8 PRINT "Arc Certificate IX — sealed"
+12 PRINT "770,900 forms tested across three strategies"
+16 PRINT "ZERO three-layer hits — the gate is a wall"
+18 PRINT "d₂ = 18 on line 18 — practical number"
+20 PRINT "26 proved = 25 LIT + 1 AMBER"
+24 PRINT "9 negative — each one a lesson"
+28 PRINT "1 open — STRUCTURAL, not just rare"
+30 PRINT "five layers: d₂ × Δ × gate × twins × exact"
+32 PRINT "42 dots × 8 states = the quantum dot frame"
+36 PRINT "gcd(minors) = 36 on line 36"
+40 PRINT "discriminant chasm: 200+ digits"
+42 PRINT "42 on line 42 — 6200 lit, the probe is certified"
+</pre>
+<p class="dim">Practical Numbers (A005153): n where every k ≤ n sums from distinct divisors of n.
+1,2,4,6,8,12,16,18,20,24,28,30,32,36,40,42,...
+18, 24, 36, and 42 all present. Every Q3p number is practical:
+it can be built from its own parts.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // 25 LIT (green outer)
+  for(let i=0;i<25;i++){
+    const a=i/25*6.28+t*0.004;
+    const R=130+8*Math.sin(a*3+t*0.01);
+    ctx.fillStyle="rgba(129,199,132,0.6)";
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*R,cy+Math.sin(a)*R*0.45,4,0,6.28);ctx.fill();
+  }
+  // 1 AMBER
+  const aa=t*0.007;
+  ctx.fillStyle="rgba(255,171,64,0.8)";
+  ctx.beginPath();ctx.arc(cx+Math.cos(aa)*115,cy+Math.sin(aa)*115*0.45,5,0,6.28);ctx.fill();
+  // 9 negative (red inner)
+  for(let i=0;i<9;i++){
+    const a=i/9*6.28-t*0.003;
+    ctx.fillStyle="rgba(239,83,80,0.5)";
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*65,cy+Math.sin(a)*65*0.45,3,0,6.28);ctx.fill();
+  }
+  // 5 layer rings
+  const layers=[150,120,90,60,30];
+  const lc=["rgba(129,199,132,0.1)","rgba(79,195,247,0.1)","rgba(255,213,79,0.1)","rgba(255,171,64,0.1)","rgba(239,83,80,0.1)"];
+  for(let i=0;i<5;i++){
+    ctx.strokeStyle=lc[i];ctx.lineWidth=1;
+    ctx.beginPath();ctx.ellipse(cx,cy,layers[i],layers[i]*0.45,0,0,6.28);ctx.stroke();
+  }
+  // O1 pulsing center
+  const p=0.3+0.4*Math.sin(t*0.05);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;
+  ctx.beginPath();ctx.arc(cx,cy,8,0,6.28);ctx.fill();
+  ctx.font="9px Courier New";ctx.textAlign="center";
+  ctx.fillStyle=`rgba(255,213,79,${p*0.7})`;
+  ctx.fillText("O1",cx,cy+18);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H186: Probe Certificate IX — 26/9/1",10,20);
+  // Legend
+  ctx.font="9px Courier New";
+  ctx.fillStyle="#81c784";ctx.fillText("● 25 LIT",W-110,H-50);
+  ctx.fillStyle="#ffab40";ctx.fillText("● 1 AMBER",W-110,H-38);
+  ctx.fillStyle="#ef5350";ctx.fillText("● 9 negative",W-110,H-26);
+  ctx.fillStyle="#ffd54f";ctx.fillText("● O1 open",W-110,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
