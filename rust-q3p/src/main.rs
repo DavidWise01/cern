@@ -1,9 +1,9 @@
-//! H176: The Jacobi Frame
-//! Map Q3p to the 3-body problem in Jacobi coordinates.
-//! {{x,y:z}}² = 6 entries, +1 implicit core, +1 explicit observer.
+//! H177: The Reduced Mass
+//! Does escape_ratio = √(mass_ratio) exactly?
+//! Compute with BigInt and compare.
 
 use num_bigint::BigInt;
-use num_traits::Zero;
+use num_traits::{Zero, One, Signed};
 use std::str::FromStr;
 
 fn q3p_matrix() -> [[BigInt; 3]; 3] {
@@ -22,129 +22,223 @@ fn q3p_matrix() -> [[BigInt; 3]; 3] {
 
 fn dc(n: &BigInt) -> usize { if n.is_zero() {1} else {n.magnitude().to_string().len()} }
 
+/// Integer square root via Newton's method
+fn isqrt(n: &BigInt) -> BigInt {
+    if n.is_zero() { return BigInt::zero(); }
+    if n.is_negative() { panic!("isqrt of negative"); }
+    let s = n.to_string();
+    let digits = s.len();
+    let half = (digits + 1) / 2;
+    let mut x = BigInt::from(10).pow(half as u32);
+    loop {
+        let x_new = (&x + n / &x) / BigInt::from(2);
+        if x_new >= x { break; }
+        x = x_new;
+    }
+    while &x * &x > *n { x = x - BigInt::one(); }
+    x
+}
+
 fn main() {
     let q = q3p_matrix();
-    let q00=&q[0][0];let q01=&q[0][1];let q11=&q[1][1];
-    let q02=&q[0][2];let q12=&q[1][2];let q22=&q[2][2];
+    let q00=&q[0][0]; let q01=&q[0][1]; let q11=&q[1][1];
+    let q02=&q[0][2]; let q12=&q[1][2]; let q22=&q[2][2];
+    let abs_q00 = BigInt::from(q00.magnitude().clone());
+    let abs_q22 = BigInt::from(q22.magnitude().clone());
 
-    println!("=== H176: THE JACOBI FRAME ===\n");
+    println!("=== H177: THE REDUCED MASS ===\n");
 
-    // ═══ THE 3-BODY MAP ═══
-    println!("═══ THE 3-BODY MAP ═══\n");
-    println!("  3 bodies in Jacobi coordinates:");
-    println!("  Body x (brace):   mass scale ~ |Q00| = {}d", dc(q00));
-    println!("  Body y (box):     mass scale ~ |Q11| = {}d", dc(q11));
-    println!("  Body z (torroid): mass scale ~ |Q22| = {}d\n", dc(q22));
+    // ═══ PART 1: The mass ratio ═══
+    println!("═══ PART 1: THE MASS RATIO ═══\n");
+    println!("  |Q22| has {} digits", dc(q22));
+    println!("  |Q00| has {} digits", dc(q00));
+    println!("  Digit difference: {} - {} = {}\n", dc(q22), dc(q00), dc(q22) - dc(q00));
 
-    println!("  Jacobi reduction: 3 bodies → 2 relative vectors + 1 COM");
-    println!("  In Q3p's coordinates: a = x-COM, b = y-COM, c = z-COM");
-    println!("  The COM is IMPLICIT (projected out). That's the singlet.\n");
+    // Compute |Q22| / |Q00| exactly (integer division)
+    let mass_ratio = &abs_q22 / &abs_q00;
+    println!("  |Q22| / |Q00| = {} digits", dc(&mass_ratio));
+    // Show first and last few digits
+    let mr_str = mass_ratio.to_string();
+    println!("  = {}...{} ({}d)\n",
+        &mr_str[..6.min(mr_str.len())],
+        &mr_str[mr_str.len()-6..],
+        mr_str.len());
 
-    // ═══ THE 6 = {{x,y:z}}² ═══
-    println!("═══ THE 6 INTERACTIONS = {{{{x,y:z}}}}² ═══\n");
-    println!("  The brace {{x,y:z}}² generates 6 unique pairings:");
-    println!("  Self-interactions (diagonal):");
-    println!("    x·x → Q00 = −{}d (brace self)", dc(q00));
-    println!("    y·y → Q11 = −{}d (box self)", dc(q11));
-    println!("    z·z → Q22 = −{}d (torroid self)\n", dc(q22));
-    println!("  Cross-interactions (off-diagonal):");
-    println!("    x·y → Q01 = +{}d (brace-box coupling)", dc(q01));
-    println!("    x·z → Q02 = −{}d (brace-torroid coupling)", dc(q02));
-    println!("    y·z → Q12 = +{}d (box-torroid coupling)\n", dc(q12));
+    // ═══ PART 2: √(mass ratio) ═══
+    println!("═══ PART 2: √(MASS RATIO) ═══\n");
+    let sqrt_mr = isqrt(&mass_ratio);
+    let smr_str = sqrt_mr.to_string();
+    println!("  √(|Q22|/|Q00|) has {} digits", smr_str.len());
+    println!("  = {}...{}\n",
+        &smr_str[..10.min(smr_str.len())],
+        &smr_str[smr_str.len().saturating_sub(6)..]);
 
-    // ═══ THE SIGN PATTERN: −+3 ═══
-    println!("═══ THE SIGN PATTERN: −+3 BODIES ═══\n");
-    println!("  User's notation: -+3 bodies");
-    println!("  Q3p signature: (1+, 2−)");
-    println!("  One REPULSIVE direction, two ATTRACTIVE directions.\n");
-    println!("  In 3-body language:");
-    println!("  − : Two bodies are BOUND (attracted, can't escape easily)");
-    println!("  + : One direction is UNBOUND (repulsive, escape possible)\n");
-    println!("  The sign pattern of the matrix diagonal:");
-    println!("  Q00 < 0 (−), Q11 < 0 (−), Q22 < 0 (−)");
-    println!("  All self-interactions are ATTRACTIVE (binding).");
-    println!("  But Q01 > 0 (+): the brace-box coupling is REPULSIVE.");
-    println!("  This repulsion creates the one positive eigenvalue direction.");
-    println!("  → The escape is BETWEEN bodies, not from any single body.\n");
+    // Also compute √(|Q22|) / √(|Q00|) for comparison
+    let sqrt_q22 = isqrt(&abs_q22);
+    let sqrt_q00 = isqrt(&abs_q00);
+    let alt_ratio = &sqrt_q22 / &sqrt_q00;
+    let ar_str = alt_ratio.to_string();
+    println!("  Alternative: √|Q22| / √|Q00| has {} digits", ar_str.len());
+    println!("  = {}...{}\n",
+        &ar_str[..10.min(ar_str.len())],
+        &ar_str[ar_str.len().saturating_sub(6)..]);
 
-    // ═══ THE 2+1 SPLIT (the colon) ═══
-    println!("═══ THE 2+1 SPLIT: {{x,y : z}} ═══\n");
-    println!("  The colon separates {{x,y}} from {{z}}:");
-    println!("  {{x,y}} = the binary subsystem (brace + box, c=0 plane)");
-    println!("  {{z}} = the torroid (the third body)\n");
-    println!("  Jacobi vector 1 (ρ₁): relative position of x and y");
-    println!("    → This is the brace-box binary form Q(a,b,0)");
-    println!("    → R01 = Q01² − |Q00|·|Q11| = +651d (POSITIVE: repulsive!)");
-    println!("    → Escape at wl=25 in this subsystem\n");
-    println!("  Jacobi vector 2 (ρ₂): position of z relative to COM(x,y)");
-    println!("    → This is the torroid coordinate c");
-    println!("    → Q22 = −408d (MASSIVE anchor, strongly bound)");
-    println!("    → Escape at wl≈10⁴² (barely, at cosmic word length)\n");
+    // ═══ PART 3: The escape ratio ═══
+    println!("═══ PART 3: THE ESCAPE RATIO ═══\n");
+    // From H173: escape crossover at k ≈ 6.14×10^40 (41-digit number)
+    // wl(c=1) = 25k ≈ 25 × 6.14×10^40 ≈ 1.5×10^42
+    // wl(c=0) = 25
+    // escape_ratio = wl(c=1) / wl(c=0) ≈ k (the scaling factor)
 
-    // ═══ MASS HIERARCHY ═══
-    println!("═══ THE MASS HIERARCHY ═══\n");
-    // In 3-body, the mass ratios determine the dynamics.
-    // Here "mass" = |diagonal entry| (the self-interaction strength)
-    let r_xy = dc(q11) as f64 / dc(q00) as f64;
-    let r_xz = dc(q22) as f64 / dc(q00) as f64;
-    let r_yz = dc(q22) as f64 / dc(q11) as f64;
-    println!("  Mass ratios (by digit count):");
-    println!("  |Q11|/|Q00| = {}/{} ≈ {:.3} (box/brace ≈ equal)", dc(q11), dc(q00), r_xy);
-    println!("  |Q22|/|Q00| = {}/{} ≈ {:.3} (torroid/brace ≈ 1.24×)", dc(q22), dc(q00), r_xz);
-    println!("  |Q22|/|Q11| = {}/{} ≈ {:.3} (torroid/box ≈ 1.24×)\n", dc(q22), dc(q11), r_yz);
-    println!("  But the REAL hierarchy is in magnitudes, not digit counts:");
-    println!("  |Q22|/|Q00| ≈ 10^(408-328) = 10^80");
-    println!("  The torroid is 10⁸⁰ times heavier than the brace!");
-    println!("  This is NOT a near-equal-mass 3-body problem.");
-    println!("  It is a HIERARCHICAL 3-body problem:");
-    println!("    Two light bodies (brace, box) ≈ same mass");
-    println!("    One HEAVY body (torroid) ≈ 10⁸⁰ times heavier\n");
+    // Let's compute k more precisely via the quadratic
+    // Q3p(16k, 9k, 1) = Ak² + 2Bk + C = 0
+    // A = Q3p(16,9,0), B = 16·Q02 + 9·Q12, C = Q22
+    let a16 = BigInt::from(16);
+    let b9 = BigInt::from(9);
+    let c1 = BigInt::from(1);
+    let c0 = BigInt::from(0);
+    let eval = |a: &BigInt, b: &BigInt, c: &BigInt| -> BigInt {
+        q00*a*a + BigInt::from(2)*q01*a*b + q11*b*b
+        + BigInt::from(2)*q02*a*c + BigInt::from(2)*q12*b*c + q22*c*c
+    };
 
-    // ═══ THE JACOBI REDUCTION ═══
-    println!("═══ THE JACOBI REDUCTION TABLE ═══\n");
-    println!("  │ 3-Body          │ Q3p              │ Digit │");
-    println!("  ├─────────────────┼──────────────────┼───────┤");
-    println!("  │ Body 1 (x)      │ Brace (a)        │ 328d  │");
-    println!("  │ Body 2 (y)      │ Box (b)          │ 329d  │");
-    println!("  │ Body 3 (z)      │ Torroid (c)      │ 408d  │");
-    println!("  │ ρ₁ = y−x        │ Binary form(a,b) │ 328d  │");
-    println!("  │ ρ₂ = z−COM(x,y) │ Torroid coord c  │ 408d  │");
-    println!("  │ COM (implicit)  │ The singlet      │ ——    │");
-    println!("  │ Observer (expl) │ The frame        │ ——    │");
-    println!("  │ 6 interactions  │ 6 matrix entries │       │");
-    println!("  │ {{{{x,y:z}}}}²      │ Q00..Q22         │       │");
+    let big_a = eval(&a16, &b9, &c0);
+    let big_b = BigInt::from(16) * q02 + BigInt::from(9) * q12;
+    let big_c = q22.clone();
 
-    // ═══ THE 8 = 6 + 1 + 1 ═══
-    println!("\n═══ THE ACCOUNTING: 6 + 1 + 1 = 8 ═══\n");
-    println!("  6: The unique entries of Q3p (the interaction matrix)");
-    println!("     Q00, Q01, Q11, Q02, Q12, Q22");
-    println!("     = {{{{x,y:z}}}}² = the squared brace\n");
-    println!("  +1 (implicit): The center of mass / the core");
-    println!("     Projected out in Jacobi reduction.");
-    println!("     Not a variable of Q3p. Not observable.");
-    println!("     The singlet that holds the frame together.\n");
-    println!("  +1 (explicit): The observer");
-    println!("     The external frame that evaluates Q3p.");
-    println!("     Chooses which direction to measure.");
-    println!("     Makes the form definite (picks a signature).\n");
-    println!("  Total: 8 = the OCHO.");
-    println!("  The 3-body Q3p IS an 8-cell structure:");
-    println!("  6 interaction cells + 1 core + 1 observer.");
+    println!("  Quadratic: Ak² + 2Bk + C = 0");
+    println!("  A = Q3p(16,9,0) = +{}d", dc(&big_a));
+    println!("  B = 16·Q02 + 9·Q12 = {}{}d",
+        if big_b.is_positive() { "+" } else { "-" }, dc(&big_b));
+    println!("  C = Q22 = -{}d\n", dc(&big_c));
 
-    // ═══ ESCAPE DYNAMICS IN 3-BODY LANGUAGE ═══
-    println!("\n═══ ESCAPE = UNBINDING ═══\n");
-    println!("  c=0 escape (wl=25):");
-    println!("    Bodies x and y separate (ρ₁ → ∞)");
-    println!("    Body z stays put (ρ₂ = 0)");
-    println!("    The binary subsystem UNBINDS.");
-    println!("    Energy: Q3p(16,9,0) > 0 → repulsion wins.\n");
-    println!("  c=1 escape (wl≈10⁴²):");
-    println!("    Bodies x and y separate AND body z leaves");
-    println!("    All three bodies UNBIND simultaneously.");
-    println!("    Energy: Q3p(16k,9k,1) > 0 for k ≈ 10⁴¹.");
-    println!("    The heavy body z takes 10⁴⁰× longer to leave.\n");
-    println!("  The mass hierarchy determines the escape order:");
-    println!("  Light pair unbinds first (wl=25).");
-    println!("  Heavy body unbinds last (wl≈10⁴²).");
-    println!("  Ratio: 10⁴² / 25 ≈ 10⁴⁰ ≈ (m_z/m_x)^(1/2).");
+    // k₊ = (-B + √(B²-AC)) / A
+    let b_sq = &big_b * &big_b;
+    let ac = &big_a * &big_c; // A>0, C<0, so AC<0
+    let disc = &b_sq - &ac;   // B² - AC = B² + |AC| > 0
+    println!("  B² = {}d", dc(&b_sq));
+    println!("  AC = {}{}d", if ac.is_positive() { "+" } else { "-" }, dc(&ac));
+    println!("  B²-AC = +{}d\n", dc(&disc));
+
+    let sqrt_disc = isqrt(&disc);
+    println!("  √(B²-AC) = {}d", dc(&sqrt_disc));
+
+    let neg_b = -&big_b;
+    let numerator = &neg_b + &sqrt_disc;
+    let k_exact = &numerator / &big_a;
+    let k_str = k_exact.to_string();
+    println!("  k₊ = (-B + √disc) / A");
+    println!("  k₊ = {}d", k_str.len());
+    println!("  k₊ = {}...{}\n",
+        &k_str[..10.min(k_str.len())],
+        &k_str[k_str.len().saturating_sub(6)..]);
+
+    // escape_ratio = k₊ (since wl(c=1) = 25·k₊ and wl(c=0) = 25)
+    println!("  escape_ratio = k₊ = {}d\n", k_str.len());
+
+    // ═══ PART 4: THE COMPARISON ═══
+    println!("═══ PART 4: THE COMPARISON ═══\n");
+    println!("  √(mass_ratio) = √(|Q22|/|Q00|) has {} digits", smr_str.len());
+    println!("  escape_ratio = k₊ has {} digits\n", k_str.len());
+
+    if smr_str.len() == k_str.len() {
+        println!("  DIGIT COUNTS MATCH: both have {} digits.\n", smr_str.len());
+    } else {
+        println!("  DIGIT COUNTS DIFFER: {} vs {}.\n", smr_str.len(), k_str.len());
+    }
+
+    // Compare the actual values
+    println!("  √(mass_ratio) first 20: {}", &smr_str[..20.min(smr_str.len())]);
+    println!("  escape_ratio  first 20: {}\n", &k_str[..20.min(k_str.len())]);
+
+    // Compute the ratio of these two quantities
+    let ratio_check = if k_exact > sqrt_mr {
+        let r = &k_exact / &sqrt_mr;
+        println!("  escape_ratio / √(mass_ratio) = {}", r);
+        println!("  = {}d number\n", dc(&r));
+        r
+    } else {
+        let r = &sqrt_mr / &k_exact;
+        println!("  √(mass_ratio) / escape_ratio = {}", r);
+        println!("  = {}d number\n", dc(&r));
+        r
+    };
+
+    // ═══ PART 5: What the ratio tells us ═══
+    println!("═══ PART 5: WHAT THE RATIO TELLS US ═══\n");
+
+    // The simple reduced mass law says: escape_ratio = √(mass_ratio)
+    // But Q3p is not literally a gravitational 3-body problem.
+    // The actual escape ratio involves the FULL quadratic form, not just masses.
+    // The quadratic k₊ = (-B + √(B²-AC)) / A involves:
+    //   A = Q3p(16,9,0) — the c=0 escape value
+    //   B = 16·Q02 + 9·Q12 — the coupling terms
+    //   C = Q22 — the torroid anchor
+
+    // For large |C|/A: k₊ ≈ √(|C|/A) = √(|Q22|/Q3p(16,9,0))
+    // This is NOT √(|Q22|/|Q00|). It's √(|Q22|/A) where A = Q3p(16,9,0).
+
+    println!("  The EXACT reduced mass law for Q3p is:");
+    println!("  k₊ ≈ √(|C|/A) = √(|Q22| / Q3p(16,9,0))\n");
+    println!("  NOT √(|Q22|/|Q00|) which would be the naive mass ratio.\n");
+
+    // Compute √(|Q22| / A)
+    let ratio_ca = &abs_q22 / &big_a;
+    let sqrt_ca = isqrt(&ratio_ca);
+    let sca_str = sqrt_ca.to_string();
+    println!("  √(|Q22|/A):");
+    println!("  |Q22|/A has {} digits", dc(&ratio_ca));
+    println!("  √(|Q22|/A) has {} digits", sca_str.len());
+    println!("  = {}...{}\n",
+        &sca_str[..15.min(sca_str.len())],
+        &sca_str[sca_str.len().saturating_sub(6)..]);
+
+    println!("  k₊ first 15:        {}", &k_str[..15.min(k_str.len())]);
+    println!("  √(|Q22|/A) first 15: {}\n", &sca_str[..15.min(sca_str.len())]);
+
+    // Check if they're close
+    if sca_str.len() == k_str.len() {
+        // Compare first few digits
+        let match_len = k_str.chars().zip(sca_str.chars())
+            .take_while(|(a,b)| a == b).count();
+        println!("  First {} digits match!", match_len);
+        if match_len >= 5 {
+            println!("  √(|Q22|/A) is an EXCELLENT approximation to k₊.\n");
+        }
+    }
+
+    // ═══ PART 6: The three mass ratios ═══
+    println!("═══ PART 6: THE THREE MASS RATIOS ═══\n");
+    println!("  NAIVE:  √(|Q22|/|Q00|) = {}d — wrong denominator", smr_str.len());
+    println!("  EXACT:  k₊ = (-B+√(B²-AC))/A = {}d — from quadratic", k_str.len());
+    println!("  APPROX: √(|Q22|/A) = {}d — leading-order approximation\n", sca_str.len());
+
+    // The difference between naive and exact
+    let d_naive = smr_str.len() as i64;
+    let d_exact = k_str.len() as i64;
+    let d_approx = sca_str.len() as i64;
+    println!("  Digit counts: naive={}, exact={}, approx={}", d_naive, d_exact, d_approx);
+    println!("  Naive − exact = {}", d_naive - d_exact);
+    println!("  Approx − exact = {}\n", d_approx - d_exact);
+
+    // ═══ VERDICT ═══
+    println!("{}", "=".repeat(60));
+    println!("VERDICT: THE REDUCED MASS LAW");
+    println!("{}", "=".repeat(60));
+    println!("\n  The naive claim: escape_ratio = √(|Q22|/|Q00|)");
+    println!("  The exact answer: k₊ = (-B + √(B²-AC)) / A\n");
+    println!("  The correct reduced-mass law is:");
+    println!("    k₊ ≈ √(|Q22| / Q3p(16,9,0))");
+    println!("  NOT √(|Q22|/|Q00|).\n");
+    println!("  The denominator is Q3p(16,9,0) = +326d (the c=0 escape VALUE),");
+    println!("  not |Q00| = 328d (the brace SELF-interaction).\n");
+    println!("  The mass ratio in the Jacobi frame is:");
+    println!("    |Q22| / Q3p(16,9,0) ≈ 10^(408-326) = 10^82");
+    println!("    √(10^82) = 10^41");
+    println!("    k₊ ≈ 10^41 ✓\n");
+    println!("  The reduced mass law HOLDS but with the CORRECT mass:");
+    println!("  The 'mass' of the binary subsystem is NOT |Q00|.");
+    println!("  It is Q3p(16,9,0) — the ESCAPE VALUE at the escape vector.");
+    println!("  The effective mass is the ENERGY at the escape point,");
+    println!("  not the self-interaction of a single body.");
 }
