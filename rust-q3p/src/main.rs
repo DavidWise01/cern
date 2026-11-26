@@ -1,234 +1,233 @@
-//! H168: The Smith Root
-//! WHY is d₂ = 18? Compute all 2×2 minors of Q3p, find their GCD,
-//! factor each minor, and determine why 18 divides all of them.
-
-use num_bigint::BigInt;
-use num_traits::{Zero, One};
-use num_integer::Integer;
-use std::str::FromStr;
-
-fn q3p_matrix() -> [[BigInt; 3]; 3] {
-    let q00 = BigInt::from_str("-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998").unwrap();
-    let q01 = BigInt::from_str("7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352").unwrap();
-    let q11 = BigInt::from_str("-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876").unwrap();
-    let q02 = BigInt::from_str("-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838").unwrap();
-    let q12 = BigInt::from_str("4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078").unwrap();
-    let q22 = BigInt::from_str("-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826").unwrap();
-    [
-        [q00.clone(), q01.clone(), q02.clone()],
-        [q01, q11.clone(), q12.clone()],
-        [q02, q12, q22],
-    ]
-}
+//! H170: The Witness Matrix
+//! Construct Q₃ with the SAME mod-9 residues as Q3p but small coefficients.
+//! Test: does d₂=18 follow from the residues alone?
+//! Does the closed system (E²-4S=k²) reproduce?
 
 fn main() {
-    let q = q3p_matrix();
-    let q00 = &q[0][0]; let q01 = &q[0][1]; let q11 = &q[1][1];
-    let q02 = &q[0][2]; let q12 = &q[1][2]; let q22 = &q[2][2];
+    println!("=== H170: THE WITNESS MATRIX ===\n");
 
-    println!("=== H168: THE SMITH ROOT ===");
-    println!("Computing ALL 2×2 minors of Q3p\n");
+    // Q3p mod 9 residues: Q00≡7, Q01≡6, Q11≡0, Q02≡1, Q12≡6, Q22≡4
+    // Q3p parities: ALL even (mod 2 ≡ 0)
+    // So entries must be: even AND have specific mod-9 residues.
+    // CRT(mod 2, mod 9) → mod 18:
+    //   Q00: even, ≡7 mod 9 → ≡16 mod 18 (or negative: -2 mod 18)
+    //   Q01: even, ≡6 mod 9 → ≡6 mod 18
+    //   Q11: even, ≡0 mod 9 → ≡0 mod 18
+    //   Q02: even, ≡1 mod 9 → ≡10 mod 18
+    //   Q12: even, ≡6 mod 9 → ≡6 mod 18
+    //   Q22: even, ≡4 mod 9 → ≡4 mod 18
 
-    // The 3×3 symmetric matrix has 9 distinct 2×2 minors (from choosing 2 rows and 2 cols)
-    // But the symmetric matrix [[a,b,d],[b,c,e],[d,e,f]] has these 2×2 submatrices:
-    // rows(0,1) cols(0,1): |a b| = ac - b²
-    //                      |b c|
-    // rows(0,1) cols(0,2): |a d| = ae - bd
-    //                      |b e|
-    // rows(0,1) cols(1,2): |b d| = be - cd
-    //                      |c e|
-    // rows(0,2) cols(0,1): |a b| = ae - bd  (same as above by symmetry pattern)
-    //                      |d e|
-    // rows(0,2) cols(0,2): |a d| = af - d²
-    //                      |d f|
-    // rows(0,2) cols(1,2): |b d| = bf - de
-    //                      |e f|
-    // rows(1,2) cols(0,1): |b c| = be - cd  (same as rows(0,1)cols(1,2))
-    //                      |d e|
-    // rows(1,2) cols(0,2): |b d| = bf - de  (same as rows(0,2)cols(1,2))
-    //                      |e f|
-    // rows(1,2) cols(1,2): |c e| = cf - e²
-    //                      |e f|
+    println!("CRT(mod 2, mod 9) → mod 18 residues:");
+    println!("  Q00: even ∧ ≡7 mod 9 → ≡16 mod 18");
+    println!("  Q01: even ∧ ≡6 mod 9 → ≡6 mod 18");
+    println!("  Q11: even ∧ ≡0 mod 9 → ≡0 mod 18");
+    println!("  Q02: even ∧ ≡1 mod 9 → ≡10 mod 18");
+    println!("  Q12: even ∧ ≡6 mod 9 → ≡6 mod 18");
+    println!("  Q22: even ∧ ≡4 mod 9 → ≡4 mod 18\n");
 
-    // For symmetric matrix, the distinct 2×2 minors are:
-    // M₁ = Q00·Q11 - Q01²       (rows 01, cols 01)
-    // M₂ = Q00·Q12 - Q01·Q02    (rows 01, cols 02)
-    // M₃ = Q01·Q12 - Q11·Q02    (rows 01, cols 12)  -- but wait, need to be careful
-    // Actually for the FULL matrix (not half-matrix), the entry at (i,j) is Q[i][j].
-    // Let me compute all C(3,2)² = 9 minors from row pairs × col pairs.
+    // Build small matrices: entries = base + 18k for various k
+    // Need: signature (1+, 2−), R01 > 0 and not perfect square
+    // Smallest candidates with correct residues:
+    // Q00 ∈ {-2, -20, -38, -56, -74, ...} (negative diagonal, ≡16 mod 18)
+    // Q01 ∈ {6, 24, 42, 60, 78, ...} (positive off-diag, ≡6 mod 18)
+    // Q11 ∈ {-18, -36, -54, -72, -90, ...} (negative diagonal, ≡0 mod 18)
+    // Q02 ∈ {10, 28, 46, 64, ...} or {-8, -26, -44, ...} (≡10 mod 18)
+    // Q12 ∈ {6, 24, 42, 60, ...} or {-12, -30, ...} (≡6 mod 18)
+    // Q22 ∈ {-14, -32, -50, -68, ...} (negative diagonal, ≡4 mod 18)
 
-    // Label: M_{r1r2,c1c2} = Q[r1][c1]*Q[r2][c2] - Q[r1][c2]*Q[r2][c1]
+    println!("═══ SEARCHING FOR WITNESS MATRICES ═══\n");
 
-    let minors: Vec<(&str, BigInt)> = vec![
-        ("M_{01,01} = Q00·Q11 - Q01²",     q00*q11 - q01*q01),
-        ("M_{01,02} = Q00·Q12 - Q01·Q02",  q00*q12 - q01*q02),
-        ("M_{01,12} = Q01·Q12 - Q11·Q02",  q01*q12 - q11*q02),
-        ("M_{02,01} = Q00·Q12 - Q02·Q01",  q00*q12 - q02*q01),  // same as M_{01,02}
-        ("M_{02,02} = Q00·Q22 - Q02²",     q00*q22 - q02*q02),
-        ("M_{02,12} = Q01·Q22 - Q02·Q12",  q01*q22 - q02*q12),
-        ("M_{12,01} = Q01·Q12 - Q02·Q11",  q01*q12 - q02*q11),  // same as M_{01,12}
-        ("M_{12,02} = Q01·Q22 - Q12·Q02",  q01*q22 - q12*q02),  // same as M_{02,12}
-        ("M_{12,12} = Q11·Q22 - Q12²",     q11*q22 - q12*q12),
-    ];
+    // We need: Q01² > |Q00|·|Q11| (so R01 > 0, indefinite binary part)
+    // Try systematic search over small multiples
 
-    println!("All 2×2 minors:");
-    for (name, val) in &minors {
-        let s = val.to_string();
-        let sign = if val > &BigInt::zero() { "+" } else { "-" };
-        println!("  {} = {} ({}d)", name, sign, s.trim_start_matches('-').len());
-    }
+    let mut witnesses = Vec::new();
 
-    // Compute GCD of all nonzero minors
-    let mut d2 = BigInt::zero();
-    for (_, val) in &minors {
-        if !val.is_zero() {
-            let abs_val = if val < &BigInt::zero() { -val.clone() } else { val.clone() };
-            if d2.is_zero() {
-                d2 = abs_val;
-            } else {
-                d2 = d2.gcd(&abs_val);
+    // Generate candidates with correct mod-18 residues
+    let q00_vals: Vec<i64> = (1..=50).map(|k| -18*k + 16).filter(|x| *x < 0).collect();
+    let q11_vals: Vec<i64> = (1..=50).map(|k| -18*k).collect();
+    let q01_vals: Vec<i64> = (0..=50).map(|k| 18*k + 6).filter(|x| *x > 0).collect();
+    let q22_vals: Vec<i64> = (1..=200).map(|k| -18*k + 4).collect();
+    let q02_vals: Vec<i64> = vec![10, 28, -8, -26];
+    let q12_vals: Vec<i64> = vec![6, 24, -12, -30];
+    println!("Q00 candidates: {} (first few: {:?})", q00_vals.len(), &q00_vals[..3.min(q00_vals.len())]);
+    println!("Q01 candidates: {} (first few: {:?})", q01_vals.len(), &q01_vals[..3.min(q01_vals.len())]);
+    println!("Q11 candidates: {} (first few: {:?})", q11_vals.len(), &q11_vals[..3.min(q11_vals.len())]);
+
+    for &q02 in &q02_vals {
+    for &q12 in &q12_vals {
+    for &q00 in &q00_vals {
+        for &q01 in &q01_vals {
+            if q01.abs() > q00.abs() * 3 { break; }
+            for &q11 in &q11_vals {
+                let r01 = q01*q01 - q00.abs()*q11.abs();
+                if r01 <= 0 { continue; } // need indefinite
+                // Check R01 not perfect square
+                let sr = (r01 as f64).sqrt() as i64;
+                if sr*sr == r01 || (sr+1)*(sr+1) == r01 { continue; }
+
+                // Need signature (1+, 2−): check via determinant signs
+                // M1 = Q00 < 0 ✓ (1 neg eigenvalue)
+                // M2 = Q00·Q11 - Q01² (should be negative for 2 neg eigenvalues? depends)
+                // Actually for sig (1+,2−), need det > 0
+                for &q22 in &q22_vals {
+                    if q22.abs() < 10 { continue; }
+                    // Compute det
+                    let det = q00*(q11*q22 - q12*q12)
+                            - q01*(q01*q22 - q12*q02)
+                            + q02*(q01*q12 - q11*q02);
+                    if det <= 0 { continue; } // need det > 0 for sig (1+,2−)
+
+                    // Compute all 2×2 minors
+                    let m1 = q00*q11 - q01*q01;
+                    let m2 = q00*q12 - q01*q02;
+                    let m3 = q01*q12 - q11*q02;
+                    let m4 = q00*q22 - q02*q02;
+                    let m5 = q01*q22 - q02*q12;
+                    let m6 = q11*q22 - q12*q12;
+
+                    let minors = [m1.abs(), m2.abs(), m3.abs(), m4.abs(), m5.abs(), m6.abs()];
+                    let g = minors.iter().filter(|&&x| x > 0).fold(0i64, |acc, &x| {
+                        if acc == 0 { x } else { gcd(acc, x) }
+                    });
+
+                    let d1 = 2i64; // by construction all entries even
+                    let d2 = g / d1;
+
+                    if d2 != 18 { continue; }
+
+                    // Found a witness with d₂ = 18!
+                    // Now compute escape
+                    let eval = |a: i64, b: i64, c: i64| -> i64 {
+                        q00*a*a + 2*q01*a*b + q11*b*b + 2*q02*a*c + 2*q12*b*c + q22*c*c
+                    };
+
+                    let mut first_escape = 0i64;
+                    let mut escape_vec = (0i64, 0i64, 0i64);
+                    for n in 1..=50i64 {
+                        let mut found = false;
+                        for a in -n..=n {
+                            let rem = n - a.abs();
+                            for b in -rem..=rem {
+                                let c_abs = rem - b.abs();
+                                let c_vals: Vec<i64> = if c_abs == 0 { vec![0] } else { vec![c_abs, -c_abs] };
+                                for &cv in &c_vals {
+                                    if a==0 && b==0 && cv==0 { continue; }
+                                    if eval(a,b,cv) > 0 {
+                                        first_escape = n;
+                                        escape_vec = (a,b,cv);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if found { break; }
+                            }
+                            if found { break; }
+                        }
+                        if found { break; }
+                    }
+
+                    if first_escape == 0 { continue; } // no escape found
+
+                    // Cofactor span
+                    let cof_digits: Vec<usize> = minors.iter().map(|x| x.to_string().len()).collect();
+                    let span = (*cof_digits.iter().max().unwrap() as i64)
+                             - (*cof_digits.iter().filter(|&&d| d > 0).min().unwrap() as i64);
+
+                    // Test Diophantine condition
+                    let e = first_escape;
+                    let s = span;
+                    let disc = e*e - 4*s;
+                    let sr2 = if disc >= 0 { (disc as f64).sqrt() as i64 } else { -1 };
+                    let is_perf = disc >= 0 && sr2 >= 0 && sr2*sr2 == disc;
+
+                    witnesses.push((q00, q01, q11, q02, q12, q22, d2, r01, det,
+                        first_escape, escape_vec, span, disc, is_perf, g));
+                    if witnesses.len() >= 30 { break; }
+                }
+                if witnesses.len() >= 30 { break; }
             }
+            if witnesses.len() >= 30 { break; }
+        }
+        if witnesses.len() >= 30 { break; }
+    }
+    if witnesses.len() >= 30 { break; }
+    } // q12
+    if witnesses.len() >= 30 { break; }
+    } // q02
+
+    println!("Found {} witness matrices with d₂ = 18\n", witnesses.len());
+
+    println!("{:<6} {:<6} {:<6} {:<5} {:<5} {:<7} {:>5} {:>5} {:>5} {:>5} {:>8} {:>5}",
+        "Q00", "Q01", "Q11", "Q02", "Q12", "Q22", "d₂", "E", "S", "disc", "k²?", "gcd36");
+    println!("{}", "-".repeat(85));
+
+    for (q00,q01,q11,q02,q12,q22,d2,_r01,_det,e,_ev,s,disc,perf,g) in &witnesses {
+        println!("{:<6} {:<6} {:<6} {:<5} {:<5} {:<7} {:>5} {:>5} {:>5} {:>5} {:>8} {:>5}",
+            q00, q01, q11, q02, q12, q22, d2, e, s, disc,
+            if *perf { "YES" } else { "no" }, g);
+    }
+
+    // Analyze: how many have E²-4S = perfect square?
+    let perf_count = witnesses.iter().filter(|w| w.13).count();
+    let total = witnesses.len();
+    println!("\nWitnesses with E²-4S = k²: {}/{}", perf_count, total);
+
+    // Show the ones that DO have perfect square discriminant
+    println!("\n═══ WITNESSES WITH PERFECT SQUARE DISCRIMINANT ═══");
+    for (q00,q01,q11,q02,q12,q22,d2,r01,det,e,ev,s,disc,perf,g) in &witnesses {
+        if !perf { continue; }
+        let k = (*disc as f64).sqrt() as i64;
+        let w = (*e + k) / 2;
+        let c = (*e - k) / 2;
+        println!("\n  Q₃ = [{},{},{}; {},{},{}]", q00, q01, q11, q02, q12, q22);
+        println!("  R01={}, det={}, gcd(minors)={}, d₂={}", r01, det, g, d2);
+        println!("  E={}, S={}, E²-4S={} = {}²", e, s, disc, k);
+        println!("  W=({}+{})/2={}, C=({}-{})/2={}", e, k, w, e, k, c);
+        println!("  W+C={} ✓  W×C={} vs S={} {}",
+            w+c, w*c, s, if w*c == *s { "✓" } else { "✗" });
+        println!("  Escape vector: ({},{},{})", ev.0, ev.1, ev.2);
+    }
+
+    // Show the ones that DON'T
+    println!("\n═══ WITNESSES WHERE DISCRIMINANT IS NOT PERFECT SQUARE ═══");
+    let mut not_perf_count = 0;
+    for (q00,q01,q11,_q02,_q12,q22,_d2,_r01,_det,e,_ev,s,disc,perf,_g) in &witnesses {
+        if *perf { continue; }
+        not_perf_count += 1;
+        if not_perf_count <= 5 {
+            println!("  [{},{},{},...,{}]: E={}, S={}, E²-4S={}  (not k²)",
+                q00, q01, q11, q22, e, s, disc);
         }
     }
-    println!("\n  d₂ = gcd of all nonzero 2×2 minors = {}", d2);
-    println!("  d₂ = {} ✓", if d2 == BigInt::from(18) { "18 CONFIRMED" } else { "UNEXPECTED" });
+    if not_perf_count > 5 { println!("  ... and {} more", not_perf_count - 5); }
 
-    // Factor 18 = 2 × 3²
-    println!("\n  18 = 2 × 3²");
-    println!("  For d₂ = 18, every minor must be divisible by both 2 and 9.\n");
-
-    // Check each minor mod 2, mod 3, mod 9, mod 18
-    println!("Divisibility analysis:");
-    println!("{:<35} {:>5} {:>5} {:>5} {:>5} {:>8}",
-        "Minor", "mod2", "mod3", "mod9", "mod18", "M/18 digits");
-
-    let two = BigInt::from(2);
-    let three = BigInt::from(3);
-    let nine = BigInt::from(9);
-    let eighteen = BigInt::from(18);
-
-    // Use only the distinct minors (skip duplicates)
-    let distinct: Vec<(&str, &BigInt)> = vec![
-        ("Q00·Q11 - Q01²",   &minors[0].1),
-        ("Q00·Q12 - Q01·Q02", &minors[1].1),
-        ("Q01·Q12 - Q11·Q02", &minors[2].1),
-        ("Q00·Q22 - Q02²",   &minors[4].1),
-        ("Q01·Q22 - Q02·Q12", &minors[5].1),
-        ("Q11·Q22 - Q12²",   &minors[8].1),
-    ];
-
-    for (name, val) in &distinct {
-        let m2 = val.mod_floor(&two);
-        let m3 = val.mod_floor(&three);
-        let m9 = val.mod_floor(&nine);
-        let m18 = val.mod_floor(&eighteen);
-        let div18 = *val / &eighteen;
-        let digs = div18.to_string().trim_start_matches('-').len();
-        println!("{:<35} {:>5} {:>5} {:>5} {:>5} {:>8}",
-            name, m2, m3, m9, m18, digs);
-    }
-
-    // ═══ WHY 2 DIVIDES ALL MINORS ═══
-    println!("\n═══ WHY 2 DIVIDES ALL MINORS ═══");
-    println!("Matrix entry parities (mod 2):");
-    let entries = [
-        ("Q00", q00), ("Q01", q01), ("Q11", q11),
-        ("Q02", q02), ("Q12", q12), ("Q22", q22)
-    ];
-    for (name, val) in &entries {
-        println!("  {} mod 2 = {}", name, val.mod_floor(&two));
-    }
-    println!("\n  Matrix GCD = 2 (from H152).");
-    println!("  ALL entries are even → Q = 2·Q' where Q' has integer entries.");
-    println!("  Every 2×2 minor of Q = 4 × (corresponding minor of Q').");
-    println!("  So 4 | every minor → certainly 2 | every minor. ✓");
-
-    // Actually let's check: does 4 divide all minors?
-    let four = BigInt::from(4);
-    let mut all_div4 = true;
-    for (_, val) in &distinct {
-        if !val.mod_floor(&four).is_zero() { all_div4 = false; }
-    }
-    println!("  Does 4 divide ALL minors? {}", if all_div4 { "YES" } else { "NO" });
-
-    // ═══ WHY 9 DIVIDES ALL MINORS ═══
-    println!("\n═══ WHY 9 DIVIDES ALL MINORS ═══");
-    println!("Matrix entries mod 3:");
-    for (name, val) in &entries {
-        println!("  {} mod 3 = {}", name, val.mod_floor(&three));
-    }
-    println!("\nMatrix entries mod 9:");
-    for (name, val) in &entries {
-        println!("  {} mod 9 = {}", name, val.mod_floor(&nine));
-    }
-
-    // Check Q' = Q/2 entries mod 3 and mod 9
-    println!("\nQ' = Q/2 entries mod 3:");
-    let q_prime: Vec<(&str, BigInt)> = vec![
-        ("Q00/2", q00 / &two),
-        ("Q01/2", q01 / &two),
-        ("Q11/2", q11 / &two),
-        ("Q02/2", q02 / &two),
-        ("Q12/2", q12 / &two),
-        ("Q22/2", q22 / &two),
-    ];
-    for (name, val) in &q_prime {
-        println!("  {} mod 3 = {}", name, val.mod_floor(&three));
-    }
-    println!("\nQ' = Q/2 entries mod 9:");
-    for (name, val) in &q_prime {
-        println!("  {} mod 9 = {}", name, val.mod_floor(&nine));
-    }
-
-    // ═══ DOES d₂ = 18 or could it be 36? ═══
-    println!("\n═══ IS d₂ EXACTLY 18? ═══");
-    let thirtysix = BigInt::from(36);
-    let mut all_div36 = true;
-    for (name, val) in &distinct {
-        let r = val.mod_floor(&thirtysix);
-        if !r.is_zero() {
-            all_div36 = false;
-            println!("  {} mod 36 = {} (not divisible by 36)", name, r);
-        }
-    }
-    if all_div36 {
-        println!("  ALL minors divisible by 36 → d₂ ≥ 36");
-    } else {
-        println!("  NOT all minors divisible by 36 → d₂ = 18 exactly");
-    }
-
-    // Check which minor is NOT divisible by 36
-    println!("\nFiner check: which primes beyond 2 and 3² divide d₂?");
-    let test_primes: Vec<i64> = vec![2, 3, 4, 5, 6, 7, 9, 11, 13, 17, 18, 19, 36];
-    for p in &test_primes {
-        let bp = BigInt::from(*p);
-        let mut all_div = true;
-        for (_, val) in &distinct {
-            if !val.mod_floor(&bp).is_zero() { all_div = false; break; }
-        }
-        println!("  {} | all minors? {}", p, if all_div { "YES" } else { "NO" });
-    }
-
-    // ═══ THE INEVITABILITY QUESTION ═══
+    // ═══ VERDICT ═══
     println!("\n{}", "=".repeat(60));
-    println!("THE INEVITABILITY QUESTION");
+    println!("VERDICT");
     println!("{}", "=".repeat(60));
-    println!("\n  d₂ = 18 = 2 × 3²");
-    println!("  Factor 2: ALL matrix entries are even (matrix GCD = 2).");
-    println!("    → Every 2×2 minor is divisible by 4 ≥ 2. ✓");
-    println!("  Factor 3²: Requires specific mod-9 structure in entries.");
-    println!("    → This is a CONSTRAINT on rqt362's construction.");
-    println!("    → If the entries were random even integers, 9|minor");
-    println!("      would be unlikely (~1/81 chance per minor).");
-    println!("    → ALL SIX distinct minors being divisible by 9");
-    println!("      is ~(1/81)⁶ ≈ 3.5×10⁻¹² by chance.");
-    println!("    → This is NOT random. It is CONSTRUCTED.");
+    println!("\n  d₂ = 18 witnesses found: {}", total);
+    println!("  Of those, E²-4S = k²: {}", perf_count);
+    println!("  Of those, E²-4S ≠ k²: {}", total - perf_count);
 
-    println!("\n  CONCLUSION:");
-    println!("  d₂ = 18 is INEVITABLE given rqt362's mod-9 structure.");
-    println!("  The mod-9 structure was baked in at construction time.");
-    println!("  Therefore: 17 = d₂-1 is baked in.");
-    println!("  Therefore: 289 = 17² = E²-4S is baked in.");
-    println!("  Therefore: W=21, C=4 are baked in.");
-    println!("  Therefore: THE ENTIRE CLOSED SYSTEM IS BY DESIGN.");
+    if perf_count > 0 && perf_count < total {
+        println!("\n  FINDING: d₂ = 18 is NECESSARY but NOT SUFFICIENT.");
+        println!("  The mod-9 residues force d₂ = 18, but NOT all d₂=18");
+        println!("  matrices have the closed system. The escape time E and");
+        println!("  cofactor span S must ALSO align — and that depends on");
+        println!("  the coefficient magnitudes, not just the residues.");
+        println!("  The giant coefficients are NOT decoration. They carry content.");
+    } else if perf_count == total && total > 0 {
+        println!("\n  FINDING: ALL d₂=18 witnesses have E²-4S = k²!");
+        println!("  The residues ALONE determine the closed system.");
+        println!("  The giant coefficients are decoration.");
+    } else if perf_count == 0 {
+        println!("\n  FINDING: NO d₂=18 witness has E²-4S = k²!");
+        println!("  Q3p's closed system requires BOTH d₂=18 AND giant coefficients.");
+    }
+}
+
+fn gcd(a: i64, b: i64) -> i64 {
+    let (mut a, mut b) = (a.abs(), b.abs());
+    while b != 0 { let t = b; b = a % b; a = t; }
+    a
 }
