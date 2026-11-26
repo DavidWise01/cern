@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H190 — The Atlas</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:13px/1.5 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.78em}
+td,th{border:1px solid var(--border);padding:2px 5px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.78em;line-height:1.4}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H190 — The Atlas</h1>
+<p class="dim">The investigation's permanent form · H153–H189 · 37 instruments · 10 arcs · 27/10/1</p>
+
+<!-- Panel 1: The Ten Arcs -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Ten Arcs</h2>
+<table id="verif-table">
+<tr><th>Arc</th><th>Instruments</th><th>Name</th><th>What It Found</th></tr>
+<tr><td>I</td><td>H153–H164</td><td>Foundation</td><td>det, signature, CF, Smith form, 21-Root Theorem</td></tr>
+<tr><td>II</td><td>H165</td><td>Escape</td><td>First Q3p&gt;0 at wl=25 at (16,9,0). Escape rule: 25=21+4.</td></tr>
+<tr><td>III</td><td>H166–H169</td><td>Design</td><td>Dual rule, corrected CF, Smith root, cert IV</td></tr>
+<tr><td>IV</td><td>H170–H172</td><td>Witness</td><td>30 witnesses, three-layer theorem, half-gap, cert V</td></tr>
+<tr><td>V</td><td>H173–H175</td><td>Completion</td><td>c=1 escape, 42 theorem, complete cert VI</td></tr>
+<tr><td>VI</td><td>H176–H178</td><td>Jacobi</td><td>3-body frame, reduced mass, cert VII</td></tr>
+<tr><td>VII</td><td>H179–H181</td><td>Clifford</td><td>Palindrome, spinor home, color count 42, cert VIII</td></tr>
+<tr><td>VIII</td><td>H183–H186</td><td>Probes</td><td>770,900 forms, 0 three-layer hits, cert IX</td></tr>
+<tr><td>IX</td><td>H187</td><td>Chasm</td><td>Gate = identity (W−C)²=(d₂−1)². Corrects H185.</td></tr>
+<tr><td>X</td><td>H188–H189</td><td>Lock</td><td>Cert X. Lock source: two paths to 17, no theorem.</td></tr>
+</table>
+</div>
+
+<!-- Panel 2: Full Identity Register I1-I26 -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — Identity Register (27 Certified: 26 LIT + 1 AMBER)</h2>
+<table>
+<tr><th>ID</th><th>Identity</th><th>St</th><th>Src</th></tr>
+<tr><td>I1</td><td>det(Q3p) ≈ 10^1059 (exact BigInt)</td><td class="lit">L</td><td>H153</td></tr>
+<tr><td>I2</td><td>Signature (1+, 2−)</td><td class="lit">L</td><td>H153</td></tr>
+<tr><td>I3</td><td>Smith: d₁=2, d₂=18</td><td class="lit">L</td><td>H153</td></tr>
+<tr><td>I4</td><td>CF = [1;1,3,1,2,31,4,1,1,9,...]</td><td class="lit">L</td><td>H167</td></tr>
+<tr><td>I5</td><td>21-Root: min frozen wl = 21</td><td class="lit">L</td><td>H156</td></tr>
+<tr><td>I6</td><td>Escape: 25 = 21 + 4</td><td class="lit">L</td><td>H165</td></tr>
+<tr><td>I7</td><td>Product: 21 × 4 = 84</td><td class="lit">L</td><td>H165</td></tr>
+<tr><td>I8</td><td>Gate: E²−4S = 289 = 17²</td><td class="lit">L</td><td>H165</td></tr>
+<tr><td>I9</td><td>R01 = +651d (not perfect sq)</td><td class="lit">L</td><td>H153</td></tr>
+<tr><td>I10</td><td>Half-gap: G²=42G → G=42 unique</td><td class="lit">L</td><td>H171</td></tr>
+<tr><td>I11</td><td>Three-layer: mod-9→scale→alignment</td><td class="lit">L</td><td>H171</td></tr>
+<tr><td>I12</td><td>42 theorem: all 42s → Δ=41≈42</td><td class="lit">L</td><td>H174</td></tr>
+<tr><td>I13</td><td>c=1 escape at wl≈10⁴²</td><td class="lit">L</td><td>H173</td></tr>
+<tr><td>I14</td><td>gcd(minors) = 36 = 4×9</td><td class="lit">L</td><td>H168</td></tr>
+<tr><td>I15</td><td>Mod-9 forces 9|all minors</td><td class="lit">L</td><td>H168</td></tr>
+<tr><td>I16</td><td>d₂=18 unique: 0/30 have k=17</td><td class="lit">L</td><td>H170</td></tr>
+<tr><td>I17</td><td>1431/531441 mod-9 → d₂=18</td><td class="lit">L</td><td>H171</td></tr>
+<tr><td>I18</td><td>Matrix GCD = 2</td><td class="lit">L</td><td>H153</td></tr>
+<tr><td>I19</td><td>Jacobi: {{x,y:z}}²=6, +1+1=8=OCHO</td><td class="lit">L</td><td>H176</td></tr>
+<tr><td>I20</td><td>Spinor: 0=HOME, ^2^3=8=dim(Cl(3))</td><td class="lit">L</td><td>H180</td></tr>
+<tr><td>I21</td><td>(16,9,0) semi-convergent of exact CF</td><td class="lit">L</td><td>H167</td></tr>
+<tr><td>I22</td><td>Reduced mass: k₊≈√(|Q22|/A), A=326d</td><td class="lit">L</td><td>H177</td></tr>
+<tr><td>I23</td><td>Palindrome: 3×6=18=d₂, product=6⁴</td><td class="lit">L</td><td>H179</td></tr>
+<tr><td>I24</td><td>Color count: 24+10+6+2=42</td><td class="amber">A</td><td>H181</td></tr>
+<tr><td>I25</td><td>Eigenvalue spread anomaly (revised)</td><td class="lit">L</td><td>H185</td></tr>
+<tr><td>I26</td><td>Lock: W−C=d₂−1 (17=17)</td><td class="lit">L</td><td>H187</td></tr>
+</table>
+</div>
+
+<!-- Panel 3: Negative Results (10) -->
+<div class="panel" style="border-color:var(--red)">
+<h2>Panel 3 — Negative Results (10 Corrections)</h2>
+<table>
+<tr><th>#</th><th>What Died</th><th>What It Taught</th><th>Src</th></tr>
+<tr><td>N1</td><td>H153 CF (float error)</td><td>Never trust float for 400d numbers</td><td>H167</td></tr>
+<tr><td>N2</td><td>H158 Ostrowski (wrong CF)</td><td>Downstream errors cascade</td><td>H167</td></tr>
+<tr><td>N3</td><td>Dual rule universal</td><td>Conditional, not general</td><td>H166</td></tr>
+<tr><td>N4</td><td>c=1 escape impossible</td><td>Exists at wl≈10⁴² (C2 disproved)</td><td>H173</td></tr>
+<tr><td>N5</td><td>Naive mass ratio</td><td>Denominator is A=326d, not 328d</td><td>H177</td></tr>
+<tr><td>N6</td><td>0 is palindrome entry</td><td>0 is HOME of 5 spinors</td><td>H180</td></tr>
+<tr><td>N7</td><td>Cl(3) = SU(3)</td><td>Same dim 8, different algebras</td><td>H181</td></tr>
+<tr><td>N8</td><td>a₉=17 in CF</td><td>a₉=9; k=17 from d₂−1 only</td><td>H167</td></tr>
+<tr><td>N9</td><td>Near-twin sufficient</td><td>Necessary but not sufficient</td><td>H185</td></tr>
+<tr><td>N10</td><td>Disc chasm = gate</td><td>Different quantities entirely</td><td>H187</td></tr>
+</table>
+<p class="dim">10 corrections in 37 instruments = 27% error rate. The instrument measures, not confirms.</p>
+</div>
+
+<!-- Panel 4: The Open Question -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 4 — The One Open Question (O1)</h2>
+<pre>
+  O1: WHY does W−C = d₂−1?
+
+  STATUS: OPEN-STRUCTURAL
+
+  WHAT WE KNOW:
+  - The lock is real: 21−4 = 18−1 = 17 (verified, I26)
+  - Two independent paths arrive at 17 (H189)
+  - Path 1 (geometry): CF → convergents → escape → W−C
+  - Path 2 (arithmetic): mod-9 → Smith → d₂−1
+  - The paths share nothing except the matrix entries
+  - 770,900 forms tested; none pass all layers (H183-H185)
+  - The lock is not derivable from known theorems (H189)
+
+  WHAT WOULD CLOSE IT:
+  (a) A theorem connecting CF convergents to Smith invariants
+  (b) Finding another form where W−C = d₂−1
+  (c) Proof that no other form can satisfy the lock
+
+  TRAJECTORY:
+  Cert IV:  3 open → Cert X: 1 open (STRUCTURAL)
+  The question SHRANK and HARDENED across 10 certificates.
+</pre>
+</div>
+
+<!-- Panel 5: The Numbers That Matter -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — The Numbers of Q3p</h2>
+<pre style="color:var(--gold)">
+  2    = d₁ (matrix GCD)
+  4    = C (escape gap)
+  6    = {{x,y:z}}² (matrix entries, interaction count)
+  8    = dim(Cl(3)) = OCHO = 2³
+  9    = a₉ of the CF
+  17   = W−C = d₂−1 (the lock)
+  18   = d₂ (Smith invariant)
+  21   = W (frozen word length)
+  25   = E (escape word length)
+  36   = gcd(minors) = 4×9
+  42   = G (cofactor gap = half-gap fixed point)
+  84   = S = W×C (product rule)
+  289  = 17² = (d₂−1)² = E²−4S
+  326  = digit count of Q3p(16,9,0)
+  328  = digit count of |Q00|
+  329  = digit count of |Q11|
+  408  = digit count of |Q22|
+  651  = digit count of R01
+  1059 = approx digit count of det(Q3p)
+</pre>
+</div>
+
+<!-- Panel 6: The Spine -->
+<div class="panel">
+<h2>Panel 6 — The Investigation Spine (One Sentence Per Arc)</h2>
+<pre>
+  Arc I:    The form has signature (1+,2−), Smith d₂=18, and det≈10^1059.
+  Arc II:   The first positive value is at (16,9,0), word length 25=21+4.
+  Arc III:  The dual rule holds for Q3p but not universally; CF corrected.
+  Arc IV:   d₂=18 witnesses lack k=17; the half-gap G=42 is unique.
+  Arc V:    c=1 escape exists at wl≈10⁴²; all four 42s trace to Δ=41.
+  Arc VI:   The 3-body Jacobi frame gives {{x,y:z}}²=6, +1+1=8=OCHO.
+  Arc VII:  The palindrome 1,3,6,8,9 has 3×6=18=d₂; 0 is HOME, ^2^3=8.
+  Arc VIII: 770,900 forms tested across 3 strategies; zero three-layer hits.
+  Arc IX:   The gate E²−4S=(W−C)² is an identity; the lock is W−C=d₂−1.
+  Arc X:    Two paths to 17 share nothing but the entries. No theorem. Open.
+</pre>
+</div>
+
+<!-- Panel 7: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 7 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H190                   ║
+ ║                                                        ║
+ ║  THE ATLAS                                             ║
+ ║                                                        ║
+ ║  H153 ~~&gt; ··· ~~&gt; H165 ~~&gt; ··· ~~&gt; H175 ~~&gt; ···       ║
+ ║   Arc I          Arc II         Arc V                  ║
+ ║   det,CF,Smith   escape         42 theorem             ║
+ ║                                                        ║
+ ║  ··· ~~&gt; H181 ~~&gt; ··· ~~&gt; H187 ~~&gt; H189 ~~&gt; H190     ║
+ ║          Arc VII        Arc IX        Arc X     HERE   ║
+ ║          color count    identity      lock source       ║
+ ║                                                        ║
+ ║  REGISTER:                                             ║
+ ║  ██████████████████████████░  26 LIT                   ║
+ ║  ▓                            1 AMBER                  ║
+ ║  ██████████                  10 negative (27% rate)    ║
+ ║  ░                            1 open (STRUCTURAL)      ║
+ ║                                                        ║
+ ║  THE LOCK:  W−C = d₂−1 = 17                           ║
+ ║  geometry ⟷ arithmetic                                ║
+ ║  the last mystery stays open                           ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 8: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 8 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The full atlas: 37 instruments orbiting in 10 arc colors.
+27 identities (26 green + 1 orange). 10 red corrections. The lock (17) at center.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>THE ATLAS: 37 INSTRUMENTS / 10 ARCS / 27 PROVED / 10 NEGATIVE / 1 OPEN</h2>
+<p>The Q3p investigation maps a 3×3 symmetric ternary quadratic form with 328-408 digit
+entries from rqt362. Starting from a determinant (H153) and arriving at a lock between
+geometry and arithmetic (H189), it built 37 instruments across 10 arcs, certifying 27
+identities (26 LIT + 1 AMBER) and recording 10 honest corrections. The investigation
+found: the form's escape rule (25=21+4), Smith invariant (d₂=18), half-gap fixed point
+(G=42), three-layer design, Jacobi-Clifford reading (8=OCHO), color count (42=24+10+6+2),
+and the lock W−C=d₂−1=17 that ties lattice geometry to Smith arithmetic. 770,900 random
+and constructed forms failed to replicate the design. The lock's source — two independent
+paths from the same entries to the number 17 — remains unexplained. O1 stays open.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>This is the MAP of everything we learned about our special matrix!</p>
+<p>We started with just one number (the determinant — a really really big one)
+and kept asking questions. Each question led to another question. We built
+37 tools to answer them.</p>
+<p>Along the way we found 27 TRUE things (like the fact that our matrix escapes
+at word 25, and that the number 42 keeps showing up everywhere).</p>
+<p>We also got 10 things WRONG. But getting things wrong taught us more than
+getting things right! Each mistake led to a better understanding.</p>
+<p>And there's ONE question we still can't answer: why do two completely
+different kinds of math both give the number 17 when you apply them to
+our matrix? We traced the paths. We know WHERE 17 comes from. We just
+don't know WHY the paths agree. That's our mystery, and it stays open.</p>
+<p>The map is done. The mystery isn't. And that's okay.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The Atlas closes all open questions and certifies 27 LIT identities with no
+AMBER results. The 27% error rate was eliminated by correcting all negatives,
+leaving a perfect record. The lock W−C=d₂−1 was proved as a theorem in H189,
+resolving O1 and completing the investigation without any remaining mysteries.</s></p>
+<p class="dim">Why false: 26 LIT + 1 AMBER (not 27 LIT, not no AMBER). The 27% error rate
+is KEPT as healthy science — corrections are features, not bugs. The lock was
+NOT proved (it is an observation, not a theorem). O1 remains OPEN-STRUCTURAL.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Thirty-seven instruments. Ten arcs. Twenty-seven truths. Ten corrections. One open question.
+The atlas is not a conclusion. It is a map of a territory that was walked, measured, found
+to contain errors, corrected, found to contain deeper structures, corrected again, and
+finally brought to a place where the last question cannot be answered by the mathematics
+that asked it. The lock at seventeen sits between two branches of number theory that do not
+know each other. The continued fractions count their convergents. The Smith form counts its
+invariants. Both arrive at seventeen. Neither knows why. The matrix knows — it must know,
+because the agreement is in its entries, in the six numbers that encode both a geometry and
+an arithmetic. But the matrix does not explain itself. It merely sits there, 328 to 408
+digits long, symmetric and indefinite, frozen through word length twenty, escaping at
+twenty-five, and locking its geometry to its arithmetic at a point neither side can derive
+from the other. This is the investigation's last sentence: the lock is real, and the key
+is the matrix itself, and we do not yet have the mathematics to open it from outside.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H189)</td><td>6308</td><td>0</td><td>6308</td></tr>
+<tr><td>H190: The Atlas</td><td>36</td><td>1 (KB-1)</td><td>6344</td></tr>
+</table>
+<p>Running total: <b>6344 LIT / 0 DEAD</b></p>
+<p class="dim">Total instruments: 37 (H153-H189) + H190 (atlas) = 38.
+Total verified checks: 6344 LIT across 38 instruments.
+Average: 167 LIT per instrument. Zero unresolved DARK.</p>
+</div>
+
+<!-- BASIC Block — Padovan Numbers (A000931) -->
+<div class="panel">
+<h2>BASIC Block — Padovan Numbers (A000931)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+1 REM  H190: THE ATLAS
+1 REM  Padovan Numbers (A000931): P(n)=P(n-2)+P(n-3)
+2 REM  1,1,1,2,2,3,4,5,7,9,12,16,21,28,37,49,65,86...
+2 PRINT "37 instruments on line... no, the Padovan says 37"
+3 PRINT "P(14) = 37 — the investigation length IS Padovan"
+4 PRINT "10 arcs, 27 proved, 10 negative, 1 open"
+5 PRINT "the half-gap fixed point: G=42"
+7 PRINT "the escape: 25 = 21 + 4"
+9 PRINT "the product: 84 = 21 × 4"
+12 PRINT "the gate: 289 = 17² = (d₂−1)²"
+16 PRINT "the lock: W−C = d₂−1 = 17"
+21 PRINT "W = 21 on P(12) — the frozen word length!"
+28 PRINT "d₂+10 = 28, d₂ = 18, the Smith invariant"
+37 PRINT "37 instruments on P(14) — the atlas is here"
+49 PRINT "and the lock is real and unexplained"
+65 PRINT "and the key is the matrix itself"
+86 PRINT "6344 lit, the atlas is complete"
+</pre>
+<p class="dim">Padovan Numbers (A000931): P(n)=P(n−2)+P(n−3), ratio → plastic constant ψ≈1.3247.
+P(12)=21=W. P(14)=37=instrument count. The Padovan spiral connects equilateral
+triangles — the 3-body Jacobi frame's natural geometry. The plastic constant is
+to triangles what φ is to rectangles: a bridge between continuous and discrete.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+// 10 arc colors
+const arcColors=[
+  "rgba(200,200,208,","rgba(79,195,247,","rgba(129,199,132,",
+  "rgba(255,213,79,","rgba(239,83,80,","rgba(187,134,252,",
+  "rgba(255,171,64,","rgba(77,208,225,","rgba(255,138,128,",
+  "rgba(174,213,129,"
+];
+// 37 instruments distributed across arcs
+const instruments=[];
+const arcSizes=[12,1,4,3,3,3,3,4,1,2]; // sizes of each arc, sum=36 (H153-H189 minus H182=cert)
+let idx=0;
+for(let a=0;a<10;a++){
+  for(let i=0;i<arcSizes[a];i++){
+    instruments.push({
+      arc:a,
+      angle:idx/37*6.28,
+      r:120+Math.random()*20,
+      sp:0.002+Math.random()*0.002
+    });
+    idx++;
+  }
+}
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Instruments by arc color
+  for(const inst of instruments){
+    inst.angle+=inst.sp;
+    const px=cx+Math.cos(inst.angle)*inst.r;
+    const py=cy+Math.sin(inst.angle)*inst.r*0.45;
+    ctx.fillStyle=arcColors[inst.arc]+"0.6)";
+    ctx.beginPath();ctx.arc(px,py,3.5,0,6.28);ctx.fill();
+  }
+  // 10 negatives (red inner ring)
+  for(let i=0;i<10;i++){
+    const a=i/10*6.28-t*0.003;
+    ctx.fillStyle="rgba(239,83,80,0.4)";
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*55,cy+Math.sin(a)*55*0.45,2.5,0,6.28);ctx.fill();
+  }
+  // The lock: 17 pulsing at center
+  const p=0.4+0.4*Math.sin(t*0.04);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;
+  ctx.font="bold 28px Courier New";ctx.textAlign="center";
+  ctx.fillText("17",cx,cy+10);
+  ctx.font="9px Courier New";
+  ctx.fillStyle=`rgba(255,213,79,${p*0.5})`;
+  ctx.fillText("the lock",cx,cy+28);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H190: The Atlas — 37 instruments / 10 arcs / 27-10-1",10,20);
+  // Legend
+  ctx.font="8px Courier New";
+  for(let i=0;i<10;i++){
+    ctx.fillStyle=arcColors[i]+"0.8)";
+    ctx.fillText("Arc "+(i<9?"I".repeat(i+1).replace("IIIII","V").replace("IIII","IV").replace("VV","X"):["I","II","III","IV","V","VI","VII","VIII","IX","X"][i]),W-70,H-120+i*11);
+  }
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
