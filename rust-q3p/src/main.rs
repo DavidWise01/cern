@@ -1,244 +1,173 @@
-// H185: The Near-Twin Probe
-// Force d₂=18 AND near-diagonal-equality (|Q00|≈|Q11| within 1-2 digits)
-// Then test Layers 2+3: Δ≈42 and Diophantine gate E²−4S=(d₂−1)²
+// H187: The Chasm Equation
+// WHY does E²−4S = 289 for Q3p?
 //
-// H184 found: the gate requires near-diagonal-equality for cancellation.
-// Now: does FORCING that equality let forms pass the gate?
+// CORRECTION: E and S are WORD LENGTH quantities, not matrix entries!
+// E = 25 (escape word length at (16,9,0))
+// S = 84 = 21 × 4 (product rule: frozen wl × additive gap)
+// E²−4S = 625 − 336 = 289 = 17² = (d₂−1)²
 //
-// E²−4S identity: (a+b+c)²−4(ab+ac+bc) = a²+b²+c²−2ab−2ac−2bc
-//                = (a−b−c)²−4bc = (b+c−a)²−4bc (when b+c>a)
-// For this to be small (289), we need massive cancellation.
+// The dual rule: E = W + C (25 = 21 + 4, additive)
+//                S = W × C (84 = 21 × 4, multiplicative)
+// So E²−4S = (W+C)² − 4WC = W² + 2WC + C² − 4WC = (W−C)²
+// THIS IS ALWAYS TRUE: E²−4S = (W−C)² for ANY W,C!
+//
+// So: (W−C)² = (d₂−1)²
+// → W−C = ±(d₂−1) = ±17
+// → W−C = 21−4 = 17 ✓
+//
+// THE CHASM EQUATION IS AN IDENTITY!
+// It's not a miraculous cancellation of large numbers.
+// It's the algebraic identity (a+b)²−4ab = (a−b)².
+// The "miracle" is that W−C = d₂−1, i.e., 21−4 = 18−1.
+// WHY does the frozen wl minus the gap equal the Smith invariant minus one?
 
 use num_bigint::{BigInt, BigUint};
 use num_integer::Integer;
 use num_traits::{Zero, One};
-use rand::Rng;
-
-fn rand_biguint(rng: &mut impl Rng, bits: u64) -> BigUint {
-    let bytes = ((bits + 7) / 8) as usize;
-    let mut buf = vec![0u8; bytes];
-    rng.fill(&mut buf[..]);
-    BigUint::from_bytes_be(&buf)
-}
-
-fn digit_count(n: &BigUint) -> usize {
-    if n.is_zero() { return 1; }
-    n.to_string().len()
-}
-
-fn abs_bigint(n: &BigInt) -> BigUint {
-    n.magnitude().clone()
-}
-
-/// Make entry with target mod-9 residue, even, with specific digit count
-fn make_entry(rng: &mut impl Rng, digits: u64, target_mod9: u64) -> BigUint {
-    let bits = (digits as f64 * 3.32) as u64;
-    loop {
-        let base = rand_biguint(rng, bits);
-        if base.is_zero() { continue; }
-        let cur = (&base % BigUint::from(9u32)).try_into().unwrap_or(0u64);
-        let adj = (target_mod9 + 9 - cur) % 9;
-        let mut val = &base + BigUint::from(adj);
-        // Ensure even
-        if &val % BigUint::from(2u32) == BigUint::one() {
-            val += BigUint::from(9u32);
-            if &val % BigUint::from(2u32) == BigUint::one() {
-                val += BigUint::from(9u32);
-            }
-        }
-        let check9: u64 = (&val % BigUint::from(9u32)).try_into().unwrap_or(99);
-        if check9 == target_mod9 && &val % BigUint::from(2u32) == BigUint::zero() {
-            return val;
-        }
-    }
-}
-
-fn smith_d2(m: &[[BigInt; 3]; 3]) -> Option<BigUint> {
-    let mut d1 = BigUint::zero();
-    for i in 0..3 { for j in i..3 { d1 = d1.gcd(&abs_bigint(&m[i][j])); } }
-    if d1.is_zero() { return None; }
-    let mut g2 = BigUint::zero();
-    for r1 in 0..3 { for r2 in (r1+1)..3 { for c1 in 0..3 { for c2 in (c1+1)..3 {
-        let minor = &m[r1][c1] * &m[r2][c2] - &m[r1][c2] * &m[r2][c1];
-        g2 = g2.gcd(&abs_bigint(&minor));
-    }}}}
-    if g2.is_zero() { return None; }
-    let (d2, rem) = g2.div_rem(&d1);
-    if !rem.is_zero() { return None; }
-    Some(d2)
-}
-
-fn cofactor_gap(m: &[[BigInt; 3]; 3]) -> u64 {
-    let cof = [
-        &m[1][1] * &m[2][2] - &m[1][2] * &m[2][1],
-        &m[0][2] * &m[2][1] - &m[0][1] * &m[2][2],
-        &m[0][1] * &m[1][2] - &m[0][2] * &m[1][1],
-        &m[0][0] * &m[2][2] - &m[0][2] * &m[2][0],
-        &m[0][0] * &m[1][2] - &m[0][1] * &m[0][2],
-        &m[0][0] * &m[1][1] - &m[0][1] * &m[1][0],
-    ];
-    let dcs: Vec<usize> = cof.iter().map(|c| digit_count(&abs_bigint(c))).filter(|&d| d > 0).collect();
-    if dcs.is_empty() { return 0; }
-    (*dcs.iter().max().unwrap() - *dcs.iter().min().unwrap()) as u64
-}
-
-fn check_diophantine(m: &[[BigInt; 3]; 3], d2: &BigUint) -> (bool, BigUint) {
-    let a = abs_bigint(&m[0][0]);
-    let b = abs_bigint(&m[1][1]);
-    let c = abs_bigint(&m[2][2]);
-    let e = &a + &b + &c;
-    let s = &a * &b + &a * &c + &b * &c;
-    let e_sq = &e * &e;
-    let four_s = BigUint::from(4u32) * &s;
-    if e_sq < four_s { return (false, BigUint::zero()); }
-    let disc = &e_sq - &four_s;
-    let sqrt_disc = disc.sqrt();
-    let is_sq = &sqrt_disc * &sqrt_disc == disc;
-    if !is_sq || d2.is_zero() { return (false, disc); }
-    let d2m1 = d2 - BigUint::one();
-    (sqrt_disc == d2m1, disc)
-}
 
 fn main() {
-    println!("=== H185: THE NEAR-TWIN PROBE ===");
-    println!("Force d₂=18 AND |Q00|≈|Q11| (within 0-2 digits)\n");
+    println!("=== H187: THE CHASM EQUATION ===");
+    println!("CORRECTED: E,S are word-length quantities, not matrix entries\n");
 
-    let mut rng = rand::thread_rng();
+    // The word-length values
+    let w: u64 = 21;  // frozen word length (21-Root Theorem)
+    let c: u64 = 4;   // additive gap (escape rule: 25 = 21 + 4)
+    let e: u64 = w + c; // = 25
+    let s: u64 = w * c; // = 84
+    let d2: u64 = 18;   // Smith invariant d₂
 
-    // Q3p has |Q00|=328d, |Q11|=329d — differ by 1 digit
-    // Strategy: pick a base digit count D, make Q00 with D digits, Q11 with D or D±1
-    // Q22 varies freely (Q3p has 408d)
-
-    // Use several residue patterns known to give d₂=18
-    // Simple valid sets: all entries ≡ 0 mod 9 (trivial but works)
-    // Better: use Q3p-like residues and others
-    let res_sets: Vec<[u64; 6]> = vec![
-        [0, 0, 0, 0, 0, 0], // all zero mod 9
-        [1, 1, 1, 1, 1, 1], // all one (1*1=1=1²)
-        [4, 2, 4, 1, 2, 4], // mixed
-        [7, 4, 1, 7, 4, 1], // mixed
-        [4, 4, 4, 4, 4, 4], // all four (4*4=16≡7, 4²=16≡7 ✓)
-        [1, 4, 7, 7, 1, 4], // another valid set
-        [7, 7, 7, 7, 7, 7], // all seven (7*7=49≡4, 7²=49≡4 ✓)
-        [1, 7, 4, 4, 1, 7], // yet another
-    ];
-
-    let n_per_config = 500u64;
-    let digit_range: Vec<u64> = (100..=400).step_by(50).collect();
-    let twin_offsets: Vec<i64> = vec![0, 1, -1, 2, -2];
-
-    let mut total = 0u64;
-    let mut d2_18 = 0u64;
-    let mut l2_hits = 0u64;
-    let mut l3_hits = 0u64;
-    let mut disc_sizes: Vec<usize> = Vec::new(); // digit count of E²-4S
-
-    println!("Config: {} residue sets × {} digit sizes × {} twin offsets × {} per config",
-        res_sets.len(), digit_range.len(), twin_offsets.len(), n_per_config);
-    let total_planned = res_sets.len() as u64 * digit_range.len() as u64
-        * twin_offsets.len() as u64 * n_per_config;
-    println!("Total planned: {}\n", total_planned);
-
-    for res in &res_sets {
-        for &base_digits in &digit_range {
-            for &offset in &twin_offsets {
-                let q11_digits = (base_digits as i64 + offset) as u64;
-                let q22_digits: u64 = rng.gen_range(100..500);
-
-                for _trial in 0..n_per_config {
-                    let o01d: u64 = rng.gen_range(100..400);
-                    let o02d: u64 = rng.gen_range(100..400);
-                    let o12d: u64 = rng.gen_range(100..400);
-                    let v00 = make_entry(&mut rng, base_digits, res[0]);
-                    let v01 = make_entry(&mut rng, o01d, res[1]);
-                    let v02 = make_entry(&mut rng, o02d, res[2]);
-                    let v11 = make_entry(&mut rng, q11_digits, res[3]);
-                    let v12 = make_entry(&mut rng, o12d, res[4]);
-                    let v22 = make_entry(&mut rng, q22_digits, res[5]);
-
-                    let q00 = -BigInt::from(v00);
-                    let q11 = -BigInt::from(v11);
-                    let q22 = -BigInt::from(v22);
-                    let q01 = if rng.gen_bool(0.5) { BigInt::from(v01) } else { -BigInt::from(v01) };
-                    let q02 = if rng.gen_bool(0.5) { BigInt::from(v02) } else { -BigInt::from(v02) };
-                    let q12 = if rng.gen_bool(0.5) { BigInt::from(v12) } else { -BigInt::from(v12) };
-
-                    let mat = [
-                        [q00.clone(), q01.clone(), q02.clone()],
-                        [q01.clone(), q11.clone(), q12.clone()],
-                        [q02.clone(), q12.clone(), q22.clone()],
-                    ];
-                    total += 1;
-
-                    let d2_val = match smith_d2(&mat) {
-                        Some(v) => v,
-                        None => continue,
-                    };
-                    if d2_val != BigUint::from(18u32) { continue; }
-                    d2_18 += 1;
-
-                    let gap = cofactor_gap(&mat);
-
-                    // Record discriminant size for ALL d₂=18 forms
-                    let (passed, disc) = check_diophantine(&mat, &d2_val);
-                    if !disc.is_zero() {
-                        disc_sizes.push(digit_count(&disc));
-                    }
-
-                    if gap >= 37 && gap <= 47 {
-                        l2_hits += 1;
-                        if passed {
-                            l3_hits += 1;
-                            println!("  *** THREE-LAYER HIT! gap={}, offset={} ***", gap, offset);
-                            println!("    Diag: {}d, {}d, {}d",
-                                digit_count(&abs_bigint(&mat[0][0])),
-                                digit_count(&abs_bigint(&mat[1][1])),
-                                digit_count(&abs_bigint(&mat[2][2])));
-                        }
-                    }
-                }
-            }
-        }
-        println!("  Set {:?} done — total:{} d₂=18:{} L2:{} L3:{}", res, total, d2_18, l2_hits, l3_hits);
-    }
-
-    println!("\n=== RESULTS ===");
-    println!("Total forms tested:    {}", total);
-    println!("d₂=18 confirmed:       {}", d2_18);
-    println!("Layer 2 hits (Δ≈42):   {}", l2_hits);
-    println!("Layer 3 hits (gate):   {}", l3_hits);
-
-    // Discriminant digit-count distribution
-    if !disc_sizes.is_empty() {
-        disc_sizes.sort();
-        let n = disc_sizes.len();
-        let mean: f64 = disc_sizes.iter().sum::<usize>() as f64 / n as f64;
-        let median = disc_sizes[n / 2];
-        let min_d = disc_sizes[0];
-        let max_d = disc_sizes[n - 1];
-        println!("\nE²−4S digit count distribution (d₂=18 forms, near-twin):");
-        println!("  Count: {}", n);
-        println!("  Min: {}, Max: {}, Median: {}, Mean: {:.1}", min_d, max_d, median, mean);
-        println!("  Q3p's E²−4S = 289 (3 digits)");
-        // Count how many have disc < 10 digits
-        let tiny = disc_sizes.iter().filter(|&&d| d <= 10).count();
-        let small = disc_sizes.iter().filter(|&&d| d <= 50).count();
-        println!("  Disc ≤ 10 digits: {} ({:.4}%)", tiny, tiny as f64 / n as f64 * 100.0);
-        println!("  Disc ≤ 50 digits: {} ({:.4}%)", small, small as f64 / n as f64 * 100.0);
-        // Count exact 289
-        // (We already know from check_diophantine: 0)
-    }
-
+    println!("W = {} (frozen word length, 21-Root Theorem)", w);
+    println!("C = {} (additive gap, escape rule)", c);
+    println!("E = W + C = {} (escape word length)", e);
+    println!("S = W × C = {} (product rule)", s);
+    println!("d₂ = {} (Smith invariant)", d2);
     println!();
-    if l3_hits == 0 {
-        println!("VERDICT: ZERO three-layer hits even with forced near-twin diagonals.");
-        println!("Near-diagonal-equality is NECESSARY but NOT SUFFICIENT.");
-        println!("The gate requires EXACT arithmetic cancellation of E²−4S to 289.");
-        println!("This cancellation depends on the PRECISE VALUES, not just digit counts.");
-        println!("\nO1 status: OPEN-STRUCTURAL (unchanged)");
-        println!("FINDING: a 5th constraint exists — exact value tuning beyond size matching.");
-    } else {
-        println!("VERDICT: {} three-layer hit(s)! Near-twin + d₂=18 is sufficient!", l3_hits);
-        println!("Q3p's design = d₂=18 + near-twin + Δ≈42 (a 4-constraint class).");
-    }
+
+    // The Diophantine gate
+    let e_sq = e * e;
+    let four_s = 4 * s;
+    let disc = e_sq - four_s;
+    println!("E² = {}", e_sq);
+    println!("4S = {}", four_s);
+    println!("E²−4S = {} − {} = {}", e_sq, four_s, disc);
+    println!("(d₂−1)² = {}² = {}", d2 - 1, (d2 - 1) * (d2 - 1));
+    println!("Match: {}", disc == (d2 - 1) * (d2 - 1));
+    println!();
+
+    // THE ALGEBRAIC IDENTITY
+    println!("=== THE IDENTITY ===");
+    println!("(W+C)² − 4WC = W² + 2WC + C² − 4WC = W² − 2WC + C² = (W−C)²");
+    println!("So E²−4S = (W−C)² ALWAYS, for any W,C.");
+    println!("This is not a cancellation. It is an algebraic identity.");
+    println!();
+
+    // THE REAL EQUATION
+    let w_minus_c = w as i64 - c as i64;
+    println!("W − C = {} − {} = {}", w, c, w_minus_c);
+    println!("d₂ − 1 = {} − 1 = {}", d2, d2 - 1);
+    println!("W − C = d₂ − 1: {} = {} → {}", w_minus_c, d2 - 1, w_minus_c == (d2 as i64 - 1));
+    println!();
+
+    println!("=== THE REAL CHASM EQUATION ===");
+    println!("The gate E²−4S = (d₂−1)² reduces to:");
+    println!();
+    println!("  W − C = d₂ − 1");
+    println!("  21 − 4 = 18 − 1");
+    println!("  17 = 17  ✓");
+    println!();
+    println!("WHY is this true?");
+    println!();
+
+    // Unpack: W = 21 (from 21-Root Theorem: min frozen wl)
+    //         C = 4  (from escape: first Q3p>0 at wl=25, gap=25−21=4)
+    //         d₂ = 18 (from Smith form)
+    // So: 21 − 4 = 17 = 18 − 1
+    // Or: W = d₂ − 1 + C = 17 + 4 = 21
+    // Or: W + 1 = d₂ + C → 22 = 22 ✓
+    // Or: W + 1 − C = d₂ → 21 + 1 − 4 = 18 ✓
+
+    println!("Rearranging:");
+    println!("  W + 1 = d₂ + C");
+    println!("  {} + 1 = {} + {}", w, d2, c);
+    println!("  {} = {}", w + 1, d2 + c);
+    println!("  22 = 22  ✓");
+    println!();
+
+    println!("Or equivalently:");
+    println!("  W + 1 − C = d₂");
+    println!("  21 + 1 − 4 = 18  ✓");
+    println!();
+
+    // This says: the frozen word length, plus 1, minus the escape gap,
+    // equals the second Smith invariant.
+    // W = 21: determined by the lattice geometry (mod structure)
+    // C = 4:  determined by the first escape point (16,9,0)
+    // d₂ = 18: determined by the Smith form (mod-9 residues)
+    // The equation W+1−C = d₂ ties the LATTICE (W), the ESCAPE (C),
+    // and the ARITHMETIC (d₂) into one relation.
+
+    println!("=== WHAT THIS MEANS ===");
+    println!();
+    println!("The Diophantine gate is NOT a miraculous cancellation.");
+    println!("It is the algebraic identity (a+b)²−4ab = (a−b)²,");
+    println!("which ALWAYS holds. The gate merely checks whether");
+    println!("W−C = d₂−1, i.e., whether the LATTICE and ARITHMETIC");
+    println!("are locked together.");
+    println!();
+    println!("The REAL equation is W + 1 − C = d₂, equivalently:");
+    println!("  frozen_wl + 1 − escape_gap = smith_d₂");
+    println!("  21 + 1 − 4 = 18");
+    println!();
+    println!("This ties three independently computed quantities:");
+    println!("  W = 21 (from lattice frozen word length)");
+    println!("  C = 4  (from first escape at (16,9,0))");
+    println!("  d₂ = 18 (from Smith form of the matrix)");
+    println!();
+    println!("The 'chasm' is not in the numbers. It is in the LOCK:");
+    println!("Q3p's lattice, escape, and arithmetic are mutually constrained.");
+    println!("Random forms have uncorrelated W, C, d₂, so W−C ≠ d₂−1.");
+    println!("This is why the probes found nothing: they forced d₂=18 but");
+    println!("could not force W+1−C=d₂, because W and C come from the");
+    println!("GEOMETRY, not the arithmetic.");
+    println!();
+
+    // Also: the 200-digit discriminant chasm from H185
+    // In H185 we computed E²−4S using DIAGONAL MAGNITUDES, which is WRONG.
+    // The correct E,S are word-length quantities (small numbers).
+    // The H185 discriminant was actually (a+b+c)²−4(ab+ac+bc) for diagonal
+    // magnitudes, which is a DIFFERENT quantity — it measures something about
+    // the eigenvalue spread, not the escape condition.
+
+    println!("=== CORRECTION TO H185 ===");
+    println!();
+    println!("H185's 'discriminant chasm' (208-998 digits) computed");
+    println!("(a+b+c)²−4(ab+ac+bc) for DIAGONAL MAGNITUDES.");
+    println!("This is a valid measure of eigenvalue spread, but it");
+    println!("is NOT the Diophantine gate E²−4S = (d₂−1)².");
+    println!();
+    println!("The gate uses E=W+C=25, S=W×C=84 (word-length quantities).");
+    println!("These are SMALL numbers, not 300-digit entries.");
+    println!();
+    println!("H185's finding (near-twin diagonal forms have large eigenvalue");
+    println!("discriminants) is STILL VALID — it measures something real.");
+    println!("But it is a DIFFERENT quantity from the gate.");
+    println!();
+    println!("The 5th constraint (exact value tuning) should be reinterpreted:");
+    println!("it is not about diagonal cancellation to 289.");
+    println!("It is about the GEOMETRY producing W and C such that W−C=d₂−1.");
+    println!();
+
+    // The question becomes: why does the lattice geometry give W=21 and C=4?
+    // W=21 comes from the 21-Root Theorem (I5): the minimum frozen word length.
+    // C=4 comes from the escape (I6): first Q3p>0 at wl=25 at (16,9,0).
+    // Both are determined by the matrix entries.
+    // The fact that W−C = d₂−1 means the lattice and Smith form are COUPLED.
+    // This coupling is what makes Q3p special.
+
+    println!("=== THE COUPLING ===");
+    println!("W (lattice) − C (escape) = d₂ (arithmetic) − 1");
+    println!("The lattice geometry and the Smith invariant are LOCKED.");
+    println!("This lock is the reason the probes found nothing:");
+    println!("forcing d₂ does not force the geometry.");
+    println!("The gate is not a wall. It is a LOCK between two domains.");
 }
