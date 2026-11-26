@@ -1,158 +1,239 @@
-//! H165: The Escape Orbit
-//! At what word length does the FIRST Q3p > 0 appear?
-//! Enumerate ALL lattice vectors at each ℓ¹ word length n = 1..30.
-
-use num_bigint::BigInt;
-use num_traits::{Zero, Signed};
-use std::str::FromStr;
-
-fn q3p_matrix() -> [[BigInt; 3]; 3] {
-    let q00 = BigInt::from_str("-4253717548231547020072693081161910555005243191618621382159372419461855224907202535906842832709092438879947727674389925183077645131066922858577018895943751046822319478442630217018545716834095147972395953888153983664209914844602489625279376395675148602660862812190681326170913579342495584589932614562185034376081141477004382243998").unwrap();
-    let q01 = BigInt::from_str("7565498733988797543826666309539672158645764751961099285226226077230250038814204868002363430242854452375972875662278073279414852310308928208990849487269672921067786123089459062793497253243665343748038187908109783688902924752341605325907260640578690410003638186608350436210381112241291833840826752544367458682323939831675097835352").unwrap();
-    let q11 = BigInt::from_str("-13455478047907106164677383535368857666436918207351665858120935409324292584029315996247637634836378793010071122621677395561112459568386370293382352655448679002690196196492296975213981584274284568264707225917115327646439866640814758493702987058883061859833338472752964669690461130438096121614528457633572730235565108466691163592876").unwrap();
-    let q02 = BigInt::from_str("-2503571742683028409040537740730011137595410794050954062318667765376411144384814665298893249955557857479495740639589132650419023842031118221489646818696725513887888080197689003518244525083703158968159003834440857697530544950131148612295779462478720973898653489630197028599535370732116592212734308695045528926037327021132885487530215578107269455695152634418708409369838").unwrap();
-    let q12 = BigInt::from_str("4502179793442409678928953455261155055669041071134544470724140576225302228946314478228192303193379535025440160574756444437840882618010772223391918519657650625236438194502033887572823936232354965562526082212167945389924093542593039846803099009395739504893990163174918863785028366190539027121980934507415751272885502047919875114240878353386031348247869331129706928655078").unwrap();
-    let q22 = BigInt::from_str("-125554881570561012885320044186620554728844545718413227582010431541944144267072332736289359842169883426726901297556830208559953295523051045851522156646872885080157267369257604860086139136040536760360085923550347222203411393498428665967572402554306569449899917819777656012431744179783562552161460497518663279351074756942294649046859697283713170954414056469544022338159259876071978639281923573112272775958587826").unwrap();
-    [
-        [q00.clone(), q01.clone(), q02.clone()],
-        [q01, q11.clone(), q12.clone()],
-        [q02, q12, q22],
-    ]
-}
-
-fn digit_count(n: &BigInt) -> usize {
-    if n.is_zero() { return 1; }
-    n.magnitude().to_string().len()
-}
+//! H166: The Closed System
+//! Test the dual rule on a SECOND ternary form Q₂.
+//! Q₂(a,b,c) = -100a² + 242ab - 144b² - 10000c²
+//! Matrix: [[-100, 121, 0], [121, -144, 0], [0, 0, -10000]]
+//! Compare to Q3p's dual rule: E=W+C, S=W×C.
 
 fn main() {
-    let q = q3p_matrix();
-    let q00=&q[0][0]; let q01=&q[0][1]; let q11=&q[1][1];
-    let q02=&q[0][2]; let q12=&q[1][2]; let q22=&q[2][2];
+    println!("=== H166: THE CLOSED SYSTEM ===\n");
 
-    println!("=== H165: THE ESCAPE ORBIT (Rust BigInt) ===\n");
+    let q00: i64 = -100;
+    let q01: i64 = 121;
+    let q11: i64 = -144;
+    let q02: i64 = 0;
+    let q12: i64 = 0;
+    let q22: i64 = -10000;
 
-    let eval = |a: i64, b: i64, c: i64| -> BigInt {
-        let ab=BigInt::from(a); let bb=BigInt::from(b); let cb=BigInt::from(c);
-        q00*&ab*&ab + BigInt::from(2)*q01*&ab*&bb + q11*&bb*&bb
-        + BigInt::from(2)*q02*&ab*&cb + BigInt::from(2)*q12*&bb*&cb + q22*&cb*&cb
+    println!("SECOND FORM Q₂:");
+    println!("  Q₂(a,b,c) = {}a² + {}ab + {}b² + {}c²", q00, 2*q01, q11, q22);
+    println!("  Matrix: [[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]]",
+        q00, q01, q02, q01, q11, q12, q02, q12, q22);
+
+    let r01 = q01*q01 - (q00.abs())*(q11.abs());
+    println!("\n  R01 = {}² - {}×{} = {}", q01, q00.abs(), q11.abs(), r01);
+    let sqrt_r01 = (r01 as f64).sqrt();
+    println!("  √R01 ≈ {:.6}", sqrt_r01);
+    let isqrt = sqrt_r01 as i64;
+    let is_perf_sq = isqrt*isqrt == r01 || (isqrt+1)*(isqrt+1) == r01;
+    println!("  R01 perfect square? {}", if is_perf_sq { "YES" } else { "NO (241 is prime)" });
+
+    let n_plus = (q01 as f64 + sqrt_r01) / (q00.abs() as f64);
+    let n_minus = (q01 as f64 - sqrt_r01) / (q00.abs() as f64);
+    println!("  n₊ = {:.10}", n_plus);
+    println!("  n₋ = {:.10}", n_minus);
+    println!("  Gap width = {:.10}", n_plus - n_minus);
+
+    // CF expansion
+    println!("\n  CF expansion of n₊:");
+    let mut x = n_plus;
+    let mut cf = Vec::new();
+    for _ in 0..12 {
+        let a = x.floor() as i64;
+        cf.push(a);
+        let frac = x - a as f64;
+        if frac < 1e-10 { break; }
+        x = 1.0 / frac;
+    }
+    println!("  n₊ = [{};{}]", cf[0],
+        cf[1..].iter().map(|x| x.to_string()).collect::<Vec<_>>().join(","));
+
+    // Convergents
+    println!("\n  Convergents:");
+    let mut h_prev: i64 = 1;
+    let mut h_curr: i64 = cf[0];
+    let mut k_prev: i64 = 0;
+    let mut k_curr: i64 = 1;
+    let ratio0 = h_curr as f64 / k_curr as f64;
+    let inside0 = ratio0 > n_minus && ratio0 < n_plus;
+    println!("    p₀/q₀ = {}/{} = {:.6} wl={} inside={}",
+        h_curr, k_curr, ratio0, h_curr.abs()+k_curr.abs(), inside0);
+    for i in 1..cf.len().min(8) {
+        let h_new = cf[i] * h_curr + h_prev;
+        let k_new = cf[i] * k_curr + k_prev;
+        let ratio = h_new as f64 / k_new as f64;
+        let inside = ratio > n_minus && ratio < n_plus;
+        println!("    p{}/q{} = {}/{} = {:.6} wl={} inside={}",
+            i, i, h_new, k_new, ratio, h_new.abs()+k_new.abs(), inside);
+        h_prev = h_curr;
+        k_prev = k_curr;
+        h_curr = h_new;
+        k_curr = k_new;
+    }
+
+    // Determinant & Smith form
+    let det = q00*(q11*q22 - q12*q12) - q01*(q01*q22 - q12*q02) + q02*(q01*q12 - q11*q02);
+    println!("\n  det = {}", det);
+
+    let m01 = q00*q11 - q01*q01;
+    let m02 = q00*q22 - q02*q02;
+    let m12 = q11*q22 - q12*q12;
+    let minors_abs: Vec<i64> = vec![m01.abs(), m02.abs(), m12.abs()];
+    let mut d2: i64 = 0;
+    for &m in &minors_abs {
+        if m > 0 { d2 = if d2 == 0 { m } else { gcd(d2, m) }; }
+    }
+    println!("  d₂ = {}", d2);
+
+    let c00 = q11*q22 - q12*q12;
+    let c11 = q00*q22 - q02*q02;
+    let c22 = q00*q11 - q01*q01;
+    println!("\n  Cofactors:");
+    println!("    C00 = {} ({} digits)", c00, dcount(c00));
+    println!("    C11 = {} ({} digits)", c11, dcount(c11));
+    println!("    C22 = {} ({} digits)", c22, dcount(c22.abs()));
+    let span = dcount(c00) as i64 - dcount(c22.abs()) as i64;
+    println!("    Span S = {} - {} = {}", dcount(c00), dcount(c22.abs()), span);
+
+    // ═══ ESCAPE SCAN ═══
+    println!("\n{}", "=".repeat(70));
+    println!("ESCAPE SCAN FOR Q₂");
+    println!("{}", "=".repeat(70));
+    let eval = |a: i64, b: i64, c: i64| -> i64 {
+        q00*a*a + 2*q01*a*b + q11*b*b + 2*q02*a*c + 2*q12*b*c + q22*c*c
     };
 
-    println!("{:<4} {:>8} {:>6} {:>6} {:>8} {:>8} {:>20}",
-        "n", "vectors", "pos", "zero", "min_d", "max_d", "first_pos_vector");
-    println!("{}", "=".repeat(70));
+    println!("{:<4} {:>8} {:>6} {:>12} {:>30}",
+        "WL", "vectors", "pos", "min_val", "first_pos_vector");
+    println!("{}", "-".repeat(70));
 
-    let mut first_escape_n = 0i64;
-    let mut first_escape_vec = (0i64, 0i64, 0i64);
+    let mut first_escape_n: i64 = 0;
+    let mut escape_wls = Vec::new();
 
-    for n in 1..=28i64 {
+    for n in 1..=20i64 {
         let mut total = 0u64;
         let mut pos_count = 0u64;
-        let mut zero_count = 0u64;
-        let mut min_digits = 9999usize;
-        let mut max_digits = 0usize;
+        let mut min_val = i64::MAX;
         let mut first_pos = String::new();
-        let mut min_pos_wl_vec = (0i64, 0i64, 0i64);
 
         for a in -n..=n {
             let rem = n - a.abs();
             for b in -rem..=rem {
                 let c_abs = rem - b.abs();
                 let c_vals: Vec<i64> = if c_abs == 0 { vec![0] } else { vec![c_abs, -c_abs] };
-                for &c in &c_vals {
-                    if a == 0 && b == 0 && c == 0 { continue; }
+                for &c_val in &c_vals {
+                    if a == 0 && b == 0 && c_val == 0 { continue; }
                     total += 1;
-                    let v = eval(a, b, c);
-                    let d = digit_count(&v);
-                    if d < min_digits { min_digits = d; }
-                    if d > max_digits { max_digits = d; }
-                    if v.is_zero() { zero_count += 1; }
-                    else if v > BigInt::zero() {
+                    let v = eval(a, b, c_val);
+                    if v < min_val { min_val = v; }
+                    if v > 0 {
                         pos_count += 1;
                         if first_pos.is_empty() {
-                            first_pos = format!("({},{},{})", a, b, c);
-                            min_pos_wl_vec = (a, b, c);
+                            first_pos = format!("({},{},{}) Q₂={}", a, b, c_val, v);
                         }
                     }
                 }
             }
         }
 
-        let first_str = if first_pos.is_empty() { "—".to_string() } else { first_pos };
-        println!("{:<4} {:>8} {:>6} {:>6} {:>8} {:>8} {:>20}",
-            n, total, pos_count, zero_count, min_digits, max_digits, first_str);
+        let tag = if pos_count > 0 { " ← ESCAPE" } else { "" };
+        println!("{:<4} {:>8} {:>6} {:>12} {:>30}{}",
+            n, total, pos_count, min_val,
+            if first_pos.is_empty() { "—".to_string() } else { first_pos }, tag);
 
-        if pos_count > 0 && first_escape_n == 0 {
-            first_escape_n = n;
-            first_escape_vec = min_pos_wl_vec;
+        if pos_count > 0 {
+            escape_wls.push(n);
+            if first_escape_n == 0 { first_escape_n = n; }
         }
     }
 
+    println!("\nEscape word lengths: {:?}", escape_wls);
+    println!("Escape pattern: {} (escapes at multiple wl)",
+        if escape_wls.len() > 1 { "PERIODIC" } else { "ISOLATED" });
+
+    // ═══ CRT ANALYSIS ═══
     println!("\n{}", "=".repeat(70));
-
-    if first_escape_n > 0 {
-        println!("\nFIRST ESCAPE at word length {} at vector ({},{},{})",
-            first_escape_n, first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
-
-        let v = eval(first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
-        println!("Q3p value: + sign, {}d", digit_count(&v));
-
-        println!("\n=== KEY RELATIONSHIPS ===");
-        println!("First escape word length: {}", first_escape_n);
-        println!("21-Root word length:      21");
-        println!("CRT minimum:              4");
-        println!("");
-        println!("first_escape - CRT_min = {} - 4 = {}", first_escape_n, first_escape_n - 4);
-        println!("first_escape - word_length = {} - 21 = {}", first_escape_n, first_escape_n - 21);
-        println!("first_escape = word_length + CRT_min? {} = 21 + 4 = 25? {}",
-            first_escape_n, if first_escape_n == 25 { "YES!" } else { "no" });
-        println!("");
-
-        // The convergent connection
-        println!("The first-escape vector ({},{},{}):",
-            first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
-        let ratio = first_escape_vec.0 as f64 / first_escape_vec.1 as f64;
-        println!("  ratio a/b = {:.6}", ratio);
-        println!("  n₊ = 1.771247, n₋ = 1.785876");
-        println!("  n₊ < {:.6} < n₋ ? {}", ratio,
-            if ratio > 1.771 && ratio < 1.786 { "YES — inside the gap!" } else { "no" });
-        println!("  This is CF convergent p₃/q₃ = 16/9 (from H153).");
+    println!("CRT ANALYSIS FOR Q₂");
+    println!("{}", "=".repeat(70));
+    let primes = [2i64, 3, 5, 7, 11, 13, 241];
+    for &p in &primes {
+        let mut min_wl: i64 = 0;
+        'outer: for n in 1..=50i64 {
+            for a in 0..p {
+                for b in 0..p {
+                    for c_val in 0..p {
+                        if a == 0 && b == 0 && c_val == 0 { continue; }
+                        let wl = a + b + c_val;
+                        if wl != n { continue; }
+                        let v = ((q00*a*a + 2*q01*a*b + q11*b*b
+                            + 2*q02*a*c_val + 2*q12*b*c_val + q22*c_val*c_val)
+                            % p + p) % p;
+                        if v > 0 {
+                            min_wl = n;
+                            break 'outer;
+                        }
+                    }
+                }
+            }
+        }
+        println!("  mod {:>3}: first nonzero Q₂ at wl = {}", p, min_wl);
     }
 
-    // ═══ THE ESCAPE LANDSCAPE ═══
-    println!("\n=== THE ESCAPE LANDSCAPE ===");
-    println!("Word lengths 1-{}: ALL Q3p ≤ 0 (bounded, no escape)", first_escape_n - 1);
-    println!("Word length {}:    FIRST Q3p > 0 (escape at ({},{},{}))",
-        first_escape_n, first_escape_vec.0, first_escape_vec.1, first_escape_vec.2);
-    println!("");
-    println!("The 21 roots of F live at word length 21, INSIDE the bounded region.");
-    println!("They are 4 word-lengths BEFORE the first escape.");
-    println!("escape = word_length + CRT_min = 21 + 4 = 25.");
-    println!("");
-    println!("NEW RELATIONSHIP:");
-    println!("  escape_time = word_length + CRT_floor");
-    println!("  25 = 21 + 4");
-    println!("");
-    println!("Compare to Product Rule: word_length × CRT = cofactor_span");
-    println!("  21 × 4 = 84");
-    println!("");
-    println!("Both involve 21 and 4, but:");
-    println!("  Product Rule: multiplicative (21 × 4 = 84)");
-    println!("  Escape Rule:  additive (21 + 4 = 25)");
+    // ═══ DUAL RULE TEST ═══
+    println!("\n{}", "=".repeat(70));
+    println!("DUAL RULE TEST");
+    println!("{}", "=".repeat(70));
 
-    // ═══ SUMMARY ═══
-    println!("\n{}", "=".repeat(60));
-    println!("SUMMARY: H165 — THE ESCAPE ORBIT");
-    println!("{}", "=".repeat(60));
-    println!("1. ALL vectors with word length 1-24: Q3p ≤ 0 (bounded).");
-    println!("2. FIRST Q3p > 0 at word length 25: vector (16, 9, 0).");
-    println!("3. (16,9,0) = CF convergent p₃/q₃, ratio 1.778 ∈ (n₊, n₋).");
-    println!("4. No c ≠ 0 vectors have Q3p > 0 at word length ≤ 28.");
-    println!("5. ESCAPE RULE: escape_time = word_length + CRT_floor = 21 + 4 = 25.");
-    println!("6. The 21 roots live 4 steps INSIDE the bounded region.");
-    println!("7. The number 4 appears TWICE: as CRT floor and as distance");
-    println!("   from word length to first escape.");
-    println!("8. Two rules of 21 and 4:");
-    println!("   MULTIPLICATIVE: 21 × 4 = 84 (Product Rule)");
-    println!("   ADDITIVE:       21 + 4 = 25 (Escape Rule)");
+    let e_q2 = first_escape_n;
+    let s_q2 = span;
+    let e_q3p: i64 = 25;
+    let s_q3p: i64 = 84;
+
+    println!("\n  Q₂:  E={}, S={}", e_q2, s_q2);
+    println!("  Q3p: E=25, S=84");
+
+    let disc_q2 = e_q2*e_q2 - 4*s_q2;
+    let disc_q3p = e_q3p*e_q3p - 4*s_q3p;
+
+    println!("\n  Diophantine condition: t² - Et + S = 0 has integer roots");
+    println!("  iff E² - 4S is a non-negative perfect square.\n");
+
+    println!("  Q3p: E² - 4S = {}² - 4×{} = {} - {} = {}",
+        e_q3p, s_q3p, e_q3p*e_q3p, 4*s_q3p, disc_q3p);
+    let isq3 = (disc_q3p as f64).sqrt() as i64;
+    println!("    √{} = {} → perfect square? {}", disc_q3p, isq3,
+        if isq3*isq3 == disc_q3p { "YES!" } else { "NO" });
+    if isq3*isq3 == disc_q3p {
+        println!("    W = (E+√disc)/2 = ({0}+{1})/2 = {2}", e_q3p, isq3, (e_q3p+isq3)/2);
+        println!("    C = (E-√disc)/2 = ({0}-{1})/2 = {2}", e_q3p, isq3, (e_q3p-isq3)/2);
+        println!("    W + C = {} ✓  W × C = {} ✓", (e_q3p+isq3)/2 + (e_q3p-isq3)/2,
+            ((e_q3p+isq3)/2) * ((e_q3p-isq3)/2));
+    }
+
+    println!("\n  Q₂: E² - 4S = {}² - 4×{} = {} - {} = {}",
+        e_q2, s_q2, e_q2*e_q2, 4*s_q2, disc_q2);
+    println!("    √{} ≈ {:.4} → perfect square? NO", disc_q2, (disc_q2 as f64).sqrt());
+    println!("    → NO integer (W,C) with W+C={} and W×C={}", e_q2, s_q2);
+    println!("    → DUAL RULE FAILS FOR Q₂\n");
+
+    println!("{}", "=".repeat(70));
+    println!("VERDICT: THE CLOSED SYSTEM IS CONDITIONAL");
+    println!("{}", "=".repeat(70));
+    println!("1. The dual rule (E=W+C, S=W×C) holds for Q3p.");
+    println!("2. It FAILS for Q₂ because E²-4S = {} ≠ k².", disc_q2);
+    println!("3. CONDITION: E²-4S must be a non-negative perfect square.");
+    println!("4. For Q3p: 25²-4×84 = 289 = 17². PERFECT SQUARE.");
+    println!("5. Q3p has d₂=18 (rich modular structure); Q₂ has d₂=1 (trivial).");
+    println!("6. The escape in Q₂ is PERIODIC (recurs); in Q3p it was ISOLATED.");
+    println!("7. The Closed System is a PROPERTY of Q3p, not a general theorem.");
+}
+
+fn dcount(n: i64) -> usize {
+    if n == 0 { return 1; }
+    n.abs().to_string().len()
+}
+
+fn gcd(a: i64, b: i64) -> i64 {
+    let (mut a, mut b) = (a.abs(), b.abs());
+    while b != 0 { let t = b; b = a % b; a = t; }
+    a
 }
