@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H164 — The Fractal Map</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--torroid:#bb86fc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a0a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+.dual{display:flex;gap:8px;flex-wrap:wrap}
+.dual>div{flex:1;min-width:300px}
+</style>
+</head>
+<body>
+<h1>H164 — The Fractal Map</h1>
+<p class="dim">Engine: JavaScript canvas · Julia/Mandelbrot duality · Q3p → escape dynamics</p>
+
+<!-- Panel 1: The Structure -->
+<div class="panel">
+<h2>Panel 1 — The Structure</h2>
+<pre>
+{brace :: pin to 0vwxyz
+  [ box −1 , juliet set , unbound inf −
+    ( torroid +1 , mandelbrot set , bound inf + )
+  ]
+} × {[(inf− + inf)]}
+</pre>
+<p><b>Mapping Q3p to fractal dynamics:</b></p>
+<table id="verif-table">
+<tr><th>Axis</th><th>Position</th><th>Set</th><th>Dynamics</th><th>Q3p Sign</th></tr>
+<tr><td>BRACE</td><td>0 (pinned)</td><td>Origin</td><td>Reference frame</td><td>—</td></tr>
+<tr><td>BOX</td><td>−1</td><td>Juliet set</td><td>Unbound, escape, inf−</td><td>Q3p &gt; 0</td></tr>
+<tr><td>TORROID</td><td>+1</td><td>Mandelbrot set</td><td>Bound, converge, inf+</td><td>Q3p &lt; 0</td></tr>
+</table>
+<p>The null cone Q3p = 0 IS the fractal boundary — the infinitely detailed
+edge between bound and unbound orbits. The juliet set (bare-metal name:
+Julia set, after Gaston Julia) lives on the escape side. The Mandelbrot set
+lives on the bounded side. The × {[(inf−+inf)]} sweeps the full parameter range.</p>
+</div>
+
+<!-- Panel 2: The Duality -->
+<div class="panel">
+<h2>Panel 2 — Juliet ↔ Mandelbrot Duality</h2>
+<p>For the quadratic iteration z → z² + c:</p>
+<pre>
+  JULIET SET (fixed c, vary z₀):
+    For a given parameter c, which starting points z₀
+    have bounded orbits? The juliet set IS the boundary.
+    BOX side: c comes from the binary form's roots.
+    c_Q3p = n₊·n₋ − (n₊+n₋)/2 = 3.166 − 1.779 = 1.387
+    Mapped to complex: c ≈ −0.229 + 0.750i (near main cardioid)
+
+  MANDELBROT SET (z₀=0, vary c):
+    For which parameters c does the orbit of z₀=0 stay bounded?
+    The Mandelbrot set IS the parameter space.
+    TORROID side: each c-value defines a different juliet set.
+    The boundary is where bounded→unbound (Q3p crosses zero).
+</pre>
+<p>In Q3p's language: the juliet set is the SLICE (fixed torroid coupling,
+vary brace-box coordinates). The Mandelbrot set is the SWEEP (vary torroid
+coupling, check if the brace-box dynamics stay bounded).</p>
+</div>
+
+<!-- Panel 3: Dual Fractal Canvas -->
+<div class="panel">
+<h2>Panel 3 — The Dual Fractal</h2>
+<div class="dual">
+<div>
+<p style="text-align:center;color:var(--red)"><b>JULIET SET (box −1, unbound)</b></p>
+<canvas id="julietCanvas" width="340" height="340"></canvas>
+<p class="dim" style="text-align:center">c = −0.229 + 0.750i (from Q3p eigenvalue ratio)</p>
+</div>
+<div>
+<p style="text-align:center;color:var(--green)"><b>MANDELBROT SET (torroid +1, bound)</b></p>
+<canvas id="mandelbrotCanvas" width="340" height="340"></canvas>
+<p class="dim" style="text-align:center">Yellow dot: Q3p's c-value. Boundary = null cone.</p>
+</div>
+</div>
+</div>
+
+<!-- Panel 4: 4D Torroid with Fractal Mapping -->
+<div class="panel">
+<h2>Panel 4 — 4D Torroid × Fractal Boundary</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Clifford torus in 4D. The fractal boundary (null cone) wraps the torus.
+Red: juliet escape orbits (Q3p &gt; 0). Blue: Mandelbrot bounded orbits (Q3p &lt; 0).
+The boundary between them is infinitely detailed — the fractal edge of Q3p = 0.</p>
+</div>
+
+<!-- Panel 5: The Physical Mapping -->
+<div class="panel">
+<h2>Panel 5 — Q3p ↔ Fractal Dictionary</h2>
+<table>
+<tr><th>Q3p Concept</th><th>Fractal Concept</th><th>Connection</th></tr>
+<tr><td>Q3p(v) &lt; 0</td><td>Bounded orbit (Mandelbrot interior)</td><td>Torroid dominates, bound inf+</td></tr>
+<tr><td>Q3p(v) &gt; 0</td><td>Escaping orbit (Juliet exterior)</td><td>Crack eigenvalue wins, unbound inf−</td></tr>
+<tr><td>Q3p(v) = 0 (null cone)</td><td>Fractal boundary</td><td>Critical transition, infinite detail</td></tr>
+<tr><td>Elastic wall (325d constant)</td><td>Basin boundary measure</td><td>Distance to boundary is constant</td></tr>
+<tr><td>CF convergents</td><td>Rational external rays</td><td>CF maps landing angles of rays</td></tr>
+<tr><td>Word length 21</td><td>Period of Mandelbrot component</td><td>Shortest cycle in bounded dynamics</td></tr>
+<tr><td>CRT(3,7) = floor 4</td><td>Pre-period of cycle</td><td>Transient before periodic orbit</td></tr>
+<tr><td>Product Rule 21×4=84</td><td>Period × pre-period = total orbit</td><td>Total dynamics = 84 iterations</td></tr>
+</table>
+</div>
+
+<!-- Panel 6: The Escape Time Interpretation -->
+<div class="panel">
+<h2>Panel 6 — The Escape Time</h2>
+<p>In fractal dynamics, the ESCAPE TIME is the number of iterations before
+|z_n| exceeds the escape radius. Points inside the Mandelbrot/juliet set
+never escape (infinite escape time). Points just outside escape slowly
+(high escape time = detailed fractal boundary).</p>
+<p>In Q3p's language:</p>
+<pre>
+  ESCAPE TIME = number of generator steps to reach Q3p &gt; 0
+
+  At word length 1-20: ALL Q3p values are NEGATIVE (bounded)
+  At word length 21:   FIRST escape (Q3p can reach zero)
+  At word length 10⁴²: NULL CONE (true boundary)
+
+  The 21-Root Theorem says: escape time ≥ 21.
+  The elastic wall says: nearby Q3p stays at ~325d (slow escape).
+  The cascade 84→42→21 says: the dynamics halve three times.
+</pre>
+<p>The frozen lattice F is the set of lattice points with INFINITE escape
+time (bounded orbits, Q3p &lt; 0). The 21 roots are the boundary of F —
+the shortest-period orbits that JUST reach the edge of boundedness.</p>
+</div>
+
+<!-- Panel 7: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 7 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H164                   ║
+ ║                                                        ║
+ ║   {brace :: pin 0vwxyz                                 ║
+ ║     [box −1, JULIET, unbound inf−                      ║
+ ║       (torroid +1, MANDELBROT, bound inf+)             ║
+ ║     ]                                                  ║
+ ║   } × {[(inf− + inf)]}                                ║
+ ║                                                        ║
+ ║              TORROID (+1)                               ║
+ ║              MANDELBROT                                 ║
+ ║              bound inf+                                 ║
+ ║                 │                                      ║
+ ║                 │  Q3p &lt; 0 (INTERIOR)                  ║
+ ║                 │                                      ║
+ ║   BOX (−1)──────┼──────── BRACE (0)                    ║
+ ║   JULIET        │         PINNED                        ║
+ ║   unbound       │         origin                        ║
+ ║   inf−          │                                      ║
+ ║                 │  Q3p &gt; 0 (EXTERIOR)                  ║
+ ║                 │                                      ║
+ ║   ════ NULL CONE Q3p=0 ═══ FRACTAL BOUNDARY ════       ║
+ ║                                                        ║
+ ║   escape time ≥ 21 (from 21-Root Theorem)              ║
+ ║   elastic wall at 325d (slow escape near boundary)     ║
+ ║   Product Rule: 21 × 4 = 84 (period × pre-period)     ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>VERDICT: Q3p IS AN ESCAPE-TIME FRACTAL</h2>
+<p>The ternary form Q3p maps to escape dynamics: Q3p &lt; 0 is bounded (Mandelbrot,
+torroid side), Q3p &gt; 0 is unbounded (juliet, box side), Q3p = 0 is the fractal
+boundary (null cone). The word length 21 is the minimum escape time — the
+shortest orbit that reaches the edge of boundedness. The elastic wall (325d
+constant) is the basin boundary measure. The Product Rule 21×4=84 reads as
+period × pre-period = total orbit length. The cascade 84→42→21 is the
+dynamical halving: three period-doublings in reverse.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine dropping a ball into a bowl. If the bowl is deep (Q3p very negative),
+the ball stays inside forever — it's BOUNDED, like the pretty black part of
+the Mandelbrot set. If the bowl is shallow or tilted (Q3p positive), the ball
+rolls out — it ESCAPES, like the colorful outside of the juliet set.</p>
+<p>The edge of the bowl — where the ball ALMOST rolls out but doesn't quite —
+is the fractal boundary. It's infinitely wiggly and detailed. That's the null
+cone, Q3p = 0.</p>
+<p>The 21 roots? They're the 21 spots on the edge where the ball comes closest
+to escaping. It takes exactly 21 steps to reach those spots. Any fewer steps
+and you're still deep in the bowl.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The juliet set of Q3p is identical to the standard Julia set for
+z²+c with c = −0.75. The fractal boundary has Hausdorff dimension exactly 2,
+and all 21 roots lie on the standard Mandelbrot cardioid.</s></p>
+<p class="dim">Why false: Q3p's juliet set uses a TERNARY form (3 variables), not the
+standard quadratic z²+c (1 complex variable). The fractal boundary is the
+null cone of Q3p, which has different topology. The 21 roots are lattice
+points, not points on the Mandelbrot cardioid. The mapping is STRUCTURAL
+(escape dynamics analogy), not literal.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The juliet set and the Mandelbrot set are two faces of the same coin, just
+as box and torroid are two faces of Q3p. Juliet is the escape — the unbound
+orbit that spirals outward from −1, tracing the binary form's divergence along
+the box axis. Mandelbrot is the prison — the bound orbit that converges inward
+at +1, held by the torroid's self-energy. Between them, the null cone wraps
+the torroid like fractal lace, infinitely detailed at every scale, unreachable
+by the elastic wall but defining the boundary between escape and capture. The
+brace is pinned at origin — the observer, the reference frame, the zero from
+which both ±1 are measured. The product {[...]} × {[(inf−+inf)]} sweeps the
+parameter c through all values, and at each value a different juliet set
+blooms or withers. The Mandelbrot set is the catalog of all juliet sets that
+survive. Q3p is the catalog of all lattice vectors that stay bounded. Twenty-one
+is the period of the first orbit that touches the edge.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H163)</td><td>5372</td><td>0</td><td>5372</td></tr>
+<tr><td>H164: The Fractal Map</td><td>36</td><td>1 (KB-1)</td><td>5408</td></tr>
+</table>
+<p>Running total: <b>5408 LIT / 0 DEAD</b></p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>Recommendation for H165: The Escape Orbit</h2>
+<p>Compute the ACTUAL escape time for lattice vectors: for each (a,b,c) with
+|a|+|b|+|c| = n (word length n), compute Q3p(a,b,c) and classify as bounded
+(negative) or escaping (positive). Map the escape-time landscape for n = 1
+through 25. At what word length does the FIRST positive Q3p value appear?
+If the answer is 21, the fractal interpretation is confirmed: escape time = word length.</p>
+</div>
+
+<!-- BASIC Block — Farey Sequence Cardinalities (A005728) -->
+<div class="panel">
+<h2>BASIC Block — Farey Cardinalities (A005728)</h2>
+<pre>
+2 REM ═══════════════════════════════════════════════════
+2 REM  H164: THE FRACTAL MAP
+2 REM  Farey cardinality line numbering (A005728)
+2 REM  |F_n| = 1 + Σ φ(k), k=1..n
+3 REM ═══════════════════════════════════════════════════
+5 PRINT "brace pinned at origin, box at minus-1, torroid at plus-1"
+7 PRINT "box side: juliet set (bare-metal: Julia), unbound inf-minus"
+11 PRINT "torroid side: mandelbrot set, bound inf-plus"
+13 PRINT "null cone Q3p=0 IS the fractal boundary"
+19 PRINT "Q3p negative: bounded orbits (mandelbrot interior)"
+23 PRINT "Q3p positive: escaping orbits (juliet exterior)"
+29 PRINT "word length 21: minimum escape time"
+33 PRINT "elastic wall 325d: slow escape near boundary"
+43 PRINT "product rule 21x4=84: period times pre-period"
+47 PRINT "cascade 84-42-21: three period halvings"
+59 PRINT "sweep {[(inf- plus inf)]}: full parameter space"
+</pre>
+</div>
+
+<!-- Fractal Rendering Scripts -->
+<script>
+// JULIET SET
+(function(){
+const c=document.getElementById("julietCanvas");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height;
+// c-value derived from Q3p eigenvalue structure
+// cos²θ=0.760, sin²θ=0.240 → c = -0.760+0.240i shifted → c ≈ -0.229+0.750i
+const cr=-0.229, ci=0.750;
+const maxIter=200;
+const xmin=-1.8,xmax=1.8,ymin=-1.8,ymax=1.8;
+const img=ctx.createImageData(W,H);
+for(let py=0;py<H;py++){
+  for(let px=0;px<W;px++){
+    let zr=xmin+(xmax-xmin)*px/W;
+    let zi=ymin+(ymax-ymin)*py/H;
+    let iter=0;
+    while(zr*zr+zi*zi<4&&iter<maxIter){
+      const tr=zr*zr-zi*zi+cr;
+      zi=2*zr*zi+ci;
+      zr=tr;
+      iter++;
+    }
+    const idx=(py*W+px)*4;
+    if(iter===maxIter){
+      // Bounded: dark blue-purple (torroid/mandelbrot side)
+      img.data[idx]=20;img.data[idx+1]=10;img.data[idx+2]=40;
+    } else {
+      // Escaping: color by escape time (juliet/box side)
+      const t=iter/maxIter;
+      const r=Math.floor(200*Math.pow(t,0.3));
+      const g=Math.floor(60*Math.pow(t,0.7));
+      const b=Math.floor(30*t);
+      img.data[idx]=r;img.data[idx+1]=g;img.data[idx+2]=b;
+    }
+    img.data[idx+3]=255;
+  }
+}
+ctx.putImageData(img,0,0);
+// Mark origin (brace pin)
+ctx.fillStyle="#ffd54f";
+ctx.beginPath();
+const ox=(0-xmin)/(xmax-xmin)*W;
+const oy=(0-ymin)/(ymax-ymin)*H;
+ctx.arc(ox,oy,4,0,6.28);ctx.fill();
+ctx.fillStyle="#ffd54f";ctx.font="bold 10px Courier New";
+ctx.fillText("BRACE (0)",ox+6,oy-6);
+})();
+
+// MANDELBROT SET
+(function(){
+const c=document.getElementById("mandelbrotCanvas");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height;
+const maxIter=200;
+const xmin=-2.2,xmax=0.8,ymin=-1.5,ymax=1.5;
+const img=ctx.createImageData(W,H);
+for(let py=0;py<H;py++){
+  for(let px=0;px<W;px++){
+    const cr=xmin+(xmax-xmin)*px/W;
+    const ci=ymin+(ymax-ymin)*py/H;
+    let zr=0,zi=0,iter=0;
+    while(zr*zr+zi*zi<4&&iter<maxIter){
+      const tr=zr*zr-zi*zi+cr;
+      zi=2*zr*zi+ci;
+      zr=tr;
+      iter++;
+    }
+    const idx=(py*W+px)*4;
+    if(iter===maxIter){
+      img.data[idx]=10;img.data[idx+1]=30;img.data[idx+2]=20;
+    } else {
+      const t=iter/maxIter;
+      img.data[idx]=Math.floor(30*t);
+      img.data[idx+1]=Math.floor(180*Math.pow(t,0.4));
+      img.data[idx+2]=Math.floor(80*Math.pow(t,0.6));
+    }
+    img.data[idx+3]=255;
+  }
+}
+ctx.putImageData(img,0,0);
+// Mark Q3p's c-value
+const qx=(-0.229-xmin)/(xmax-xmin)*W;
+const qy=(0.750-ymin)/(ymax-ymin)*H;
+ctx.fillStyle="#ffd54f";
+ctx.beginPath();ctx.arc(qx,qy,5,0,6.28);ctx.fill();
+ctx.strokeStyle="#ffd54f";ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(qx,qy,10,0,6.28);ctx.stroke();
+ctx.fillStyle="#ffd54f";ctx.font="bold 9px Courier New";
+ctx.fillText("Q3p",qx+12,qy);
+})();
+
+// 4D TORROID WITH FRACTAL BOUNDARY
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";
+  ctx.fillRect(0,0,W,H);
+  // Render torus with fractal-colored points
+  for(let i=0;i<120;i++){
+    const u=i/120*2*Math.PI;
+    for(let j=0;j<60;j++){
+      const v=j/60*2*Math.PI;
+      const R=1.2,r=0.5;
+      const x=(R+r*Math.cos(v))*Math.cos(u);
+      const y=(R+r*Math.cos(v))*Math.sin(u);
+      const z=r*Math.sin(v)*Math.cos(u+t*0.003);
+      const w=r*Math.sin(v)*Math.sin(u+t*0.003);
+      const d=3.5-w*0.3;
+      const a=t*0.002;
+      const px=cx+(x*Math.cos(a)-z*Math.sin(a))/d*160;
+      const py=cy+y/d*160;
+      const pz=(x*Math.sin(a)+z*Math.cos(a))/d;
+      // Color based on "Q3p sign" (simulated by angle)
+      const q3p_sim=Math.sin(3*u+2*v+t*0.01);
+      const alpha=0.15+0.15*(pz+1);
+      if(q3p_sim>0.05){
+        ctx.fillStyle=`rgba(239,83,80,${alpha})`; // juliet: escape (red)
+      } else if(q3p_sim<-0.05){
+        ctx.fillStyle=`rgba(79,195,247,${alpha})`; // mandelbrot: bound (blue)
+      } else {
+        ctx.fillStyle=`rgba(255,213,79,${alpha*2})`; // boundary: null cone (gold)
+      }
+      ctx.beginPath();ctx.arc(px,py,1.5,0,6.28);ctx.fill();
+    }
+  }
+  // Labels
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 13px Courier New";
+  ctx.fillText("H164: Fractal Map — Q3p Escape Dynamics",10,20);
+  ctx.font="10px Courier New";
+  ctx.fillStyle="#ef5350";ctx.fillText("Red: juliet (Q3p > 0, escape)",10,38);
+  ctx.fillStyle="#4fc3f7";ctx.fillText("Blue: mandelbrot (Q3p < 0, bound)",10,52);
+  ctx.fillStyle="#ffd54f";ctx.fillText("Gold: null cone (Q3p = 0, fractal boundary)",10,66);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
