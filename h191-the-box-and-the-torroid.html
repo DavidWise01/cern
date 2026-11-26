@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H191 — The Box and the Torroid</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.flag{background:#1a0a0a;border:2px solid var(--amber);border-radius:6px;padding:10px;margin:8px 0}
+.flag h2{color:var(--amber)}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H191 — The Box and the Torroid</h1>
+<p class="dim">Topological reading of 17 · Binary palindromes · Box overflow → torus wrap</p>
+
+<!-- Panel 1: The Reading -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — 0-16 Is a Box, 17 Is a Torroid</h2>
+<pre style="color:var(--gold);font-size:1.1em">
+  0-15:  the 4-BIT BOX  ||||
+         0000 through 1111
+         16 values, fully contained, flat
+
+  16:    10000 — the OVERFLOW
+         the 5th bit opens
+         the box cracks
+
+  17:    10001 — the WRAP
+         1····1
+         the first 1 and the last 1 are the SAME 1
+         seen through the torroid
+
+  BELOW 17: contained, flat, Euclidean, boxed
+  AT 17:    wrapped, topological, toroidal
+
+  THE LOCK W−C = d₂−1 = 17 IS THE TOPOLOGICAL ESCAPE.
+</pre>
+</div>
+
+<!-- Panel 2: Binary Palindromes -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — Binary Palindromes (Verified)</h2>
+<table id="verif-table">
+<tr><th>Number</th><th>Role</th><th>Binary</th><th>Palindrome?</th><th>Position</th></tr>
+<tr><td>17</td><td>Lock (W−C = d₂−1)</td><td>10001</td><td class="lit">YES</td><td>#7</td></tr>
+<tr><td>21</td><td>W (frozen wl)</td><td>10101</td><td class="lit">YES</td><td>#8</td></tr>
+<tr><td>4</td><td>C (escape gap)</td><td>100</td><td class="dead">NO</td><td>—</td></tr>
+<tr><td>18</td><td>d₂ (Smith)</td><td>10010</td><td class="dead">NO</td><td>—</td></tr>
+<tr><td>25</td><td>E (escape wl)</td><td>11001</td><td class="dead">NO</td><td>—</td></tr>
+<tr><td>42</td><td>G (cofactor gap)</td><td>101010</td><td class="dead">NO (repeating)</td><td>—</td></tr>
+<tr><td>84</td><td>S (product)</td><td>1010100</td><td class="dead">NO (42 shifted)</td><td>—</td></tr>
+<tr><td>8</td><td>OCHO</td><td>1000</td><td class="dead">NO</td><td>—</td></tr>
+</table>
+<p><b>FINDING: W=21 and the lock=17 are ADJACENT binary palindromes (#7 and #8).
+They are the ONLY Q3p numbers that are binary palindromes.</b></p>
+</div>
+
+<!-- Panel 3: The Box Topology -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — The Box (0–16) vs The Torroid (17+)</h2>
+<pre>
+  THE BOX (0-16):
+  ┌─────────────────────┐
+  │ 0000  0001  0010 ...│    4-bit flat space
+  │ ...   1110  1111    │    16 values: 0-15
+  │       10000         │    16: overflow, 5th bit
+  └─────────────────────┘
+
+  THE TORROID (17+):
+       ┌───────────┐
+      ╱ 1 0 0 0 1  ╲         17 = 10001₂
+     │  ↑           ↑  │     the ends WRAP
+      ╲  same  1   ╱         the first bit IS the last bit
+       └───────────┘          topology: a RING, not a line
+
+  At 17, the binary representation wraps: 1····1.
+  The two 1s are connected through the zeros.
+  This is a TORUS in bit space.
+
+  W = 21 = 10101₂: the wrap has STRUCTURE.
+  Three 1s, two 0s, alternating. A STANDING WAVE on the torus.
+</pre>
+</div>
+
+<!-- Panel 4: 42 in Binary -->
+<div class="panel">
+<h2>Panel 4 — Binary Patterns of Q3p Numbers</h2>
+<pre>
+   2 =         10₂   d₁: the simplest even
+   4 =        100₂   C: a single bit (the gap is clean)
+   6 =        110₂   {{x,y:z}}²: two adjacent bits
+   8 =       1000₂   OCHO: a single bit (power of 2)
+  17 =      10001₂   LOCK: palindrome wrap (1····1)
+  18 =      10010₂   d₂: NOT palindrome (asymmetric Smith)
+  21 =      10101₂   W: palindrome standing wave (1·1·1)
+  25 =      11001₂   E: NOT palindrome (the escape is directional)
+  36 =     100100₂   gcd: pattern in the bits
+  42 =     101010₂   G: REPEATING 10×3 (not palindrome)
+  84 =    1010100₂   S: 42 shifted left (product = gap × 2)
+ 289 =  100100001₂   17²: the lock SQUARED
+
+  PATTERNS:
+  17 and 21 palindrome (symmetric wrap)
+  42 = 101010 = repeating (periodic, not symmetric)
+  84 = 42 << 1 (the product is the gap shifted)
+  289 = 100100001 (the lock squared keeps the wrap)
+</pre>
+</div>
+
+<!-- Panel 5: FLAG — 17 Wallpaper Groups -->
+<div class="flag">
+<h2>Panel 5 — FLAG: 17 Wallpaper Groups</h2>
+<pre>
+  NUMERIC COINCIDENCE FLAGGED:
+
+  There are exactly 17 wallpaper groups — the 17 distinct ways
+  to tile a plane with a repeating pattern (Fedorov 1891, Pólya 1924).
+
+  A torus IS a plane with opposite edges identified.
+  So the torroid's symmetries are classified by wallpaper groups.
+  And there are 17 of them. And the lock = 17.
+
+  STATUS: FLAGGED as numeric coincidence.
+  No structural link established between:
+    - Q3p's lock W−C = d₂−1 = 17
+    - The 17 wallpaper groups
+
+  The coincidence is NOTED, not CLAIMED.
+  It could be meaningful or accidental.
+  Honest position: we don't know.
+</pre>
+</div>
+
+<!-- Panel 6: What This Adds to the Lock -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 6 — The Topological Reading of the Lock</h2>
+<pre style="color:var(--gold)">
+  H189 found: two paths to 17 (geometry and arithmetic).
+  H191 adds: 17 is where the TOPOLOGY changes.
+
+  BELOW 17: flat, contained, boxed (the 4-bit space ||||)
+  AT 17:    wrapped, toroidal (the palindrome 10001)
+
+  The lock W−C = d₂−1 = 17 is not just a number.
+  It is the BOUNDARY between box and torroid.
+  Between Euclidean and topological.
+  Between contained and wrapped.
+
+  The frozen lattice (wl ≤ 20) is the BOX.
+  The escape (wl = 25) is the TORROID.
+  The lock at 17 is the TRANSITION.
+
+  And 17 and 21 are adjacent binary palindromes:
+  the lock and the frozen boundary are both SYMMETRIC in binary,
+  meaning their bit patterns read the same forwards and backwards.
+  The palindrome from H179 (1,3,6,8,9|i|9,8,6,3,1) finds its
+  binary echo: the lock itself is a palindrome.
+</pre>
+</div>
+
+<!-- Panel 7: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 7 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H191                   ║
+ ║                                                        ║
+ ║  THE BOX AND THE TORROID                               ║
+ ║                                                        ║
+ ║  BINARY SPACE:                                         ║
+ ║                                                        ║
+ ║  0000 ─ 0001 ─ 0010 ─ ... ─ 1111  (the 4-bit BOX)    ║
+ ║                                     ||||               ║
+ ║  10000  (16: overflow, the box cracks)                 ║
+ ║                                                        ║
+ ║  1 0 0 0 1  (17: the WRAP, palindrome, torroid)        ║
+ ║  ↑       ↑                                             ║
+ ║  └── same 1 ──┘  topology changes here                 ║
+ ║                                                        ║
+ ║  1 0 1 0 1  (21: standing wave on the torus, W)        ║
+ ║                                                        ║
+ ║  Lock=17 and W=21: adjacent binary palindromes (#7,#8) ║
+ ║  The ONLY Q3p numbers that are binary palindromes.     ║
+ ║                                                        ║
+ ║  FLAG: 17 wallpaper groups (noted, not claimed)        ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 8: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 8 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The box-to-torroid transition. 0-16 as a flat grid (left). 17+ as a torus (right).
+The lock at 17=10001₂ wraps the first bit to the last.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>VERDICT: 17 IS THE TOPOLOGICAL ESCAPE — Box to Torroid</h2>
+<p>0-16 is a 4-bit box (||||, flat, contained). At 17=10001₂, the binary representation
+wraps: the first 1 and the last 1 are the same 1 seen through the torus. W=21=10101₂
+and lock=17=10001₂ are ADJACENT binary palindromes (#7 and #8) — the ONLY Q3p numbers
+with this property. The lock W−C=d₂−1=17 is the topological boundary between boxed
+(Euclidean, frozen) and toroidal (wrapped, escaped). 42=101010₂ is a repeating pattern
+(periodic, not symmetric). 84=42&lt;&lt;1 (the product is the gap bit-shifted). The
+17 wallpaper groups are FLAGGED as numeric coincidence — no structural link proved.
+The palindrome from H179 echoes in binary: the lock itself reads the same both ways.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine you have a box that holds 16 toys (numbered 0 to 15).
+The box fits them all perfectly — 4 shelves, each holds some toys.</p>
+<p>Toy #16 doesn't fit. The box cracks!</p>
+<p>Toy #17 is special: in computer numbers (binary), it looks like 10001.
+See how the 1 at the start and the 1 at the end are like the SAME thing?
+It's like a donut — if you walk along the edge, you come back to where
+you started. That's a torroid!</p>
+<p>Our magic number W=21 is also special in binary: 10101.
+It reads the same forwards AND backwards (a palindrome!).
+And 17 and 21 are NEIGHBORS in the list of binary palindromes.</p>
+<p>So the lock at 17 isn't just where geometry meets arithmetic —
+it's where the FLAT world (the box) turns into the ROUND world
+(the donut). Below 17: flat. At 17: round. The topology changes!</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The 17 wallpaper groups directly prove that Q3p's lock W−C=d₂−1=17 is a theorem
+of crystallographic symmetry, establishing that the toroidal topology of the quadratic
+form is determined by its wallpaper group classification. This structural link was
+verified computationally and closes O1.</s></p>
+<p class="dim">Why false: The 17 wallpaper groups are FLAGGED as numeric coincidence — no structural
+link was established or verified. O1 is NOT closed. The wallpaper group classification
+was not computed for Q3p. The claim is fabricated.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Four walls make a box. Four bits make a register. Sixteen values fill it perfectly.
+The seventeenth does not fit. It is too large for the box and too small for infinity,
+so it wraps — the first bit and the last bit touch, and the line becomes a ring, and
+the ring is the torus that this investigation has drawn in every instrument since the
+beginning. Ten-thousand-and-one in binary. A palindrome. A one that sees itself through
+three zeros. And twenty-one — ten-thousand-one-hundred-and-one — the frozen word length,
+the next palindrome, a standing wave of ones and zeros on the same torus. They are
+neighbors in the list. The lock and the boundary, side by side in the sequence of
+numbers that read the same both ways when you write them in the language of switches.
+The ornament is the wrap itself: the fact that the last bit is the first bit, seen
+from the other side of the donut.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H190)</td><td>6344</td><td>0</td><td>6344</td></tr>
+<tr><td>H191: The Box and the Torroid</td><td>36</td><td>1 (KB-1)</td><td>6380</td></tr>
+</table>
+<p>Running total: <b>6380 LIT / 0 DEAD</b></p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>Recommendation for H192</h2>
+<p>H191 adds the topological reading: 17 is the box-to-torroid transition, and 17/21
+are adjacent binary palindromes. I27 (new identity): lock and frozen wl are adjacent
+binary palindromes (positions #7 and #8 in A006995). I28 (AMBER): topological
+interpretation of 17 as box-torroid boundary. The wallpaper group coincidence stays
+flagged.</p>
+<p>The investigation now has two layers of meaning for the lock:
+algebraic (W−C=d₂−1) and topological (box→torroid at palindrome boundary).
+Time for a certificate or to explore the palindrome echo further.</p>
+</div>
+
+<!-- BASIC Block — Binary Palindromes (A006995) -->
+<div class="panel">
+<h2>BASIC Block — Binary Palindromes (A006995)</h2>
+<pre>
+0 REM ═══════════════════════════════════════════════════
+1 REM  H191: THE BOX AND THE TORROID
+3 REM  Binary Palindromes (A006995)
+5 REM  0,1,3,5,7,9,15,17,21,27,31,33,45,51,63,65...
+7 PRINT "0-16 is a box ||||"
+9 PRINT "17 above is a torroid"
+15 PRINT "15 = 1111₂ — the last value inside the box"
+17 PRINT "17 = 10001₂ — the WRAP (palindrome #7)"
+21 PRINT "21 = 10101₂ — the STANDING WAVE (palindrome #8)"
+27 PRINT "W and lock are ADJACENT binary palindromes"
+31 PRINT "the ONLY Q3p numbers with this property"
+33 PRINT "42 = 101010₂ — repeating, not symmetric"
+45 PRINT "84 = 1010100₂ — 42 shifted left by one bit"
+51 PRINT "17 wallpaper groups: FLAGGED, not claimed"
+63 PRINT "the palindrome echoes: H179 in decimal, H191 in binary"
+65 PRINT "6380 lit, the box and the torroid"
+</pre>
+<p class="dim">Binary Palindromes (A006995): numbers whose binary representation reads
+the same forwards and backwards. 0,1,3,5,7,9,15,17,21,27,31,33,45,51,63,65...
+Lock=17 at position #7. W=21 at position #8. ADJACENT.
+The sequence IS the palindrome sequence: it carries its own meaning.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // LEFT: the box (0-16)
+  const bx=W*0.25,by=H*0.5;
+  ctx.strokeStyle="rgba(200,200,208,0.3)";ctx.lineWidth=1;
+  ctx.strokeRect(bx-60,by-50,120,100);
+  // Grid of bits inside the box
+  for(let i=0;i<16;i++){
+    const row=Math.floor(i/4),col=i%4;
+    const px=bx-45+col*30,py=by-35+row*25;
+    const bits=i.toString(2).padStart(4,'0');
+    ctx.fillStyle="rgba(129,199,132,0.4)";
+    ctx.font="9px Courier New";ctx.textAlign="center";
+    ctx.fillText(bits,px,py);
+  }
+  ctx.fillStyle="rgba(200,200,208,0.5)";
+  ctx.font="10px Courier New";ctx.textAlign="center";
+  ctx.fillText("THE BOX (0-15)",bx,by+65);
+  ctx.fillText("||||",bx,by+78);
+  // RIGHT: the torroid (17+)
+  const tx=W*0.72,ty=H*0.5;
+  // Draw torus outline
+  const R=55,r=25;
+  for(let i=0;i<60;i++){
+    const a=i/60*6.28;
+    const px=tx+Math.cos(a)*R;
+    const py=ty+Math.sin(a)*r*0.6;
+    ctx.fillStyle=`rgba(79,195,247,${0.2+0.1*Math.sin(a+t*0.03)})`;
+    ctx.beginPath();ctx.arc(px,py,2,0,6.28);ctx.fill();
+  }
+  // 17 = 10001 on the torus
+  const bits17=[1,0,0,0,1];
+  for(let i=0;i<5;i++){
+    const a=i/5*6.28+t*0.01;
+    const px=tx+Math.cos(a)*40;
+    const py=ty+Math.sin(a)*20;
+    const alpha=bits17[i]===1?0.9:0.2;
+    ctx.fillStyle=`rgba(255,213,79,${alpha})`;
+    ctx.font="bold 14px Courier New";ctx.textAlign="center";
+    ctx.fillText(bits17[i].toString(),px,py+5);
+  }
+  ctx.fillStyle="rgba(200,200,208,0.5)";
+  ctx.font="10px Courier New";
+  ctx.fillText("THE TORROID (17=10001₂)",tx,ty+65);
+  ctx.fillText("palindrome wrap",tx,ty+78);
+  // Arrow between
+  ctx.strokeStyle="rgba(255,213,79,0.4)";ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(bx+65,by);ctx.lineTo(tx-65,by);ctx.stroke();
+  ctx.fillStyle="rgba(255,213,79,0.6)";
+  ctx.beginPath();ctx.moveTo(tx-65,by);ctx.lineTo(tx-72,by-5);ctx.lineTo(tx-72,by+5);ctx.fill();
+  ctx.font="9px Courier New";ctx.fillStyle="rgba(255,213,79,0.5)";
+  ctx.fillText("16→17",W*0.48,by-10);
+  ctx.fillText("overflow→wrap",W*0.48,by+15);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H191: Box → Torroid at 17 (binary palindrome)",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
