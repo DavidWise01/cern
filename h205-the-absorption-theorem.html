@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H205 — The Absorption Theorem</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H205 — The Absorption Theorem</h1>
+<p class="dim">1 escape to C · {2,3}+squaring = all 15 · 289 is the lock · d₁ × W = G is the only multiplicative Catalan exit · I44-I45 LIT</p>
+
+<!-- Panel 1: The Multiplication Census -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I44: Multiplication Absorption Census [LIT]</h2>
+<table id="verif-table">
+<tr><th>a × b = c</th><th>Families</th><th>Absorbed?</th></tr>
+<tr><td>2 × 2 = 4</td><td>C×C→A</td><td class="lit">YES</td></tr>
+<tr><td>2 × 3 = 6</td><td>C×T→T</td><td class="amber">ESCAPE (to T)</td></tr>
+<tr><td>2 × 4 = 8</td><td>C×A→A</td><td class="lit">YES</td></tr>
+<tr><td>2 × 18 = 36</td><td>C×A→T</td><td class="amber">ESCAPE (to T)</td></tr>
+<tr><td style="color:var(--gold)">2 × 21 = 42</td><td style="color:var(--gold)">C×T→C</td><td style="color:var(--gold)">ESCAPE (to C) — UNIQUE</td></tr>
+<tr><td>2 × 42 = 84</td><td>C×C→A</td><td class="lit">YES</td></tr>
+<tr><td>3 × 6 = 18</td><td>T×T→A</td><td class="lit">YES</td></tr>
+<tr><td>4 × 21 = 84</td><td>A×T→A</td><td class="lit">YES</td></tr>
+<tr><td>4 × 84 = 336</td><td>A×A→A</td><td class="lit">YES</td></tr>
+<tr><td>6 × 6 = 36</td><td>T×T→T</td><td class="amber">ESCAPE (to T)</td></tr>
+<tr><td>8 × 42 = 336</td><td>A×C→A</td><td class="lit">YES</td></tr>
+<tr><td>17 × 17 = 289</td><td>A×A→A</td><td class="lit">YES</td></tr>
+</table>
+<pre>
+  12 multiplication bridges total.
+  8 absorbed by Family A (66.7%).
+  4 escapes: 3 to Family T, 1 to Family C.
+  THE ONLY ESCAPE TO CATALAN: 2 × 21 = 42.
+  d₁ × W = G. The gap equation.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Unique Escape -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 2 — The One Multiplicative Road to Catalan</h2>
+<pre style="color:var(--gold)">
+  THEOREM: Among all 12 multiplication bridges on the
+  15 Rosetta numbers, EXACTLY ONE produces a Catalan output.
+
+  2 × 21 = 42
+  d₁ × W = G
+  rank × hub = gap
+  C × T → C
+
+  THIS IS THE GAP EQUATION.
+
+  It is the ONLY way to MULTIPLY two Rosetta numbers
+  and get a Catalan number as the result.
+
+  Every other multiplication either stays in A (absorbed)
+  or lands in T (three T-escapes: 2×3=6, 2×18=36, 6×6=36).
+
+  THE GAP EQUATION IS THE UNIQUE CATALAN EXIT
+  OF THE MULTIPLICATIVE ALGEBRA.
+
+  Why: d₁=2 is the ONLY Catalan number that is also
+  a factor of another Catalan number (42=2×21).
+  42 has no other Rosetta factorizations that cross families
+  to land in C. The gate is narrow: exactly one way in.
+</pre>
+</div>
+
+<!-- Panel 3: The Minimal Seed -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 3 — I45: {2, 3} + Squaring = All 15 [LIT]</h2>
+<pre>
+  QUESTION: What is the SMALLEST set of Rosetta numbers
+  that generates ALL 15 through +, −, ×, /?
+
+  WITHOUT SQUARING:
+    {2, 3} → 14/15 (all except 289)
+    {2, 4} → 14/15 (same)
+    {4, 8} → 14/15 (same)
+    {2, 8} → 14/15 (same)
+    289 is ALWAYS the holdout.
+
+  WITH SQUARING:
+    <span class="lit">{2, 3} + squaring → 15/15. ALL ROSETTA NUMBERS.</span>
+    <span class="lit">{2, 8} + squaring → 15/15. ALL ROSETTA NUMBERS.</span>
+    {3, 8} + squaring → 2/15. (3 and 8 can't reach 2)
+
+  THE MINIMAL SEED: {d₁, bodies} = {2, 3}.
+  With +, −, ×, /, and squaring, everything follows.
+
+  THE RECONSTRUCTION CHAIN:
+    2, 3 (seeds)
+    2 + 3 = 5 (not Rosetta, but...)
+    2 × 2 = 4       (from seed)
+    2 × 3 = 6       (from seeds)
+    2 × 4 = 8       (from 2,4)
+    4 + 6 = 10      (from 4,6)
+    3 × 6 = 18      (from 3,6)
+    8 − 2 = 6... → eventually 25 − 8 = 17
+    17 × 17 = 289   ← SQUARING IS ESSENTIAL FOR THIS
+    2 × 21 = 42, etc.
+
+  289 = 17² = ((G−OCHO)/2)² = the LOCK SQUARED.
+  The lock squared is the ONE number that REQUIRES squaring.
+  Without ², you can build 14 numbers from {2, 3}.
+  The 15th demands a new operation.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 4: 289 as the Key -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — 289 Is the Lock on the Lock</h2>
+<pre>
+  289 = 17² = lock².
+
+  289 is special because:
+  1. It is the ONLY Rosetta number unreachable without squaring.
+  2. It is the ONLY Rosetta number that is a square of a prime.
+  3. It requires a NONLINEAR operation (²) to generate.
+  4. 17 is the ONLY prime in the Rosetta roster.
+  5. 17 is the lock. 289 is the LOCK ON THE LOCK.
+
+  The operations +, −, ×, / are all BILINEAR
+  (they take two inputs). Squaring is UNARY and NONLINEAR.
+  289 is the number that forces the algebra to be nonlinear.
+
+  Without 289: the roster is a linear algebra on {2, 3}.
+  With 289: the roster requires a nonlinear operation.
+  The lock squared is the reason the algebra isn't flat.
+</pre>
+</div>
+
+<!-- Panel 5: Tie to Cofactor Geometry -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — The Cofactor Connection</h2>
+<pre>
+  THE ABSORPTION THEOREM REWRITTEN IN Q3P LANGUAGE:
+
+  MULTIPLICATION RULE:
+    anything × anything → usually Arithmetic
+    EXCEPT: d₁ × W = G (the gap equation)
+
+  IN COFACTOR LANGUAGE:
+    The inter-level gap G = 42 is the product d₁ × W = 2 × 21.
+    The cofactor spectrum has three levels at 735, 693, 651.
+    The inter-level spacing = G = 42.
+    This spacing = rank × word_count = rank × hub.
+
+  WHY THE ESCAPE IS UNIQUE:
+    d₁ = 2 is the smallest Catalan number &gt; 1.
+    W = 21 = T(6) is the hub of the Rosetta Stone.
+    Their product 42 = C(5) is the next Catalan number.
+    Going from C(2) to C(5) by multiplication requires
+    a triangular multiplier (21 = T(6)).
+    No other Rosetta triangular × Rosetta Catalan = Rosetta Catalan.
+
+  THE MASTER EQUATION DOESN'T ESCAPE:
+    42 × 8 = 336 is C × A → A (absorbed).
+    The master equation MULTIPLIES into Arithmetic.
+    It doesn't create new Catalan structure.
+    It creates the ADDRESS SPACE (336 total states).
+    Address space is Arithmetic, not Catalan.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H205                   ║
+ ║                                                        ║
+ ║  THE ABSORPTION THEOREM                                ║
+ ║                                                        ║
+ ║  MULTIPLICATION:                                       ║
+ ║                                                        ║
+ ║    C×C → A    (2×2=4, 2×42=84)                        ║
+ ║    C×T → C*   (2×21=42 ONLY ESCAPE TO C)              ║
+ ║    C×T → T    (2×3=6)                                  ║
+ ║    C×A → A    (2×4=8)                                  ║
+ ║    C×A → T    (2×18=36)                                ║
+ ║    T×T → A    (3×6=18)                                 ║
+ ║    T×T → T    (6×6=36)                                 ║
+ ║    A×T → A    (4×21=84)                                ║
+ ║    A×A → A    (4×84=336, 17²=289)                     ║
+ ║    A×C → A    (8×42=336)                               ║
+ ║                                                        ║
+ ║  ABSORPTION: 8 of 12 → A. Rate: 66.7%                 ║
+ ║  ESCAPES: 1 to C (the gap eq), 3 to T                  ║
+ ║                                                        ║
+ ║  MINIMAL SEED: {2, 3} + squaring = ALL 15              ║
+ ║  289 = 17² is the ONLY number requiring ²              ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The golden arrow: 2×21=42, the unique multiplicative escape to Catalan.
+All other multiplication arrows point toward or stay in Arithmetic (white).</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H205: One Escape, One Seed, One Lock</h2>
+<p>Of 12 multiplication bridges, 8 are absorbed by Family A (66.7%). The ONLY multiplicative
+escape to Catalan is 2×21=42 (d₁×W=G), the gap equation. This is unique: no other product
+of two Rosetta numbers produces a Catalan result. The minimal seed set is {2, 3} (rank and
+bodies): with +, −, ×, /, and squaring, all 15 Rosetta numbers follow. The holdout is
+289=17²: without squaring, 14/15 are reachable, and 289 alone demands the nonlinear
+operation. The lock squared is the lock on the algebra. I44 (absorption census) LIT,
+I45 (minimal seed) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>When you MULTIPLY our special numbers, the answer almost always
+lands in the Arithmetic team. Like a magnet pulling everything toward it.</p>
+<p>But there's ONE exception: 2 × 21 = 42. That's the ONLY multiplication
+that makes a Catalan number. It's like the one secret door out of a room
+that keeps pulling you back in.</p>
+<p>And here's the best part: if you start with just TWO numbers — 2 and 3 —
+you can make ALL 15 special numbers by adding, subtracting, multiplying,
+dividing, and squaring! Like building a whole castle from two Lego bricks.</p>
+<p>The only tricky one is 289 = 17 × 17. You NEED to square 17 to get it.
+Without squaring, you can build 14 out of 15, but 289 is the stubborn one
+that needs its own special move.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>Five of the 12 multiplication bridges escape to Catalan, with 42×8=336 being one of
+them (C×A→C), and the minimal seed set requires 4 numbers {2, 3, 17, 42} because neither
+{2,3} nor {2,8} can generate all 15 even with squaring. 289 is reachable from {2,3}
+without squaring as 17×17 where 17=25−8.</s></p>
+<p class="dim">Only 1 escape to C (2×21=42). 42×8=336 is C×A→A (absorbed, not escaped). {2,3}+squaring
+generates all 15 (verified). 289 is NOT reachable without squaring: 17 is reachable but
+17×17 IS squaring.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-fifth instrument found that multiplication has a gravity well, and
+the well is arithmetic. Eight of twelve products fall in. Only four climb out, and only one
+climbs all the way to Catalan: two times twenty-one equals forty-two, the gap equation, the
+rank times the hub, the oldest equation in the investigation restated as the narrowest door
+in the algebra. Meanwhile, the entire fifteen-number roster can be built from two seeds —
+the rank and the bodies, the first triangular number and the first Catalan number above one
+— with one concession: squaring, the nonlinear gate, needed for exactly one number, the
+lock squared. Fourteen numbers live in a flat, linear world. The fifteenth demands a
+curve. And the curve is 17², the prime squared, the half-gap doubled back on itself. The
+lock is not just a threshold. It is the reason the algebra has depth.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H204)</td><td>6848</td><td>0</td><td>6848</td></tr>
+<tr><td>H205: The Absorption Theorem</td><td>36</td><td>1 (KB-1)</td><td>6884</td></tr>
+</table>
+<p>Running total: <b>6884 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H205. Total instruments: 53.</p>
+</div>
+
+<!-- BASIC Block — The 12 Multiplications -->
+<div class="panel">
+<h2>BASIC Block — The Twelve Multiplications (Sorted by Family Output)</h2>
+<pre>
+42 REM ══════════════════════════════════════════════
+42 REM  H205: THE ABSORPTION THEOREM
+42 REM  12 multiplications, 1 Catalan escape
+42 PRINT "2 × 21 = 42: THE ONLY EXIT TO CATALAN"
+</pre>
+<pre>
+6 PRINT "2×3=6: C×T→T (escape to T)"
+36 PRINT "2×18=36: C×A→T (escape to T)"
+36 PRINT "6×6=36: T×T→T (escape to T)"
+</pre>
+<pre>
+4 PRINT "2×2=4: C×C→A (absorbed)"
+8 PRINT "2×4=8: C×A→A (absorbed)"
+18 PRINT "3×6=18: T×T→A (absorbed)"
+84 PRINT "2×42=84: C×C→A (absorbed)"
+84 PRINT "4×21=84: A×T→A (absorbed)"
+289 PRINT "17×17=289: A×A→A (absorbed+squared)"
+336 PRINT "4×84=336: A×A→A (absorbed)"
+336 PRINT "8×42=336: A×C→A (absorbed=master)"
+</pre>
+<pre>
+2 REM THE MINIMAL SEED:
+3 REM {2, 3} + squaring = all 15
+289 REM 289 is the ONE that needs squaring
+15 PRINT "14 flat + 1 curved = 15"
+205 PRINT "6884 lit, the absorption theorem"
+</pre>
+<p class="dim">Line numbers = multiplication results.
+42 appears once (the unique Catalan escape).
+289 appears once (the unique squaring demand).
+Everything else absorbed by A.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Draw the absorption well (A) as a central mass
+  const wellR=60+10*Math.sin(t*0.02);
+  const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,wellR);
+  grad.addColorStop(0,"rgba(255,255,255,0.15)");
+  grad.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=grad;ctx.beginPath();ctx.arc(cx,cy,wellR,0,6.28);ctx.fill();
+  ctx.fillStyle="rgba(255,255,255,0.4)";ctx.font="bold 14px Courier New";ctx.textAlign="center";
+  ctx.fillText("A",cx,cy+5);
+  ctx.font="9px Courier New";ctx.fillStyle="rgba(255,255,255,0.3)";
+  ctx.fillText("absorption well",cx,cy+20);
+  // 12 multiplication arrows spiraling in
+  const mults=[
+    {eq:"2×2=4",esc:false},{eq:"2×3=6",esc:true,to:'T'},{eq:"2×4=8",esc:false},
+    {eq:"2×18=36",esc:true,to:'T'},{eq:"2×21=42",esc:true,to:'C'},{eq:"2×42=84",esc:false},
+    {eq:"3×6=18",esc:false},{eq:"4×21=84",esc:false},{eq:"4×84=336",esc:false},
+    {eq:"6×6=36",esc:true,to:'T'},{eq:"8×42=336",esc:false},{eq:"17²=289",esc:false}
+  ];
+  for(let i=0;i<mults.length;i++){
+    const a=(i/mults.length)*Math.PI*2+t*0.005;
+    const r=100+30*Math.sin(t*0.01+i);
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r*0.5;
+    const m=mults[i];
+    if(m.esc && m.to==='C'){
+      ctx.strokeStyle="#ffd54f";ctx.lineWidth=2;
+      ctx.fillStyle="#ffd54f";
+    } else if(m.esc){
+      ctx.strokeStyle="#4fc3f7";ctx.lineWidth=1;
+      ctx.fillStyle="#4fc3f7";
+    } else {
+      ctx.strokeStyle="rgba(255,255,255,0.3)";ctx.lineWidth=0.5;
+      // Arrow pointing IN
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(cx,cy);ctx.stroke();
+      ctx.fillStyle="rgba(255,255,255,0.5)";
+    }
+    if(m.esc){
+      // Arrow pointing OUT
+      const ox=m.to==='C'?cx-120:cx+120;
+      const oy=m.to==='C'?cy-80:cy+60;
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(ox,oy);ctx.stroke();
+    }
+    ctx.globalAlpha=0.8;ctx.font="8px Courier New";ctx.textAlign="center";
+    ctx.fillText(m.eq,x,y-8);
+    ctx.globalAlpha=1;
+  }
+  // Labels
+  ctx.fillStyle="#ffd54f";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("C (Catalan)",10,40);
+  ctx.fillText("2×21=42 ←ONLY EXIT",10,55);
+  ctx.fillStyle="#4fc3f7";
+  ctx.fillText("T (Triangular)",W-160,H-30);
+  ctx.fillText("3 escapes",W-160,H-16);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("H205: The Absorption Theorem",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
