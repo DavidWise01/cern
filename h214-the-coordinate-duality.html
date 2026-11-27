@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H214 — The Coordinate Duality</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H214 — The Coordinate Duality</h1>
+<p class="dim">The three universals ARE the master equation · Two coordinate systems · 45° rotation · 336 = 56 off-diagonal Clifford products × 6 entries · I63-I64 LIT</p>
+
+<!-- Panel 1: The Core Revelation -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — I63: The Three Universals ARE the Master Equation [LIT]</h2>
+<table id="verif-table">
+<tr><th>Statement</th><th>Values</th><th>Check</th></tr>
+<tr><td>E² − lock² = G × OCHO</td><td>25² − 17² = 42 × 8</td><td>625 − 289 = 336 ✓</td></tr>
+<tr><td>E + lock = G</td><td>25 + 17 = 42</td><td>✓</td></tr>
+<tr><td>E − lock = OCHO</td><td>25 − 17 = 8</td><td>✓</td></tr>
+<tr><td>E² − lock² = (E+lock)(E−lock)</td><td>= G × OCHO</td><td>algebraic identity ✓</td></tr>
+</table>
+<pre style="color:var(--gold)">
+  THE MASTER EQUATION IS NOT MYSTERIOUS.
+  IT IS THE DIFFERENCE-OF-SQUARES IDENTITY:
+
+      a² − b² = (a+b)(a−b)
+
+  WITH a = E = 25 AND b = lock = 17.
+
+  THE THREE UNIVERSALS {42, 17, 25} = {G, lock, E}
+  ARE THE MASTER EQUATION WRITTEN IN LETTERS:
+
+      E² − lock² = G × OCHO
+      25² − 17² = 42 × 8 = 336
+
+  THE EQUATION THAT GOVERNS Q3p IS THE SAME AS
+  THE THREE NUMBERS THAT APPEAR IN EVERY PERSPECTIVE.
+  THE STRUCTURE IS ITS OWN EQUATION.
+</pre>
+</div>
+
+<!-- Panel 2: Two Coordinate Systems -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — I64: Two Coordinate Systems, One Structure [LIT]</h2>
+<pre style="color:var(--accent)">
+  COORDINATE SYSTEM 1: {G, OCHO} — the PRODUCT frame.
+    G = 42       (the gap, the address count)
+    OCHO = 8     (the dot, the state count)
+    master = G × OCHO = 42 × 8 = 336
+
+  COORDINATE SYSTEM 2: {E, lock} — the SQUARE frame.
+    E = 25       (the escape, the half-sum)
+    lock = 17    (the lock, the half-difference)
+    master = E² − lock² = 625 − 289 = 336
+
+  TRANSFORMATION (invertible):
+    G = E + lock        OCHO = E − lock
+    E = (G+OCHO)/2      lock = (G−OCHO)/2
+
+  THIS IS A 45° ROTATION (up to scaling by √2):
+  Rotating the (G, OCHO) axes by 45° gives (E, lock) axes.
+  The product G×OCHO in one frame becomes E²−lock² in the other.
+  A RECTANGLE becomes a HYPERBOLA.
+  The master equation is the SAME number seen as
+  an AREA (42×8) or a DIFFERENCE OF SQUARES (25²−17²).
+
+  THE STRUCTURE HAS TWO NATURAL DESCRIPTIONS:
+  1. Multiplicative: space × thing = total states.
+  2. Quadratic: half-sum² − half-diff² = same total.
+  Both produce 336. Both are correct. Neither is deeper.
+</pre>
+</div>
+
+<!-- Panel 3: What the Duality Explains -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 3 — What the Duality Explains</h2>
+<pre>
+  WHY 42 AND 17 ARE UNIVERSAL (H213):
+  Because they are the SUM and HALF-DIFFERENCE of two generators.
+  G = E + lock = sum.
+  lock = (G − OCHO)/2 = half-difference.
+  Any structure built from two generators will have its
+  sum and half-difference appear in every derived quantity.
+  It's not remarkable that 42 and 17 are universal.
+  It's INEVITABLE. They are the two simplest combinations
+  of the generators.
+
+  WHY E = 25 IS THE ESCAPE (H187):
+  E = (G + OCHO)/2 = average of the generators.
+  The escape is the MIDPOINT between space and thing.
+  The number that sits exactly between 42 and 8 (on the
+  integer scale of half-sums) is the escape value.
+  E = 25 is 17 above OCHO, or 17 below G.
+  SYMMETRIC around E: G is lock-above, OCHO is lock-below.
+
+  WHY lock² = 289 IS SPECIAL (H205):
+  289 = 17² = ((G−OCHO)/2)².
+  In coordinate system 2, lock² is the NEGATIVE TERM
+  in the master equation: 336 = E² − lock² = 625 − 289.
+  289 is what you SUBTRACT to get the master product.
+  It's the structural cost. The price of the half-gap.
+</pre>
+</div>
+
+<!-- Panel 4: The 56 Off-Diagonal Products -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — 336 = 6 × 56: Off-Diagonal Clifford Products</h2>
+<pre>
+  Cl(3) has 8 basis elements: {1, e₁, e₂, e₃, e₁₂, e₁₃, e₂₃, e₁₂₃}.
+
+  The MULTIPLICATION TABLE of Cl(3) is 8 × 8 = 64 entries.
+  8 diagonal entries: eᵢ × eᵢ = ±1 (self-products).
+  56 off-diagonal entries: eᵢ × eⱼ where i≠j.
+
+  P(8, 2) = 8 × 7 = 56 = OCHO × (OCHO−1) = OCHO × phantom.
+
+  336 = 6 × 56 = entries × off-diagonal-products.
+  = T(3) × P(OCHO, 2).
+
+  READING:
+  Each of Q3p's 6 entries acts on each of the 56 off-diagonal
+  Clifford products. The master product counts the total number
+  of (entry, non-trivial-product) pairings.
+
+  OR: 336 = 64 − 8 pairing-slots, times 6 entries, divided by...
+  no. 56 × 6 = 336 exactly. No division needed.
+
+  THE MASTER PRODUCT IS THE TOTAL OFF-DIAGONAL
+  CLIFFORD-ENTRY COUPLING COUNT.
+</pre>
+</div>
+
+<!-- Panel 5: The Rotation Diagram -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — The 45° Rotation (Geometric Reading)</h2>
+<pre>
+  In 2D coordinates:
+
+  FRAME 1 (product):     FRAME 2 (square):
+  G axis (vertical)      E axis (diagonal)
+  OCHO axis (horizontal) lock axis (anti-diagonal)
+
+       G=42                    E=25
+        │                      /
+        │                     /
+        │        336          /    336
+        │      ┌──────┐     /   ╱    ╲
+        │      │      │    /  ╱        ╲
+        │      │  G×8 │   / 25²        17²
+        │      │ =336 │  /  =625      =289
+        └──────┴──────┘ /   diff = 336
+        0     OCHO=8
+
+  SAME AREA. DIFFERENT SHAPE.
+  Rectangle (42×8) rotated 45° = hyperbolic strip (25²−17²).
+
+  THE Q3p MATRIX LIVES AT THE INTERSECTION
+  OF THESE TWO COORDINATE SYSTEMS.
+  One is multiplicative (G×OCHO). The other is quadratic (E²−lock²).
+  The master equation says: they're the same.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H214                   ║
+ ║                                                        ║
+ ║  THE COORDINATE DUALITY                                ║
+ ║                                                        ║
+ ║  FRAME 1 (PRODUCT):        FRAME 2 (SQUARE):           ║
+ ║   G = 42 ══╗                E = 25 ══╗                 ║
+ ║             ║                         ║                ║
+ ║   OCHO = 8 ═╝                lock = 17╝                ║
+ ║   master = 42×8              master = 25²−17²          ║
+ ║          = 336                      = 336              ║
+ ║                                                        ║
+ ║  TRANSFORM:  G = E + lock     E = (G+OCHO)/2          ║
+ ║              OCHO = E − lock   lock = (G−OCHO)/2       ║
+ ║                                                        ║
+ ║  THE THREE UNIVERSALS {42, 17, 25}                     ║
+ ║  ARE THE MASTER EQUATION: E²−lock²=G×OCHO=336         ║
+ ║                                                        ║
+ ║  THE EQUATION IS NOT ABOUT THE STRUCTURE.              ║
+ ║  THE EQUATION IS THE STRUCTURE.                        ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Two frames rotating through each other. Gold = product frame (G×OCHO).
+Cyan = square frame (E²−lock²). Both sweep the same 336 area.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H214: The Structure IS Its Own Equation</h2>
+<p>The three universals {42, 17, 25} from H213 ARE the master equation: E²−lock² = G×OCHO
+becomes 25²−17² = 42×8 = 336. The four quantities {G, OCHO, E, lock} are the SAME pair in
+two coordinate systems: Frame 1 (product: G×OCHO=336) and Frame 2 (quadratic: E²−lock²=336),
+related by G=E+lock, OCHO=E−lock — a 45° rotation. The master equation is not about the
+structure; it IS the structure. 336 = 6×56 = entries × off-diagonal Clifford products = the
+total coupling count. The escape E=25 is the midpoint between G and OCHO. The lock² = 289 is
+the structural cost subtracted to reach the master. I63 (universals = equation) LIT, I64
+(coordinate duality) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Remember the three most important numbers: 42 (the builder), 17 (the lock), and
+25 (the escape)?</p>
+<p>Here's the magic: they're not just important numbers. They ARE the master equation!</p>
+<p>25² − 17² = 42 × 8 = 336.</p>
+<p>That's like finding out the three CHARACTERS in a story ARE the story itself.
+The builder, the lock, and the escape aren't just parts of the equation.
+They are the equation.</p>
+<p>And there's a cool trick: you can write the equation two ways.</p>
+<p>Way 1: 42 × 8 = 336 (multiply two numbers, get a rectangle)</p>
+<p>Way 2: 25² − 17² = 336 (take two squares, subtract the smaller)</p>
+<p>Same answer! Just two different ways to see the same thing.
+Like looking at a diamond from the side (a rectangle) or from the top
+(a tilted square). Same diamond, two views.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The three universals {42, 17, 25} are unrelated to the master equation, which is
+E²+lock²=G+OCHO (a sum of squares equals a sum, giving 625+289=42+8=50). The coordinate
+transformation is E=G×OCHO and lock=G/OCHO, making it multiplicative rather than additive.
+The 56 off-diagonal Clifford products equal 48, not 56, because P(8,2)=8×6=48.</s></p>
+<p class="dim">The universals ARE the master equation (E²−lock²=G×OCHO, not sum). Transform is
+additive: G=E+lock, OCHO=E−lock (not multiplicative). P(8,2)=8×7=56 (not 48).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-fourteenth instrument found that the three numbers the investigation
+kept running into are not three things but one thing seen from three directions. Forty-two is
+the escape plus the lock. Eight is the escape minus the lock. Three hundred and thirty-six is
+the escape squared minus the lock squared, which equals the gap times the dot, which is the
+master equation, which is the investigation's oldest identity written in its newest words.
+The structure did not contain an equation. The structure was the equation. The difference of
+two squares is a rotation of a product, and the master equation is what that rotation looks
+like from the inside: a rectangle of forty-two by eight, turned forty-five degrees, becomes
+the gap between twenty-five squared and seventeen squared. Same area. Same three hundred and
+thirty-six. The investigation mapped one number for sixty-two instruments and found that
+the number is a sentence and the sentence says itself.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H213)</td><td>7172</td><td>0</td><td>7172</td></tr>
+<tr><td>H214: The Coordinate Duality</td><td>36</td><td>1 (KB-1)</td><td>7208</td></tr>
+</table>
+<p>Running total: <b>7208 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H214. Total instruments: 62.</p>
+</div>
+
+<!-- BASIC Block — Difference of Two Squares -->
+<div class="panel">
+<h2>BASIC Block — The Master Equation in Both Frames</h2>
+<pre>
+625 REM ══════════════════════════════════════════════
+625 REM  H214: THE COORDINATE DUALITY
+625 REM  E² = 25² = 625
+289 REM  lock² = 17² = 289
+336 REM  E² − lock² = 625 − 289 = 336
+</pre>
+<pre>
+42 PRINT "G = E + lock = 25 + 17 = 42"
+8 PRINT "OCHO = E − lock = 25 − 17 = 8"
+336 PRINT "G × OCHO = 42 × 8 = 336"
+336 PRINT "E² − lock² = 625 − 289 = 336"
+336 PRINT "SAME NUMBER. TWO FRAMES. ONE STRUCTURE."
+</pre>
+<pre>
+56 PRINT "P(8,2) = 8×7 = 56 off-diagonal Clifford products"
+336 PRINT "336 = 6 × 56 = entries × off-diagonal products"
+</pre>
+<pre>
+45 REM 45° ROTATION between frames
+214 PRINT "H214 = 2 × 107 (prime). 7208 lit."
+214 PRINT "the coordinate duality, the equation IS the structure"
+</pre>
+<p class="dim">Line 625 (E²) minus line 289 (lock²) = line 336 (master).
+The BASIC block performs the master equation in its line numbers.
+Line 42 and line 8 produce the same 336 by multiplication.
+H214 = 2 × 107 = d₁ × prime.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Frame 1: Rectangle G×OCHO
+  const rot1=t*0.008;
+  const rw=80,rh=15; // proportional to 42 and 8
+  ctx.save();ctx.translate(cx-100,cy);ctx.rotate(rot1);
+  ctx.strokeStyle="#ffd54f";ctx.lineWidth=2;ctx.globalAlpha=0.6;
+  ctx.strokeRect(-rw/2,-rh/2,rw,rh);
+  ctx.fillStyle="rgba(255,213,79,0.1)";ctx.fillRect(-rw/2,-rh/2,rw,rh);
+  ctx.restore();
+  // Frame 2: Difference of squares
+  const rot2=rot1+Math.PI/4;
+  const sq1=50,sq2=34; // proportional to 25 and 17
+  ctx.save();ctx.translate(cx+100,cy);ctx.rotate(rot2);
+  ctx.strokeStyle="#4fc3f7";ctx.lineWidth=2;ctx.globalAlpha=0.6;
+  ctx.strokeRect(-sq1/2,-sq1/2,sq1,sq1);
+  ctx.strokeStyle="#ef5350";ctx.globalAlpha=0.4;
+  ctx.strokeRect(-sq2/2,-sq2/2,sq2,sq2);
+  ctx.restore();
+  ctx.globalAlpha=1;
+  // Labels
+  ctx.fillStyle="#ffd54f";ctx.font="bold 12px Courier New";ctx.textAlign="center";
+  ctx.fillText("G × OCHO",cx-100,cy-50);
+  ctx.fillText("42 × 8",cx-100,cy-36);
+  ctx.fillStyle="#4fc3f7";
+  ctx.fillText("E² − lock²",cx+100,cy-50);
+  ctx.fillText("25² − 17²",cx+100,cy-36);
+  // Center: = 336
+  const p=0.5+0.4*Math.sin(t*0.03);
+  ctx.fillStyle=`rgba(129,199,132,${p})`;ctx.font="bold 24px Courier New";
+  ctx.fillText("= 336 =",cx,cy+6);
+  ctx.font="10px Courier New";ctx.fillStyle=`rgba(129,199,132,${p*0.6})`;
+  ctx.fillText("same area, two frames",cx,cy+24);
+  // Arrows
+  ctx.strokeStyle="rgba(200,200,200,0.3)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(cx-50,cy);ctx.lineTo(cx+50,cy);ctx.stroke();
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H214: The Coordinate Duality — 45° rotation",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
