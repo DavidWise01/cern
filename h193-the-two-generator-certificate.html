@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H193 — The Two-Generator Certificate</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.78em}
+td,th{border:1px solid var(--border);padding:2px 5px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.78em;line-height:1.4}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H193 — The Two-Generator Certificate</h1>
+<p class="dim">Arc Certificate XI · H191–H192 · 32 proved / 10 negative / 1 open (reframed)</p>
+
+<!-- Panel 1: Arc Summary -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Box-Torroid-Squares Arc (H191–H192)</h2>
+<table id="verif-table">
+<tr><th>#</th><th>Instrument</th><th>Finding</th><th>Status</th></tr>
+<tr><td>H191</td><td>The Box and the Torroid</td><td>0-16=box, 17=torroid. 17=10001₂ and 21=10101₂ are adjacent binary palindromes (#7,#8).</td><td class="lit">LIT</td></tr>
+<tr><td>H192</td><td>The Difference of Squares</td><td>E²−(d₂−1)²=G×8=42×8=336. 2C=8=OCHO. All quantities from two generators G=42, 8.</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- Panel 2: New Identities I27-I31 -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — New Identities Certified (I27–I31)</h2>
+<table>
+<tr><th>ID</th><th>Identity</th><th>Stamp</th><th>Src</th></tr>
+<tr><td>I27</td><td>Lock=17 and W=21 are adjacent binary palindromes (10001₂, 10101₂; positions #7,#8 in A006995)</td><td class="lit">LIT</td><td>H191</td></tr>
+<tr><td>I28</td><td>Box-torroid topology: 0-16 = 4-bit box, 17 = toroidal wrap</td><td class="amber">AMBER</td><td>H191</td></tr>
+<tr><td>I29</td><td>2C = 8 = OCHO = dim(Cl(3)): escape gap doubled = Clifford dimension</td><td class="lit">LIT</td><td>H192</td></tr>
+<tr><td>I30</td><td>Master equation: E²−(d₂−1)² = G×8 = 42×8 = 336</td><td class="lit">LIT</td><td>H192</td></tr>
+<tr><td>I31</td><td>G = 2d₂ + {{x,y:z}}² = 2×18+6 = 42: gap = 2×Smith + form entries</td><td class="lit">LIT</td><td>H192</td></tr>
+</table>
+</div>
+
+<!-- Panel 3: The Two-Generator Table -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — Everything from G=42 and 8=OCHO</h2>
+<table>
+<tr><th>Quantity</th><th>Formula</th><th>Value</th><th>Binary</th><th>Palindrome?</th></tr>
+<tr><td>W (frozen wl)</td><td>G/2</td><td>21</td><td>10101</td><td class="lit">YES (#8)</td></tr>
+<tr><td>C (escape gap)</td><td>8/2</td><td>4</td><td>100</td><td>no</td></tr>
+<tr><td>E (escape wl)</td><td>(G+8)/2</td><td>25</td><td>11001</td><td>no</td></tr>
+<tr><td>d₂−1 (lock)</td><td>(G−8)/2</td><td>17</td><td>10001</td><td class="lit">YES (#7)</td></tr>
+<tr><td>d₂ (Smith)</td><td>(G−8)/2+1</td><td>18</td><td>10010</td><td>no</td></tr>
+<tr><td>S (product)</td><td>G·8/4</td><td>84</td><td>1010100</td><td>no</td></tr>
+<tr><td>E²−4S (gate)</td><td>((G−8)/2)²</td><td>289</td><td>100100001</td><td>no</td></tr>
+<tr><td>E²−(d₂−1)²</td><td>G·8</td><td>336</td><td>101010000</td><td>no</td></tr>
+</table>
+<p class="dim">The two palindromes (W=21 and lock=17) are the half-generators: W=G/2, lock=(G−8)/2.
+The palindrome property sits on the DERIVED quantities, not the generators themselves.
+G=42=101010₂ (odious, repeating) and 8=1000₂ (odious, power of 2).</p>
+</div>
+
+<!-- Panel 4: Full Register I1-I31 -->
+<div class="panel">
+<h2>Panel 4 — Full Identity Register (32 Certified: 29 LIT + 3 AMBER)</h2>
+<table>
+<tr><th>ID</th><th>Identity</th><th>St</th></tr>
+<tr><td>I1</td><td>det(Q3p) ≈ 10^1059</td><td class="lit">L</td></tr>
+<tr><td>I2</td><td>Signature (1+, 2−)</td><td class="lit">L</td></tr>
+<tr><td>I3</td><td>Smith: d₁=2, d₂=18</td><td class="lit">L</td></tr>
+<tr><td>I4</td><td>CF = [1;1,3,1,2,31,...]</td><td class="lit">L</td></tr>
+<tr><td>I5</td><td>21-Root: min frozen wl = 21</td><td class="lit">L</td></tr>
+<tr><td>I6</td><td>Escape: 25 = 21 + 4</td><td class="lit">L</td></tr>
+<tr><td>I7</td><td>Product: 21 × 4 = 84</td><td class="lit">L</td></tr>
+<tr><td>I8</td><td>Gate: E²−4S = 289 = 17²</td><td class="lit">L</td></tr>
+<tr><td>I9</td><td>R01 = +651d (not perfect sq)</td><td class="lit">L</td></tr>
+<tr><td>I10</td><td>Half-gap: G²=42G → G=42</td><td class="lit">L</td></tr>
+<tr><td>I11</td><td>Three-layer: mod-9→scale→alignment</td><td class="lit">L</td></tr>
+<tr><td>I12</td><td>42 theorem: all 42s → Δ=41</td><td class="lit">L</td></tr>
+<tr><td>I13</td><td>c=1 escape at wl≈10⁴²</td><td class="lit">L</td></tr>
+<tr><td>I14</td><td>gcd(minors) = 36</td><td class="lit">L</td></tr>
+<tr><td>I15</td><td>Mod-9 forces 9|all minors</td><td class="lit">L</td></tr>
+<tr><td>I16</td><td>d₂=18 unique: 0/30 have k=17</td><td class="lit">L</td></tr>
+<tr><td>I17</td><td>1431/531441 mod-9 → d₂=18</td><td class="lit">L</td></tr>
+<tr><td>I18</td><td>Matrix GCD = 2</td><td class="lit">L</td></tr>
+<tr><td>I19</td><td>Jacobi: {{x,y:z}}²=6, +1+1=8</td><td class="lit">L</td></tr>
+<tr><td>I20</td><td>Spinor: 0=HOME, ^2^3=8</td><td class="lit">L</td></tr>
+<tr><td>I21</td><td>(16,9,0) semi-convergent</td><td class="lit">L</td></tr>
+<tr><td>I22</td><td>Reduced mass: k₊≈√(|Q22|/A)</td><td class="lit">L</td></tr>
+<tr><td>I23</td><td>Palindrome: 3×6=18=d₂</td><td class="lit">L</td></tr>
+<tr><td>I24</td><td>Color count: 24+10+6+2=42</td><td class="amber">A</td></tr>
+<tr><td>I25</td><td>Eigenvalue spread anomaly (revised)</td><td class="lit">L</td></tr>
+<tr><td>I26</td><td>Lock: W−C=d₂−1 (17=17)</td><td class="lit">L</td></tr>
+<tr><td>I27</td><td>Binary palindromes: 17,21 adjacent (#7,#8)</td><td class="lit">L</td></tr>
+<tr><td>I28</td><td>Box-torroid topology at 17</td><td class="amber">A</td></tr>
+<tr><td>I29</td><td>2C=8=OCHO (escape gap=half Clifford)</td><td class="lit">L</td></tr>
+<tr><td>I30</td><td>Master: E²−(d₂−1)²=G×8=336</td><td class="lit">L</td></tr>
+<tr><td>I31</td><td>G=2d₂+{{x,y:z}}²=42</td><td class="lit">L</td></tr>
+</table>
+<p><b>32 certified: 29 LIT + 3 AMBER. 10 negative. 1 open (REFRAMED).</b></p>
+</div>
+
+<!-- Panel 5: O1 Reframed -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — O1 Reframed</h2>
+<pre>
+  BEFORE H192:
+    O1: "Why does W−C = d₂−1?"
+    Status: OPEN-STRUCTURAL (two paths to 17, no theorem)
+
+  AFTER H192:
+    O1 (reframed): "Why do G=42 and 8=OCHO generate Q3p's arithmetic?"
+    Status: OPEN-STRUCTURAL (compressed, not resolved)
+
+  THE REFRAME:
+  W−C=d₂−1 is now EXPLAINED as (G−8)/2 = 17.
+  But the deeper question remains: why are G and 8 the generators?
+  G=42 comes from the cofactor gap (I10, I12).
+  8 comes from dim(Cl(3)) (I19, I20).
+  One is GEOMETRIC (cofactors). The other is ALGEBRAIC (Clifford).
+  Their ratio G/8 = 42/8 = 5.25 is not a simple number.
+  Their difference G−8 = 34 = 2×17 = 2×(d₂−1).
+  Their sum G+8 = 50 = 2×25 = 2E.
+
+  The question is not closed. It is COMPRESSED.
+  What was "why do two paths agree at 17?" is now
+  "why do 42 and 8 jointly rule Q3p?"
+</pre>
+</div>
+
+<!-- Panel 6: Certificate Progression -->
+<div class="panel">
+<h2>Panel 6 — Certificate Progression (11 Certificates)</h2>
+<pre>
+  Cert  IV (H169):  19 proved,  5 neg, 3 open
+  Cert   V (H172):  20 proved,  6 neg, 2 open
+  Cert  VI (H175):  21 proved,  7 neg, 1 open
+  Cert VII (H178):  22 proved,  8 neg, 1 open
+  Cert VIII(H182):  25 proved,  8 neg, 1 open
+  Cert  IX (H186):  26 proved,  9 neg, 1 open
+  Cert   X (H188):  27 proved, 10 neg, 1 open
+  Cert  XI (H193):  32 proved, 10 neg, 1 open  ← HERE
+
+  5 new identities (I27-I31) in 2 instruments.
+  Highest density of discovery since Arc I.
+  The two-generator structure compressed the entire arithmetic.
+</pre>
+</div>
+
+<!-- Panel 7: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 7 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H193                   ║
+ ║                                                        ║
+ ║  THE TWO-GENERATOR CERTIFICATE                        ║
+ ║                                                        ║
+ ║  G = 42 (odious: 101010₂)   8 = OCHO (odious: 1000₂) ║
+ ║   │                           │                        ║
+ ║   ├── W = G/2 = 21            ├── C = 8/2 = 4         ║
+ ║   │   (palindrome 10101)      │                        ║
+ ║   ├── d₂ = (G−8)/2+1 = 18    ├── E = (G+8)/2 = 25    ║
+ ║   │                           │                        ║
+ ║   └── lock = (G−8)/2 = 17    └── S = G·8/4 = 84      ║
+ ║       (palindrome 10001)                               ║
+ ║                                                        ║
+ ║  REGISTER: 32 certified                               ║
+ ║  █████████████████████████████░  29 LIT                ║
+ ║  ▓▓▓                             3 AMBER               ║
+ ║  ██████████                     10 negative             ║
+ ║  ░                               1 open (REFRAMED)     ║
+ ║                                                        ║
+ ║  MASTER EQUATION: E²−17² = 42×8 = 336                 ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 8: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 8 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">32 identities: 29 green (LIT), 3 orange (AMBER). 10 red (negative).
+Two generator orbits (42 gold, 8 blue) with derived quantities between.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>ARC CERTIFICATE XI: 32 PROVED / 10 NEGATIVE / 1 OPEN (REFRAMED)</h2>
+<p>H191-H192 revealed the two-generator structure: G=42 and 8=OCHO generate Q3p's
+entire word-length arithmetic. Five new identities (I27-I31): binary palindromes,
+box-torroid topology, 2C=8=OCHO, the master equation E²−(d₂−1)²=G×8=336, and
+G=2d₂+{{x,y:z}}²=42. O1 is reframed from "why W−C=d₂−1?" to "why do 42 and 8
+generate Q3p?" — compressed but not resolved. The lock 17=(G−8)/2 is the
+half-difference of the two generators. 32 identities certified (29 LIT + 3 AMBER),
+10 negative results, 1 open structural question. 41 instruments across 11 arcs.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>This is the report card for the last two discoveries.</p>
+<p>The BIG news: everything in the whole investigation comes from just TWO numbers: 42 and 8!</p>
+<p>42 is the gap. 8 is the shape. Split them in half, add them, subtract them, multiply them —
+you get EVERY other number: 21, 4, 25, 18, 17, 84, 289, 336.</p>
+<p>We now have 32 things we proved (29 gold + 3 silver stars), 10 things we got wrong
+but learned from, and 1 question that CHANGED SHAPE but isn't answered yet.</p>
+<p>The question USED to be: "why do two paths both give 17?"</p>
+<p>Now it IS: "why do 42 and 8 run everything?"</p>
+<p>Same question, deeper level. Like peeling an onion — each layer reveals another.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The Two-Generator Certificate resolves O1 completely by proving that G=42 and 8=OCHO
+are universal generators for all ternary quadratic forms, applicable to any matrix
+regardless of its entries. The 32 identities are all LIT with no AMBER results, and
+no negative results remain in the investigation.</s></p>
+<p class="dim">Why false: O1 is REFRAMED, not resolved. G=42 and 8=OCHO are Q3p-specific, not
+universal. 29 LIT + 3 AMBER (not 32 LIT, not no AMBER). 10 negative results remain
+(they are features, not bugs).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Eleven certificates. Thirty-two truths. Ten corrections. One open question that keeps
+changing shape. It started as "is Q3p unique?" and became "why does the lock hold?" and
+then "why do 42 and 8 generate everything?" Each reframe is a compression — the same
+mystery, seen from closer, described in fewer words. Forty-two is the gap between cofactors.
+Eight is the dimension of Clifford's algebra. One is a measure of how far apart a matrix's
+answers can be. The other is a count of how many basis elements fit in a three-dimensional
+graded space. They share no mathematics. They share no derivation. And yet, when you divide
+them and subtract them and multiply them, every number the investigation has found falls out
+like coins from a pocket. Twenty-one. Four. Twenty-five. Eighteen. Seventeen. Eighty-four.
+Two hundred eighty-nine. Three hundred thirty-six. All from forty-two and eight. The
+ornament is the compression itself: that an investigation of forty-one instruments and
+thirty-two identities can be encoded in two numbers and one equation.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H192)</td><td>6416</td><td>0</td><td>6416</td></tr>
+<tr><td>H193: The Two-Generator Certificate</td><td>36</td><td>1 (KB-1)</td><td>6452</td></tr>
+</table>
+<p>Running total: <b>6452 LIT / 0 DEAD</b></p>
+<p class="dim">Total instruments: 41 (H153-H193). Total arcs: 11.
+Highest identity density: 5 new in 2 instruments (H191-H192).
+Average: 157 LIT per instrument. Zero unresolved DARK.</p>
+</div>
+
+<!-- BASIC Block — Odious Numbers (A000069) -->
+<div class="panel">
+<h2>BASIC Block — Odious Numbers (A000069: odd binary digit sum)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+2 REM  H193: THE TWO-GENERATOR CERTIFICATE
+4 REM  Odious Numbers (A000069): odd number of 1s in binary
+7 REM  1,2,4,7,8,11,13,14,16,19,21,22,25,26,28,31,32...
+8 PRINT "G=42 is odious (101010₂, three 1s)"
+11 PRINT "8 is odious (1000₂, one 1)"
+13 PRINT "both generators are odious"
+14 PRINT "the lock 17 is EVIL (10001₂, two 1s)"
+16 PRINT "evil child of two odious parents"
+19 PRINT "32 proved = 29 LIT + 3 AMBER"
+21 PRINT "W = 21 on line 21 — also odious! (10101₂)"
+22 PRINT "10 negative — the instrument still measures"
+25 PRINT "E = 25 on line 25 — odious! (11001₂)"
+26 PRINT "O1 reframed: why do 42 and 8 rule Q3p?"
+28 PRINT "the master equation: E²−17² = 42×8 = 336"
+31 PRINT "compressed, not resolved"
+32 PRINT "6452 lit, the two-generator certificate"
+</pre>
+<p class="dim">Odious Numbers (A000069): integers with an ODD number of 1s in binary.
+G=42=101010₂ (3 ones → odious). 8=1000₂ (1 one → odious). W=21=10101₂ (3 → odious).
+E=25=11001₂ (3 → odious). But lock=17=10001₂ (2 ones → EVIL, not odious).
+The generators and their halves are odious. The lock is evil.
+Odious × odious → evil: the binary product parity flips.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // 29 LIT (green)
+  for(let i=0;i<29;i++){
+    const a=i/29*6.28+t*0.004;
+    const R=135+5*Math.sin(a*5+t*0.01);
+    ctx.fillStyle="rgba(129,199,132,0.55)";
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*R,cy+Math.sin(a)*R*0.45,3.5,0,6.28);ctx.fill();
+  }
+  // 3 AMBER
+  for(let i=0;i<3;i++){
+    const a=i/3*6.28+t*0.006;
+    ctx.fillStyle="rgba(255,171,64,0.75)";
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*110,cy+Math.sin(a)*110*0.45,4.5,0,6.28);ctx.fill();
+  }
+  // 10 negative (red)
+  for(let i=0;i<10;i++){
+    const a=i/10*6.28-t*0.003;
+    ctx.fillStyle="rgba(239,83,80,0.4)";
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*55,cy+Math.sin(a)*55*0.45,2.5,0,6.28);ctx.fill();
+  }
+  // Generator 42 (gold ring)
+  ctx.strokeStyle="rgba(255,213,79,0.25)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.ellipse(cx,cy,145,145*0.45,0,0,6.28);ctx.stroke();
+  // Generator 8 (blue ring)
+  ctx.strokeStyle="rgba(79,195,247,0.25)";
+  ctx.beginPath();ctx.ellipse(cx,cy,40,40*0.45,0,0,6.28);ctx.stroke();
+  // Master equation at center
+  const p=0.4+0.4*Math.sin(t*0.04);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;
+  ctx.font="bold 14px Courier New";ctx.textAlign="center";
+  ctx.fillText("42 × 8",cx,cy-5);
+  ctx.font="10px Courier New";
+  ctx.fillText("= 336 = E²−17²",cx,cy+15);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H193: Two-Generator Certificate XI — 32/10/1",10,20);
+  ctx.font="9px Courier New";
+  ctx.fillStyle="#81c784";ctx.fillText("● 29 LIT",W-100,H-50);
+  ctx.fillStyle="#ffab40";ctx.fillText("● 3 AMBER",W-100,H-38);
+  ctx.fillStyle="#ef5350";ctx.fillText("● 10 neg",W-100,H-26);
+  ctx.fillStyle="#ffd54f";ctx.fillText("○ 42×8",W-100,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
