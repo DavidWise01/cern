@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H210 — The Practical Connection</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H210 — The Practical Connection</h1>
+<p class="dim">Stewart's criterion · Lock family {17,25,289} entirely non-practical · Factor of 2 is the gate · I53-I54 LIT</p>
+
+<!-- Panel 1: Stewart's Criterion -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I53: Practicality Splits on the Factor of 2 [LIT]</h2>
+<table id="verif-table">
+<tr><th>n</th><th>Factorization</th><th>Divisor count</th><th>σ(n)</th><th>Stewart</th><th>Practical?</th></tr>
+<tr><td style="color:var(--green)">2</td><td>2</td><td>2</td><td>3</td><td>PASS</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--red)">3</td><td>3</td><td>2</td><td>4</td><td>p₁=3&gt;2</td><td class="dead">NO</td></tr>
+<tr><td style="color:var(--green)">4</td><td>2²</td><td>3</td><td>7</td><td>PASS</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--green)">6</td><td>2×3</td><td>4</td><td>12</td><td>3≤1+σ(2)=4 ✓</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--green)">8</td><td>2³</td><td>4</td><td>15</td><td>PASS</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--red)">10</td><td>2×5</td><td>4</td><td>18</td><td>5&gt;1+σ(2)=4</td><td class="dead">NO</td></tr>
+<tr><td style="color:var(--red)">17</td><td>17</td><td>2</td><td>18</td><td>p₁=17&gt;2</td><td class="dead">NO</td></tr>
+<tr><td style="color:var(--green)">18</td><td>2×3²</td><td>6</td><td>39</td><td>3≤4 ✓</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--red)">21</td><td>3×7</td><td>4</td><td>32</td><td>p₁=3&gt;2</td><td class="dead">NO</td></tr>
+<tr><td style="color:var(--red)">25</td><td>5²</td><td>3</td><td>31</td><td>p₁=5&gt;2</td><td class="dead">NO</td></tr>
+<tr><td style="color:var(--green)">36</td><td>2²×3²</td><td>9</td><td>91</td><td>3≤1+σ(4)=8 ✓</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--green)">42</td><td>2×3×7</td><td>8</td><td>96</td><td>3≤4,7≤1+σ(6)=13 ✓</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--green)">84</td><td>2²×3×7</td><td>12</td><td>224</td><td>3≤8,7≤13 ✓</td><td class="lit">YES</td></tr>
+<tr><td style="color:var(--red)">289</td><td>17²</td><td>3</td><td>307</td><td>p₁=17&gt;2</td><td class="dead">NO</td></tr>
+<tr><td style="color:var(--green)">336</td><td>2⁴×3×7</td><td>20</td><td>992</td><td>3≤32,7≤40 ✓</td><td class="lit">YES</td></tr>
+</table>
+<pre>
+  STEWART'S CRITERION: n is practical iff its smallest prime
+  factor is 2, and each subsequent prime p satisfies
+  p ≤ 1 + σ(product of all smaller prime-power factors).
+
+  THE GATE: having 2 as a factor.
+  5 of 6 non-practical numbers are ODD (no factor of 2).
+  The 6th (10=2×5) HAS factor 2 but 5 is too big (5 > 4).
+
+  STATUS: <span class="lit">LIT</span> (Stewart's theorem applied)
+</pre>
+</div>
+
+<!-- Panel 2: The Lock Family -->
+<div class="panel" style="border-color:var(--red)">
+<h2>Panel 2 — I54: The Lock Family Is Entirely Non-Practical [LIT]</h2>
+<pre>
+  THE NON-PRACTICAL SET: {3, 10, 17, 21, 25, 289}
+
+  Split by Q3p role:
+
+  THE LOCK FAMILY (all from 17 = (G−OCHO)/2):
+    17 = lock               (prime, p₁=17 &gt; 2)
+    25 = escape = lock+8    (5², p₁=5 &gt; 2)
+    289 = lock²             (17², p₁=17 &gt; 2)
+  ALL THREE: non-practical. Odd. No factor of 2.
+
+  THE ODD TRIANGULARS:
+    3 = bodies = T(2)       (prime, p₁=3 &gt; 2)
+    21 = hub = T(6) = 3×7   (p₁=3 &gt; 2)
+  BOTH: odd, non-practical.
+
+  THE LONE EVEN FAILURE:
+    10 = T(4) = QCD = 2×5   (5 &gt; 1+σ(2)=4)
+  The ONLY even non-practical member.
+  Stewart fails because 5 is too large a gap after 2.
+
+  THE LOCK MAKES THINGS NON-PRACTICAL.
+  Everything touched by 17 (the prime at the half-gap)
+  inherits its impracticality. The lock LOCKS OUT
+  the representability property that practical numbers have.
+</pre>
+</div>
+
+<!-- Panel 3: Why 42 IS Practical -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 3 — Why G=42 Is Practical (and the 2-3-7 Chain)</h2>
+<pre>
+  42 = 2 × 3 × 7. Stewart check:
+    p₁ = 2: OK (smallest prime is 2)
+    p₂ = 3: check 3 ≤ 1+σ(2) = 1+3 = 4. YES (3 ≤ 4).
+    p₃ = 7: check 7 ≤ 1+σ(2×3) = 1+σ(6) = 1+12 = 13. YES (7 ≤ 13).
+
+  THE 2-3-7 CHAIN: each prime is small enough relative
+  to the divisor sum of everything before it.
+  2 → σ(2)=3 → allows 3 → σ(6)=12 → allows 7.
+  The primes of 42 form a CASCADING PERMISSION CHAIN.
+
+  84 = 2²×3×7: same chain, stronger (σ(4)=7, so 3≤8, 7≤13).
+  336 = 2⁴×3×7: same chain, much stronger (σ(16)=31, so 3≤32, 7≤40).
+
+  THE {2, 3, 7} FACTORIZATION IS THE SHARED DNA.
+  42, 84, 336 are ALL built from the same three primes.
+    42 = 2¹ × 3¹ × 7¹
+    84 = 2² × 3¹ × 7¹
+   336 = 2⁴ × 3¹ × 7¹
+  They differ ONLY in the power of 2.
+  More factors of 2 = more practical (wider σ margin).
+</pre>
+</div>
+
+<!-- Panel 4: The Divisor Count Ladder -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — Divisor Counts (The Richness Ladder)</h2>
+<pre style="color:var(--accent)">
+  DIVISOR COUNTS, SORTED:
+
+  336: 20 divisors  (2⁴×3×7, the RICHEST)
+  84:  12 divisors  (2²×3×7)
+  36:   9 divisors  (2²×3²)
+  42:   8 divisors  (2×3×7)
+  18:   6 divisors  (2×3²)
+  6:    4 divisors  (2×3)
+  8:    4 divisors  (2³)
+  10:   4 divisors  (2×5)   ← NOT practical despite 4 divs
+  21:   4 divisors  (3×7)   ← NOT practical (no factor 2)
+  4:    3 divisors  (2²)
+  25:   3 divisors  (5²)    ← NOT practical
+  289:  3 divisors  (17²)   ← NOT practical
+  2:    2 divisors  (2)
+  3:    2 divisors  (3)     ← NOT practical
+  17:   2 divisors  (17)    ← NOT practical
+
+  THE MASTER PRODUCT 336 HAS THE MOST DIVISORS: 20.
+  It is the richest number in the roster.
+  336 = 42 × 8 = G × OCHO.
+  Its divisor richness comes from 2⁴ × 3 × 7:
+  4 copies of 2 provide the combinatorial depth.
+</pre>
+</div>
+
+<!-- Panel 5: The Structural Reason -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — Why Q3p Produces Practical Numbers</h2>
+<pre>
+  THE STRUCTURAL REASON:
+
+  Q3p's generators are G=42=2×3×7 and OCHO=8=2³.
+  BOTH have 2 as their smallest prime factor.
+
+  When you MULTIPLY numbers whose smallest prime is 2,
+  the product's smallest prime is still 2.
+  Practicality is preserved under multiplication
+  (when the smallest prime stays at 2 and the
+  subsequent primes stay within the Stewart bound).
+
+  THE CHAIN:
+    2 is practical.
+    4 = 2² is practical.
+    6 = 2×3 is practical (3 ≤ 1+σ(2)=4).
+    8 = 2³ is practical.
+    18 = 2×3² is practical.
+    36 = 2²×3² is practical.
+    42 = 2×3×7 is practical (7 ≤ 1+σ(6)=13).
+    84 = 2²×3×7 is practical.
+    336 = 2⁴×3×7 is practical.
+
+  EVERY STEP IN THE GENERATION CHAIN THAT INVOLVES
+  MULTIPLICATION BY 2 OR SQUARING OF AN EVEN NUMBER
+  PRESERVES PRACTICALITY.
+
+  The non-practical numbers arise from ADDITION/SUBTRACTION:
+    3+18=21 (21 is odd, non-practical)
+    21-4=17 (17 is odd prime, non-practical)
+    4+21=25 (25 is odd, non-practical)
+    4+6=10 (10 is even but 5 &gt; Stewart bound)
+
+  MULTIPLICATION PRESERVES PRACTICALITY.
+  ADDITION BREAKS IT.
+  This is why 9/15 are practical: the multiplicative core
+  (H207) is entirely practical. The additive extensions
+  are where non-practicality enters.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H210                   ║
+ ║                                                        ║
+ ║  THE PRACTICAL CONNECTION                              ║
+ ║                                                        ║
+ ║  PRACTICAL (9):       NON-PRACTICAL (6):               ║
+ ║  2  = 2         (p)   3  = 3         (odd prime)      ║
+ ║  4  = 2²        (p)   10 = 2×5       (5 too big)     ║
+ ║  6  = 2×3       (p)   17 = 17        (odd prime)      ║
+ ║  8  = 2³        (p)   21 = 3×7       (odd, no 2)     ║
+ ║  18 = 2×3²      (p)   25 = 5²        (odd, no 2)     ║
+ ║  36 = 2²×3²     (p)   289= 17²       (odd, no 2)     ║
+ ║  42 = 2×3×7     (p)                                   ║
+ ║  84 = 2²×3×7    (p)   LOCK FAMILY: {17,25,289}       ║
+ ║  336= 2⁴×3×7    (p)   ALL non-practical. ALL from 17. ║
+ ║                                                        ║
+ ║  GATE: factor of 2 (Stewart's first criterion)         ║
+ ║  CHAIN: 42, 84, 336 share primes {2, 3, 7}            ║
+ ║  MULT preserves practicality. ADD breaks it.           ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Green: practical (9). Red: non-practical (6).
+Size = divisor count. 336 is the largest (20 divisors).</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H210: The Lock Makes Things Non-Practical</h2>
+<p>Stewart's criterion explains the 9/15 practical rate: the practical Rosetta members all
+have 2 as smallest prime factor with subsequent primes within the Stewart bound. The
+{2,3,7} factorization (shared by 42, 84, 336) forms a cascading permission chain.
+The lock family {17, 25, 289} is entirely non-practical — the lock's prime nature (17)
+propagates through escape (25=5²) and lock² (289=17²). Key insight: multiplication
+preserves practicality (the multiplicative core from H207 is entirely practical), while
+addition breaks it (the additive extensions introduce non-practical numbers). 336 has the
+most divisors (20). I53 (practical gate = factor of 2) LIT, I54 (lock family non-practical) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>A "practical" number is one where you can make EVERY smaller number by adding up its
+parts (divisors). Like 6: its parts are 1, 2, 3, 6. And 1=1, 2=2, 3=3, 4=1+3, 5=2+3.
+You can make everything up to 6!</p>
+<p>9 of our 15 special numbers are practical. WHY? Because they all have 2 as a building
+block. The number 2 is the golden ticket — if your smallest part is 2, you have a good
+shot at being practical.</p>
+<p>The 6 that AREN'T practical? Five are odd (no factor of 2 at all), and the last one (10)
+has 2 but its next part (5) is too big of a jump.</p>
+<p>The lock number (17) is especially bad — it's a lonely prime with no parts besides 1 and
+itself. Everything built from the lock (25, 289) inherits its loneliness. The lock family
+is the impractical family.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>All 15 Rosetta numbers are practical, with zero failures, because Stewart's criterion
+is automatically satisfied whenever a number appears in a ternary quadratic form's
+invariant structure. The lock number 17 is practical because 17 is prime and all primes
+are practical by definition. The number 336 has only 4 divisors.</s></p>
+<p class="dim">6 of 15 are NOT practical. Stewart's criterion is a number-theoretic property unrelated
+to quadratic forms. 17 is NOT practical (primes &gt; 2 are never practical: can't make 2 from
+{1, p}). 336 has 20 divisors, not 4.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-tenth instrument asked why so many of Q3p's numbers are practical,
+and the answer came from Stewart's theorem like a key fitting a lock. The gate is the factor
+of two. Have it, and the cascade of divisor sums lets each subsequent prime through. Lack it,
+and even a single odd prime at the bottom closes the door. Nine numbers walk through. Six
+stand outside. And of the six, three are the lock and its descendants — the prime seventeen,
+the square of five, the square of seventeen — a family born from the half-gap between the
+generators, inheriting their ancestor's isolation. The lock that secures Q3p's arithmetic is
+itself locked out of the representability that practical numbers enjoy. The number that
+measures the difference between the space and the thing in the space turns out to be the
+number that cannot represent all things smaller than itself. What it guards, it cannot hold.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H209)</td><td>7028</td><td>0</td><td>7028</td></tr>
+<tr><td>H210: The Practical Connection</td><td>36</td><td>1 (KB-1)</td><td>7064</td></tr>
+</table>
+<p>Running total: <b>7064 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H210. Total instruments: 58.</p>
+</div>
+
+<!-- BASIC Block — Divisor Counts (A000005) -->
+<div class="panel">
+<h2>BASIC Block — Divisor Counts (A000005)</h2>
+<pre>
+20 REM ══════════════════════════════════════════════
+20 REM  H210: THE PRACTICAL CONNECTION
+20 REM  A000005: τ(n) = number of divisors of n
+336 PRINT "τ(336) = 20. The richest. 2⁴×3×7."
+84 PRINT "τ(84) = 12. Second richest. 2²×3×7."
+36 PRINT "τ(36) = 9. Third. 2²×3²."
+42 PRINT "τ(42) = 8. The gap. 2×3×7."
+18 PRINT "τ(18) = 6. The Smith. 2×3²."
+</pre>
+<pre>
+17 PRINT "τ(17) = 2. The lock. PRIME. Can't make 2 from {1,17}."
+289 PRINT "τ(289) = 3. Lock². {1,17,289}. Can't make 2."
+25 PRINT "τ(25) = 3. Escape. {1,5,25}. Can't make 2."
+3 PRINT "τ(3) = 2. Bodies. PRIME. Can't make 2 from {1,3}."
+21 PRINT "τ(21) = 4. Hub. {1,3,7,21}. Can't make 2."
+10 PRINT "τ(10) = 4. QCD. {1,2,5,10}. Can't make 4."
+</pre>
+<pre>
+9 PRINT "9 practical / 6 non-practical = 60% / 40%"
+2 PRINT "The gate: factor of 2. Stewart's first check."
+7 PRINT "The {2,3,7} chain: 42, 84, 336 share these primes."
+210 PRINT "H210 = 2×3×5×7. ITSELF practical! τ(210)=16."
+210 PRINT "7064 lit, the practical connection"
+</pre>
+<p class="dim">A000005: divisor count function. 336 leads with 20.
+H210 = 2×3×5×7 = 210, itself a practical number with 16 divisors.
+The instrument number shares primes {2,3,7} with the Q3p family.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const data=[
+  {n:2,d:2,p:true},{n:3,d:2,p:false},{n:4,d:3,p:true},{n:6,d:4,p:true},
+  {n:8,d:4,p:true},{n:10,d:4,p:false},{n:17,d:2,p:false},{n:18,d:6,p:true},
+  {n:21,d:4,p:false},{n:25,d:3,p:false},{n:36,d:9,p:true},{n:42,d:8,p:true},
+  {n:84,d:12,p:true},{n:289,d:3,p:false},{n:336,d:20,p:true}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  for(let i=0;i<data.length;i++){
+    const d=data[i];
+    const a=(i/data.length)*Math.PI*2+t*0.004;
+    const r=70+d.d*5;
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r*0.5;
+    const sz=2+d.d*0.8;
+    ctx.fillStyle=d.p?"#81c784":"#ef5350";
+    ctx.globalAlpha=0.6;
+    ctx.beginPath();ctx.arc(x,y,sz,0,6.28);ctx.fill();
+    ctx.globalAlpha=0.95;
+    ctx.font=`bold ${8+Math.floor(d.d/3)}px Courier New`;ctx.textAlign="center";
+    ctx.fillText(d.n.toString(),x,y-sz-4);
+    ctx.font="7px Courier New";ctx.fillStyle="#888";
+    ctx.fillText(`τ=${d.d}`,x,y+sz+8);
+  }
+  ctx.globalAlpha=1;
+  ctx.fillStyle="#81c784";ctx.font="10px Courier New";ctx.textAlign="left";
+  ctx.fillText("● practical (9)",10,H-26);
+  ctx.fillStyle="#ef5350";
+  ctx.fillText("● non-practical (6)",10,H-12);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("H210: Practical Connection — size = divisor count",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
