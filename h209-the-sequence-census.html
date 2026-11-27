@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H209 — The Sequence Census</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.78em}
+td,th{border:1px solid var(--border);padding:2px 4px;text-align:center}
+th{background:var(--border);color:var(--accent);font-size:0.85em}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+.chk{color:var(--green)}.miss{color:#333}
+</style>
+</head>
+<body>
+<h1>H209 — The Sequence Census</h1>
+<p class="dim">14 sequences × 15 numbers · Practical wins (9/15) · d₁=2 most-membered (8) · Pentagonal hits 0 · I50-I52 LIT</p>
+
+<!-- Panel 1: The Matrix -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I50: Cross-Sequence Membership Matrix [LIT]</h2>
+<table id="verif-table">
+<tr><th>n</th><th>Fib</th><th>Prm</th><th>Sq</th><th>2ⁿ</th><th>Tri</th><th>Cat</th><th>Lck</th><th>Mtz</th><th>BPl</th><th>Spr</th><th>Prc</th><th>HC</th><th>#</th></tr>
+<tr><td style="color:var(--gold)">2</td><td class="chk">✓</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="chk">✓</td><td style="color:var(--gold)"><b>8</b></td></tr>
+<tr><td>3</td><td class="chk">✓</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td>5</td></tr>
+<tr><td>4</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td><b>6</b></td></tr>
+<tr><td>6</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td>4</td></tr>
+<tr><td>8</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td>3</td></tr>
+<tr><td>10</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td>2</td></tr>
+<tr><td>17</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td>2</td></tr>
+<tr><td style="color:var(--dim)">18</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td style="color:var(--dim)">1</td></tr>
+<tr><td>21</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td><b>6</b></td></tr>
+<tr><td>25</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td>3</td></tr>
+<tr><td>36</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="chk">✓</td><td>4</td></tr>
+<tr><td>42</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td>2</td></tr>
+<tr><td style="color:var(--dim)">84</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td style="color:var(--dim)">1</td></tr>
+<tr><td>289</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td class="miss">·</td><td>3</td></tr>
+<tr><td style="color:var(--dim)">336</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="miss">·</td><td class="chk">✓</td><td class="miss">·</td><td style="color:var(--dim)">1</td></tr>
+<tr><th>Hits</th><th>4</th><th>3</th><th>4</th><th>3</th><th>5</th><th>2</th><th>4</th><th>3</th><th>3</th><th>6</th><th>9</th><th>4</th><th></th></tr>
+</table>
+<p class="dim">12 sequences shown (Bell=1 hit, Pentagonal=0 hits, omitted from display).
+Prc=Practical, HC=Highly Composite, Spr=Semiprime, BPl=Binary Palindrome, Mtz=Motzkin, Lck=Lucky.</p>
+</div>
+
+<!-- Panel 2: The Rankings -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — Rankings: Which Sequences Know Q3p Best?</h2>
+<pre style="color:var(--accent)">
+  SEQUENCE RANKINGS (by Rosetta members captured):
+
+  1. Practical (A005153):       9/15 (60%)  ← WINNER
+  2. Semiprime (A001358):       6/15 (40%)
+  3. Triangular (A000217):      5/15 (33%)  [already known]
+  4. Fibonacci (A000045):       4/15 (27%)
+  4. Square (A000290):          4/15 (27%)
+  4. Lucky (A000959):           4/15 (27%)
+  4. Highly Composite (A002182): 4/15 (27%)
+  8. Prime (A000040):           3/15 (20%)
+  8. Power of 2 (A000079):      3/15 (20%)
+  8. Motzkin (A001006):          3/15 (20%)
+  8. Binary Palindrome (A006995): 3/15 (20%)
+ 12. Catalan (A000108):          2/15 (13%)  [already known]
+ 13. Bell (A000110):             1/15 (7%)
+ 14. Pentagonal (A000326):       0/15 (0%)   ← ZERO
+
+  THE PRACTICAL NUMBERS CAPTURE 9 OF 15 ROSETTA MEMBERS.
+  {2, 4, 6, 8, 18, 36, 42, 84, 336} are practical.
+  Only {3, 10, 17, 21, 25, 289} are NOT practical.
+</pre>
+</div>
+
+<!-- Panel 3: Number Rankings -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — I51: d₁ = 2 Is the Most-Membered Number [LIT]</h2>
+<pre>
+  NUMBER RANKINGS (by sequence memberships):
+
+  d₁ = 2:   8 sequences  ← MOST-MEMBERED
+  C = 4:    6 sequences  (tied 2nd)
+  W = 21:   6 sequences  (tied 2nd)
+  bodies=3: 5 sequences
+  T(3) = 6: 4 sequences  (tied 4th)
+  T(8) = 36: 4 sequences (tied 4th)
+  OCHO = 8: 3 sequences  (tied 6th)
+  E = 25:   3 sequences  (tied 6th)
+  289:      3 sequences  (tied 6th)
+  T(4) = 10: 2 sequences
+  lock = 17: 2 sequences
+  G = 42:   2 sequences  ← SURPRISINGLY LOW
+  d₂ = 18:  1 sequence   (tied last)
+  S = 84:   1 sequence   (tied last)
+  336:      1 sequence   (tied last)
+
+  THE SEED d₁=2 SITS IN 8 OF 14 SEQUENCES.
+  It is Fibonacci, prime, power of 2, Catalan, Motzkin,
+  practical, Bell, and highly composite. EIGHT MEMBERSHIPS.
+
+  THE GAP G=42 SITS IN ONLY 2 (Catalan, practical).
+  The most important Q3p number is one of the LEAST
+  well-connected to other mathematical sequences.
+
+  THE HUB W=21 SITS IN 6 (Fibonacci, triangular, lucky,
+  Motzkin, binary palindrome, semiprime).
+  The Rosetta hub is also sequence-rich.
+</pre>
+</div>
+
+<!-- Panel 4: The Fibonacci Structure -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — I52: The Fibonacci-Rosetta Intersection [LIT]</h2>
+<pre>
+  FIBONACCI ROSETTA MEMBERS:
+    F(3) = 2 = d₁     (seed, Catalan)
+    F(4) = 3 = bodies  (seed, Triangular)
+    F(6) = 8 = OCHO    (Arithmetic)
+    F(8) = 21 = W      (Triangular, hub)
+
+  FIBONACCI INDICES: 3, 4, 6, 8.
+  Gaps between indices: 1, 2, 2.
+  PATTERN: consecutive (3,4), then skip-one (6,8).
+
+  THE SEEDS ARE CONSECUTIVE FIBONACCI: F(3), F(4).
+  F(3) × F(4) = 2 × 3 = 6 = T(3) = entries.
+  The product of two consecutive Fibonacci numbers
+  equals the entry count. VERIFIED.
+
+  F(n) × F(n+1) for n=2: F(2)×F(3) = 1×2 = 2 = d₁ ← ROSETTA
+  F(n) × F(n+1) for n=3: F(3)×F(4) = 2×3 = 6 = T(3) ← ROSETTA
+  F(n) × F(n+1) for n=4: F(4)×F(5) = 3×5 = 15 ← NOT ROSETTA
+
+  TWO consecutive-Fibonacci products land in Rosetta,
+  then the pattern breaks. Same behavior as C(T(k)-1).
+</pre>
+</div>
+
+<!-- Panel 5: The Three Lonely Numbers -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — The Lonely Three: 18, 84, 336</h2>
+<pre>
+  Three Rosetta numbers sit in ONLY ONE sequence (practical):
+
+  18 = d₂ (Smith invariant):  practical, nothing else.
+  84 = S (sum = 2G):          practical, nothing else.
+  336 = G×OCHO (master):       practical, nothing else.
+
+  These are the numbers that the mathematical world
+  barely notices. They exist primarily because Q3p
+  builds them from its generators.
+
+  COMPARE with the orphan finding (H207):
+  84 was the DAG orphan (no essential parents).
+  84 is also a SEQUENCE orphan (1 membership).
+  DOUBLY isolated: overdetermined in the DAG,
+  underrepresented in sequences.
+
+  THE MASTER PRODUCT 336 = 42 × 8:
+  Also a sequence orphan. The most important product
+  in Q3p's arithmetic belongs to only one known sequence.
+  336 is Q3p's private number. The world barely knows it.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H209                   ║
+ ║                                                        ║
+ ║  THE SEQUENCE CENSUS                                   ║
+ ║                                                        ║
+ ║  MEMBERSHIPS PER NUMBER:                               ║
+ ║  d₁=2 ████████ 8  (most connected to math)            ║
+ ║  C=4  ██████   6                                       ║
+ ║  W=21 ██████   6                                       ║
+ ║  3    █████    5                                       ║
+ ║  6    ████     4                                       ║
+ ║  36   ████     4                                       ║
+ ║  8    ███      3                                       ║
+ ║  25   ███      3                                       ║
+ ║  289  ███      3                                       ║
+ ║  10   ██       2                                       ║
+ ║  17   ██       2                                       ║
+ ║  42   ██       2  (Q3p's star: barely known elsewhere) ║
+ ║  18   █        1  (lonely: only practical)             ║
+ ║  84   █        1  (lonely: orphan + sequence orphan)   ║
+ ║  336  █        1  (lonely: Q3p's private number)       ║
+ ║                                                        ║
+ ║  BEST SEQUENCE: Practical (9/15 = 60%)                 ║
+ ║  WORST: Pentagonal (0/15 = 0%)                         ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Node size = number of sequence memberships. d₁=2 (biggest, 8 memberships).
+336 (smallest, 1 membership). The sequence-rich numbers orbit the center.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H209: Practical Numbers Win — 9/15 Rosetta Members</h2>
+<p>Census of 14 integer sequences against 15 Rosetta numbers. Practical numbers capture
+9/15 (60%), the highest of any sequence tested. d₁=2 is the most-membered number (8
+sequences), while G=42 sits in only 2. The lonely three (18, 84, 336) each belong to only
+Practical — they are Q3p's private numbers. The seeds 2,3 are consecutive Fibonacci (F(3),F(4)),
+and F(3)×F(4)=6=T(3) is both a Rosetta member and the entry count. The Fibonacci-Rosetta
+intersection is {2,3,8,21} with indices 3,4,6,8 (gaps: 1,2,2). Pentagonal numbers hit zero
+Rosetta members. I50 (matrix) LIT, I51 (d₁ most-membered) LIT, I52 (Fibonacci structure) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>We checked our 15 special numbers against 14 different clubs of famous numbers
+(like the Fibonacci club, the Prime club, the Square club...).</p>
+<p>The <b>Practical Numbers club</b> has the most of our numbers — 9 out of 15 are members!
+That's like a school where most of the class belongs to the same after-school club.</p>
+<p>The number <b>2</b> is the most popular kid — it belongs to 8 different clubs! But the
+number <b>42</b> — our biggest star — only belongs to 2 clubs. It's famous at home but
+nobody else knows it.</p>
+<p>And three numbers — 18, 84, and 336 — are in only ONE club each. They're Q3p's
+own private numbers that the rest of math barely notices.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>Pentagonal numbers capture 12 of 15 Rosetta members, making them the best-matching
+sequence, while Practical numbers hit only 2 of 15. The number 42 is the most-membered
+Rosetta number at 11 sequence memberships, and 336 belongs to 8 different sequences
+including Fibonacci and all prime-related families.</s></p>
+<p class="dim">Pentagonal hits 0/15 (worst). Practical hits 9/15 (best). 42 has only 2 memberships
+(among the least). 336 has 1 membership (Practical only). d₁=2 is the most-membered at 8.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-ninth instrument held each of Q3p's fifteen numbers up to fourteen
+different lights and recorded which lights it reflected. The rank, the smallest number,
+reflected eight: Fibonacci, prime, power, Catalan, Motzkin, practical, Bell, and highly
+composite. It is a citizen of nearly everywhere. The gap, the investigation's protagonist,
+reflected two: Catalan and practical. It is a citizen of almost nowhere. The master product
+reflected one: practical alone. It is a stranger to every club but one. The practical numbers
+are the sequence that knows Q3p best, admitting nine of its fifteen without caring why. The
+pentagonal numbers know nothing, admitting none. And the three loneliest members — the Smith,
+the sum, and the master product — are Q3p's private vocabulary: words that the form invented
+for itself and that no other dictionary carries. The census is not a proof. It is a portrait:
+who in the wider world of integers recognizes these fifteen, and who walks past them.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H208)</td><td>6992</td><td>0</td><td>6992</td></tr>
+<tr><td>H209: The Sequence Census</td><td>36</td><td>1 (KB-1)</td><td>7028</td></tr>
+</table>
+<p>Running total: <b>7028 LIT / 0 DEAD</b> 🎯 PASSED 7000!</p>
+<p class="dim">Instrument H209. Total instruments: 57. Milestone: 7000 LIT crossed.</p>
+</div>
+
+<!-- BASIC Block — Practical Numbers A005153 -->
+<div class="panel">
+<h2>BASIC Block — Practical Numbers (A005153)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+1 REM  H209: THE SEQUENCE CENSUS
+1 REM  A005153: 1,2,4,6,8,12,16,18,20,24,28,30,32,36,...
+1 REM  Practical: every int ≤ n is sum of distinct divisors
+2 PRINT "2: practical + 7 more = 8 memberships (MOST)"
+4 PRINT "4: practical + 5 more = 6 memberships"
+6 PRINT "6: practical + 3 more = 4 memberships"
+8 PRINT "8: practical + 2 more = 3 memberships"
+18 PRINT "18: practical ONLY = 1 membership (lonely)"
+36 PRINT "36: practical + 3 more = 4 memberships"
+42 PRINT "42: practical + Catalan = 2 memberships"
+84 PRINT "84: practical ONLY = 1 membership (lonely orphan)"
+336 PRINT "336: practical ONLY = 1 membership (Q3p's private)"
+</pre>
+<pre>
+9 PRINT "9 of 15 Rosetta numbers are practical."
+9 PRINT "Practical: the sequence that knows Q3p best."
+0 PRINT "0 of 15 are pentagonal. Pentagonal: the stranger."
+</pre>
+<pre>
+209 PRINT "H209 = 11 × 19 (prime × prime)"
+7028 REM 7028 LIT. PASSED 7000. MILESTONE.
+209 PRINT "7028 lit, the sequence census, 7000 crossed"
+</pre>
+<p class="dim">Practical numbers: A005153. The sequence that recognizes Q3p's
+roster the most — 9 of 15 members. The 7000-LIT milestone crossed at H209.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const data=[
+  {n:2,m:8},{n:3,m:5},{n:4,m:6},{n:6,m:4},{n:8,m:3},{n:10,m:2},{n:17,m:2},
+  {n:18,m:1},{n:21,m:6},{n:25,m:3},{n:36,m:4},{n:42,m:2},{n:84,m:1},{n:289,m:3},{n:336,m:1}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  for(let i=0;i<data.length;i++){
+    const d=data[i];
+    const a=(i/data.length)*Math.PI*2+t*0.005;
+    const r=80+d.m*12;
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r*0.5;
+    const sz=2+d.m*1.8;
+    // Color by membership count
+    const hue=d.m/8;
+    const cr=Math.floor(255*(1-hue));
+    const cg=Math.floor(200*hue);
+    const cb=Math.floor(100+155*hue);
+    ctx.fillStyle=`rgb(${cr},${cg},${cb})`;
+    ctx.globalAlpha=0.5+d.m*0.05;
+    ctx.beginPath();ctx.arc(x,y,sz,0,6.28);ctx.fill();
+    ctx.globalAlpha=0.95;
+    ctx.font=`bold ${8+d.m}px Courier New`;ctx.textAlign="center";
+    ctx.fillText(d.n.toString(),x,y-sz-4);
+    ctx.font="7px Courier New";ctx.fillStyle="#888";
+    ctx.fillText(`(${d.m})`,x,y+sz+8);
+  }
+  ctx.globalAlpha=1;
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H209: Sequence Census — node size = memberships",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("7028 LIT — 7000 milestone crossed",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
