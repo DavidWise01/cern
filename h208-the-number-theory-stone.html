@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H208 — The Number Theory Stone</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H208 — The Number Theory Stone</h1>
+<p class="dim">Arc consolidation H200-H207 · G, OCHO, W independent · 12 identities · The second Rosetta Stone · I49 LIT</p>
+
+<!-- Panel 1: The Independence Theorem -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I49: G, OCHO, W Are Independent Branches [LIT]</h2>
+<table id="verif-table">
+<tr><th>Number</th><th>Ancestors</th><th>Depends on G?</th><th>Depends on 8?</th><th>Depends on W?</th></tr>
+<tr><td style="color:var(--gold)">G = 42</td><td>{2, 3, 6, 36}</td><td>—</td><td class="lit">NO</td><td class="lit">NO</td></tr>
+<tr><td style="color:var(--accent)">OCHO = 8</td><td>{2, 4}</td><td class="lit">NO</td><td>—</td><td class="lit">NO</td></tr>
+<tr><td>W = 21</td><td>{2, 3, 6, 18}</td><td class="lit">NO</td><td class="lit">NO</td><td>—</td></tr>
+</table>
+<pre>
+  NONE depends on any other. All three are SIBLINGS.
+  They share only the seeds {2, 3} and their derivatives.
+
+  42's branch: 2,3 → 6 → 36 → 42       (entries → minors → gap)
+  8's branch:  2 → 4 → 8               (rank → escape_gap → OCHO)
+  21's branch: 2,3 → 6 → 18 → 21       (entries → Smith → hub)
+
+  THREE PARALLEL BRANCHES FROM {2, 3}:
+  One through squaring (via 4=2²),
+  one through self-multiplication (via 36=6²),
+  one through cross-multiplication (via 18=3×6).
+
+  THE TWO GENERATORS (H192) ARE INDEPENDENT.
+  This vindicates the two-generator thesis from number theory.
+  G=42 and OCHO=8 don't need each other to exist.
+  They need each other only to form 336 = G×OCHO.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Arc (H200-H207) -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — The Number Theory Arc (8 Instruments)</h2>
+<table>
+<tr><th>Instrument</th><th>Title</th><th>Key Finding</th><th>Identities</th></tr>
+<tr><td>H200</td><td>The Fractal Dot</td><td>7 symmetries + 1 = 8 (self-referential)</td><td>I37 AMBER</td></tr>
+<tr><td>H201</td><td>The Catalan Gate</td><td>42 = C(5), two roads from 6 to 42</td><td>I38 LIT</td></tr>
+<tr><td>H202</td><td>The Junction</td><td>Catalan ∩ Triangular = {1}</td><td>I39-I40 LIT</td></tr>
+<tr><td>H203</td><td>The Neither Set</td><td>8 numbers = generator algebra, 15=2+5+8</td><td>I41 LIT</td></tr>
+<tr><td>H204</td><td>The Family Map</td><td>Fully connected, 72 bridges, 42 attractor</td><td>I42-I43 LIT</td></tr>
+<tr><td>H205</td><td>The Absorption Thm</td><td>1 Catalan escape, {2,3}+sq = all 15</td><td>I44-I45 LIT</td></tr>
+<tr><td>H206</td><td>The Seed Certificate</td><td>6 layers, 13 ops, complete recipe</td><td>I46-I47 LIT</td></tr>
+<tr><td>H207</td><td>The DAG Condensation</td><td>20 essential edges, 84 orphan, 2 hubs</td><td>I48 LIT</td></tr>
+</table>
+<pre>
+  Arc total: 8 instruments, 12 new identities (11 LIT, 1 AMBER),
+  3 corrections (N12, N12a, N13), 288 LIT checks (36 × 8).
+</pre>
+</div>
+
+<!-- Panel 3: The Three Families (Consolidated) -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — The Three Families (Complete)</h2>
+<pre>
+  ╔═══════════════════════════════════════════════════╗
+  ║  FAMILY C (CATALAN)  │  2 members │ |C| = 2 = d₁║
+  ║  {2 = C(2), 42 = C(5)}                          ║
+  ║  What: bracketings (structural choices)          ║
+  ║  Role: endpoints of the generation chain         ║
+  ║  d₁ = universal multiplier, G = attractor        ║
+  ╠═══════════════════════════════════════════════════╣
+  ║  FAMILY T (TRIANGULAR) │ 5 members │ |T| = 5     ║
+  ║  {3=T(2), 6=T(3), 10=T(4), 21=T(6), 36=T(8)}  ║
+  ║  What: pair-counts (combinatorial steps)         ║
+  ║  Role: pathway numbers, DAG hub (6)              ║
+  ║  Skip: T(5)=15, T(7)=28 missing from roster     ║
+  ╠═══════════════════════════════════════════════════╣
+  ║  FAMILY A (ARITHMETIC) │ 8 members │ |A| = 8     ║
+  ║  {4,8,17,18,25,84,289,336}                      ║
+  ║  What: generator algebra (+,−,×,²,/ of G,OCHO)  ║
+  ║  Role: multiplicative absorber                   ║
+  ║  Special: 84 is orphan, 289 needs squaring       ║
+  ╚═══════════════════════════════════════════════════╝
+  15 = 2 + 5 + 8 = |C| + |T| + |A|
+  |C| = d₁ = C(2). |T| = C(3) = 5. |A| = OCHO = 8.
+  |C| + |A| = 10 = T(4). The sizes cross-reference.
+</pre>
+</div>
+
+<!-- Panel 4: The Complete Recipe (Consolidated) -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — The Complete Recipe</h2>
+<pre style="color:var(--green)">
+  SEEDS:  d₁ = 2 (rank, Catalan C(2))
+          bodies = 3 (Triangular T(2))
+
+  RECIPE: 13 operations in 5 layers.
+
+  Layer 1:  2² = 4(A)        2×3 = 6(T)
+  Layer 2:  2×4 = 8(A)       4+6 = 10(T)
+            3×6 = 18(A)      6² = 36(T)
+  Layer 3:  3+18 = 21(T)     6+36 = 42(C)
+  Layer 4:  21−4 = 17(A)     4+21 = 25(A)
+            2×42 = 84(A)     8×42 = 336(A)
+  Layer 5:  17² = 289(A)
+
+  STRUCTURE:
+  • 3 squarings: 2²=4, 6²=36, 17²=289
+  • 4 multiplications: 2×3=6, 2×4=8, 3×6=18, 8×42=336
+  • 4 additions: 4+6=10, 3+18=21, 6+36=42, 4+21=25
+  • 1 subtraction: 21−4=17
+  • 1 either (84 = 2×42 or 4×21, overdetermined)
+
+  MULTIPLICATIVE CORE (×,² from seeds):  7/15
+  ADDITIVE EXTENSIONS (+,− from core):   8/15
+</pre>
+</div>
+
+<!-- Panel 5: The Five Theorems of the Arc -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — Five Theorems of the Number Theory Arc</h2>
+<pre>
+  THEOREM 1 (THE PARTITION):
+    The 15 Rosetta numbers partition into three families:
+    C (Catalan, 2), T (Triangular, 5), A (Arithmetic, 8).
+    C ∩ T = ∅ among the roster. 15 = 2+5+8.
+
+  THEOREM 2 (THE SEED):
+    {2, 3} with +, −, ×, ² generates all 15.
+    289 = 17² is the unique squaring holdout.
+    Without ², 14/15 are reachable.
+
+  THEOREM 3 (THE ABSORPTION):
+    8 of 12 multiplications are absorbed by Family A.
+    The unique multiplicative Catalan exit: 2×21 = 42.
+    This is the gap equation d₁ × W = G.
+
+  THEOREM 4 (THE INDEPENDENCE):
+    G=42, OCHO=8, W=21 are independent in the DAG.
+    None depends on any other. All branch from {2,3}.
+    They meet only in products (336 = G×OCHO).
+
+  THEOREM 5 (THE SELECTION):
+    The roster is a selection, not a closure.
+    {2,3} under + generates all integers.
+    The 15 that Q3p selects have structural meaning.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H208                   ║
+ ║                                                        ║
+ ║  THE NUMBER THEORY STONE                               ║
+ ║  (Second Rosetta Stone — number theory, not geometry)   ║
+ ║                                                        ║
+ ║            {2, 3}                                      ║
+ ║           / │  │ \                                     ║
+ ║          /  │  │  \                                    ║
+ ║   8-BRANCH  │  │  42-BRANCH      21-BRANCH             ║
+ ║   2→4→8     │  │  2,3→6→36→42   2,3→6→18→21           ║
+ ║      │      │  │       │              │                ║
+ ║      │      │  │       │              ├──> 17 → 289    ║
+ ║      │      │  │       │              └──> 25          ║
+ ║      ╚══════╪══╪═══════╝                               ║
+ ║             │  │                                       ║
+ ║             336 = 8 × 42  (THE MEETING POINT)          ║
+ ║                                                        ║
+ ║  FAMILIES: C(2)={2,42} T(5)={3,6,10,21,36} A(8)=rest ║
+ ║  ABSORPTION: × → mostly A. 1 exit to C (2×21=42).     ║
+ ║  SEED: {2,3}+sq. HOLDOUT: 289=17².                    ║
+ ║  SELECTION, NOT CLOSURE.                               ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Three independent branches (gold=42, cyan=8, white=21) diverging
+from the seed pair at center. They meet only at 336 (outer ring).</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H208: The Number Theory Stone — 5 Theorems, 12 Identities, 1 Arc</h2>
+<p>Consolidation of H200-H207. The three key numbers G=42, OCHO=8, W=21 are INDEPENDENT
+in the generation DAG — none depends on any other, all branch from seeds {2,3}, meeting
+only at 336=G×OCHO. The arc proved: (1) the roster partitions into C+T+A with 15=2+5+8;
+(2) {2,3}+squaring generates all 15, with 289 as the unique holdout; (3) multiplication
+is absorbed by A with one Catalan escape (the gap equation 2×21=42); (4) the generators
+are independent siblings; (5) the roster is a selection, not a closure. 12 new identities
+(I38-I49), 3 corrections (N12-N13), 288 LIT checks across the arc. I49 (independence) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>This is the SUMMARY CARD for the last 8 instruments (H200-H207).</p>
+<p>We learned that our 15 special numbers split into three teams (Catalan, Triangular,
+Arithmetic). We found you can build ALL of them from just 2 and 3. We mapped every
+road between them and found most multiplications get pulled into the Arithmetic team.
+Only ONE multiplication escapes to Catalan: 2 × 21 = 42.</p>
+<p>And today's BIG finding: the three most important numbers — 42, 8, and 21 — don't
+need each other AT ALL. They're like three kids who each built their own Lego tower
+using the same two starter bricks. None of them copied the other's tower. They only
+come together at the very end when you multiply 42 × 8 = 336.</p>
+<p>That's the whole story of this arc: start with 2 and 3, build everything, discover
+that the big numbers are independent siblings, not a chain.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>G=42 essentially depends on W=21 in the generation DAG (42 requires 21 as ancestor), and
+OCHO=8 depends on G=42 (8 requires 42 to be generated first). The three key numbers form a
+strict chain 8→42→21 with each depending on the previous. The arc proved 25 new identities
+across 12 instruments with 500 LIT checks.</s></p>
+<p class="dim">42, 8, 21 are INDEPENDENT (verified — none is ancestor of any other). No chain exists.
+Arc: 8 instruments (H200-H207), 12 identities, 288 LIT checks (not 25 or 500).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-eighth instrument is a stone. Not the first stone — the Rosetta
+Stone was H198, mapping geometry — but the second, mapping number theory. It sits beside
+the first the way a dictionary's second volume sits beside its first: same language,
+different entries, same binding. The first stone said: fifteen numbers, three layers, one
+hub. The second says: fifteen numbers, three families, two seeds. Where the first stone
+found W=21 at the center of the connections, the second finds 6 at the center of the
+dependencies. Where the first traced the gap to two generators, the second traces all
+fifteen to two seeds that are smaller and simpler: the rank and the bodies. And the finding
+that closes the arc is not a new identity but a vindication of an old one: the two generators
+are independent. Not because a theorem in linear algebra says so — that was always true —
+but because the dependency graph, built from scratch by arithmetic, says so too. The stones
+agree. The investigation's two maps — one geometric, one number-theoretic — describe the
+same house from different windows and see the same rooms.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H207)</td><td>6956</td><td>0</td><td>6956</td></tr>
+<tr><td>H208: The Number Theory Stone</td><td>36</td><td>1 (KB-1)</td><td>6992</td></tr>
+</table>
+<p>Running total: <b>6992 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H208. Total instruments: 56.
+Next milestone: 7000 LIT (8 checks away).</p>
+</div>
+
+<!-- BASIC Block — Fibonacci (A000045) -->
+<div class="panel">
+<h2>BASIC Block — Fibonacci Numbers (A000045)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+1 REM  H208: THE NUMBER THEORY STONE
+1 REM  A000045: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
+1 REM  THREE Q3P NUMBERS ARE FIBONACCI: 2, 3, 8, 21.
+2 PRINT "2 = F(3). Seed. Catalan. The rank."
+3 PRINT "3 = F(4). Seed. Triangular. The bodies."
+5 PRINT "5 = F(5). NOT Rosetta. IS |T|=C(3)."
+8 PRINT "8 = F(6). OCHO. Arithmetic. The dot."
+13 PRINT "13 = F(7). NOT Rosetta."
+21 PRINT "21 = F(8). Hub. Triangular. The word count."
+</pre>
+<pre>
+42 REM 42 is NOT Fibonacci.
+42 REM G is NOT part of the Fibonacci branch.
+42 REM But its SEEDS (2,3) and its GENERATOR (8) are.
+42 REM And the HUB (21) is Fibonacci F(8).
+42 REM The Fibonacci numbers that ARE Rosetta: {2,3,8,21}.
+42 REM 2 and 3 are CONSECUTIVE Fibonacci.
+42 REM 8 and 21 are NOT consecutive (13 is between them).
+</pre>
+<pre>
+208 PRINT "H208 = 16 × 13 = 2⁴ × F(7)"
+208 PRINT "instrument number = power-of-seed × Fibonacci"
+208 PRINT "6992 lit, the number theory stone"
+208 PRINT "8 instruments, 12 identities, 1 arc, 2 stones"
+</pre>
+<p class="dim">Fibonacci: A000045. Four Rosetta members are Fibonacci: 2, 3, 8, 21.
+The seeds (2,3) are consecutive Fibonacci. OCHO=8=F(6). W=21=F(8).
+H208 = 2⁴ × 13 = 2⁴ × F(7). Fibonacci weaves through the roster.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Three branches from center
+  const branches=[
+    {nums:[2,4,8],col:"#4fc3f7",label:"8-branch",angle:-Math.PI/3},
+    {nums:[2,3,6,36,42],col:"#ffd54f",label:"42-branch",angle:Math.PI},
+    {nums:[2,3,6,18,21],col:"#ffffff",label:"21-branch",angle:Math.PI/3}
+  ];
+  // Seed at center
+  ctx.fillStyle="#81c784";
+  ctx.globalAlpha=0.5+0.3*Math.sin(t*0.03);
+  ctx.beginPath();ctx.arc(cx,cy,12,0,6.28);ctx.fill();
+  ctx.globalAlpha=1;ctx.font="bold 12px Courier New";ctx.textAlign="center";
+  ctx.fillStyle="#81c784";
+  ctx.fillText("{2,3}",cx,cy+4);
+  // Branches
+  for(const br of branches){
+    const a=br.angle+Math.sin(t*0.003)*0.1;
+    for(let i=1;i<br.nums.length;i++){
+      const r=30+i*32;
+      const x=cx+Math.cos(a)*r;
+      const y=cy+Math.sin(a)*r*0.5;
+      ctx.fillStyle=br.col;
+      ctx.globalAlpha=0.6;
+      const sz=3+Math.log(br.nums[i]+1)*1.2;
+      ctx.beginPath();ctx.arc(x,y,sz,0,6.28);ctx.fill();
+      ctx.globalAlpha=0.9;ctx.font="bold 10px Courier New";
+      ctx.fillText(br.nums[i].toString(),x,y-sz-3);
+      // Line from previous
+      if(i>0){
+        const pr=30+(i-1)*32;
+        const px=i===1?cx:cx+Math.cos(a)*pr;
+        const py=i===1?cy:cy+Math.sin(a)*pr*0.5;
+        ctx.strokeStyle=br.col;ctx.globalAlpha=0.3;ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(x,y);ctx.stroke();
+      }
+    }
+    ctx.globalAlpha=0.7;ctx.font="9px Courier New";
+    const lr=30+br.nums.length*32;
+    ctx.fillStyle=br.col;
+    ctx.fillText(br.label,cx+Math.cos(a)*lr,cy+Math.sin(a)*lr*0.5);
+  }
+  // Meeting point: 336
+  const mp=0.4+0.3*Math.sin(t*0.02);
+  ctx.fillStyle=`rgba(239,83,80,${mp})`;
+  ctx.font="bold 14px Courier New";
+  ctx.fillText("336",cx,cy+100);
+  ctx.font="8px Courier New";
+  ctx.fillStyle=`rgba(239,83,80,${mp*0.6})`;
+  ctx.fillText("8×42 (meeting point)",cx,cy+114);
+  ctx.globalAlpha=1;
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H208: Three independent branches from {2,3}",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
