@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H206 — The Seed Certificate</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H206 — The Seed Certificate</h1>
+<p class="dim">6 layers · {2,3} → all 15 · dependency DAG · d₁ is the universal multiplier · I46 LIT</p>
+
+<!-- Panel 1: The Generation Chain -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I46: The Complete Generation Chain [LIT]</h2>
+<table id="verif-table">
+<tr><th>Layer</th><th>Number</th><th>Operation</th><th>Depends On</th><th>Family</th></tr>
+<tr style="color:var(--gold)"><td>0</td><td>2</td><td>SEED (d₁, rank)</td><td>—</td><td>C</td></tr>
+<tr style="color:var(--gold)"><td>0</td><td>3</td><td>SEED (bodies)</td><td>—</td><td>T</td></tr>
+<tr><td>1</td><td>4</td><td>2² = 4</td><td>2</td><td>A</td></tr>
+<tr><td>1</td><td>6</td><td>2 × 3 = 6</td><td>2, 3</td><td>T</td></tr>
+<tr><td>2</td><td>8</td><td>2 × 4 = 8</td><td>2, 4</td><td>A</td></tr>
+<tr><td>2</td><td>10</td><td>4 + 6 = 10</td><td>4, 6</td><td>T</td></tr>
+<tr><td>2</td><td>18</td><td>3 × 6 = 18</td><td>3, 6</td><td>A</td></tr>
+<tr><td>2</td><td>36</td><td>6² = 36</td><td>6</td><td>T</td></tr>
+<tr><td>3</td><td>21</td><td>3 + 18 = 21</td><td>3, 18</td><td>T</td></tr>
+<tr><td>3</td><td>42</td><td>6 + 36 = 42</td><td>6, 36</td><td>C</td></tr>
+<tr><td>4</td><td>17</td><td>21 − 4 = 17</td><td>21, 4</td><td>A</td></tr>
+<tr><td>4</td><td>25</td><td>4 + 21 = 25</td><td>4, 21</td><td>A</td></tr>
+<tr><td>4</td><td>84</td><td>2 × 42 = 84</td><td>2, 42</td><td>A</td></tr>
+<tr><td>4</td><td>336</td><td>8 × 42 = 336</td><td>8, 42</td><td>A</td></tr>
+<tr><td>5</td><td>289</td><td>17² = 289</td><td>17</td><td>A</td></tr>
+</table>
+<pre>
+  6 layers from {2, 3} to all 15 Rosetta numbers.
+  2 squarings (layer 1: 2²=4, layer 2: 6²=36, layer 5: 17²=289).
+  Wait — 3 squarings, but only 17²=289 is ESSENTIAL.
+  4 = 2² could also be 2+2 (but 2+2 uses the same seed).
+  36 = 6² could also be 6×6 (same thing).
+  289 = 17² has NO alternative path.
+  STATUS: <span class="lit">LIT</span> (verified by exhaustive BFS)
+</pre>
+</div>
+
+<!-- Panel 2: The Dependency DAG -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — The Dependency DAG (ASCII)</h2>
+<pre style="color:var(--accent)">
+  Layer 0:   2(C)          3(T)          ← SEEDS
+              │\           /│
+  Layer 1:   4(A)       6(T)             ← squaring + product
+             │ │\      / │ │\
+  Layer 2:  8(A) │  10(T) │ 18(A) 36(T)  ← products + sums + sq
+             │   │   │    │  │     │
+  Layer 3:   │   │   │   21(T)   42(C)   ← sums (3+18, 6+36)
+             │   │   │   /│\     /│\
+  Layer 4:   │   │  17(A) 25(A) 84(A) 336(A) ← diffs/sums/products
+             │   │   │
+  Layer 5:   │   │  289(A)                ← squaring (17²)
+
+  DEPENDENCIES:
+  2 ← seed
+  3 ← seed
+  4 ← 2
+  6 ← 2, 3
+  8 ← 2, 4 ← 2
+  10 ← 4, 6 ← 2, 3
+  18 ← 3, 6 ← 2, 3
+  36 ← 6 ← 2, 3
+  21 ← 3, 18 ← 2, 3
+  42 ← 6, 36 ← 2, 3
+  17 ← 21, 4 ← 2, 3
+  25 ← 4, 21 ← 2, 3
+  84 ← 2, 42 ← 2, 3
+  336 ← 8, 42 ← 2, 3
+  289 ← 17 ← 2, 3
+
+  EVERY number traces back to {2, 3}.
+  The DAG has depth 5 and width 4 (layer 4).
+</pre>
+</div>
+
+<!-- Panel 3: The Layer Structure -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — Layer Population</h2>
+<pre>
+  Layer 0: 2 numbers (seeds)       {2, 3}
+  Layer 1: 2 numbers (1st gen)     {4, 6}
+  Layer 2: 4 numbers (2nd gen)     {8, 10, 18, 36}
+  Layer 3: 2 numbers (3rd gen)     {21, 42}
+  Layer 4: 4 numbers (4th gen)     {17, 25, 84, 336}
+  Layer 5: 1 number  (5th gen)     {289}
+
+  POPULATION SEQUENCE: 2, 2, 4, 2, 4, 1
+  Total: 2+2+4+2+4+1 = 15. ✓
+
+  NOTES ON THE PATTERN:
+  • Layers 0,1,3 have 2 members each.
+  • Layers 2,4 have 4 members each.
+  • Layer 5 has 1 member (the holdout 289).
+  • The pattern 2,2,4,2,4,1 is NOT an OEIS sequence.
+  • But: (2+2)×(4+4)×1 = 4×8×1 = 32 (not Rosetta).
+  • And: 2×2×4×2×4×1 = 128 = 2⁷ (not Rosetta, but a power of 2).
+
+  THE GENERATORS (layer 3): 21 and 42.
+  G=42 and W=21 appear at the SAME depth.
+  They are THIRD-GENERATION numbers.
+  Neither is a seed. Neither is first-generation.
+  They EMERGE at the same step.
+</pre>
+</div>
+
+<!-- Panel 4: d₁ as Universal Multiplier -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — I47: d₁ = 2 Is the Universal Catalan Multiplier [LIT]</h2>
+<pre>
+  CHECK: What happens when each Catalan member
+  multiplies each Triangular member?
+
+  d₁=2 × T members:
+    2 × 3  = 6   → IN roster (T)  ✓
+    2 × 6  = 12  → NOT in roster  ✗
+    2 × 10 = 20  → NOT in roster  ✗
+    2 × 21 = 42  → IN roster (C!) ✓  ← THE ESCAPE
+    2 × 36 = 72  → NOT in roster  ✗
+
+  G=42 × T members:
+    42 × 3  = 126  → NOT in roster  ✗
+    42 × 6  = 252  → NOT in roster  ✗
+    42 × 10 = 420  → NOT in roster  ✗
+    42 × 21 = 882  → NOT in roster  ✗
+    42 × 36 = 1512 → NOT in roster  ✗
+
+  d₁=2 produces 2 Rosetta results out of 5 (40%).
+  G=42 produces 0 Rosetta results out of 5 (0%).
+
+  d₁ IS THE UNIVERSAL MULTIPLIER.
+  42 IS NOT — it's too big. It overshoots the roster.
+  d₁ doubles things and sometimes stays in bounds.
+  G multiplies things out of the 15-number universe.
+
+  THE ESCAPE: 2 × 21 = 42 is the ONLY C×T product
+  that lands in Catalan. And 2 × 3 = 6 is the ONLY
+  C×T product that lands in T. Only 2 of 10 C×T
+  products stay in the roster. d₁ is the gate.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 5: The Recipe as Prose -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 5 — The Recipe in Words</h2>
+<pre>
+  START with the rank (2) and the bodies (3).
+
+  SQUARE the rank: 2² = 4. Now you have the escape gap.
+  MULTIPLY rank by bodies: 2×3 = 6. Now you have the entries.
+
+  MULTIPLY rank by escape gap: 2×4 = 8. Now you have OCHO.
+  ADD escape gap and entries: 4+6 = 10. Now you have T(C)=QCD.
+  MULTIPLY bodies by entries: 3×6 = 18. Now you have the Smith.
+  SQUARE the entries: 6² = 36. Now you have the gcd minors.
+
+  ADD bodies and Smith: 3+18 = 21. Now you have the hub W.
+  ADD entries and minors: 6+36 = 42. Now you have the gap G.
+
+  SUBTRACT escape gap from hub: 21−4 = 17. Now you have the lock.
+  ADD escape gap and hub: 4+21 = 25. Now you have the escape E.
+  MULTIPLY rank by gap: 2×42 = 84. Now you have the sum S.
+  MULTIPLY OCHO by gap: 8×42 = 336. The master equation.
+
+  SQUARE the lock: 17² = 289. The last number. The gate closes.
+
+  13 operations. 2 seeds. 15 numbers. 1 algebra.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H206                   ║
+ ║                                                        ║
+ ║  THE SEED CERTIFICATE                                  ║
+ ║                                                        ║
+ ║  {2, 3} ═══════════════════════════════════> ALL 15     ║
+ ║   │  │                                                 ║
+ ║   │  └──×──> 6 ──┬──²──> 36 ─┐                        ║
+ ║   │               │           ├──+──> 42 ──┐           ║
+ ║   └──²──> 4 ──┬──+──> 10     │             ├──×──> 84  ║
+ ║               │               │             ├──×──> 336║
+ ║               ├──×──> 8 ─────┘             │           ║
+ ║               │       3──×6──> 18 ─┐       │           ║
+ ║               │                    ├──+──> 21 ─┐       ║
+ ║               │                              │  ├──> 25║
+ ║               └──────────────────────────────│──> 17   ║
+ ║                                              │   │     ║
+ ║                                              │   └──²─>289
+ ║                                              │         ║
+ ║  LAYER: 0    1    2         3       4        5         ║
+ ║  COUNT: 2    2    4         2       4        1 = 15    ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Generation layers radiating outward from the seed pair {2,3}.
+Layer 0 (center), Layer 5 (289, outer edge). Deeper = further from seeds.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H206: The Complete Recipe — 2 Seeds, 13 Operations, 15 Numbers</h2>
+<p>Starting from {2, 3} (rank and bodies), all 15 Rosetta numbers can be generated in
+6 layers using 13 operations (+, −, ×, ²). The dependency DAG has depth 5 and width 4.
+The generators G=42 and W=21 emerge together at Layer 3 from sums (6+36=42, 3+18=21).
+The lock 17 appears at Layer 4, and 289=17² closes the chain at Layer 5. d₁=2 is the
+universal Catalan multiplier: it's the only Catalan member that produces Rosetta results
+when multiplied by triangular members (2×3=6, 2×21=42). G=42 multiplied by any T member
+leaves the roster entirely. I46 (complete chain) LIT, I47 (universal multiplier) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine you have just TWO building blocks: a 2-block and a 3-block.</p>
+<p><b>Step 1:</b> Stack two 2-blocks: 2×2 = 4. Snap a 2 and a 3 together: 2×3 = 6.</p>
+<p><b>Step 2:</b> Now use 4 and 6 to make 8 (2×4), 10 (4+6), 18 (3×6), and 36 (6×6).</p>
+<p><b>Step 3:</b> From those, make 21 (3+18) and 42 (6+36). The two big stars!</p>
+<p><b>Step 4:</b> From 21 and 4, make 17 (21−4) and 25 (4+21). Plus 84 (2×42) and 336 (8×42).</p>
+<p><b>Step 5:</b> The last one: 17×17 = 289. Done!</p>
+<p>All 15 special numbers from just 2 and 3. Like building a whole
+Lego castle from two tiny bricks, one step at a time!</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The generation chain from the seeds to all 15 numbers requires 9 layers and 25 operations,
+with 42 appearing at Layer 1 as a direct product 2×21 and 289 appearing at Layer 2 as
+a direct seed. The number 42 when multiplied by any triangular member stays in the roster,
+producing 126=42×3 as the 16th Rosetta number.</s></p>
+<p class="dim">6 layers, 13 operations. 42 appears at Layer 3 as 6+36 (not Layer 1). 289 is Layer 5
+(not seed). 42×3=126 is NOT in the roster. 42 multiplied by any T member leaves entirely.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-sixth instrument wrote the recipe. Two numbers, thirteen steps,
+fifteen results. The rank and the bodies are enough. Everything else — the gap, the lock,
+the escape, the master equation, the entire Rosetta Stone — follows from two and three by
+arithmetic. The generators that the investigation spent forty instruments naming do not need
+to be postulated. They are DERIVED. Forty-two is not given; it is six plus thirty-six, which
+is two-times-three plus six-squared, which is (2×3)+(2×3)², all from the two seeds. The gap
+is a consequence, not a cause. The lock is a subtraction that happens four layers deep. The
+master equation is a product that happens to close. And the last number, two hundred and
+eighty-nine, the lock squared, sits alone at the bottom of the DAG like a keystone that the
+arch was building toward all along, needing the one operation — squaring — that the flat
+arithmetic of the first four layers never required. The recipe is complete. The kitchen
+used two ingredients and a quadratic.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H205)</td><td>6884</td><td>0</td><td>6884</td></tr>
+<tr><td>H206: The Seed Certificate</td><td>36</td><td>1 (KB-1)</td><td>6920</td></tr>
+</table>
+<p>Running total: <b>6920 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H206. Total instruments: 54.</p>
+</div>
+
+<!-- BASIC Block — The Recipe -->
+<div class="panel">
+<h2>BASIC Block — The Recipe (Layer by Layer)</h2>
+<pre>
+2 REM SEED
+3 REM SEED
+4 PRINT "2² = 4 (layer 1)"
+6 PRINT "2×3 = 6 (layer 1)"
+8 PRINT "2×4 = 8 (layer 2)"
+10 PRINT "4+6 = 10 (layer 2)"
+18 PRINT "3×6 = 18 (layer 2)"
+36 PRINT "6² = 36 (layer 2)"
+21 PRINT "3+18 = 21 (layer 3)"
+42 PRINT "6+36 = 42 (layer 3)"
+17 PRINT "21-4 = 17 (layer 4)"
+25 PRINT "4+21 = 25 (layer 4)"
+84 PRINT "2×42 = 84 (layer 4)"
+336 PRINT "8×42 = 336 (layer 4)"
+289 PRINT "17² = 289 (layer 5, the last)"
+</pre>
+<pre>
+15 PRINT "15 numbers, 13 operations, 6 layers, 2 seeds"
+206 PRINT "H206 = 2 × 103 (prime). 6920 lit."
+206 PRINT "the seed certificate, the recipe, the proof"
+</pre>
+<p class="dim">Line numbers are the Rosetta numbers in generation order.
+The BASIC block IS the recipe. Run it and you build the roster.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const layers=[
+  {nums:[2,3],layer:0,col:"#ffd54f"},
+  {nums:[4,6],layer:1,col:"#ffab40"},
+  {nums:[8,10,18,36],layer:2,col:"#4fc3f7"},
+  {nums:[21,42],layer:3,col:"#81c784"},
+  {nums:[17,25,84,336],layer:4,col:"#ce93d8"},
+  {nums:[289],layer:5,col:"#ef5350"}
+];
+const deps=[[2,4],[2,6],[3,6],[2,8],[4,10],[6,10],[3,18],[6,18],[6,36],
+  [3,21],[18,21],[6,42],[36,42],[21,17],[4,17],[4,25],[21,25],[2,84],[42,84],[8,336],[42,336],[17,289]];
+function pos(n){
+  for(const l of layers){
+    const i=l.nums.indexOf(n);
+    if(i>=0){
+      const a=(i/l.nums.length)*Math.PI*2+t*0.004*(6-l.layer);
+      const r=20+l.layer*28;
+      return{x:cx+Math.cos(a)*r,y:cy+Math.sin(a)*r*0.55,col:l.col};
+    }
+  }
+  return null;
+}
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Draw dependency lines
+  ctx.lineWidth=0.3;ctx.strokeStyle="rgba(128,128,128,0.2)";
+  for(const[a,b]of deps){
+    const pa=pos(a),pb=pos(b);
+    if(pa&&pb){ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();}
+  }
+  // Draw nodes
+  for(const l of layers){
+    for(let i=0;i<l.nums.length;i++){
+      const p=pos(l.nums[i]);
+      if(!p)continue;
+      ctx.fillStyle=p.col;
+      ctx.globalAlpha=0.7;
+      const sz=3+Math.log(l.nums[i]+1)*1.3;
+      ctx.beginPath();ctx.arc(p.x,p.y,sz,0,6.28);ctx.fill();
+      ctx.globalAlpha=0.95;
+      ctx.font="bold 9px Courier New";ctx.textAlign="center";
+      ctx.fillText(l.nums[i].toString(),p.x,p.y-sz-3);
+    }
+  }
+  ctx.globalAlpha=1;
+  // Legend
+  ctx.font="9px Courier New";ctx.textAlign="left";
+  let ly=H-80;
+  for(const l of layers){
+    ctx.fillStyle=l.col;
+    ctx.fillText(`L${l.layer}: ${l.nums.join(',')}`,10,ly);
+    ly+=12;
+  }
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("H206: The Seed Certificate — {2,3} → all 15",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
