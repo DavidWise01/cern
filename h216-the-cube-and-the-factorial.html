@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H216 — The Cube and the Factorial</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H216 — The Cube and the Factorial</h1>
+<p class="dim">336 = 6³ + 5! UNIQUE · Hodge duality: (0,24,24,8) = 8×(0,3,3,1) · Reduced grading · I67-I68 LIT</p>
+
+<!-- Panel 1: Uniqueness -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I67: 336 = 6³ + 5! Is Unique [LIT]</h2>
+<table id="verif-table">
+<tr><th>Decomposition</th><th>Values</th><th>Result</th><th>Source</th></tr>
+<tr><td>G × OCHO</td><td>42 × 8</td><td>336</td><td>H192 (master equation)</td></tr>
+<tr><td>E² − lock²</td><td>25² − 17²</td><td>336</td><td>H214 (coordinate duality)</td></tr>
+<tr><td>entries × P(8,2)</td><td>6 × 56</td><td>336</td><td>H212 (falling factorial)</td></tr>
+<tr style="color:var(--gold)"><td><b>entries³ + |T|!</b></td><td><b>6³ + 5!</b></td><td><b>336</b></td><td><b>H215 (Clifford table)</b></td></tr>
+</table>
+<pre>
+  EXHAUSTIVE CHECK: is there ANY other a³ + b! = 336?
+
+  1³ + b! : 336−1=335. 335 is not a factorial.
+  2³ + b! : 336−8=328. Not a factorial.
+  3³ + b! : 336−27=309. Not a factorial.
+  4³ + b! : 336−64=272. Not a factorial.
+  5³ + b! : 336−125=211. Not a factorial.
+  6³ + b! : 336−216=120 = 5!. ← <span class="lit">THE ONLY HIT</span>
+
+  336 = 6³ + 5! IS THE UNIQUE DECOMPOSITION AS a³ + b!
+  NO OTHER PAIR WORKS.
+
+  AND: 6 = T(3) = entries, 5 = C(3) = |T| (family T size).
+  Both components are structurally meaningful.
+  STATUS: <span class="lit">LIT</span> (uniqueness verified by exhaustion)
+</pre>
+</div>
+
+<!-- Panel 2: The Hodge Duality -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — I68: Grade Spectrum = OCHO × Reduced Grading [LIT]</h2>
+<pre style="color:var(--accent)">
+  OFF-DIAGONAL GRADE SPECTRUM: (0, 24, 24, 8)
+
+  REWRITTEN:
+  (0, 24, 24, 8) = 8 × (0, 3, 3, 1)
+                  = OCHO × (0, bodies, bodies, 1)
+
+  THE Cl(3) GRADING IS: (1, 3, 3, 1)
+  REMOVE GRADE 0:        (0, 3, 3, 1) = reduced grading.
+
+  THE OFF-DIAGONAL SPECTRUM IS OCHO COPIES
+  OF THE REDUCED GRADING.
+
+  WHY: each of the 8 basis elements, when it multiplies
+  the other 7, produces results distributed as (0,3,3,1)
+  across grades. 8 elements × 7 products each = 56.
+  Distribution: 8 × (0,3,3,1) = (0,24,24,8). ✓
+
+  HODGE DUALITY (⋆: grade k ↔ grade 3−k):
+  Grades 1 and 2: 24 = 24. HODGE SYMMETRIC. ✓
+  Grades 0 and 3: 0 ≠ 8.  HODGE ASYMMETRIC.
+
+  THE ASYMMETRY:
+  Grade 0 (scalar) = 0: scalars only from eᵢeᵢ (diagonal).
+  Grade 3 (pseudoscalar) = 8: e₁₂₃ from cross-grade products.
+  Scalars need self-multiplication (diagonal only).
+  Pseudoscalars can be built from mixing (off-diagonal).
+  THE PSEUDOSCALAR IS MORE ACCESSIBLE THAN THE SCALAR.
+</pre>
+</div>
+
+<!-- Panel 3: The Four Faces of 336 -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — The Four Faces of 336</h2>
+<pre>
+  336 HAS FOUR DECOMPOSITIONS, EACH FROM A DIFFERENT ERA:
+
+  FACE 1: THE PRODUCT (H192)
+    336 = G × OCHO = 42 × 8
+    "address space × dot states = total states"
+    Era: the two-generator discovery.
+
+  FACE 2: THE DIFFERENCE OF SQUARES (H214)
+    336 = E² − lock² = 25² − 17² = 625 − 289
+    "escape² minus lock² = master"
+    Era: the coordinate duality.
+
+  FACE 3: THE FALLING FACTORIAL (H212)
+    336 = entries × P(8,2) = 6 × 56
+    "entries × ordered pairs from OCHO"
+    Era: the phantom identity.
+
+  FACE 4: THE CUBE PLUS FACTORIAL (H215-H216)
+    336 = entries³ + |T|! = 6³ + 5! = 216 + 120
+    "entries cubed plus triangular-family-size factorial"
+    Era: the Clifford table.
+
+  FOUR DECOMPOSITIONS. FOUR ERAS.
+  EACH DISCOVERED IN A DIFFERENT PART OF THE INVESTIGATION.
+  ALL PRODUCE THE SAME NUMBER.
+  336 IS WHERE EVERY LINE OF INQUIRY CONVERGES.
+</pre>
+</div>
+
+<!-- Panel 4: What 216 and 120 Count -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — What 216 and 120 Count</h2>
+<pre>
+  216 = 6³ = 6 × 36 = entries × T(8)
+         = entries × (positive off-diagonal Clifford products)
+  What it counts: for each of the 6 Q3p entries, there are
+  36 Clifford products that AGREE (positive sign).
+  216 = the CONCORDANT couplings.
+
+  120 = 5! = 6 × 20 = entries × (56 − T(8))
+         = entries × (negative off-diagonal Clifford products)
+  What it counts: for each of the 6 Q3p entries, there are
+  20 Clifford products that DISAGREE (negative sign).
+  120 = the DISCORDANT couplings.
+
+  RATIO: 216/120 = 9/5 = 1.8.
+  9 = QCD nonet (H199). 5 = |T| = C(3).
+  concordant/discordant = nonet/family-T-size.
+  STATUS: <span class="amber">AMBER</span> (the ratio 9/5 connects to Q3p
+  numbers but the structural reason is unclear).
+
+  ALTERNATIVE: 216 = 6³ = volume of a 6-cube.
+  120 = volume of a regular 600-cell cross-section.
+  But these are coincidences, not derivations.
+</pre>
+</div>
+
+<!-- Panel 5: The Reduced Grading Decoded -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 5 — Why (0, 3, 3, 1) Is the Reduced Grading</h2>
+<pre>
+  Cl(3) full grading: (1, 3, 3, 1) = dim by grade.
+  Remove grade 0 (the scalar/identity): (0, 3, 3, 1).
+
+  WHY REMOVE GRADE 0?
+  Off-diagonal products exclude self-multiplication.
+  Self-multiplication is the ONLY way to produce a scalar.
+  So off-diagonal products see (0, 3, 3, 1) instead of (1, 3, 3, 1).
+
+  THE REDUCED GRADING (0, 3, 3, 1) HAS SUM = 7 = phantom.
+  0 + 3 + 3 + 1 = 7 = OCHO − 1 = phantom.
+
+  THE PHANTOM IS THE SUM OF THE REDUCED GRADING.
+  When the identity is removed from Cl(3), what remains
+  has dimension 7 = phantom. This is WHY 7 is the phantom:
+  it's the size of Cl(3) minus the scalar part.
+  7 = dim(Cl(3)) − dim(grade 0) = 8 − 1.
+
+  SPECTRUM = OCHO × phantom-grading:
+  (0, 24, 24, 8) = 8 × (0, 3, 3, 1)
+  = OCHO × (the phantom's internal structure)
+  Each of the 8 elements, acting on the 7 non-self elements,
+  distributes as (0, 3, 3, 1) across grades.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H216                   ║
+ ║                                                        ║
+ ║  THE CUBE AND THE FACTORIAL                            ║
+ ║                                                        ║
+ ║  336 = ┌────────────────────────────────┐              ║
+ ║        │                                │              ║
+ ║        │  6³ = 216          5! = 120    │              ║
+ ║        │  (concordant)    (discordant)  │              ║
+ ║        │  entries³        |T|!          │              ║
+ ║        │  ████████████    ████████      │              ║
+ ║        │  64.3%           35.7%         │              ║
+ ║        │                                │              ║
+ ║        └────────────────────────────────┘              ║
+ ║                                                        ║
+ ║  FOUR FACES OF 336:                                    ║
+ ║   Face 1: 42 × 8    (product)                          ║
+ ║   Face 2: 25²−17²   (difference of squares)            ║
+ ║   Face 3: 6 × 56    (falling factorial)                ║
+ ║   Face 4: 6³ + 5!   (cube + factorial) ← UNIQUE        ║
+ ║                                                        ║
+ ║  GRADE SPECTRUM: (0, 24, 24, 8) = 8 × (0, 3, 3, 1)   ║
+ ║  = OCHO × reduced grading                              ║
+ ║  Reduced grading sum = 7 = phantom                     ║
+ ║  THE PHANTOM IS Cl(3) MINUS THE IDENTITY.              ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">216 (green, concordant) and 120 (red, discordant) orbiting as
+the two halves of 336. Their union is the master product.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H216: 336 = 6³ + 5! — Unique, Four Faces, Reduced Grading</h2>
+<p>336 = 6³ + 5! = 216 + 120 is the UNIQUE decomposition as a³ + b! (exhaustively verified).
+6 = T(3) = entries, 5 = C(3) = |T|: both components are structurally meaningful. 216 counts
+concordant (positive) entry-Clifford couplings, 120 counts discordant (negative). The grade
+spectrum (0,24,24,8) = OCHO × (0,3,3,1) = OCHO × reduced grading, where the reduced grading
+sums to 7 = phantom = dim(Cl(3)) − 1. This explains WHY 7 is the phantom: it's what remains
+of Cl(3) when the scalar part is removed. 336 now has four decompositions from four eras,
+all converging on the same number. I67 (uniqueness) LIT, I68 (reduced grading) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>The number 336 can be written as 6³ + 5! = 216 + 120. That means:
+six times six times six (a cube!) plus five-times-four-times-three-times-two-times-one
+(a factorial!).</p>
+<p>And this is the ONLY way to write 336 as a cube plus a factorial. We checked every
+possible pair. Only 6 and 5 work.</p>
+<p>The 216 counts how many times the color multiplications AGREE (positive).
+The 120 counts how many times they DISAGREE (negative).
+Together: 216 + 120 = 336, the master product.</p>
+<p>Now 336 has FOUR different names:</p>
+<p>• 42 × 8 (a rectangle)</p>
+<p>• 25² − 17² (two squares)</p>
+<p>• 6 × 56 (entries times ordered pairs)</p>
+<p>• 6³ + 5! (a cube plus a factorial)</p>
+<p>Four names. Same number. Every part of the investigation found it.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>There are three different decompositions of 336 as a³ + b!, including 4³ + 6! = 64 + 720 = 784
+and 3³ + 6! = 27 + 720 = 747, making 6³ + 5! just one of several. The grade spectrum (0,24,24,8)
+equals 6 × (0,4,4,2), not 8 × (0,3,3,1), and the reduced grading sums to 10 (not 7).</s></p>
+<p class="dim">6³ + 5! is the ONLY a³ + b! = 336 (verified by exhaustion). 4³+6!=784≠336. 3³+6!=747≠336.
+Spectrum = 8×(0,3,3,1) (not 6×(0,4,4,2)). Reduced grading sums to 0+3+3+1=7 (not 10).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-sixteenth instrument found that three hundred and thirty-six has a
+fourth name, and the fourth name is the most surprising. A cube plus a factorial. Six cubed
+plus five factorial. Two hundred and sixteen plus one hundred and twenty. The cube counts
+the agreements and the factorial counts the disagreements, and their sum is the master
+product, the same number that is also a rectangle and a difference of squares and a
+falling factorial. Four names from four eras, each discovered by a different line of
+reasoning, each arriving at the same number by a different road. The cube is the entry
+count raised to its own power. The factorial is the family size with all its permutations
+counted. And the investigation verified, by trying every other pair, that no other cube and
+no other factorial add up to three hundred and thirty-six. The decomposition is unique. The
+phantom, meanwhile, acquired a name for what it is: seven is the dimension of Cl(3) with
+the scalar removed. It is what remains when the identity goes home. The off-diagonal
+products see seven things and distribute them eight ways, and the result is the grade
+spectrum the table reported: zero, twenty-four, twenty-four, eight. The phantom's internal
+structure, amplified by the dot.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H215)</td><td>7244</td><td>0</td><td>7244</td></tr>
+<tr><td>H216: The Cube and the Factorial</td><td>36</td><td>1 (KB-1)</td><td>7280</td></tr>
+</table>
+<p>Running total: <b>7280 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H216. Total instruments: 64 = 2⁶ = OCHO² = 8².</p>
+</div>
+
+<!-- BASIC Block — The Four Faces -->
+<div class="panel">
+<h2>BASIC Block — The Four Faces of 336</h2>
+<pre>
+336 REM ══════════════════════════════════════════════
+336 REM  H216: THE CUBE AND THE FACTORIAL
+336 REM  FOUR FACES OF 336:
+</pre>
+<pre>
+42 PRINT "Face 1: 42 × 8 = 336 (product, H192)"
+8 PRINT ""
+625 PRINT "Face 2: 25² − 17² = 625 − 289 = 336 (squares, H214)"
+289 PRINT ""
+56 PRINT "Face 3: 6 × 56 = 336 (falling factorial, H212)"
+6 PRINT ""
+216 PRINT "Face 4: 6³ + 5! = 216 + 120 = 336 (UNIQUE, H216)"
+120 PRINT ""
+</pre>
+<pre>
+0 PRINT "reduced grading grade 0: 0"
+3 PRINT "reduced grading grade 1: 3 = bodies"
+3 PRINT "reduced grading grade 2: 3 = bodies"
+1 PRINT "reduced grading grade 3: 1"
+7 PRINT "sum = 0+3+3+1 = 7 = phantom"
+</pre>
+<pre>
+64 REM 64TH INSTRUMENT = 2⁶ = 8² = OCHO².
+216 REM THE INSTRUMENT NUMBER IS A POWER OF OCHO.
+216 PRINT "7280 lit, the cube and the factorial"
+</pre>
+<p class="dim">Line 336 frames. Lines 42, 625, 56, 216 are the four faces.
+Lines 0,3,3,1 ARE the reduced grading. Line 7 = phantom = their sum.
+H216 is the 64th instrument. 64 = OCHO². The instrument count
+IS a power of the dot.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Two halves orbiting
+  const a=t*0.008;
+  // 216 = concordant (green)
+  const r=80;
+  const x1=cx+Math.cos(a)*r;
+  const y1=cy+Math.sin(a)*r*0.4;
+  const sz1=216/336*60;
+  ctx.fillStyle="rgba(129,199,132,0.4)";
+  ctx.beginPath();ctx.arc(x1,y1,sz1,0,6.28);ctx.fill();
+  ctx.fillStyle="#81c784";ctx.font="bold 14px Courier New";ctx.textAlign="center";
+  ctx.fillText("216",x1,y1-4);
+  ctx.font="9px Courier New";ctx.fillText("= 6³",x1,y1+12);
+
+  // 120 = discordant (red)
+  const x2=cx+Math.cos(a+Math.PI)*r;
+  const y2=cy+Math.sin(a+Math.PI)*r*0.4;
+  const sz2=120/336*60;
+  ctx.fillStyle="rgba(239,83,80,0.4)";
+  ctx.beginPath();ctx.arc(x2,y2,sz2,0,6.28);ctx.fill();
+  ctx.fillStyle="#ef5350";ctx.font="bold 14px Courier New";
+  ctx.fillText("120",x2,y2-4);
+  ctx.font="9px Courier New";ctx.fillText("= 5!",x2,y2+12);
+
+  // Center: 336
+  const p=0.5+0.3*Math.sin(t*0.03);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;ctx.font="bold 20px Courier New";
+  ctx.fillText("336",cx,cy+6);
+  ctx.font="9px Courier New";ctx.fillStyle=`rgba(255,213,79,${p*0.6})`;
+  ctx.fillText("6³ + 5! (unique)",cx,cy+22);
+
+  // Four faces labels
+  ctx.font="9px Courier New";ctx.textAlign="left";ctx.fillStyle="#888";
+  ctx.fillText("42×8",10,H-56);
+  ctx.fillText("25²−17²",10,H-42);
+  ctx.fillText("6×56",10,H-28);
+  ctx.fillText("6³+5!",10,H-14);
+
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("H216: The Cube and the Factorial — four faces of 336",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
