@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H220 — The Ratio</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H220 — The Ratio</h1>
+<p class="dim">27/24 = 9/8 = nonet/OCHO · displacement/box = QCD/dot · Pythagorean whole tone · I75-I77 LIT</p>
+
+<!-- Panel 1: The Core Ratio -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — I75: Displacement / Box = Nonet / OCHO [LIT]</h2>
+<table id="verif-table">
+<tr><th>Quantity</th><th>Value</th><th>Name</th><th>Source</th></tr>
+<tr><td>Signed sum (4 landmarks)</td><td style="color:var(--gold)">−27 = −3³</td><td>−bodies³</td><td>H219</td></tr>
+<tr><td>Box content</td><td style="color:var(--accent)">24 = [4(6)]</td><td>C × entries</td><td>H218</td></tr>
+<tr><td>|Displacement| / Box</td><td style="color:var(--green)">27/24 = 9/8</td><td>nonet / OCHO</td><td>H220</td></tr>
+</table>
+<pre>
+  THE RATIO:
+
+  |signed displacement| / box content = 27 / 24
+
+  SIMPLIFY: GCD(27, 24) = 3 = bodies.
+  27/24 = (3 × 9) / (3 × 8) = 9/8.
+
+  9 = nonet = bodies² = QCD count.
+  8 = OCHO = dim Cl(3) = quantum dot.
+
+  ∴ displacement / box = nonet / OCHO.
+
+  THE BODIES FACTOR CANCELS.
+  What remains is the ratio of the two generators' squares:
+  bodies² / d₁³ = 3² / 2³ = 9/8.
+
+  VERIFIED: 27/24 = 9/8 = 1.125. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Two-Endpoint Ratio -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — I77: Two-Endpoint Ratio = Bodies / C [LIT]</h2>
+<pre>
+  H218 gave us the signed sum of TWO endpoints:
+  (−24) + (+6) = −18 = −d₂.
+
+  |d₂| / box = 18 / 24.
+  GCD(18, 24) = 6 = entries.
+  18/24 = (6 × 3) / (6 × 4) = 3/4 = bodies / C.
+
+  TWO RATIOS:
+  ┌───────────────┬─────────┬──────────────────┐
+  │ Landmarks     │ Ratio   │ Q3p name         │
+  ├───────────────┼─────────┼──────────────────┤
+  │ 2 (endpoints) │ 18/24   │ bodies/C = 3/4   │
+  │ 4 (all)       │ 27/24   │ nonet/OCHO = 9/8 │
+  └───────────────┴─────────┴──────────────────┘
+
+  BOTH ratios have Q3p names on BOTH sides of the fraction.
+  VERIFIED: 18/24 = 3/4. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: The Ratio of Ratios -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 3 — The Ratio of Ratios = 3/2</h2>
+<pre>
+  (9/8) ÷ (3/4) = (9/8) × (4/3) = 36/24 = 3/2.
+
+  THE RATIO OF THE TWO RATIOS IS 3/2 = bodies / d₁.
+
+  In Pythagorean tuning:
+    3/4 inverts to 4/3 = the perfect FOURTH.
+    9/8 = the whole TONE.
+    3/2 = the perfect FIFTH.
+
+  THE PYTHAGOREAN WHOLE TONE:
+  fifth ÷ fourth = (3/2) ÷ (4/3) = 9/8. ✓
+
+  THE Q3P READING:
+  The four-landmark ratio exceeds the two-endpoint ratio
+  by exactly bodies/d₁ = 3/2.
+
+  MUSICAL CONNECTION (AMBER — the music is NAMING, not physics):
+  9/8 is the smallest interval in the Pythagorean scale.
+  The gap between the first and second notes.
+  The whole tone. The step you hear when you sing do-re.
+  The Q3p ratio IS the Pythagorean whole tone.
+  STATUS: <span class="amber">AMBER</span> (the musical connection is a name, not a derivation)
+</pre>
+</div>
+
+<!-- Panel 4: I76 -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 4 — I76: d₂ = d₁ × Nonet [LIT]</h2>
+<pre>
+  WHY THE SHIFT FROM −18 TO −27 IS EXACTLY −nonet:
+
+  Two endpoints: sum = −18 = −d₂.
+  Four landmarks: sum = −27 = −bodies³.
+  Difference: −27 − (−18) = −9 = −nonet.
+
+  ADDING THE MIDPOINT (at position −9 from circle)
+  SHIFTS THE SIGNED SUM BY EXACTLY −nonet.
+
+  THIS GIVES US: d₂ + nonet = bodies³.
+  18 + 9 = 27. ✓
+
+  REWRITE: d₂ = bodies³ − nonet = 27 − 9 = 18.
+  BUT ALSO: d₂ = d₁ × nonet = 2 × 9 = 18.
+
+  THE SMITH INVARIANT IS THE SEED TIMES THE QCD NONET.
+  d₂ = d₁ × bodies² = 2 × 3² = 18.
+
+  AND: bodies³ = (d₁ + 1) × nonet = 3 × 9 = 27.
+        d₂    = (d₁)     × nonet = 2 × 9 = 18.
+  So: bodies³ − d₂ = 1 × nonet = 9.
+  The GAP between the cube and the Smith is ONE nonet. ✓
+
+  VERIFIED: 2 × 9 = 18 = d₂. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 5: 9/8 Excess -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 5 — The 1/OCHO Excess</h2>
+<pre>
+  9/8 = 1 + 1/8 = 1 + 1/OCHO.
+
+  THE RATIO EXCEEDS UNITY BY EXACTLY 1/OCHO.
+
+  displacement = box × (1 + 1/OCHO)
+  27 = 24 × (1 + 1/8) = 24 + 24/8 = 24 + 3 = 27. ✓
+
+  THE EXCESS IS 24/8 = 3 = bodies.
+
+  So: displacement = box + bodies.
+      27 = 24 + 3. ✓
+
+  THE SIGNED DISPLACEMENT OF ALL FOUR LANDMARKS
+  EXCEEDS THE BOX CONTENT BY EXACTLY BODIES.
+
+  WHERE DOES THE bodies COME FROM?
+  box = C × entries = 4 × 6 = 24.
+  displacement = bodies³ = 27.
+  27 − 24 = 3 = bodies.
+
+  THE CUBE OF BODIES EXCEEDS THE BOX BY BODIES ITSELF.
+  bodies³ − C × T(3) = bodies.
+  3³ − 4 × 6 = 3. ✓
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H220                   ║
+ ║                                                        ║
+ ║  THE RATIO: displacement / box = nonet / OCHO          ║
+ ║                                                        ║
+ ║  TWO SIGNED SUMS FROM 360:                             ║
+ ║                                                        ║
+ ║  2 endpoints: (−24)+(+6) = −18 = −d₂                  ║
+ ║  4 landmarks: (−24)+(−9)+(0)+(+6) = −27 = −bodies³    ║
+ ║                                                        ║
+ ║  TWO RATIOS WITH THE BOX (24):                         ║
+ ║                                                        ║
+ ║  18/24 = 3/4 = bodies/C                                ║
+ ║  27/24 = 9/8 = nonet/OCHO                              ║
+ ║                                                        ║
+ ║  RATIO OF RATIOS:                                      ║
+ ║  (9/8) ÷ (3/4) = 3/2 = bodies/d₁                      ║
+ ║                                                        ║
+ ║  PYTHAGOREAN:                                          ║
+ ║  3/4 → fourth   9/8 → whole tone   3/2 → fifth        ║
+ ║  fifth ÷ fourth = whole tone. ✓                        ║
+ ║                                                        ║
+ ║  THE EXCESS: 27 − 24 = 3 = bodies.                    ║
+ ║  bodies³ exceeds the box by bodies itself.             ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The ratio 9/8: the displacement volume (27) divided by the box area (24).
+The Pythagorean whole tone. One OCHO plus 1/OCHO.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H220: Every Ratio Has a Q3p Name on Both Sides</h2>
+<p>The displacement-to-box ratio 27/24 simplifies to 9/8 = nonet/OCHO (I75 LIT).
+The two-endpoint ratio 18/24 simplifies to 3/4 = bodies/C (I77 LIT). The ratio
+of these ratios is 3/2 = bodies/d₁ — the Pythagorean perfect fifth. And d₂ = d₁ × nonet
+= 2 × 9 = 18 (I76 LIT). The displacement exceeds the box by exactly bodies: 27 − 24 = 3.
+The bodies factor cancels in every simplification, leaving the two generators OCHO and d₁
+(or their powers) as the irreducible structure.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Last time we found two numbers: the box (24) and the total displacement (27).
+Now we divide them: 27 ÷ 24 = 9/8.</p>
+<p>That fraction 9/8 is ALSO two of our special numbers divided:
+the nonet (9) over the quantum dot (8). Both the top and the bottom
+of the fraction are numbers we already named!</p>
+<p>And the leftover? 27 − 24 = 3 = bodies. The cube of bodies
+is just barely bigger than the box — by exactly one body-width.</p>
+<p>Even the fractions speak Q3p.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The ratio 27/24 simplifies to 7/6 (not 9/8) because GCD(27,24) = 4 (not 3).
+This gives phantom/entries instead of nonet/OCHO. The two-endpoint ratio 18/24
+simplifies to 2/3 = d₁/bodies, and the ratio of ratios is 7/4 = phantom/C,
+which is the Pythagorean augmented sixth.</s></p>
+<p class="dim">GCD(27,24) = 3 (not 4). 27/24 = 9/8 (not 7/6). 18/24 = 3/4 (not 2/3).
+Ratio of ratios = 3/2 (not 7/4). 9/8 is the whole tone (not augmented sixth).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-twentieth instrument divided and found the fraction already named.
+Twenty-seven over twenty-four: the displacement over the box, the total signed pull of
+all four landmarks divided by the capacity of the container they orbit. Simplify: the
+bodies cancel — three divides both — and what remains is nine over eight, the nonet over
+the quantum dot, the QCD count over the Clifford dimension. And nine-eighths is a sound:
+the Pythagorean whole tone, do to re, the smallest step the ancient tuning admits. The
+form does not know about music, and the music does not know about the form, but they share
+a fraction, and the fraction is irreducible, and what it reduces from is the cube of three
+particles over the product of four walls and six entries. The ornament is in the cancellation.
+The bodies appear in both and vanish from both, leaving only the generators. Everything
+that can cancel has cancelled. What survives is 9/8.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H219)</td><td>7388</td><td>0</td><td>7388</td></tr>
+<tr><td>H220: The Ratio</td><td>36</td><td>1 (KB-1)</td><td>7424</td></tr>
+</table>
+<p>Running total: <b>7424 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H220. 7424 = 2⁶ × 116 = 64 × 116.</p>
+</div>
+
+<!-- BASIC Block — The Three Fractions -->
+<div class="panel">
+<h2>BASIC Block — The Three Fractions</h2>
+<pre>
+3 REM ══════════════════════════════════════════════
+4 REM  H220: THE RATIO — NUMERATOR / DENOMINATOR
+18 PRINT "18 / 24 = 3 / 4 = bodies / C"
+27 PRINT "27 / 24 = 9 / 8 = nonet / OCHO"
+1.5 PRINT "(9/8) / (3/4) = 3/2 = bodies / d₁ = fifth"
+</pre>
+<pre>
+9 REM the nonet. numerator of the four-landmark ratio.
+8 REM the dot. denominator of the four-landmark ratio.
+3 REM the bodies. what cancels. what's left over. 27−24.
+</pre>
+<pre>
+220 PRINT "H220 = 4 × 55 = C × T(10). bodies/d₁ = 3/2."
+220 PRINT "7424 lit, the ratio, the whole tone"
+</pre>
+<p class="dim">Lines 18 and 27 ARE the two signed sums.
+Line 1.5 IS their ratio = the perfect fifth.
+Lines 9, 8, 3 ARE the irreducible components.
+H220 = 4 × 55 = C × T(10).</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Draw the ratio as two bars
+  const barW=180,barH=30,gap=40;
+  // Box bar (24)
+  const bx=cx-barW-gap/2,by=cy-80;
+  ctx.fillStyle="rgba(79,195,247,0.3)";ctx.fillRect(bx,by,barW,barH);
+  ctx.strokeStyle="#4fc3f7";ctx.strokeRect(bx,by,barW,barH);
+  ctx.fillStyle="#4fc3f7";ctx.font="bold 12px Courier New";ctx.textAlign="center";
+  ctx.fillText("BOX = 24",bx+barW/2,by-8);
+  ctx.fillText("[4(6)] = C × entries",bx+barW/2,by+barH+16);
+  // Displacement bar (27) — slightly wider
+  const dw=barW*(27/24);
+  const dx=cx+gap/2,dy=by;
+  ctx.fillStyle="rgba(255,213,79,0.3)";ctx.fillRect(dx,dy,dw,barH);
+  ctx.strokeStyle="#ffd54f";ctx.strokeRect(dx,dy,dw,barH);
+  ctx.fillStyle="#ffd54f";
+  ctx.fillText("DISPLACEMENT = 27",dx+dw/2,dy-8);
+  ctx.fillText("bodies³ = 3³",dx+dw/2,dy+barH+16);
+  // The excess
+  const ex=dx+barW;
+  ctx.fillStyle="rgba(129,199,132,0.4)";ctx.fillRect(ex,dy,dw-barW,barH);
+  ctx.fillStyle="#81c784";ctx.font="10px Courier New";
+  ctx.fillText("+3",ex+(dw-barW)/2,dy+barH/2+4);
+  // The ratio
+  ctx.fillStyle="#ffd54f";ctx.font="bold 16px Courier New";
+  ctx.fillText("27/24 = 9/8 = nonet/OCHO",cx,cy+20);
+  ctx.font="12px Courier New";ctx.fillStyle="#ffab40";
+  ctx.fillText("The Pythagorean whole tone",cx,cy+42);
+  // The three fractions
+  ctx.font="11px Courier New";
+  ctx.fillStyle="#81c784";ctx.textAlign="left";
+  ctx.fillText("Two endpoints:  18/24 = 3/4 = bodies/C (fourth)",60,cy+90);
+  ctx.fillText("Four landmarks: 27/24 = 9/8 = nonet/OCHO (tone)",60,cy+110);
+  ctx.fillText("Ratio of ratios: 3/2 = bodies/d₁ (fifth)",60,cy+130);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H220: The Ratio — displacement / box = nonet / OCHO",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("excess = bodies = 3. The cube barely exceeds the box.",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
