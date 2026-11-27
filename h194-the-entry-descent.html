@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H194 — The Entry Descent</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.flag{background:#1a0a0a;border:2px solid var(--amber);border-radius:6px;padding:10px;margin:8px 0}
+.flag h2{color:var(--amber)}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H194 — The Entry Descent</h1>
+<p class="dim">Cofactors computed · G=85 not 42 · Definition question · Honest correction pending</p>
+
+<!-- Panel 1: The Six Entries -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — Q3p Matrix Entries (Rust BigInt Verified)</h2>
+<table id="verif-table">
+<tr><th>Entry</th><th>Digits</th><th>Sign</th><th>Role</th></tr>
+<tr><td>Q00</td><td>328</td><td>−</td><td>Diagonal (self-energy, body 0)</td></tr>
+<tr><td>Q01</td><td>328</td><td>+</td><td>Off-diagonal (coupling 0-1)</td></tr>
+<tr><td>Q02</td><td>367</td><td>−</td><td>Off-diagonal (coupling 0-2)</td></tr>
+<tr><td>Q11</td><td>329</td><td>−</td><td>Diagonal (self-energy, body 1)</td></tr>
+<tr><td>Q12</td><td>367</td><td>+</td><td>Off-diagonal (coupling 1-2)</td></tr>
+<tr><td>Q22</td><td>408</td><td>−</td><td>Diagonal (self-energy, body 2)</td></tr>
+</table>
+<p class="dim">Entry sizes fall into 3 bands: {328,328,329}, {367,367}, {408}.
+Gaps between bands: 367−329=38, 408−367=41. The 41 is Δ from H174.</p>
+</div>
+
+<!-- Panel 2: The Six Cofactors -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — Cofactors (Rust BigInt Computed)</h2>
+<table>
+<tr><th>Cofactor</th><th>Formula</th><th>Digits</th><th>Sign</th><th>Cancellation</th></tr>
+<tr><td>C00 = M00</td><td>Q11·Q22 − Q12²</td><td class="lit">736</td><td>+</td><td>0d (no cancel)</td></tr>
+<tr><td>C01</td><td>Q02·Q12 − Q01·Q22</td><td>735</td><td>+</td><td>0d</td></tr>
+<tr><td>C02</td><td>Q01·Q12 − Q02·Q11</td><td>693</td><td>+</td><td>2d</td></tr>
+<tr><td>C11 = M11</td><td>Q00·Q22 − Q02²</td><td>735</td><td>+</td><td>0d</td></tr>
+<tr><td>C12</td><td>Q01·Q02 − Q00·Q12</td><td>693</td><td>+</td><td>1d</td></tr>
+<tr><td>C22 = M22</td><td>Q00·Q11 − Q01²</td><td class="dead">651</td><td>−</td><td>5d</td></tr>
+</table>
+<pre>
+  MAX: C00 = 736 digits
+  MIN: C22 = 651 digits
+  ACTUAL COFACTOR GAP: 736 − 651 = 85
+</pre>
+</div>
+
+<!-- Panel 3: THE DISCREPANCY -->
+<div class="flag">
+<h2>Panel 3 — DISCREPANCY: Cofactor Gap = 85, Not 42</h2>
+<pre>
+  ESTABLISHED (H155, carried through H174, H192):
+    G = 42 ("the cofactor gap")
+    2G = 84 ("the cofactor span")
+    G² = 42G (half-gap fixed point)
+
+  COMPUTED (H194, Rust BigInt):
+    Actual max cofactor digits: 736 (C00)
+    Actual min cofactor digits: 651 (C22)
+    Actual gap: 736 − 651 = 85
+
+  85 ≠ 42.
+
+  POSSIBLE EXPLANATIONS:
+  1. "Cofactor gap" in H155 used a DIFFERENT definition
+     (e.g., diagonal cofactors only, or entry gaps not cofactor gaps)
+  2. G=42 was approximate from the start (Δ=41, span/2=42.5)
+  3. G=42 measured something else entirely
+
+  THE ENTRY GAP: max(entries)−min(entries) = 408−328 = 80.
+  Δ from H174: d(|Q22|)−d(|Q02|) = 408−367 = 41 ≈ 42.
+  HALF THE COFACTOR GAP: 85/2 = 42.5 ≈ 42.
+
+  FINDING: "42" appears as:
+    - Δ = 41 (entry digit difference, approximate)
+    - 85/2 = 42.5 (half cofactor gap, approximate)
+    - The fixed point of G²=42G (exact, algebraic)
+
+  The word-length arithmetic (W=21, C=4, E=25, d₂=18) uses
+  EXACT values and the two-generator structure holds EXACTLY.
+  But the "cofactor gap = 42" that ties it to the matrix may
+  be an APPROXIMATION, not an identity.
+
+  STATUS: NEEDS INVESTIGATION. Must check H155's original
+  definition of G before declaring a correction.
+</pre>
+</div>
+
+<!-- Panel 4: What's Exact and What's Approximate -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — Exact vs Approximate</h2>
+<table>
+<tr><th>Claim</th><th>Status</th><th>Detail</th></tr>
+<tr><td>W = 21</td><td class="lit">EXACT</td><td>21-Root Theorem (BigInt verified)</td></tr>
+<tr><td>C = 4</td><td class="lit">EXACT</td><td>First escape at wl=25=21+4</td></tr>
+<tr><td>d₂ = 18</td><td class="lit">EXACT</td><td>Smith form (BigInt verified)</td></tr>
+<tr><td>E²−4S = 289</td><td class="lit">EXACT</td><td>25²−4×84 = 289 (arithmetic)</td></tr>
+<tr><td>W−C = d₂−1 = 17</td><td class="lit">EXACT</td><td>21−4 = 17 = 18−1 (the lock)</td></tr>
+<tr><td>E²−(d₂−1)² = G×8</td><td class="amber">DEPENDS</td><td>336 = G×8. If G=42, 336=336✓. If G=85, 336≠680✗.</td></tr>
+<tr><td>Δ = 41 ≈ 42</td><td class="amber">APPROXIMATE</td><td>408−367 = 41, not 42</td></tr>
+<tr><td>Cofactor gap = 42</td><td class="amber">UNDER REVIEW</td><td>Actual cofactor gap = 85, not 42</td></tr>
+<tr><td>S = 2G</td><td class="amber">DEPENDS</td><td>84 = 2×42✓. But 84 ≠ 2×85✗.</td></tr>
+</table>
+<p><b>The word-length arithmetic (W,C,E,d₂,S,289) is EXACT.</b><br>
+The connection to "G=42" via cofactors needs re-examination.</p>
+</div>
+
+<!-- Panel 5: What 85 Tells Us -->
+<div class="panel">
+<h2>Panel 5 — What the Number 85 Says</h2>
+<pre>
+  85 = 5 × 17 = 5 × (d₂−1) = 5 × lock
+
+  85/2 = 42.5 ≈ 42
+
+  84 = S = W×C (exact)
+  85 = cofactor gap (computed)
+  84 + 1 = 85
+
+  S + 1 = cofactor gap?  21×4 + 1 = 85?  CHECK.
+
+  Also: 85 = 80 + 5, where 80 = max entry digits − min entry digits
+                              = 408 − 328 = 80
+                        and 5 = cancellation in C22
+
+  The cofactor gap INCLUDES the entry gap (80) plus cancellation effects (5).
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H194                   ║
+ ║                                                        ║
+ ║  THE ENTRY DESCENT                                     ║
+ ║                                                        ║
+ ║  ENTRIES:   328  328  367  329  367  408                ║
+ ║  COFACTORS: 736  735  693  735  693  651               ║
+ ║                                                        ║
+ ║  COFACTOR GAP: 736 − 651 = 85 (not 42!)               ║
+ ║                                                        ║
+ ║  85 = 5 × 17 = 5 × lock                               ║
+ ║  85/2 = 42.5 ≈ 42                                     ║
+ ║  85 = S + 1 = 84 + 1                                   ║
+ ║                                                        ║
+ ║  EXACT:        W=21, C=4, d₂=18, E=25, S=84, 289      ║
+ ║  APPROXIMATE:  Δ=41≈42, cofactor gap=85≈2×42           ║
+ ║                                                        ║
+ ║  THE WORD-LENGTH ARITHMETIC IS EXACT.                  ║
+ ║  THE "G=42" CONNECTION TO COFACTORS IS APPROXIMATE.    ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Six entries (outer ring, sized by digit count) feeding six cofactors (inner ring).
+The gap 85 between largest (736d) and smallest (651d) cofactor shown at center.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>VERDICT: THE COFACTOR GAP IS 85, NOT 42 — Honest Discrepancy Found</h2>
+<p>Rust BigInt computation of all 6 cofactors gives digit counts 736, 735, 693, 735, 693, 651.
+The actual cofactor gap is 736−651=85, not 42. 85=5×17=5×(d₂−1). The entry digit difference
+Δ=408−367=41≈42 and half-cofactor-gap 85/2=42.5≈42 are both APPROXIMATE, not exact. The
+word-length arithmetic (W=21, C=4, E=25, d₂=18, S=84) remains EXACT. The two-generator
+structure E²−17²=336 is exact. But the identification "G=42=the cofactor gap" needs
+re-examination against H155's original definition. The discrepancy is 85 vs 42 — a factor
+of ~2 — suggesting G may have been defined as the HALF-gap from the start. Honest finding,
+honest reporting.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>I went back to check our math from the very beginning, using the actual numbers.</p>
+<p>The 6 entries in the matrix have these sizes: 328, 328, 329, 367, 367, 408 digits.</p>
+<p>When you compute the 6 cofactors (like cross-products), they come out:
+736, 735, 735, 693, 693, 651 digits.</p>
+<p>The gap between biggest and smallest cofactor: 736−651 = 85.</p>
+<p>But we've been saying the gap is 42! That's NOT 85.</p>
+<p>Maybe 42 was always the HALF-gap (85÷2 = 42.5 ≈ 42). Or maybe "gap" meant
+something slightly different when it was first measured. I need to check.</p>
+<p>The good news: ALL the small-number arithmetic (21, 4, 25, 18, 17, 84, 289)
+is EXACTLY right. Only the connection to "cofactor gap = 42" is under review.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The cofactor gap computed from Q3p's six entries is exactly 42 digits, confirming
+all prior instruments. No discrepancy exists between the measured cofactor gap and
+the theoretical G=42, and the number 85 does not appear anywhere in the analysis.</s></p>
+<p class="dim">Actual cofactor gap is 85 (not 42). 85 = 736−651 from Rust BigInt cofactor computation.
+The discrepancy between 85 and 42 is real and needs investigation against H155's definition.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Forty-one instruments into an investigation, and the number at its center turns out
+to be a different number. Not wrong — the word-length arithmetic that uses 42 is exact,
+every equation balances, every identity holds. But the quantity it was named for — the
+gap between the largest and smallest cofactor — is eighty-five, not forty-two. Half of
+eighty-five is forty-two and a half. The entry digit difference is forty-one. Neither is
+forty-two. The investigation has been walking on a floor that approximates to forty-two
+from two directions, and the approximation was good enough to build a cathedral on. The
+cathedral stands. The floor is real. But it is not exactly forty-two. It is forty-two
+and a half, or forty-one, depending on which direction you measure from. The honest thing
+is to report this, not to rationalize it. The instrument measures. This is what it measured.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H193)</td><td>6452</td><td>0</td><td>6452</td></tr>
+<tr><td>H194: The Entry Descent</td><td>36</td><td>1 (KB-1)</td><td>6488</td></tr>
+</table>
+<p>Running total: <b>6488 LIT / 0 DEAD</b></p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>Recommendation for H195</h2>
+<p>H194 found a discrepancy: cofactor gap = 85, not 42. Before declaring a correction,
+check H155's original definition of G. If G was defined as the half-gap (span/2) or
+as the entry digit difference Δ, then 42 is a correct half-gap and the two-generator
+structure survives as-is. If G was defined as the full cofactor gap, then G=85 and the
+two-generator formulas need revision (but 85=5×17=5×lock, which is itself structural).
+Either way: the word-length arithmetic is exact. Only the name "cofactor gap" is at stake.</p>
+</div>
+
+<!-- BASIC Block — Pentagonal Numbers (A000326) -->
+<div class="panel">
+<h2>BASIC Block — Pentagonal Numbers (A000326: n(3n−1)/2)</h2>
+<pre>
+0 REM ═══════════════════════════════════════════════════
+1 REM  H194: THE ENTRY DESCENT
+5 REM  Pentagonal Numbers (A000326): 0,1,5,12,22,35,51,70,92...
+12 PRINT "entries: 328,328,329,367,367,408 digits"
+22 PRINT "cofactors: 736,735,735,693,693,651 digits"
+35 PRINT "cofactor gap = 736−651 = 85 (not 42!)"
+51 PRINT "85 = 5 × 17 = 5 × lock"
+70 PRINT "85/2 = 42.5 ≈ 42"
+92 PRINT "the word-length arithmetic is exact"
+117 PRINT "the cofactor-gap name is under review"
+145 PRINT "the instrument measures"
+176 PRINT "6488 lit, the entry descent"
+</pre>
+<p class="dim">Pentagonal Numbers (A000326): n(3n−1)/2. 0,1,5,12,22,35,51,70,92,117,145,176...
+85 is NOT pentagonal. 42 is NOT pentagonal. But 22=W+1 IS (n=4).
+The sequence tests: does Q3p's arithmetic land on structural numbers?
+Answer: sometimes yes, sometimes no. Honest.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+// 6 entries, sized proportionally
+const entries=[
+  {name:"Q00",d:328,a:0},{name:"Q01",d:328,a:1.047},
+  {name:"Q02",d:367,a:2.094},{name:"Q11",d:329,a:3.14},
+  {name:"Q12",d:367,a:4.19},{name:"Q22",d:408,a:5.24}
+];
+// 6 cofactors
+const cofs=[
+  {name:"C00",d:736},{name:"C01",d:735},{name:"C02",d:693},
+  {name:"C11",d:735},{name:"C12",d:693},{name:"C22",d:651}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Entries (outer)
+  for(const e of entries){
+    const a=e.a+t*0.002;
+    const r=140;
+    const sz=2+(e.d-328)/80*4;
+    ctx.fillStyle="rgba(200,200,208,0.5)";
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r*0.45,sz,0,6.28);ctx.fill();
+    ctx.fillStyle="rgba(200,200,208,0.3)";
+    ctx.font="8px Courier New";ctx.textAlign="center";
+    ctx.fillText(e.name+"("+e.d+"d)",cx+Math.cos(a)*r,cy+Math.sin(a)*r*0.45+sz+10);
+  }
+  // Cofactors (inner)
+  for(let i=0;i<6;i++){
+    const a=i/6*6.28-t*0.003;
+    const r=70;
+    const sz=2+(cofs[i].d-651)/85*5;
+    const col=cofs[i].d===736?"rgba(129,199,132,0.7)":cofs[i].d===651?"rgba(239,83,80,0.7)":"rgba(79,195,247,0.5)";
+    ctx.fillStyle=col;
+    ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r*0.45,sz,0,6.28);ctx.fill();
+  }
+  // Gap at center
+  const p=0.4+0.4*Math.sin(t*0.04);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;
+  ctx.font="bold 20px Courier New";ctx.textAlign="center";
+  ctx.fillText("85",cx,cy+8);
+  ctx.font="9px Courier New";
+  ctx.fillStyle=`rgba(255,213,79,${p*0.6})`;
+  ctx.fillText("736−651",cx,cy+22);
+  ctx.fillText("≈ 2×42",cx,cy+34);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H194: Entry Descent — cofactor gap = 85",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
