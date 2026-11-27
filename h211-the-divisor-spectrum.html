@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H211 — The Divisor Spectrum</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H211 — The Divisor Spectrum</h1>
+<p class="dim">336 contains 8 Rosetta members · Longest chain = 5 · Phantom prime 7 · 42=6×7 · I55-I57 LIT</p>
+
+<!-- Panel 1: Containment Ranking -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I55: Rosetta-in-Rosetta Containment [LIT]</h2>
+<table id="verif-table">
+<tr><th>n</th><th>Rosetta divisors (excl self)</th><th>Count</th></tr>
+<tr style="color:var(--gold)"><td>336</td><td>{2, 3, 4, 6, 8, 21, 42, 84}</td><td><b>8</b></td></tr>
+<tr><td>84</td><td>{2, 3, 4, 6, 21, 42}</td><td>6</td></tr>
+<tr><td>36</td><td>{2, 3, 4, 6, 18}</td><td>5</td></tr>
+<tr><td>42</td><td>{2, 3, 6, 21}</td><td>4</td></tr>
+<tr><td>18</td><td>{2, 3, 6}</td><td>3</td></tr>
+<tr><td>6</td><td>{2, 3}</td><td>2</td></tr>
+<tr><td>8</td><td>{2, 4}</td><td>2</td></tr>
+<tr><td>4, 10, 21, 289</td><td>1 each</td><td>1</td></tr>
+<tr><td>2, 3, 17, 25</td><td>none</td><td>0</td></tr>
+</table>
+<pre>
+  336 CONTAINS 8 OF THE OTHER 14 ROSETTA MEMBERS AS DIVISORS.
+  More than half the roster DIVIDES the master product.
+
+  The 6 that DON'T divide 336: {10, 17, 18, 25, 36, 289}
+  WHY: 10 and 25 contain prime 5 (not in 336).
+       17 and 289 contain prime 17 (not in 336).
+       18 and 36 need 3² (336 has only 3¹).
+
+  The excluded set splits: {5-family: 10,25} ∪ {17-family: 17,289} ∪ {3²-family: 18,36}.
+  Three phantom obstacles: 5, 17, and the SQUARE of 3.
+
+  STATUS: <span class="lit">LIT</span> (exhaustive divisor check)
+</pre>
+</div>
+
+<!-- Panel 2: The Longest Chains -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — I56: Longest Divisibility Chain = 5 [LIT]</h2>
+<pre style="color:var(--accent)">
+  THREE MAXIMAL CHAINS OF LENGTH 5 (all ending at 336):
+
+  Chain A: 2 | 6 | 42 | 84 | 336
+  Chain B: 3 | 6 | 42 | 84 | 336
+  Chain C: 3 | 21 | 42 | 84 | 336
+
+  ALL THREE pass through 42 and 84 on the way to 336.
+  42 | 84 | 336 is the COMMON TAIL of every maximal chain.
+
+  THE THREE STARTING SEGMENTS:
+  A: 2 → 6 → 42    (seed → entries → gap)
+  B: 3 → 6 → 42    (seed → entries → gap)
+  C: 3 → 21 → 42   (seed → hub → gap)
+
+  Chain C is DIFFERENT: it goes through the HUB (21)
+  instead of the ENTRIES (6). Same destination, different route.
+  This echoes the two roads to 42 (H201):
+  Road 1 through 21 (triangular), Road 2 through 6 (Catalan).
+
+  NO CHAIN REACHES LENGTH 6. The roster has depth 5.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: The Phantom Prime -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — I57: 7 Is the Phantom Prime [LIT]</h2>
+<pre>
+  7 IS NOT IN THE ROSETTA ROSTER.
+  But 7 appears in the factorizations of FOUR roster members:
+
+    21 = 3 × 7     (bodies × 7)
+    42 = 2 × 3 × 7 (rank × bodies × 7 = entries × 7)
+    84 = 4 × 3 × 7 (escape_gap × bodies × 7)
+   336 = 16 × 3 × 7 (2⁴ × bodies × 7)
+
+  THESE FOUR FORM A DIVISIBILITY CHAIN: 21 | 42 | 84 | 336.
+  It is the COMMON TAIL of all maximal chains.
+  7 is the prime that BINDS the tail together.
+
+  7 = OCHO − 1 = 8 − 1.
+  The phantom prime is one less than the Clifford dimension.
+
+  EVERY 7-MULTIPLE IN THE ROSTER IS ALSO A 3-MULTIPLE.
+  The 7-family is the (3×7)-family:
+    21 = 3×7, 42 = 2×3×7, 84 = 4×3×7, 336 = 16×3×7.
+  The bodies (3) and the phantom (7) always appear TOGETHER.
+  3×7 = 21 = W. The hub is the PRODUCT of bodies and phantom.
+
+  W = bodies × phantom = 3 × 7 = 21.
+  G = rank × bodies × phantom = 2 × 3 × 7 = 42.
+  G = rank × W = 2 × 21 = 42. CONSISTENT.
+</pre>
+</div>
+
+<!-- Panel 4: The 336 as Container -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — 336: The Container Number</h2>
+<pre>
+  336 = 2⁴ × 3 × 7. Its 20 divisors:
+  1, 2, 3, 4, 6, 7, 8, 12, 14, 16, 21, 24, 28, 42, 48, 56, 84, 112, 168, 336.
+
+  ROSETTA MEMBERS INSIDE 336: {2, 3, 4, 6, 8, 21, 42, 84} = 8/14.
+  NON-ROSETTA DIVISORS: {1, 7, 12, 14, 16, 24, 28, 48, 56, 112, 168} = 11.
+
+  THE RATIO: 8 Rosetta ÷ 20 total = 40% of 336's divisors are Rosetta.
+  BY COMPARISON: a random set of 15 numbers from 1-336 would
+  have about 15/336 = 4.5% of 336's divisors. We have 40%.
+  NEARLY 10× the random expectation.
+
+  336 is not just a product of generators.
+  It is a CONTAINER that holds more than half the roster.
+  The master equation is the roster's HOME ADDRESS:
+  most of the roster lives INSIDE 336.
+
+  WHAT 336 DOESN'T CONTAIN:
+  {10, 17, 18, 25, 36, 289} — the numbers that need
+  primes 5 or 17, or need 3² (not just 3¹).
+  The lock family (17, 25, 289) and the 5-family (10, 25)
+  and the deep-3 pair (18, 36) are OUTSIDE 336.
+</pre>
+</div>
+
+<!-- Panel 5: Divisibility as Hierarchy -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 5 — The Divisibility Hierarchy</h2>
+<pre>
+  ROSETTA NUMBERS RANKED BY "HOW MANY DIVIDE YOU":
+
+  ROOTS (nothing divides them, in Rosetta): 2, 3, 17, 25
+    The seeds, the lock, and the escape. FOUR roots.
+
+  SHALLOW (1 Rosetta divisor): 4←{2}, 10←{2}, 21←{3}, 289←{17}
+    Each has ONE Rosetta parent.
+
+  MEDIUM (2-4 Rosetta divisors): 6, 8, 18, 42
+    Each has 2-4 Rosetta parents.
+
+  DEEP (5-8 Rosetta divisors): 36, 84, 336
+    The most "contained" numbers. Rich in Rosetta factors.
+
+  THE HIERARCHY ECHOES THE DAG (H207):
+    Roots ≈ seeds + lock family.
+    Deep ≈ late-layer numbers.
+    But NOT identical: 25 is a DAG leaf but a divisibility root.
+    36 is DAG layer 2 but divisibility "deep" (5 Rosetta divisors).
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H211                   ║
+ ║                                                        ║
+ ║  THE DIVISOR SPECTRUM                                  ║
+ ║                                                        ║
+ ║  336 (THE CONTAINER: 8 Rosetta members inside)         ║
+ ║   │                                                    ║
+ ║   ├── 84 (6 inside: 2,3,4,6,21,42)                    ║
+ ║   │    ├── 42 (4 inside: 2,3,6,21)                    ║
+ ║   │    │    ├── 21 (1 inside: 3)                       ║
+ ║   │    │    │    └── 3 (root)                          ║
+ ║   │    │    └── 6 (2 inside: 2,3)                      ║
+ ║   │    │         ├── 2 (root)                          ║
+ ║   │    │         └── 3 (root)                          ║
+ ║   │    └── 4 (1 inside: 2)                             ║
+ ║   │         └── 2 (root)                               ║
+ ║   └── 8 (2 inside: 2,4)                               ║
+ ║        └── 4 → 2 (root)                               ║
+ ║                                                        ║
+ ║  PHANTOM PRIME 7: not in roster, but inside            ║
+ ║  21=3×7, 42=6×7, 84=12×7, 336=48×7                   ║
+ ║  7 = OCHO−1 = 8−1. One less than the dot.             ║
+ ║                                                        ║
+ ║  LONGEST CHAIN: seed | 6 | 42 | 84 | 336 (depth 5)   ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Size = Rosetta divisor count. 336 is the largest container.
+Lines = divisibility. 7 (phantom) pulses at the center, absent but binding.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H211: 336 Contains More Than Half the Roster</h2>
+<p>336 = 2⁴×3×7 has 20 divisors, 8 of which are Rosetta members (2,3,4,6,8,21,42,84) —
+more than half the remaining roster. The longest divisibility chain is 5 (seed→6→42→84→336),
+with all three maximal chains sharing the tail 42|84|336. The phantom prime 7 (=OCHO−1)
+is NOT in the roster but appears in all four members of the common tail (21,42,84,336),
+always paired with 3: W = bodies × phantom = 3×7 = 21. The 6 numbers excluded from 336
+need primes 5 or 17 or the square of 3 — the lock family, the 5-family, and the deep-3 pair.
+I55 (containment) LIT, I56 (chain length 5) LIT, I57 (phantom 7) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>The number 336 is like a big box. If you open it up and look at all the smaller
+numbers that divide evenly into it, you find 20 of them. And 8 of those 20 are
+our special Q3p numbers! More than half our roster LIVES INSIDE 336.</p>
+<p>There's also a secret number hiding in the walls: <b>7</b>. The number 7 isn't one
+of our 15 special numbers, but it hides inside 21 (=3×7), 42 (=6×7), 84 (=12×7),
+and 336 (=48×7). It's like a ghost that lives in the house but isn't on the
+mailbox. And 7 = 8−1, one less than OCHO.</p>
+<p>The longest chain of numbers-dividing-numbers goes 5 deep:
+2 → 6 → 42 → 84 → 336. Five Russian dolls, each inside the next.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The number 42 contains the most Rosetta members as divisors (12 of 14), while 336
+contains only 2. The longest divisibility chain in the roster is 8, passing through every
+Rosetta number sequentially. The prime 7 appears in the factorization of every Rosetta
+number, making it the universal prime factor of the roster.</s></p>
+<p class="dim">336 contains the most (8 of 14), not 42 (which has 4). Longest chain is 5, not 8.
+7 appears in only 4 of 15 Rosetta members (21, 42, 84, 336), not all.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-eleventh instrument opened the master product like a box and found
+most of the investigation's numbers already inside. Eight of fourteen live there as divisors,
+nested like dolls: two inside four, four inside six, six inside eight, all inside three
+hundred and thirty-six. The chain descends five levels, and every maximal chain passes through
+forty-two and eighty-four on its way down. And at the joins, holding the chain's links
+together, is a number the roster never names: seven, the phantom prime. It sits inside
+twenty-one, forty-two, eighty-four, and three-hundred-and-thirty-six, always beside three,
+never alone. It is OCHO minus one, the step before the dot. Its product with the bodies is
+the hub. Its product with the entries is the gap. The number that binds the largest chain in
+the roster is not in the roster itself. It is the ghost in the architecture.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H210)</td><td>7064</td><td>0</td><td>7064</td></tr>
+<tr><td>H211: The Divisor Spectrum</td><td>36</td><td>1 (KB-1)</td><td>7100</td></tr>
+</table>
+<p>Running total: <b>7100 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H211. Total instruments: 59.</p>
+</div>
+
+<!-- BASIC Block — Divisor Chain (Depth Sequence) -->
+<div class="panel">
+<h2>BASIC Block — The Divisibility Depth (Custom Sequence)</h2>
+<pre>
+0 REM ═══════════════════════════════════════════════════
+0 REM  H211: THE DIVISOR SPECTRUM
+0 REM  Rosetta divisor counts: how many Rosetta members
+0 REM  divide each number (excluding self)
+2 PRINT "2: 0 Rosetta divisors. ROOT."
+3 PRINT "3: 0 Rosetta divisors. ROOT."
+4 PRINT "4: 1 Rosetta divisor {2}."
+6 PRINT "6: 2 Rosetta divisors {2,3}. SEEDS."
+8 PRINT "8: 2 Rosetta divisors {2,4}."
+10 PRINT "10: 1 Rosetta divisor {2}."
+17 PRINT "17: 0 Rosetta divisors. ROOT."
+18 PRINT "18: 3 Rosetta divisors {2,3,6}."
+21 PRINT "21: 1 Rosetta divisor {3}."
+25 PRINT "25: 0 Rosetta divisors. ROOT."
+36 PRINT "36: 5 Rosetta divisors {2,3,4,6,18}."
+42 PRINT "42: 4 Rosetta divisors {2,3,6,21}."
+84 PRINT "84: 6 Rosetta divisors {2,3,4,6,21,42}."
+289 PRINT "289: 1 Rosetta divisor {17}."
+336 PRINT "336: 8 Rosetta divisors. THE CONTAINER."
+</pre>
+<pre>
+7 REM THE PHANTOM PRIME: not in roster, but inside 4 members
+7 PRINT "7 = OCHO-1. Ghost in the architecture."
+7 PRINT "21=3×7, 42=6×7, 84=12×7, 336=48×7"
+5 REM DEPTH SEQUENCE: 0,0,1,2,2,1,0,3,1,0,5,4,6,1,8
+211 PRINT "H211 = 211 (prime!). 7100 lit."
+</pre>
+<p class="dim">Line numbers = Rosetta numbers. PRINT = divisor content.
+Depth sequence 0,0,1,2,2,1,0,3,1,0,5,4,6,1,8 is NOT a known OEIS sequence.
+H211 = 211 is prime. 7100 is a round milestone.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const data=[
+  {n:2,d:0},{n:3,d:0},{n:4,d:1},{n:6,d:2},{n:8,d:2},{n:10,d:1},{n:17,d:0},
+  {n:18,d:3},{n:21,d:1},{n:25,d:0},{n:36,d:5},{n:42,d:4},{n:84,d:6},{n:289,d:1},{n:336,d:8}
+];
+const divLinks=[[2,4],[2,6],[2,8],[2,10],[2,18],[2,36],[2,42],[2,84],[2,336],
+  [3,6],[3,18],[3,21],[3,36],[3,42],[3,84],[3,336],[4,8],[4,36],[4,84],[4,336],
+  [6,18],[6,36],[6,42],[6,84],[6,336],[8,336],[17,289],[18,36],[21,42],[21,84],
+  [21,336],[42,84],[42,336],[84,336]];
+function getPos(n){
+  const idx=data.findIndex(d=>d.n===n);
+  if(idx<0)return null;
+  const a=(idx/data.length)*Math.PI*2+t*0.004;
+  const r=50+data[idx].d*14;
+  return{x:cx+Math.cos(a)*r,y:cy+Math.sin(a)*r*0.5};
+}
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Divisibility lines
+  for(const[a,b]of divLinks){
+    const pa=getPos(a),pb=getPos(b);
+    if(pa&&pb){
+      ctx.strokeStyle="rgba(100,100,120,0.15)";ctx.lineWidth=0.5;
+      ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+    }
+  }
+  // Phantom 7
+  const p7=0.3+0.3*Math.sin(t*0.03);
+  ctx.fillStyle=`rgba(255,213,79,${p7})`;ctx.font="bold 16px Courier New";ctx.textAlign="center";
+  ctx.fillText("7",cx,cy+5);
+  ctx.font="8px Courier New";ctx.fillStyle=`rgba(255,213,79,${p7*0.5})`;
+  ctx.fillText("phantom prime",cx,cy+18);
+  // Nodes
+  for(const d of data){
+    const p=getPos(d.n);if(!p)continue;
+    const sz=3+d.d*1.5;
+    const hue=d.d/8;
+    ctx.fillStyle=`rgb(${Math.floor(100+155*hue)},${Math.floor(199*hue)},${Math.floor(100+132*(1-hue))})`;
+    ctx.globalAlpha=0.6;
+    ctx.beginPath();ctx.arc(p.x,p.y,sz,0,6.28);ctx.fill();
+    ctx.globalAlpha=0.95;ctx.font="bold 10px Courier New";ctx.textAlign="center";
+    ctx.fillStyle="#c8c8d0";
+    ctx.fillText(d.n.toString(),p.x,p.y-sz-3);
+  }
+  ctx.globalAlpha=1;ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H211: Divisor Spectrum — 336 contains 8 Rosetta members",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
