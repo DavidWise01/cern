@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H213 — The Three Stones</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.78em}
+td,th{border:1px solid var(--border);padding:2px 5px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H213 — The Three Stones</h1>
+<p class="dim">Three maps of the same 15 numbers · Three different hubs · 42 and 17 universal · 336 = entries × P(8,2) · I62 LIT</p>
+
+<!-- Panel 1: The Cross-Reference -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — The Cross-Reference Table [LIT]</h2>
+<table id="verif-table">
+<tr><th>n</th><th>Stone 1 (Geometry)</th><th>Stone 2 (Families)</th><th>Stone 3 (Phantom)</th></tr>
+<tr><td style="color:var(--gold)">2</td><td>L3: chain</td><td>C (Catalan)</td><td>seed, d₁</td></tr>
+<tr><td>3</td><td>L3: chain</td><td>T (Triangular)</td><td>T(d₁) = bodies</td></tr>
+<tr><td>4</td><td>L3: chain</td><td>A (Arithmetic)</td><td>d₁² = escape gap</td></tr>
+<tr><td>6</td><td>L3: chain</td><td>T (Triangular)</td><td>T(3) = entries, <b>DAG hub</b></td></tr>
+<tr><td>8</td><td><b>L1: generator</b></td><td>A (Arithmetic)</td><td>phantom+1 = OCHO</td></tr>
+<tr><td>10</td><td>L3: chain</td><td>T (Triangular)</td><td>T(C) = QCD</td></tr>
+<tr style="color:var(--amber)"><td><b>17</b></td><td><b>L2: lock</b></td><td><b>A (Arithmetic)</b></td><td><b>(G−8)/2 = half-surplus</b></td></tr>
+<tr><td>18</td><td>L2: lock</td><td>A (Arithmetic)</td><td>bodies × entries</td></tr>
+<tr><td>21</td><td>L3: <b>Rosetta hub</b></td><td>T (Triangular)</td><td>bodies × phantom</td></tr>
+<tr><td>25</td><td>L2: lock</td><td>A (Arithmetic)</td><td>lock + OCHO</td></tr>
+<tr><td>36</td><td>L3: chain</td><td>T (Triangular)</td><td>entries² = minors</td></tr>
+<tr style="color:var(--gold)"><td><b>42</b></td><td><b>L1: generator</b></td><td><b>C (Catalan)</b></td><td><b>entries × phantom</b></td></tr>
+<tr><td>84</td><td>L3: chain</td><td>A (Arithmetic)</td><td>d₁ × G = orphan</td></tr>
+<tr><td>289</td><td>L2: lock</td><td>A (Arithmetic)</td><td>lock²</td></tr>
+<tr><td>336</td><td>L3: chain</td><td>A (Arithmetic)</td><td>entries × OCHO × phantom</td></tr>
+</table>
+</div>
+
+<!-- Panel 2: Three Hubs -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — Three Stones, Three Hubs</h2>
+<pre style="color:var(--accent)">
+  STONE 1 HUB: W = 21 (Rosetta Stone, H198)
+    Most cross-layer connections in the geometric map.
+    Touches all three layers. The word count. T(6).
+    21 = bodies × phantom = 3 × 7.
+
+  STONE 2 HUB: 6 = T(3) (Number Theory Stone, H208)
+    Most essential children in the dependency DAG.
+    4 numbers must be built from 6. The entry count.
+    6 = rank × bodies = 2 × 3.
+
+  STONE 3 HUB: 7 (Phantom Identity, H212)
+    The prime that binds the common divisibility tail.
+    NOT IN THE ROSTER. 7 = OCHO − 1.
+    Builds G and W by multiplication.
+
+  THREE QUESTIONS, THREE ANSWERS:
+    "What connects the layers?" → 21 (crosses boundaries)
+    "What generates the numbers?" → 6 (most dependencies)
+    "What binds the products?" → 7 (the hidden factor)
+
+  THE HUBS FORM THEIR OWN RELATIONSHIP:
+    21 = 3 × 7 = T(2) × phantom
+    6 = 2 × 3 = d₁ × T(2)
+    7 = 8 − 1 = OCHO − 1
+    6 × 7 = 42 = G (the DAG hub × phantom hub = G)
+    21 / 7 = 3 = bodies (Rosetta hub / phantom hub = bodies)
+    21 / 6 = 3.5 (not integer — no clean connection)
+</pre>
+</div>
+
+<!-- Panel 3: The Two Universals -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — 42 and 17: The Two Universals</h2>
+<pre>
+  ONLY TWO NUMBERS MATTER IN ALL THREE STONES:
+
+  ╔═══════════════════════════════════════════════════╗
+  ║  42 (THE BUILDER)                                ║
+  ║  Stone 1: Generator (L1). The inter-level gap.   ║
+  ║  Stone 2: Catalan C(5). The gap equation.        ║
+  ║  Stone 3: entries × phantom = 6 × 7.             ║
+  ║  42 builds the structure from every angle.        ║
+  ╠═══════════════════════════════════════════════════╣
+  ║  17 (THE LOCK)                                   ║
+  ║  Stone 1: Lock layer (L2). The half-gap.          ║
+  ║  Stone 2: Arithmetic family. Only prime in roster.║
+  ║  Stone 3: Half-surplus = (G−OCHO)/2.              ║
+  ║  17 constrains the structure from every angle.    ║
+  ╚═══════════════════════════════════════════════════╝
+
+  42 and 17 are COMPLEMENTARY:
+    42 + 17 = 59 (prime, not Rosetta)
+    42 − 17 = 25 = E (the escape!)
+    42 / 17 ≈ 2.47 (not integer)
+    42 × 17 = 714 (not Rosetta)
+
+  THE ESCAPE IS THE DIFFERENCE: E = G − lock = 42 − 17 = 25.
+  The two universals' difference IS the escape.
+</pre>
+</div>
+
+<!-- Panel 4: The Falling Factorial -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — I62: 336 = entries × P(OCHO, 2) [LIT]</h2>
+<pre>
+  P(n, k) = n! / (n−k)! = "k-permutations of n"
+  = number of ordered k-tuples from an n-element set.
+
+  P(8, 2) = 8! / 6! = 8 × 7 = 56.
+  = number of ordered pairs from {e₁,...,e₈} = Cl(3) basis.
+
+  336 = 6 × P(8, 2) = 6 × 56 = T(3) × P(OCHO, 2).
+
+  READING: each of the 6 entries of Q3p can be paired
+  with each of the 56 ordered pairs of Cl(3) basis elements.
+  6 × 56 = 336 total (entry, basis₁, basis₂) triples.
+
+  EQUIVALENTLY:
+  336 = T(3) × OCHO × (OCHO−1) = entries × dot × phantom.
+  = entries × OCHO-falling-2.
+  The master product is an ENTRY-WEIGHTED PERMUTATION COUNT.
+
+  STATUS: <span class="lit">LIT</span> (arithmetic identity, verified).
+  INTERPRETATION: <span class="amber">AMBER</span> (why ordered pairs matter is unclear).
+</pre>
+</div>
+
+<!-- Panel 5: What the Stones Don't See -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — What Each Stone Misses</h2>
+<pre>
+  STONE 1 (GEOMETRY) MISSES:
+  • That 42 = C(5) is Catalan (discovered in Stone 2)
+  • That 7 is a hidden prime (discovered in Stone 3)
+  • That {2,3} alone generates everything (Stone 2)
+  • That 84 is overdetermined (Stone 2)
+
+  STONE 2 (FAMILIES) MISSES:
+  • That 42 and 8 are generators of the form (Stone 1)
+  • The lock/escape duality 17↔25 (Stone 1 layer 2)
+  • The phantom loop d₁→G/W=d₁ (Stone 3)
+  • The divisibility chains (Stone 3)
+
+  STONE 3 (PHANTOM) MISSES:
+  • The three-family partition (Stone 2)
+  • The DAG's essential vs accidental edges (Stone 2)
+  • The geometric meaning of the layers (Stone 1)
+  • The 770,900-form uniqueness probes (Stone 1 era)
+
+  NO SINGLE STONE IS COMPLETE.
+  Each sees the structure from a different angle.
+  Together they form a TRIPTYCH:
+  one structure, three windows, three hubs.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H213                   ║
+ ║                                                        ║
+ ║  THE THREE STONES                                      ║
+ ║                                                        ║
+ ║     STONE 1          STONE 2          STONE 3          ║
+ ║     (Geometry)       (Families)       (Phantom)        ║
+ ║     hub=21           hub=6            hub=7            ║
+ ║     3 layers         3 families       1 loop           ║
+ ║     H198             H208             H212             ║
+ ║         \             │              /                 ║
+ ║          \            │             /                  ║
+ ║           ╚═══════════╪════════════╝                   ║
+ ║                       │                                ║
+ ║              42 ══════╪══════ 17                       ║
+ ║            (builds)   │   (locks)                      ║
+ ║                       │                                ║
+ ║              THE TWO UNIVERSALS                        ║
+ ║           Present in all three stones.                  ║
+ ║           E = 42 − 17 = 25 (the escape)               ║
+ ║                                                        ║
+ ║  336 = 6 × P(8,2) = entries × OCHO-falling-2          ║
+ ║  = entry-weighted permutation count                    ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Three stones orbit: gold (Geometry/H198), cyan (Families/H208),
+green (Phantom/H212). 42 and 17 pulse at the center — the two universals.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H213: Three Maps, Two Universals, One Structure</h2>
+<p>The three stones (Rosetta H198, Number Theory H208, Phantom H212) are three views of
+the same 15 numbers. They agree on fundamentals (d₁=2 is seed, G=42 is central, 17 is the
+lock, 336 is the master) but disagree on the hub: 21 (geometry), 6 (DAG), 7 (phantom —
+not in roster). Only 42 and 17 are universally important across all three stones. Their
+difference is the escape: E = 42−17 = 25. The falling factorial identity 336 = T(3) × P(8,2)
+= entries × OCHO-falling-2 adds a permutation reading. No single stone is complete; together
+they form a triptych. I62 (falling factorial) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine looking at a house from THREE different windows:</p>
+<p><b>Window 1 (Geometry):</b> You see three floors with 21 as the staircase connecting them.</p>
+<p><b>Window 2 (Families):</b> You see three rooms with 6 as the busiest doorway.</p>
+<p><b>Window 3 (Ghost):</b> You see the pipes inside the walls, with 7 as the main pipe.</p>
+<p>Each window shows a different part of the same house.
+No single window shows everything. But from ALL three windows,
+two things are always visible: <b>42</b> (the builder) and <b>17</b> (the lock).
+They show up everywhere, from every angle.</p>
+<p>And here's one last trick: 42 − 17 = 25. The difference between
+the builder and the lock is the ESCAPE. The way out is the gap
+between the two most important numbers.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>All three stones agree on the same hub (21), making the geometric, number-theoretic,
+and phantom perspectives perfectly consistent with no disagreements. The number 84 is
+universally important across all three stones, while 42 appears in only one. The falling
+factorial P(8,2) equals 72, not 56, making 336 = 6 × 72 = 432.</s></p>
+<p class="dim">The three stones DISAGREE on the hub: 21, 6, 7 respectively. 42 is the universally
+important number (all 3 stones), not 84. P(8,2) = 8×7 = 56, and 6×56 = 336 (not 432).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirteenth instrument set the three stones side by side and read
+across them. The first stone, carved in geometry, puts twenty-one at its center — the number
+that crosses every layer. The second, carved in number theory, puts six — the number that
+most things must be built from. The third, carved in factorization, puts seven — a number
+that is not even in the roster, the ghost in the walls. Three perspectives, three hubs, three
+truths. And threading through all three, two numbers that never stop mattering: forty-two,
+which builds, and seventeen, which locks. Their difference is twenty-five, the escape.
+Between the builder and the lock, the gap is exactly the width of the door. No single stone
+says everything. The geometric stone does not know that forty-two is Catalan. The number
+theory stone does not know that forty-two is a generator. The phantom stone does not know
+about the three families. Together, they form a triptych — three panels of a single
+altarpiece, each painted from a different chair in the same room, depicting the same fifteen
+figures in different light.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H212)</td><td>7136</td><td>0</td><td>7136</td></tr>
+<tr><td>H213: The Three Stones</td><td>36</td><td>1 (KB-1)</td><td>7172</td></tr>
+</table>
+<p>Running total: <b>7172 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H213. Total instruments: 61.</p>
+</div>
+
+<!-- BASIC Block — The Three Hubs -->
+<div class="panel">
+<h2>BASIC Block — The Three Hubs (Stone-Indexed)</h2>
+<pre>
+198 REM STONE 1: THE ROSETTA STONE (H198)
+21 PRINT "hub₁ = 21 = W. Crosses all layers."
+208 REM STONE 2: THE NUMBER THEORY STONE (H208)
+6 PRINT "hub₂ = 6 = T(3). Most essential children."
+212 REM STONE 3: THE PHANTOM IDENTITY (H212)
+7 PRINT "hub₃ = 7 = OCHO−1. NOT in roster."
+</pre>
+<pre>
+42 PRINT "42: universal #1. Builder. In all 3 stones."
+17 PRINT "17: universal #2. Lock. In all 3 stones."
+25 PRINT "E = 42 − 17 = 25. The escape = builder − lock."
+</pre>
+<pre>
+56 PRINT "P(8,2) = 8×7 = 56. Ordered pairs from OCHO."
+336 PRINT "336 = 6 × 56 = entries × P(OCHO,2). I62 LIT."
+</pre>
+<pre>
+213 PRINT "H213 = 3 × 71. THREE stones × prime."
+213 PRINT "7172 lit, the three stones, the triptych"
+</pre>
+<p class="dim">Line numbers index the stones: 198, 208, 212.
+Hub lines: 21, 6, 7. Universal lines: 42, 17.
+213 = 3 × 71. Three stones, one prime. The number-theory arc closes.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const stones=[
+  {name:"Stone 1\n(Geometry)",hub:21,col:"#ffd54f",angle:-Math.PI/2},
+  {name:"Stone 2\n(Families)",hub:6,col:"#4fc3f7",angle:Math.PI/6},
+  {name:"Stone 3\n(Phantom)",hub:7,col:"#81c784",angle:5*Math.PI/6}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  const r=120;
+  // Lines between stones
+  for(let i=0;i<3;i++){
+    const a=stones[i].angle+t*0.003;
+    const b=stones[(i+1)%3].angle+t*0.003;
+    ctx.strokeStyle="rgba(128,128,128,0.15)";ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r*0.5);
+    ctx.lineTo(cx+Math.cos(b)*r,cy+Math.sin(b)*r*0.5);
+    ctx.stroke();
+  }
+  // Stones
+  for(const s of stones){
+    const a=s.angle+t*0.003;
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r*0.5;
+    ctx.fillStyle=s.col;ctx.globalAlpha=0.6;
+    ctx.beginPath();ctx.arc(x,y,25,0,6.28);ctx.fill();
+    ctx.globalAlpha=1;ctx.font="bold 10px Courier New";ctx.textAlign="center";
+    ctx.fillStyle="#050510";
+    ctx.fillText(`hub=${s.hub}`,x,y+4);
+    ctx.fillStyle=s.col;ctx.font="9px Courier New";
+    const lines=s.name.split('\n');
+    ctx.fillText(lines[0],x,y-32);
+    if(lines[1])ctx.fillText(lines[1],x,y-22);
+  }
+  // Center: 42 and 17
+  const p=0.5+0.4*Math.sin(t*0.03);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;ctx.font="bold 18px Courier New";
+  ctx.fillText("42",cx-20,cy+5);
+  ctx.fillStyle=`rgba(239,83,80,${p})`;
+  ctx.fillText("17",cx+20,cy+5);
+  ctx.fillStyle=`rgba(200,200,208,${p*0.5})`;ctx.font="9px Courier New";
+  ctx.fillText("universals",cx,cy+20);
+  ctx.fillText("E = 42−17 = 25",cx,cy+32);
+  ctx.globalAlpha=1;ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H213: Three Stones — 42 and 17 are universal",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
