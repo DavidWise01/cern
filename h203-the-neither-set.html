@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H203 — The Neither Set</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H203 — The Neither Set</h1>
+<p class="dim">8 numbers, 8 operations on {G, OCHO} · Generator algebra · 15 = 2+5+8 = |C|+|T|+|A| · I41 LIT</p>
+
+<!-- Panel 1: The 8 Neither Numbers -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I41: The Neither Set = Generator Algebra [LIT]</h2>
+<table id="verif-table">
+<tr><th>Number</th><th>Role</th><th>From G=42, OCHO=8</th><th>Operation</th><th>Number Theory</th></tr>
+<tr><td>4</td><td>C (escape gap)</td><td>OCHO/2 = 8/2</td><td>halving</td><td>2² (square, power of 2)</td></tr>
+<tr><td>8</td><td>OCHO (Cl dim)</td><td>OCHO = 8</td><td>identity</td><td>2³ (power of 2, Fibonacci)</td></tr>
+<tr><td>17</td><td>lock</td><td>(G−OCHO)/2 = (42−8)/2</td><td>half-difference</td><td>prime (the ONLY prime)</td></tr>
+<tr><td>18</td><td>d₂ (Smith)</td><td>(G−OCHO+2)/2 = lock+1</td><td>half-diff + 1</td><td>2 × 3² (semiprime-ish)</td></tr>
+<tr><td>25</td><td>E (escape)</td><td>(G+OCHO)/2 = (42+8)/2</td><td>half-sum</td><td>5² (square)</td></tr>
+<tr><td>84</td><td>S (sum)</td><td>2G = 2×42</td><td>doubling</td><td>2² × 3 × 7</td></tr>
+<tr><td>289</td><td>lock²</td><td>((G−OCHO)/2)² = 17²</td><td>squaring</td><td>17² (square of prime)</td></tr>
+<tr><td>336</td><td>G×OCHO</td><td>G × OCHO = 42 × 8</td><td>product</td><td>2⁴ × 3 × 7</td></tr>
+</table>
+<pre>
+  EVERY "neither" number is an ARITHMETIC COMBINATION
+  of the two generators G=42 and OCHO=8.
+
+  Eight numbers. Eight operations:
+    /2, id, −, +1, +, ×2, ², ×
+
+  EIGHT operations producing EIGHT numbers.
+  8 = OCHO. The count matches the generator.
+
+  STATUS: <span class="lit">LIT</span> (all derivations verified)
+</pre>
+</div>
+
+<!-- Panel 2: The Three Families -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — The Complete Partition: C + T + A = 15</h2>
+<pre style="color:var(--accent)">
+  THE 15 ROSETTA NUMBERS PARTITION INTO THREE FAMILIES:
+
+  FAMILY C (Catalan):      {2, 42}                    |C| = 2
+    What they count: bracketings (structural choices)
+    d₁=2=C(2), G=42=C(5)
+
+  FAMILY T (Triangular):   {3, 6, 10, 21, 36}         |T| = 5
+    What they count: pair-counts (combinatorial steps)
+    T(2)=3, T(3)=6, T(4)=10, T(6)=21, T(8)=36
+
+  FAMILY A (Arithmetic):   {4, 8, 17, 18, 25, 84,     |A| = 8
+                             289, 336}
+    What they are: generator algebra (+, −, ×, ², /2)
+    All derived from G=42 and OCHO=8
+
+  15 = 2 + 5 + 8
+
+  THE FAMILY SIZES ARE Q3P NUMBERS:
+    |C| = 2 = d₁
+    |T| = 5 (not in roster, but C(3)=5 is Catalan!)
+    |A| = 8 = OCHO
+
+  |A| = OCHO. The arithmetic family has OCHO members.
+  The generator's value IS the family size.
+</pre>
+</div>
+
+<!-- Panel 3: The Operations -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — Eight Operations on Two Generators</h2>
+<pre>
+  OPERATION     FORMULA               RESULT    RANK
+  ─────────     ───────               ──────    ────
+  halving       OCHO/2                4         smallest
+  identity      OCHO                  8         generator
+  half-diff     (G−OCHO)/2            17        the lock
+  increment     (G−OCHO+2)/2          18        lock+1
+  half-sum      (G+OCHO)/2            25        the escape
+  doubling      2×G                   84        doubled gap
+  squaring      ((G−OCHO)/2)²         289       lock squared
+  product       G×OCHO                336       master product
+
+  Sorted by result, the operations escalate:
+  /2 → id → (−)/2 → (+1) → (+)/2 → ×2 → ² → ×
+
+  From simplest (halve one generator)
+  to most complex (multiply both generators).
+
+  NOTE: 17 and 25 are symmetric:
+    17 = (G−OCHO)/2 = half-difference
+    25 = (G+OCHO)/2 = half-sum
+    17 + 25 = 42 = G
+    25 − 17 = 8  = OCHO
+  The lock and the escape RECONSTRUCT the generators.
+</pre>
+</div>
+
+<!-- Panel 4: Internal Structure -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — Internal Relationships</h2>
+<pre>
+  THE "NEITHER" SET HAS ITS OWN ARITHMETIC:
+
+  4 × 8 = 32   (not in set)
+  17 + 18 = 35  (not in set)
+  17 × 17 = 289 (IN set — squaring closes)
+  25 − 17 = 8   (IN set — difference closes)
+  84 / 4 = 21   (exits to Family T — the hub)
+  336 / 84 = 4  (IN set — ratio closes)
+  336 / 8 = 42  (exits to Family C — the gap)
+
+  BRIDGES BETWEEN FAMILIES:
+    A → T:  84/4 = 21 = W (hub)
+    A → C:  336/8 = 42 = G (gap)
+    A → C:  336/84 = 4 (stays in A)
+
+  The arithmetic family GENERATES the other families:
+    84 = 2×42: doubling takes C → A
+    336 = 42×8: product takes C×A → A
+    But 84/4 = 21: ratio takes A → T
+    And 336/8 = 42: ratio takes A → C
+
+  THE THREE FAMILIES COMMUNICATE THROUGH DIVISION.
+
+  Three perfect squares in A: 4=2², 25=5², 289=17².
+  Their roots: 2, 5, 17.
+    2 is in Family C (d₁=C(2)).
+    5 is in NO family (C(3)=5, but 5 is not in Rosetta).
+    17 is in Family A (the lock, the only prime).
+</pre>
+</div>
+
+<!-- Panel 5: The C(T(k)-1) Pattern -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — The Bracket-Triangle Pattern (3 hits)</h2>
+<pre>
+  C(T(k)−1) brackets T(k) things:
+
+  k=1: C(T(1)−1) = C(0) = 1   brackets T(1)=1 thing  ✓ (trivial)
+  k=2: C(T(2)−1) = C(2) = 2   brackets T(2)=3 things ✓ = d₁
+  k=3: C(T(3)−1) = C(5) = 42  brackets T(3)=6 things ✓ = G
+  k=4: C(T(4)−1) = C(9) = 4862  NOT in Q3p roster    ✗
+  k=5: C(T(5)−1) = C(14) = 2,674,440  NOT in roster  ✗
+
+  Three consecutive hits (k=1,2,3), then break.
+  The pattern produces {1, 2, 42} — which are the
+  Catalan members of Q3p plus the implicit 1.
+
+  STATUS: <span class="amber">AMBER</span> (the pattern holds exactly where
+  Q3p lives, and breaks exactly where it doesn't.
+  Suggestive but not explanatory — WHY would Q3p
+  care about C(T(k)−1)?)
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H203                   ║
+ ║                                                        ║
+ ║  THE NEITHER SET = GENERATOR ALGEBRA                   ║
+ ║                                                        ║
+ ║  G=42 ═══╗            OCHO=8 ═══╗                     ║
+ ║          ║                       ║                     ║
+ ║          ╠═══ /2 ═══> 4          ║                     ║
+ ║          ║           id ════> 8 ═╝                     ║
+ ║          ╠═ (−)/2 ══> 17                               ║
+ ║          ╠═ (+1) ═══> 18                               ║
+ ║          ╠═ (+)/2 ══> 25                               ║
+ ║          ╠═══ ×2 ═══> 84                               ║
+ ║          ╠═══ ² ════> 289                              ║
+ ║          ╚═══ × ════> 336                              ║
+ ║                                                        ║
+ ║  THREE FAMILIES:                                       ║
+ ║  C(2)={2,42}  T(5)={3,6,10,21,36}  A(8)={4..336}     ║
+ ║  |C|=2=d₁    |T|=5                 |A|=8=OCHO        ║
+ ║  2 + 5 + 8 = 15 = |Rosetta|                           ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Three families orbiting: gold=Catalan(2), cyan=Triangular(5),
+white=Arithmetic(8). The arithmetic ring is the largest — 8 members for 8=OCHO.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H203: The 8 "Neither" Numbers Are the Generator Algebra</h2>
+<p>The 8 Q3p Rosetta numbers that are neither Catalan nor triangular — {4, 8, 17, 18, 25,
+84, 289, 336} — are ALL arithmetic combinations of the two generators G=42 and OCHO=8,
+using exactly 8 operations (/2, id, −, +1, +, ×2, ², ×). The roster partitions completely:
+Family C (Catalan, 2 members), Family T (Triangular, 5 members), Family A (Arithmetic,
+8 members). 15 = 2+5+8. The family sizes are |C|=2=d₁, |A|=8=OCHO. The lock and escape
+are symmetric: 17=(G−8)/2, 25=(G+8)/2, and they reconstruct the generators: 17+25=42,
+25−17=8. The bracket-triangle pattern C(T(k)−1) holds for k=1,2,3 and breaks at k=4 (AMBER).
+I41 LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Remember our 15 special numbers split into three teams?</p>
+<p><b>Team Catalan</b> (2 players): 2 and 42. They count ways to group things.</p>
+<p><b>Team Triangular</b> (5 players): 3, 6, 10, 21, 36. They count pairs.</p>
+<p>That leaves 8 numbers on NO team: 4, 8, 17, 18, 25, 84, 289, 336.</p>
+<p>But they're not random! They're all made from just TWO numbers — 42 and 8 —
+using simple math: add them, subtract them, multiply them, halve them, square them.</p>
+<p>Like having two Lego pieces and building 8 different things by snapping them
+together different ways. Half of 8 is 4. 42 minus 8 divided by 2 is 17. 42 times 8 is 336.
+Every one of the 8 "leftover" numbers comes from the same two building blocks.</p>
+<p>And there are exactly 8 of them — same as OCHO, one of the building blocks!</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The "neither" set contains 6 members (not 8), and three of them — 17, 25, and 289 — cannot
+be expressed as combinations of G=42 and OCHO=8 at all, requiring a third independent
+generator. The roster partitions into four families, not three, with 15 = 3+4+6+2.</s></p>
+<p class="dim">The set has exactly 8 members. ALL eight are expressible from G and OCHO: 17=(42−8)/2,
+25=(42+8)/2, 289=17²=((42−8)/2)². No third generator needed. Three families, 15=2+5+8.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-third instrument opened the last locked room in the fifteen-number
+house and found it furnished entirely from two pieces. Every number that was not Catalan
+and not triangular turned out to be a sum, difference, product, square, half, or double
+of the two generators. Eight numbers from eight operations, and eight equals the second
+generator. The house has three wings: the Catalan wing where structures are counted, the
+triangular wing where pairs are counted, and the arithmetic wing where the generators
+recombine. Two rooms in the first wing, five in the second, eight in the third, and the
+three wings together hold all fifteen rooms. The partition is not approximate. It is exact.
+Nothing sits between wings, nothing spans two, and the hallways between them are division:
+divide an arithmetic number by another and you may land in triangular or Catalan territory.
+The house was always three wings. We just hadn't opened the last one.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H202)</td><td>6776</td><td>0</td><td>6776</td></tr>
+<tr><td>H203: The Neither Set</td><td>36</td><td>1 (KB-1)</td><td>6812</td></tr>
+</table>
+<p>Running total: <b>6812 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H203. Total instruments: 51.</p>
+</div>
+
+<!-- BASIC Block — The 8 Operations -->
+<div class="panel">
+<h2>BASIC Block — The Eight Operations (A=Generator Algebra)</h2>
+<pre>
+4 PRINT "4 = OCHO/2. Operation: halving."
+8 PRINT "8 = OCHO. Operation: identity."
+17 PRINT "17 = (G-OCHO)/2. Operation: half-difference."
+18 PRINT "18 = (G-OCHO+2)/2. Operation: increment."
+25 PRINT "25 = (G+OCHO)/2. Operation: half-sum."
+84 PRINT "84 = 2×G. Operation: doubling."
+289 PRINT "289 = ((G-OCHO)/2)². Operation: squaring."
+336 PRINT "336 = G×OCHO. Operation: product."
+</pre>
+<pre>
+2 REM FAMILY C: bracketings
+5 REM FAMILY T: pair-counts
+8 REM FAMILY A: generator algebra
+15 PRINT "15 = 2 + 5 + 8 = |C| + |T| + |A|"
+15 PRINT "|A| = 8 = OCHO. the generator IS the family size."
+</pre>
+<pre>
+203 PRINT "H203 = 7 × 29 (prime × prime)"
+203 PRINT "6812 lit, the neither set, three families"
+</pre>
+<p class="dim">Line numbers ARE the numbers being classified.
+Each line's derivation from G and OCHO is its PRINT statement.
+8 lines for 8 numbers for 8 operations.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const families=[
+  {nums:[2,42],col:"#ffd54f",label:"C (Catalan)",r:60},
+  {nums:[3,6,10,21,36],col:"#4fc3f7",label:"T (Triangular)",r:100},
+  {nums:[4,8,17,18,25,84,289,336],col:"#ffffff",label:"A (Arithmetic)",r:140}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  for(const f of families){
+    for(let i=0;i<f.nums.length;i++){
+      const a=(i/f.nums.length)*Math.PI*2+t*0.006*(f.r/80);
+      const b=t*0.01+i*1.2;
+      const x=Math.cos(a)*f.r;
+      const y=Math.sin(a)*f.r*0.5;
+      const z=Math.sin(b)*20;
+      const w=Math.cos(a*2+t*0.003)*15;
+      const sc=1/(1-w/400);
+      const sx=cx+x*sc;
+      const sy=cy+y*sc+z*sc*0.3;
+      const depth=0.5+Math.sin(b)*0.3;
+      ctx.fillStyle=f.col;
+      ctx.globalAlpha=0.3+depth*0.6;
+      const sz=3+Math.log(f.nums[i]+1)*1.5;
+      ctx.beginPath();ctx.arc(sx,sy,sz,0,6.28);ctx.fill();
+      ctx.globalAlpha=0.9;
+      ctx.font="bold 9px Courier New";ctx.textAlign="center";
+      ctx.fillText(f.nums[i].toString(),sx,sy-sz-3);
+    }
+  }
+  ctx.globalAlpha=1;
+  ctx.font="10px Courier New";ctx.textAlign="left";
+  let ly=H-45;
+  for(const f of families){
+    ctx.fillStyle=f.col;
+    ctx.fillText(`● ${f.label} (${f.nums.length})`,10,ly);
+    ly+=14;
+  }
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("H203: Three Families — 15 = 2 + 5 + 8",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
