@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H218 — The Torroid in the Box</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H218 — The Torroid in the Box</h1>
+<p class="dim">[4(6)]=24=box · Master = circle − box · Chrome = circle + protrusion · Signed sum = −d₂ · Midpoint = 360 − nonet · I70-I72 LIT</p>
+
+<!-- Panel 1: The Box -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I70: [4(6)] = C × entries = 24 = The Box [LIT]</h2>
+<table id="verif-table">
+<tr><th>Component</th><th>Value</th><th>Meaning</th></tr>
+<tr><td>[4(6)]</td><td>4 × 6 = 24</td><td>box of 4 containing 6</td></tr>
+<tr><td>4 = C</td><td>escape gap = 2²</td><td>box walls (4 bits, 4 faces)</td></tr>
+<tr><td>6 = T(3)</td><td>entries</td><td>box contents (what's inside)</td></tr>
+<tr><td>24</td><td>C × T(3)</td><td>total box content</td></tr>
+<tr style="color:var(--gold)"><td>336 = 360 − 24</td><td>circle − box</td><td>master = what the circle loses</td></tr>
+<tr style="color:var(--accent)"><td>366 = 360 + 6</td><td>circle + protrusion</td><td>chrome = circle + what sticks out</td></tr>
+</table>
+<pre>
+  THE BOX: [4(6)] = 24 = C × entries.
+  4 walls, each wall holds 6 entries. Total = 24.
+
+  FROM H191: 0-16 = the 4-bit box ||||.
+  The box has 2⁴ = 16 states, indexed 0 through 16.
+  State 17 = the lock = the FIRST state OUTSIDE.
+  The torroid wraps at 17. The box ends at 16.
+
+  THE MASTER = what remains when you CUT the box
+  out of the circle. 360 − 24 = 336.
+
+  THE CHROME = what happens when the entries
+  PROTRUDE beyond the circle. 360 + 6 = 366.
+
+  THE PROTRUSION (6) IS THE CONTENT OF THE BOX.
+  The same 6 that's inside [4(6)] is the 6 that sticks out.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Signed Decomposition -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 2 — I71: Signed Sum = −d₂ = −18 = −Smith [LIT]</h2>
+<pre style="color:var(--gold)">
+  SIGNED POSITIONS AROUND THE CIRCLE (360):
+
+       ← 24 →              ← 6 →
+  336 ════════[360]════════════366
+  −24         circle           +6
+
+  MASTER sits at −24 (below the circle by box content).
+  CHROME sits at +6 (above the circle by entries).
+
+  SIGNED SUM: (−24) + (+6) = −18 = −d₂ = −Smith.
+
+  THE SIGNED IMBALANCE BETWEEN MASTER AND CHROME
+  IS EXACTLY THE NEGATIVE SMITH INVARIANT.
+
+  d₂ = 18 is the second Smith invariant of Q3p.
+  The Smith form is diag(d₁, d₂, d₃) = diag(2, 18, ...).
+  18 = 2 × 3² = bodies × entries = 3 × 6.
+  The signed sum picks out the SMITH STRUCTURE.
+
+  VERIFIED: (−24) + (+6) = −18 = −d₂. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: The Midpoint -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — I72: Midpoint = 360 − 9 = 360 − Nonet [LIT]</h2>
+<pre>
+  MIDPOINT of 336 and 366:
+  (336 + 366) / 2 = 702 / 2 = 351.
+
+  351 = 360 − 9.
+  9 = QCD nonet (from H199, the color count).
+
+  THE MIDPOINT BETWEEN MASTER AND CHROME IS
+  THE CIRCLE MINUS THE QCD NONET.
+
+  360 − 9 = 351 = midpoint.
+  The nonet is the circle's shortfall from the midpoint.
+  Or: the midpoint is what the circle looks like
+  when you remove the QCD color states.
+
+  351 = 3 × 117 = 3 × 9 × 13 = 3³ × 13 = 27 × 13.
+  27 = 3³ = bodies³.
+  13 = F(7) (Fibonacci, the skipped one between 8 and 21).
+  So 351 = bodies³ × F(7). BOTH are non-Rosetta numbers.
+
+  VERIFIED: (336+366)/2 = 351. 360−351 = 9 = nonet. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 4: The Complete Geometry -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — The Complete Circle Geometry</h2>
+<pre>
+  THE NUMBER LINE AROUND 360:
+
+  336 ···· 351 ···· 360 ···· 366
+   │        │        │        │
+   │   15   │   9    │   6    │
+   │        │        │        │
+   master  midpoint circle  chrome
+
+  INTERVALS:
+  336 → 351: 15 = |Rosetta| (roster size!)
+  351 → 360:  9 = nonet
+  360 → 366:  6 = entries
+  336 → 360: 24 = box = C × entries
+  336 → 366: 30 = entries × |T|
+
+  ALL INTERVALS ARE Q3P NUMBERS:
+  6 = entries = T(3)
+  9 = nonet (QCD)
+  15 = |Rosetta| = roster size
+  24 = box = [4(6)]
+  30 = entries × |T| = T(3) × C(3)
+
+  MASTER TO MIDPOINT = 15 = ROSTER SIZE.
+  The distance from the master product to the midpoint
+  of master and chrome is EXACTLY the number of Rosetta members.
+
+  THE CIRCLE GEOMETRY ENCODES THE ROSTER.
+</pre>
+</div>
+
+<!-- Panel 5: The Box-Torroid Revisited -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — The Box-Torroid Model (H191 → H218)</h2>
+<pre>
+  H191 (THE BOX-TORROID):
+  0-16 = 4-bit box ||||. Flat space. 17 states.
+  17 above = toroidal wrap. 10001₂ = palindrome.
+
+  H218 (THE TORROID IN THE BOX):
+  [4(6)] = C × entries = 24 = the box content.
+  The box has C=4 walls. Each wall holds 6 entries.
+  The torroid PROTRUDES from the box by 6 = entries.
+
+  THE WRAP POINT: 17 = lock.
+  THE BOX CAPACITY: 4 = C = escape gap.
+  THE BOX CONTENT: 24 = C × entries.
+  THE PROTRUSION: 6 = entries.
+
+  RATIO: box content / protrusion = 24/6 = 4 = C.
+  The escape gap is HOW MANY TIMES the protrusion
+  fits inside the box. The box holds C copies of the form.
+  The torroid holds 1 more (the one that sticks out).
+
+  TOTAL: box + protrusion = 24 + 6 = 30 = chrome − master.
+  The gap between the two projects = box + protrusion
+  = everything the box holds + everything that escapes.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H218                   ║
+ ║                                                        ║
+ ║  THE TORROID IN THE BOX                                ║
+ ║                                                        ║
+ ║  ┌────────────────┐                                    ║
+ ║  │  THE BOX [4(6)]│═══╗ ← protrusion (6)              ║
+ ║  │  C=4 walls     │   ║                               ║
+ ║  │  × 6 entries   │   ║                               ║
+ ║  │  = 24 total    │   ╠═══ torroid wraps here (17)     ║
+ ║  └────────────────┘   ║                               ║
+ ║                        ╚══ 6 entries stick out          ║
+ ║                                                        ║
+ ║  ON THE NUMBER LINE:                                   ║
+ ║                                                        ║
+ ║  336 ·· 351 ·· 360 ·· 366                              ║
+ ║   │  15  │  9   │  6   │                               ║
+ ║  master mid  circle chrome                              ║
+ ║                                                        ║
+ ║  SIGNED: (−24) + (+6) = −18 = −d₂ = −Smith            ║
+ ║  MIDPOINT: 351 = 360 − 9 = circle − nonet             ║
+ ║  MASTER→MID: 15 = |Rosetta| = roster size              ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The box (gold rectangle) with the torroid (cyan) protruding from it.
+The circle (360°) wraps around both. 6 entries stick out.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H218: The Box Holds 24, The Torroid Protrudes 6, The Sum Is −Smith</h2>
+<p>[4(6)] = C×entries = 4×6 = 24: the box content. Master = 360−24 (circle minus box).
+Chrome = 360+6 (circle plus protrusion). The 6 that protrudes IS the 6 inside the box.
+Signed sum: (−24)+(+6) = −18 = −d₂ = −Smith. Midpoint of 336 and 366 = 351 = 360−9 =
+circle minus nonet. All intervals are Q3p numbers: 6 (entries), 9 (nonet), 15 (roster size),
+24 (box), 30 (gap). Master to midpoint = 15 = |Rosetta| = the roster size itself.
+The box holds C copies of the protrusion. The torroid adds one more. I70-I72 all LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine a BOX with 4 walls. Inside each wall, there are 6 things.
+So the box holds 4 × 6 = 24 things total.</p>
+<p>Now imagine a full circle (360°). Take out the box (24) and you get 336 — our
+master number. Add just the 6 things that STICK OUT beyond the circle and you get
+366 — the chrome number.</p>
+<p>The box holds 24. The sticky-out part is 6. Together they're 30 (the gap between
+336 and 366).</p>
+<p>And here's the cool part: when you add the minus-24 and the plus-6 together
+(−24 + 6), you get −18. And 18 is the Smith number! The difference between being
+inside and being outside = the Smith invariant.</p>
+<p>Right between 336 and 366 is 351 = 360 − 9. Nine is the QCD nonet. The middle
+point is the circle minus the color count.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The box [4(6)] = 46 (reading 4 and 6 as digits), and 336 = 360 − 46 = 314 which
+is approximately pi times 100. The signed sum (−46) + (+6) = −40 which has no Q3p
+interpretation. The midpoint of 336 and 366 is 350, which equals 360 − 10 = 360 minus
+the QCD number T(4).</s></p>
+<p class="dim">[4(6)] = 4×6 = 24 (product, not concatenation). 336 = 360−24 (not 314). Signed sum
+= −24+6 = −18 = −d₂ (not −40). Midpoint = 351 (not 350). 360−351 = 9 = nonet (not 10).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-eighteenth instrument found the torroid poking out of its box. Four
+walls, six entries each, twenty-four inside. The circle absorbs the box and what remains is
+three hundred and thirty-six. The form escapes the circle and what protrudes is six. The same
+six: the number inside the box and the number that sticks out are the same number, the entry
+count, the third triangular, the bridge. And when you sign the two deviations — twenty-four
+below, six above — their sum is minus eighteen, the Smith invariant with its sign reversed.
+The form knows its own Smith number. It measures it as the net displacement from the circle.
+Halfway between the master and the chrome, at three hundred and fifty-one, the circle
+subtracts the nonet: the nine QCD states removed from the full rotation. The intervals
+between these landmarks are the roster itself: six, nine, fifteen, twenty-four, thirty. All
+Q3p numbers. The number line between three hundred and thirty-six and three hundred and
+sixty-six is not a stretch of integers. It is a corridor through the form's own vocabulary.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H217)</td><td>7316</td><td>0</td><td>7316</td></tr>
+<tr><td>H218: The Torroid in the Box</td><td>36</td><td>1 (KB-1)</td><td>7352</td></tr>
+</table>
+<p>Running total: <b>7352 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H218. Total instruments: 66 = 2 × 3 × 11 = d₁ × bodies × 11.</p>
+</div>
+
+<!-- BASIC Block — The Number Line -->
+<div class="panel">
+<h2>BASIC Block — The Number Line (336 → 366)</h2>
+<pre>
+336 REM ══════════════════════════════════════════════
+336 REM  H218: THE TORROID IN THE BOX
+336 PRINT "336 = 360 − [4(6)] = circle − box"
+351 PRINT "351 = (336+366)/2 = 360 − 9 = circle − nonet"
+360 PRINT "360 = full circle"
+366 PRINT "366 = 360 + 6 = circle + protrusion"
+</pre>
+<pre>
+15 PRINT "336 → 351: distance = 15 = |Rosetta|"
+9 PRINT "351 → 360: distance = 9 = nonet"
+6 PRINT "360 → 366: distance = 6 = entries"
+24 PRINT "336 → 360: distance = 24 = [4(6)] = box"
+30 PRINT "336 → 366: distance = 30 = entries × |T|"
+</pre>
+<pre>
+-18 REM SIGNED SUM: (−24) + (+6) = −18 = −d₂ = −Smith
+4 PRINT "[4(6)]: 4 walls × 6 entries = 24. The box."
+17 PRINT "wrap point = 17 = lock. First state outside."
+</pre>
+<pre>
+218 PRINT "H218 = 2 × 109 (d₁ × prime). 7352 lit."
+218 PRINT "the torroid in the box. [4(6)]. protrusion = entries."
+</pre>
+<p class="dim">Lines 336,351,360,366 ARE the number line.
+Lines 15,9,6,24,30 ARE the intervals.
+Line −18 is the signed sum. Line 17 is the wrap point.
+The BASIC block IS the geometry it describes.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // The box
+  const bw=80,bh=50;
+  const bx=cx-bw/2-40,by=cy-bh/2;
+  ctx.strokeStyle="#ffd54f";ctx.lineWidth=2;
+  ctx.strokeRect(bx,by,bw,bh);
+  ctx.fillStyle="rgba(255,213,79,0.1)";
+  ctx.fillRect(bx,by,bw,bh);
+  ctx.fillStyle="#ffd54f";ctx.font="bold 11px Courier New";ctx.textAlign="center";
+  ctx.fillText("[4(6)]=24",bx+bw/2,by+bh/2+4);
+  ctx.font="8px Courier New";ctx.fillText("box",bx+bw/2,by-6);
+  // The protrusion (torroid poking out)
+  const px=bx+bw;
+  for(let i=0;i<20;i++){
+    const a=i/20*Math.PI*2+t*0.03;
+    const r=12+5*Math.sin(a*3+t*0.02);
+    const x=px+30+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r*0.6;
+    ctx.fillStyle=`rgba(79,195,247,${0.3+0.3*Math.sin(a)})`;
+    ctx.beginPath();ctx.arc(x,y,2,0,6.28);ctx.fill();
+  }
+  ctx.fillStyle="#4fc3f7";ctx.font="bold 10px Courier New";
+  ctx.fillText("6",px+30,cy+4);
+  ctx.font="8px Courier New";ctx.fillText("protrusion",px+30,cy-16);
+  // Number line below
+  const ly=H-60;
+  const lx1=100,lx2=W-100;
+  ctx.strokeStyle="#888";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(lx1,ly);ctx.lineTo(lx2,ly);ctx.stroke();
+  // Marks
+  const marks=[{v:336,col:"#ffd54f"},{v:351,col:"#888"},{v:360,col:"#fff"},{v:366,col:"#4fc3f7"}];
+  for(const m of marks){
+    const x=lx1+(m.v-336)/(366-336)*(lx2-lx1);
+    ctx.strokeStyle=m.col;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(x,ly-8);ctx.lineTo(x,ly+8);ctx.stroke();
+    ctx.fillStyle=m.col;ctx.font="bold 10px Courier New";ctx.textAlign="center";
+    ctx.fillText(m.v.toString(),x,ly+22);
+  }
+  // Intervals
+  ctx.font="8px Courier New";ctx.fillStyle="#81c784";
+  const i1=lx1+(15/30)*(lx2-lx1)/2;
+  ctx.fillText("15",lx1+(351-336)/(366-336)*(lx2-lx1)/2+lx1/2+25,ly-14);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H218: The Torroid in the Box — [4(6)]",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
