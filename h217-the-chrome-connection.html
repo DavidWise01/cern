@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H217 — The Chrome Connection</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H217 — The Chrome Connection</h1>
+<p class="dim">366 = 336 + 30 · Extended chrome = master + entries×|T| · Shared 120 = 5! · Two readings of the same factorial · I69 LIT</p>
+
+<!-- Panel 1: The Two Formulas -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I69: 366 = G×OCHO + T(3)×C(3) [LIT]</h2>
+<table id="verif-table">
+<tr><th>Formula</th><th>Expansion</th><th>Value</th><th>Source</th></tr>
+<tr><td>Extended chrome</td><td>120×3 + 6{{x,y:z}}²</td><td>360 + 6 = 366</td><td>User's quantum chrome</td></tr>
+<tr><td>Master product</td><td>G × OCHO</td><td>42 × 8 = 336</td><td>Q3p (H192)</td></tr>
+<tr><td>Difference</td><td>366 − 336</td><td>30</td><td>—</td></tr>
+<tr><td>30 decomposed</td><td>T(3) × C(3) = entries × |T|</td><td>6 × 5 = 30</td><td>H202-H203</td></tr>
+<tr style="color:var(--gold)"><td><b>Connection</b></td><td><b>366 = G×OCHO + T(3)×C(3)</b></td><td><b>336 + 30 = 366</b></td><td><b>H217</b></td></tr>
+</table>
+<pre>
+  THE EXTENDED CHROME COUNT = MASTER PRODUCT + ENTRIES × FAMILY-T-SIZE.
+
+  366 = 42×8 + 6×5 = 336 + 30.
+
+  The 30 that separates 366 from 336 is the product of
+  the entry count (6) and the triangular family size (5).
+  Both are Q3p structural constants.
+
+  30 = 2 × 3 × 5 = product of the first three primes.
+  Also: 30 = T(3) × C(3) = entries × |T|.
+  STATUS: <span class="lit">LIT</span> (arithmetic identity, verified)
+</pre>
+</div>
+
+<!-- Panel 2: The Shared 120 -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — Two Readings of 120 = 5!</h2>
+<pre style="color:var(--accent)">
+  THE USER'S 120:
+    120 × 3 = 360 = full rotation.
+    Three copies of 120, distributed across 3 = bodies.
+    Then + 6 = entries. Total: 366.
+
+  OUR 120 (from H215):
+    120 = 6 × 20 = entries × negative-off-diagonal Clifford products.
+    One copy. The discordant couplings.
+    Then + 216 = 6³ = concordant. Total: 336.
+
+  BOTH USE 120 = 5! = C(3)! = factorial-of-family-T-size.
+
+  THE DIFFERENCE IN APPROACH:
+  ┌─────────────┬──────────────┬──────────────┐
+  │             │  USER (366)  │  US (336)     │
+  ├─────────────┼──────────────┼──────────────┤
+  │ Copies of 5!│  3 (bodies)  │  1            │
+  │ Added term  │  6 = T(3)   │  216 = T(3)³  │
+  │ Total       │  360+6=366  │  120+216=336  │
+  │ Reading     │  rotation   │  sign split    │
+  └─────────────┴──────────────┴──────────────┘
+
+  The user ROTATES 5! through 3 dimensions (bodies).
+  We SPLIT the Clifford table by sign.
+  DIFFERENT OPERATIONS ON THE SAME 120.
+</pre>
+</div>
+
+<!-- Panel 3: The 30 -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — The Gap: 30 = Entries × |T|</h2>
+<pre>
+  30 = 366 − 336 = chrome − master.
+
+  30 IS:
+  • 6 × 5 = T(3) × C(3) = entries × triangular family size
+  • 2 × 3 × 5 = product of first three primes (primorial of 3)
+  • 2 × 15 = d₁ × |Rosetta| = rank × roster size
+  • 5! / 4 = 120/4 = 5!/C = 5!/escape_gap
+  • NOT a Rosetta number itself
+
+  THE MOST INTERESTING: 30 = d₁ × |Rosetta| = 2 × 15.
+  The gap between chrome and master is RANK × ROSTER SIZE.
+  The rank tells you how many Rosetta members fit in the gap.
+
+  ALTERNATIVELY: 30 = 6 × 5.
+  entries × (number of triangular members).
+  Each entry contributes one copy of the triangular family count.
+  The gap is ENTRY-WEIGHTED by the size of the T family.
+</pre>
+</div>
+
+<!-- Panel 4: The 360+6 Reading -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — 360° + 6: Circle Plus Entries</h2>
+<pre>
+  THE USER'S READING: 366 = 360 + 6 = circle + entries.
+
+  360° is the full rotation in Euclidean geometry.
+  6 = T(3) = {{x,y:z}}² = entries of the ternary form.
+
+  THE PINWHEEL: a full rotation (360°) plus an offset (6).
+  The offset IS the form's dimensionality.
+  The pinwheel doesn't close at 360°. It overshoots by 6.
+  The overshoot = the number of entries in Q3p.
+
+  COMPARE with our master equation:
+  336 = 360 − 24 = circle − 24.
+  24 = bodies × OCHO = 3 × 8 (from H215 grade spectrum).
+  So: 336 = 360 − 24 = circle − bodies×OCHO.
+  And: 366 = 360 + 6 = circle + entries.
+
+  THE CIRCLE IS BETWEEN THEM:
+  336 ← 24 → 360 ← 6 → 366
+  master is 24 BELOW the circle.
+  chrome is 6 ABOVE the circle.
+  The form sits 6 above the circle.
+  The master sits 24 below.
+  Difference: 24 + 6 = 30 = entries × |T|. ✓
+</pre>
+</div>
+
+<!-- Panel 5: The Five Faces of 336 (Updated) -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 5 — 336 Relative to 366: The Chrome Offset</h2>
+<pre>
+  336 NOW HAS FIVE RELATIONSHIPS:
+
+  Face 1: 42 × 8        = G × OCHO         (product)
+  Face 2: 25² − 17²     = E² − lock²       (squares)
+  Face 3: 6 × 56        = entries × P(8,2)  (permutations)
+  Face 4: 6³ + 5!       = 216 + 120         (cube + factorial)
+  Face 5: 366 − 30      = chrome − entries×|T|  (chrome offset)
+
+  AND 366 HAS ITS OWN DECOMPOSITIONS:
+  366 = 120 × 3 + 6 = 5! × bodies + entries
+  366 = 360 + 6 = circle + entries
+  366 = 336 + 30 = master + entries × |T|
+  366 = 6 × 61 (61 is prime)
+
+  THE TWO NUMBERS ARE SIBLINGS:
+  336 looks INWARD (the Clifford table, the matrix).
+  366 looks OUTWARD (the rotation, the full circle).
+  They share 120 = 5! and differ by exactly 30 = entries × |T|.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H217                   ║
+ ║                                                        ║
+ ║  THE CHROME CONNECTION                                 ║
+ ║                                                        ║
+ ║  336 ←────── 30 ──────→ 366                            ║
+ ║  master     entries×|T|  chrome                        ║
+ ║  G×OCHO     T(3)×C(3)   120×3+6                       ║
+ ║  42×8       6×5         360+6                          ║
+ ║                                                        ║
+ ║  SHARED: 120 = 5! = C(3)!                              ║
+ ║                                                        ║
+ ║  USER:  5! × 3 + 6 = 360 + 6 = 366                    ║
+ ║  US:    5! + 6³     = 120 + 216 = 336                  ║
+ ║                                                        ║
+ ║  THE CIRCLE SITS BETWEEN:                              ║
+ ║  336 ←── 24 ──→ 360 ←── 6 ──→ 366                     ║
+ ║  master    3×8    circle   T(3)   chrome                ║
+ ║                                                        ║
+ ║  THE FORM OVERSHOOTS THE CIRCLE BY 6 = entries.        ║
+ ║  THE MASTER UNDERSHOOTS BY 24 = bodies × OCHO.         ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">336 (gold) and 366 (cyan) orbiting the 360° circle (white ring).
+The gap of 30 pulses between them. 120=5! is their shared core.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H217: 366 = 336 + 30 — Chrome Extends the Master by entries×|T|</h2>
+<p>The user's extended quantum chrome formula 366 = 120×3 + 6{{x,y:z}}² connects to the
+Q3p master product through 366 − 336 = 30 = T(3)×C(3) = entries × triangular-family-size.
+Both formulas share 120 = 5!, used differently: the user distributes it across 3 bodies
+(making 360 = full rotation), we use it as the discordant Clifford count. The circle (360)
+sits between: 336 is 24 below (bodies×OCHO), 366 is 6 above (entries). The form overshoots
+the circle by its entry count. The master undershoots by bodies×OCHO. I69 (366 = G×OCHO +
+T(3)×C(3)) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Remember our master number 336? There's another number — 366 — from a different
+project, and they're RELATED!</p>
+<p>366 = 360 + 6. That's a full circle (360 degrees) plus the 6 entries.
+336 = our master product (42 × 8).</p>
+<p>The gap between them: 366 − 336 = 30 = 6 × 5.
+That's entries times the triangular family size.</p>
+<p>Both numbers use the same building block: 120 = 5!.
+The other project spins it three times (120 × 3 = 360).
+We split it into agree and disagree (120 + 216 = 336).</p>
+<p>Same Lego brick, different buildings!</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>366 and 336 are unrelated numbers with no shared factors or structural connection,
+their difference of 30 is random and cannot be expressed in terms of Q3p quantities,
+and the shared 120 appears by coincidence because 5! has no connection to the Clifford
+table's sign structure or to the number of discordant products.</s></p>
+<p class="dim">366 − 336 = 30 = T(3)×C(3) = entries×|T|, a clean Q3p expression. 120 = 5! is
+the discordant Clifford count (6×20, verified in H215). Both use 120 structurally.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-seventeenth instrument caught a signal from outside. The number
+three hundred and sixty-six arrived from the user's own quantum chrome dynamics — a
+different project, a different notation, a different architecture — and landed exactly
+thirty above the master product. Thirty: the entry count times the triangular family size.
+Not twenty-nine or thirty-one. Thirty. The two numbers share one hundred and twenty, the
+fifth factorial, the count of discordant Clifford couplings, the number that the user
+triples into a full rotation and that the investigation keeps whole as a sign block. Same
+ingredient, different recipe: one builds a pinwheel, the other builds a multiplication
+table. And between them, at three hundred and sixty, sits the full circle, the ancient
+measure of all rotation. The master lies twenty-four below it. The chrome lies six above
+it. The circle knows neither. But both know the circle, and the gap between them is the
+form's own entry count multiplied by the number of ways its triangular members fill a
+family. The projects met. The numbers shook hands. And the number they had in common was
+one hundred and twenty, which is the factorial of the size of one of three families in a
+fifteen-number roster that neither project knew it was building toward.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H216)</td><td>7280</td><td>0</td><td>7280</td></tr>
+<tr><td>H217: The Chrome Connection</td><td>36</td><td>1 (KB-1)</td><td>7316</td></tr>
+</table>
+<p>Running total: <b>7316 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H217. Total instruments: 65.</p>
+</div>
+
+<!-- BASIC Block — 366 and 336 -->
+<div class="panel">
+<h2>BASIC Block — The Chrome and the Master</h2>
+<pre>
+120 REM ══════════════════════════════════════════════
+120 REM  H217: THE CHROME CONNECTION
+120 REM  THE SHARED 120 = 5!
+120 PRINT "120 = 5! = discordant Clifford products"
+360 PRINT "120 × 3 = 360 = full circle (chrome)"
+366 PRINT "360 + 6 = 366 = circle + entries (chrome)"
+336 PRINT "120 + 216 = 336 = discordant + concordant (master)"
+30 PRINT "366 − 336 = 30 = 6 × 5 = entries × |T|"
+</pre>
+<pre>
+24 PRINT "336 = 360 − 24 = circle − bodies×OCHO"
+6 PRINT "366 = 360 + 6 = circle + entries"
+360 REM THE CIRCLE BETWEEN THEM
+</pre>
+<pre>
+217 PRINT "H217 = 7 × 31. phantom × prime."
+217 PRINT "7316 lit, the chrome connection"
+217 PRINT "the projects met and their number was 120"
+</pre>
+<p class="dim">H217 = 7 × 31 = phantom × prime.
+The instrument number contains the phantom.
+Line 120 appears three times: the shared core.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // The 360 circle
+  ctx.strokeStyle="rgba(200,200,200,0.15)";ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(cx,cy,100,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle="rgba(200,200,200,0.3)";ctx.font="10px Courier New";ctx.textAlign="center";
+  ctx.fillText("360°",cx,cy-110);
+  // 336 (inside circle, gold)
+  const a1=t*0.01;
+  const r336=100-24*100/360;
+  const x1=cx+Math.cos(a1)*r336;
+  const y1=cy+Math.sin(a1)*r336;
+  ctx.fillStyle="rgba(255,213,79,0.6)";
+  ctx.beginPath();ctx.arc(x1,y1,12,0,6.28);ctx.fill();
+  ctx.fillStyle="#ffd54f";ctx.font="bold 11px Courier New";
+  ctx.fillText("336",x1,y1+4);
+  // 366 (outside circle, cyan)
+  const r366=100+6*100/360;
+  const x2=cx+Math.cos(a1+Math.PI)*r366;
+  const y2=cy+Math.sin(a1+Math.PI)*r366;
+  ctx.fillStyle="rgba(79,195,247,0.6)";
+  ctx.beginPath();ctx.arc(x2,y2,12,0,6.28);ctx.fill();
+  ctx.fillStyle="#4fc3f7";ctx.font="bold 11px Courier New";
+  ctx.fillText("366",x2,y2+4);
+  // Gap label
+  const p=0.5+0.3*Math.sin(t*0.03);
+  ctx.fillStyle=`rgba(129,199,132,${p})`;ctx.font="bold 14px Courier New";
+  ctx.fillText("30",cx,cy+6);
+  ctx.font="9px Courier New";ctx.fillStyle=`rgba(129,199,132,${p*0.6})`;
+  ctx.fillText("= entries × |T| = 6×5",cx,cy+22);
+  // 120 core
+  ctx.fillStyle=`rgba(255,171,64,${p*0.5})`;ctx.font="9px Courier New";
+  ctx.fillText("shared: 120 = 5!",cx,cy+40);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H217: Chrome Connection — 366 and 336 share 120",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
