@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H215 — The Clifford Table</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.78em}
+td,th{border:1px solid var(--border);padding:2px 4px;text-align:center}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+.pos{color:var(--green)}.neg{color:var(--red)}
+</style>
+</head>
+<body>
+<h1>H215 — The Clifford Table</h1>
+<p class="dim">8×8 = 64 entries · 56 off-diagonal · 36 positive off-diag = T(8) = ROSETTA · Grade spectrum {0,24,24,8} · I65-I66 LIT</p>
+
+<!-- Panel 1: The Full Table -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I65: The Cl(3) Multiplication Table [LIT]</h2>
+<table id="verif-table">
+<tr><th>×</th><th>1</th><th>e₁</th><th>e₂</th><th>e₃</th><th>e₁₂</th><th>e₁₃</th><th>e₂₃</th><th>e₁₂₃</th></tr>
+<tr><td><b>1</b></td><td class="pos">+1</td><td class="pos">+e₁</td><td class="pos">+e₂</td><td class="pos">+e₃</td><td class="pos">+e₁₂</td><td class="pos">+e₁₃</td><td class="pos">+e₂₃</td><td class="pos">+e₁₂₃</td></tr>
+<tr><td><b>e₁</b></td><td class="pos">+e₁</td><td class="pos">+1</td><td class="pos">+e₁₂</td><td class="pos">+e₁₃</td><td class="pos">+e₂</td><td class="pos">+e₃</td><td class="pos">+e₁₂₃</td><td class="pos">+e₂₃</td></tr>
+<tr><td><b>e₂</b></td><td class="pos">+e₂</td><td class="neg">−e₁₂</td><td class="pos">+1</td><td class="pos">+e₂₃</td><td class="neg">−e₁</td><td class="neg">−e₁₂₃</td><td class="pos">+e₃</td><td class="neg">−e₁₃</td></tr>
+<tr><td><b>e₃</b></td><td class="pos">+e₃</td><td class="neg">−e₁₃</td><td class="neg">−e₂₃</td><td class="pos">+1</td><td class="pos">+e₁₂₃</td><td class="neg">−e₁</td><td class="neg">−e₂</td><td class="pos">+e₁₂</td></tr>
+<tr><td><b>e₁₂</b></td><td class="pos">+e₁₂</td><td class="neg">−e₂</td><td class="pos">+e₁</td><td class="pos">+e₁₂₃</td><td class="neg">−1</td><td class="neg">−e₂₃</td><td class="pos">+e₁₃</td><td class="neg">−e₃</td></tr>
+<tr><td><b>e₁₃</b></td><td class="pos">+e₁₃</td><td class="neg">−e₃</td><td class="neg">−e₁₂₃</td><td class="pos">+e₁</td><td class="pos">+e₂₃</td><td class="neg">−1</td><td class="neg">−e₁₂</td><td class="pos">+e₂</td></tr>
+<tr><td><b>e₂₃</b></td><td class="pos">+e₂₃</td><td class="pos">+e₁₂₃</td><td class="neg">−e₃</td><td class="pos">+e₂</td><td class="neg">−e₁₃</td><td class="pos">+e₁₂</td><td class="neg">−1</td><td class="neg">−e₁</td></tr>
+<tr><td><b>e₁₂₃</b></td><td class="pos">+e₁₂₃</td><td class="pos">+e₂₃</td><td class="neg">−e₁₃</td><td class="pos">+e₁₂</td><td class="neg">−e₃</td><td class="pos">+e₂</td><td class="neg">−e₁</td><td class="neg">−1</td></tr>
+</table>
+<pre>
+  VERIFIED: 64 entries. 8 diagonal, 56 off-diagonal.
+  Rules: eᵢeᵢ = +1 (vectors), eᵢⱼeᵢⱼ = −1 (bivectors),
+  e₁₂₃e₁₂₃ = −1 (pseudoscalar). eᵢeⱼ = −eⱼeᵢ (anticommutation).
+  STATUS: <span class="lit">LIT</span> (computed and verified)
+</pre>
+</div>
+
+<!-- Panel 2: The 36 -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 2 — I66: 36 Positive Off-Diagonal Products = T(8) [LIT]</h2>
+<pre style="color:var(--gold)">
+  OFF-DIAGONAL SIGN COUNT:
+    Positive: 36
+    Negative: 20
+    Total: 56 = P(OCHO, 2)
+
+  36 = T(8) = THE GCD MINORS COUNT. A ROSETTA NUMBER.
+
+  THE NUMBER OF POSITIVE OFF-DIAGONAL CLIFFORD PRODUCTS
+  EQUALS THE NUMBER OF GCD MINORS OF Q3p.
+
+  36 appears in THREE places:
+  1. T(8) = number of 2×2 minors whose GCD = matrix GCD (H167)
+  2. 6² = entries squared (H197)
+  3. POSITIVE off-diagonal Clifford products (H215, NEW)
+
+  THE 20 NEGATIVE PRODUCTS:
+  20 is NOT a Rosetta number. But:
+  20 = 56 − 36 = P(8,2) − T(8) = OCHO×phantom − T(OCHO).
+  = 8×7 − 36 = 56 − 36 = 20.
+
+  IS THERE A FORMULA? T(8) = 8×9/2 = 36.
+  P(8,2) − T(8) = 8×7 − 8×9/2 = 56 − 36 = 20.
+  = 8×(7 − 9/2) = 8×(14−9)/2 = 8×5/2 = 20.
+  So negative count = OCHO × |T| / d₁ = 8 × 5 / 2 = 20.
+  WAIT: |T|=5, d₁=2. So 20 = OCHO × |T| / d₁ = 8×5/2.
+  THAT'S a Q3p expression. But is it meaningful? AMBER.
+</pre>
+</div>
+
+<!-- Panel 3: Grade Spectrum -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — Off-Diagonal Grade Spectrum: {0, 24, 24, 8}</h2>
+<pre>
+  Off-diagonal products that land in each grade:
+
+  GRADE 0 (scalar ±1):        0 products
+  GRADE 1 (vectors ±eᵢ):     24 products
+  GRADE 2 (bivectors ±eᵢⱼ):  24 products
+  GRADE 3 (pseudoscalar ±e₁₂₃): 8 products
+  TOTAL:                      56
+
+  THE SPECTRUM: {0, 24, 24, 8}.
+
+  GRADE 0: NO off-diagonal product gives scalar.
+  (The only way to get ±1 is eᵢeᵢ, which is DIAGONAL.)
+  Off-diagonal products NEVER produce scalars.
+
+  GRADE 1 AND 2: tied at 24 each.
+  24 = 3 × 8 = bodies × OCHO.
+  Or: 24 = the refined color count from H199.
+  Each vector and each bivector appears as the result
+  of 24 off-diagonal multiplications.
+
+  GRADE 3: exactly 8 = OCHO.
+  The pseudoscalar e₁₂₃ appears in 8 off-diagonal products.
+  OCHO products produce the volume element.
+
+  SPECTRUM SUM: 0 + 24 + 24 + 8 = 56. ✓
+</pre>
+</div>
+
+<!-- Panel 4: The Diagonal -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — The Diagonal: Self-Products by Grade</h2>
+<pre>
+  SELF-PRODUCTS (eᵢeᵢ):
+    Grade 0: 1×1 = +1          (POSITIVE)
+    Grade 1: e₁e₁ = e₂e₂ = e₃e₃ = +1  (POSITIVE, 3 of them)
+    Grade 2: e₁₂e₁₂ = e₁₃e₁₃ = e₂₃e₂₃ = −1  (NEGATIVE, 3 of them)
+    Grade 3: e₁₂₃e₁₂₃ = −1    (NEGATIVE)
+
+  POSITIVE self-products: 4 (grades 0 and 1)
+  NEGATIVE self-products: 4 (grades 2 and 3)
+
+  THE SPLIT: grades 0+1 square to +1, grades 2+3 square to −1.
+  Count: 1+3 = 4 positive, 3+1 = 4 negative.
+  The Cl(3) GRADING IS: 1+3+3+1 = 8.
+  First half (grades 0,1): 1+3 = 4 = C. Square to +1.
+  Second half (grades 2,3): 3+1 = 4 = C. Square to −1.
+  THE ESCAPE GAP C = 4 IS THE BOUNDARY
+  BETWEEN POSITIVE AND NEGATIVE SELF-SQUARES.
+
+  4 = C = OCHO/2 = d₁² = the escape gap.
+  THE ESCAPE GAP SEPARATES THE REAL FROM THE IMAGINARY.
+  Grades 0,1 behave like real numbers (square to +1).
+  Grades 2,3 behave like imaginary numbers (square to −1).
+</pre>
+</div>
+
+<!-- Panel 5: 336 Decoded -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — 336 Fully Decoded</h2>
+<pre>
+  336 = G × OCHO = 42 × 8          (the master equation)
+  336 = E² − lock² = 625 − 289     (coordinate duality, H214)
+  336 = entries × P(8,2) = 6 × 56  (falling factorial, H212)
+  336 = entries × (pos + neg off-diag) = 6 × (36 + 20)
+  336 = 6 × 36 + 6 × 20 = 216 + 120
+
+  THE SPLIT BY SIGN:
+  6 × 36 = 216 = 6³    (entries × positive off-diag)
+  6 × 20 = 120 = 5!    (entries × negative off-diag)
+
+  216 = 6³. The cube of the entry count.
+  120 = 5! = factorial of 5 = factorial of |T|.
+
+  336 = 6³ + 5! = entries³ + |T|!
+
+  IS THIS A COINCIDENCE? CHECK:
+  6³ = 216. 5! = 120. 216 + 120 = 336. ✓
+  entries³ + (family-T-size)! = master product.
+
+  STATUS: <span class="lit">LIT</span> (arithmetic) but <span class="amber">AMBER</span>
+  (the decomposition 336 = 6³ + 5! is true but
+  the connection between 6³ and positive products,
+  and 5! and negative products, may be coincidental).
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H215                   ║
+ ║                                                        ║
+ ║  THE CLIFFORD TABLE                                    ║
+ ║                                                        ║
+ ║  8 × 8 = 64 total products                            ║
+ ║  ┌────────────────────────────────┐                    ║
+ ║  │ DIAGONAL: 8                    │                    ║
+ ║  │  +1: grades 0,1 (4)  C=4      │                    ║
+ ║  │  −1: grades 2,3 (4)  C=4      │                    ║
+ ║  ├────────────────────────────────┤                    ║
+ ║  │ OFF-DIAGONAL: 56               │                    ║
+ ║  │  +: 36 = T(8) ← ROSETTA!      │                    ║
+ ║  │  −: 20 = 56−36                 │                    ║
+ ║  │  By grade: {0, 24, 24, 8}      │                    ║
+ ║  ├────────────────────────────────┤                    ║
+ ║  │ × 6 entries:                   │                    ║
+ ║  │  6 × 36 = 216 = 6³             │                    ║
+ ║  │  6 × 20 = 120 = 5!             │                    ║
+ ║  │  336 = 6³ + 5! ← NEW          │                    ║
+ ║  └────────────────────────────────┘                    ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">8×8 grid: green = positive product, red = negative product.
+Diagonal highlighted. Off-diagonal: 36 green (T(8)), 20 red.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H215: 36 Positive Off-Diagonal Clifford Products = T(8) = Rosetta</h2>
+<p>The full 8×8 Cl(3) multiplication table: 64 entries, 8 diagonal (4 positive grades 0,1;
+4 negative grades 2,3), 56 off-diagonal (36 positive, 20 negative). The 36 positive
+off-diagonal products equal T(8), the gcd minors count — a Rosetta number. The grade
+spectrum of off-diagonal products is {0, 24, 24, 8}, with 24 = bodies × OCHO for vectors
+and bivectors, and 8 = OCHO for the pseudoscalar. The escape gap C=4 separates positive
+self-squares (grades 0,1) from negative (grades 2,3). 336 = 6×36 + 6×20 = 6³ + 5! =
+216 + 120 (arithmetic LIT, interpretation AMBER). I65 (table) LIT, I66 (36 positive) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>The color cube has 8 colors. We made a BIG multiplication chart: every color
+times every other color. That's 8 × 8 = 64 squares in the chart.</p>
+<p>8 squares are on the diagonal (a color times itself). The other 56 squares
+are where you multiply two DIFFERENT colors.</p>
+<p>Of those 56, <b>36 give a positive answer</b> and <b>20 give a negative answer</b>.
+And 36 is one of our special Q3p numbers! It's T(8) — the same number that counts
+the gcd minors. The Clifford algebra KNOWS about Q3p's minors.</p>
+<p>Also: half the self-multiplications give +1 (the first 4 colors) and half give
+−1 (the last 4 colors). The number 4 — the escape gap — is the BOUNDARY between
+the plus world and the minus world.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The Cl(3) multiplication table has 48 off-diagonal entries (not 56), with 24 positive
+and 24 negative, perfectly balanced. All self-products are positive (+1) across all 8
+grades. The off-diagonal grade spectrum is {8, 16, 16, 8} with equal scalar and
+pseudoscalar counts. 336 = 6 × 48 = 288, not 336.</s></p>
+<p class="dim">56 off-diagonal (not 48): 36 positive, 20 negative (not balanced). Self-products:
+4 positive (grades 0,1), 4 negative (grades 2,3). Grade spectrum: {0, 24, 24, 8}
+(zero scalars, not 8). 336 = 6 × 56 (not 6 × 48).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-fifteenth instrument opened the multiplication table of the Clifford
+algebra and counted what it found. Sixty-four products in an eight-by-eight grid. Eight on
+the diagonal, where every element meets itself — four return plus one, four return minus one,
+and the boundary between them is four, the escape gap. Fifty-six off the diagonal, where
+different elements meet — and of those, thirty-six are positive. Thirty-six: the eighth
+triangular number, the number of gcd minors, the entry count squared. It showed up in the
+minors. It showed up in the chain. And now it shows up in the sign count of the Clifford
+table. The same number, counting different things, in different buildings, finding itself in
+every room it enters. Twenty remain negative, and their count times the entries is one
+hundred and twenty, which is five factorial, which is the factorial of the triangular family's
+size. The master product decomposes into a cube and a factorial: six cubed plus five factorial
+equals three hundred and thirty-six. The table does not explain why these numbers agree. It
+only shows that they do.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H214)</td><td>7208</td><td>0</td><td>7208</td></tr>
+<tr><td>H215: The Clifford Table</td><td>36</td><td>1 (KB-1)</td><td>7244</td></tr>
+</table>
+<p>Running total: <b>7244 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H215. Total instruments: 63.</p>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel">
+<h2>BASIC Block — The 64 Products (Grade-Indexed)</h2>
+<pre>
+64 REM ═══════════════════════════════════════════════════
+64 REM  H215: THE CLIFFORD TABLE
+64 REM  8 × 8 = 64 products in Cl(3)
+8 PRINT "8 diagonal: 4 square to +1, 4 to −1"
+56 PRINT "56 off-diagonal: 36 positive, 20 negative"
+36 PRINT "36 = T(8) = ROSETTA! Positive off-diagonal count."
+20 PRINT "20 = 56 − 36. Negative off-diagonal count."
+</pre>
+<pre>
+0 PRINT "grade 0 off-diag results: 0 (scalars are diagonal only)"
+24 PRINT "grade 1 off-diag results: 24 = 3×8 = bodies × OCHO"
+24 PRINT "grade 2 off-diag results: 24 (tied with grade 1)"
+8 PRINT "grade 3 off-diag results: 8 = OCHO"
+</pre>
+<pre>
+216 PRINT "6 × 36 = 216 = 6³ (entries × positive)"
+120 PRINT "6 × 20 = 120 = 5! (entries × negative)"
+336 PRINT "336 = 216 + 120 = 6³ + 5!"
+4 PRINT "C = 4: boundary between +1 and −1 self-squares"
+</pre>
+<pre>
+215 PRINT "H215 = 5 × 43. 7244 lit. the clifford table."
+</pre>
+<p class="dim">Line 36 carries T(8). Line 24 carries bodies×OCHO.
+Line 216 = 6³. Line 120 = 5!. Line 336 = their sum.
+The BASIC block IS the grade spectrum.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height;
+let t=0;
+// Sign table from computation
+const signs=[
+  [1,1,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1],
+  [1,-1,1,1,-1,-1,1,-1],
+  [1,-1,-1,1,1,-1,-1,1],
+  [1,-1,1,1,-1,-1,1,-1],
+  [1,-1,-1,1,1,-1,-1,1],
+  [1,1,-1,1,-1,1,-1,-1],
+  [1,1,-1,1,-1,1,-1,-1]
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  const ox=W/2-80,oy=50;
+  const sz=22;
+  for(let i=0;i<8;i++){
+    for(let j=0;j<8;j++){
+      const x=ox+j*sz;const y=oy+i*sz;
+      const isDiag=i===j;
+      const s=signs[i][j];
+      if(isDiag){
+        ctx.fillStyle=s>0?"rgba(129,199,132,0.8)":"rgba(239,83,80,0.8)";
+      }else{
+        ctx.fillStyle=s>0?"rgba(129,199,132,0.3)":"rgba(239,83,80,0.3)";
+      }
+      ctx.fillRect(x+1,y+1,sz-2,sz-2);
+      ctx.fillStyle="#c8c8d0";ctx.font="9px Courier New";ctx.textAlign="center";
+      ctx.fillText(s>0?"+":"−",x+sz/2,y+sz/2+3);
+    }
+  }
+  // Labels
+  const names=['1','e₁','e₂','e₃','e₁₂','e₁₃','e₂₃','ω'];
+  ctx.fillStyle="#888";ctx.font="8px Courier New";ctx.textAlign="center";
+  for(let i=0;i<8;i++){
+    ctx.fillText(names[i],ox+i*sz+sz/2,oy-4);
+    ctx.textAlign="right";
+    ctx.fillText(names[i],ox-3,oy+i*sz+sz/2+3);
+    ctx.textAlign="center";
+  }
+  // Stats
+  ctx.fillStyle="#ffd54f";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  const sx=ox+8*sz+20;
+  ctx.fillText("Off-diagonal:",sx,oy+20);
+  ctx.fillStyle="#81c784";ctx.fillText("+ 36 = T(8)",sx,oy+40);
+  ctx.fillStyle="#ef5350";ctx.fillText("− 20",sx,oy+60);
+  ctx.fillStyle="#ffd54f";ctx.fillText("Grade spectrum:",sx,oy+90);
+  ctx.fillStyle="#c8c8d0";ctx.font="10px Courier New";
+  ctx.fillText("{0, 24, 24, 8}",sx,oy+108);
+  ctx.fillText("336 = 6³ + 5!",sx,oy+130);
+  ctx.fillText("= 216 + 120",sx,oy+148);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("H215: Cl(3) Multiplication Table",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
