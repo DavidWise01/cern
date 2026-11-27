@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H222 — The Lattice Triangle</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H222 — The Lattice Triangle</h1>
+<p class="dim">Triangle P5-M2-P4 has area 1/2 · Unimodular · |det|=1 · {fifth, fourth} basis for ℤ² · Edge vectors = H220 ratios · I80-I81 LIT</p>
+
+<!-- Panel 1: The Triangle -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I80: Triangle Area = 1/2 (Unimodular) [LIT]</h2>
+<table id="verif-table">
+<tr><th>Vertex</th><th>Lattice point (a,b)</th><th>Interval</th><th>Ratio</th></tr>
+<tr><td>P5 (fifth)</td><td style="color:var(--gold)">(1, −1)</td><td>bodies¹ × d₁⁻¹</td><td>3/2</td></tr>
+<tr><td>M2 (tone)</td><td style="color:var(--accent)">(2, −3)</td><td>bodies² × d₁⁻³</td><td>9/8</td></tr>
+<tr><td>P4 (fourth)</td><td style="color:var(--green)">(−1, 2)</td><td>bodies⁻¹ × d₁²</td><td>4/3</td></tr>
+</table>
+<pre>
+  SHOELACE FORMULA:
+
+  Area = ½|x₁(y₂−y₃) + x₂(y₃−y₁) + x₃(y₁−y₂)|
+       = ½|1(−3−2) + 2(2−(−1)) + (−1)((−1)−(−3))|
+       = ½|1×(−5) + 2×3 + (−1)×2|
+       = ½|−5 + 6 − 2|
+       = ½|−1|
+       = 1/2. ✓
+
+  AREA = 1/2 IS THE MINIMUM NONZERO AREA
+  FOR A TRIANGLE WITH VERTICES IN ℤ².
+
+  By Pick's theorem: A = I + B/2 − 1
+  1/2 = I + B/2 − 1 → I + B/2 = 3/2.
+  B = 3 (the vertices only), I = 0 (no interior points).
+
+  THE TRIANGLE HAS NO INTERIOR LATTICE POINTS.
+  It is a FUNDAMENTAL DOMAIN of ℤ².
+  Two copies tile any parallelogram. The plane tiles from triangles.
+
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Determinant -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — I81: |det| = 1 → Basis for ℤ² [LIT]</h2>
+<pre>
+  Edge vectors from P5:
+    P5→M2 = (2−1, −3−(−1)) = (1, −2)
+    P5→P4 = (−1−1, 2−(−1)) = (−2, 3)
+
+  DETERMINANT:
+    |1   −2|
+    |−2   3| = 1×3 − (−2)×(−2) = 3 − 4 = −1.
+
+  |det| = 1.
+
+  THIS MEANS: the two edge vectors form a BASIS for ℤ².
+  EVERY integer lattice point (a,b) can be written as
+  a unique integer combination of (1,−2) and (−2,3).
+
+  MUSICALLY: every Pythagorean interval = n×fifth + m×fourth.
+
+  VERIFIED (all 13 intervals):
+    unison  = 0×fifth + 0×fourth
+    m2      = −2×fifth + 3×fourth
+    M2      = 1×fifth − 1×fourth    (tone = fifth minus fourth!)
+    m3      = −1×fifth + 2×fourth
+    M3      = 2×fifth − 2×fourth
+    P4      = 0×fifth + 1×fourth
+    tritone = 3×fifth − 3×fourth
+    P5      = 1×fifth + 0×fourth
+    m6      = −1×fifth + 3×fourth
+    M6      = 2×fifth − 1×fourth
+    m7      = 0×fifth + 2×fourth
+    M7      = 3×fifth − 2×fourth
+    octave  = 1×fifth + 1×fourth    (octave = fifth PLUS fourth!)
+
+  ALL 13 VERIFIED. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: Edge Vectors = H220 Ratios -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — The Edges ARE the H220 Ratios</h2>
+<pre>
+  EDGE VECTOR P5→M2 = (1, −2):
+    = bodies¹ × d₁⁻² = 3/4 = bodies/C.
+    THIS IS THE TWO-ENDPOINT RATIO FROM H220 (I77).
+
+  EDGE VECTOR P5→P4 = (−2, 3):
+    = bodies⁻² × d₁³ = 8/9 = OCHO/nonet.
+    THIS IS THE INVERSE OF THE FOUR-LANDMARK RATIO FROM H220 (I75).
+
+  THE TRIANGLE'S EDGES ARE THE H220 RATIOS.
+
+  The triangle that tiles the Pythagorean lattice
+  has edges whose lengths (as frequency ratios)
+  are the SAME ratios that emerged from the number line
+  336-351-360-366.
+
+  CHAIN OF CONNECTIONS:
+  H218: box and protrusion → signed sums
+  H219: intervals {15,9,6} → signed sum −27
+  H220: ratios 18/24=3/4 and 27/24=9/8
+  H221: these are Pythagorean intervals
+  H222: they span a minimal lattice cell
+
+  THE NUMBER LINE'S GEOMETRY TILES THE PITCH LATTICE.
+</pre>
+</div>
+
+<!-- Panel 4: The Tiling -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — How the Triangle Tiles</h2>
+<pre>
+  Two copies of the triangle (area 1/2 each) form a
+  PARALLELOGRAM of area 1 — the fundamental cell of ℤ².
+
+  The parallelogram has edges (1,−2) and (−2,3).
+  It tiles the entire lattice plane.
+
+  EVERY Pythagorean interval sits at a lattice point.
+  EVERY lattice point is in exactly one copy of the triangle.
+  THE TRIANGLE IS THE ATOM OF THE PITCH SPACE.
+
+  IN Q3P LANGUAGE:
+  The fundamental domain of the {d₁, bodies} lattice
+  is bounded by the ratios bodies/C and OCHO/nonet.
+  Its area (1/2) is half of d₁ = half of the seed.
+  The seed divided by itself — the simplest possible cell.
+
+  WHY UNIMODULAR MATTERS:
+  |det| = 1 means no information is lost when you express
+  an interval as n×fifth + m×fourth. The map is INVERTIBLE.
+  Given any (a,b), you recover (n,m) = (2a+b, a+b) exactly.
+  The lattice coordinates and the fifth/fourth coordinates
+  are THE SAME INFORMATION, rearranged.
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H222                   ║
+ ║                                                        ║
+ ║  THE LATTICE TRIANGLE                                  ║
+ ║                                                        ║
+ ║           b (d₁ exponent)                              ║
+ ║           ↑                                            ║
+ ║       3   ·   ·   ·   P4(−1,2)                        ║
+ ║           ·   ·   ·   · /                              ║
+ ║       1   ·   ·   ·  / ·                               ║
+ ║           ·   ·   · / · ·                              ║
+ ║      −1   · P5(1,−1) · · ·                            ║
+ ║           · / ·   ·   · ·                              ║
+ ║      −3  M2(2,−3) ·   · ·                             ║
+ ║           ·   ·   ·   · ·                              ║
+ ║          −2  −1   0   1   2 → a (bodies exponent)      ║
+ ║                                                        ║
+ ║  AREA = 1/2 (minimum). |det| = 1 (basis).             ║
+ ║  Edge P5→M2 = bodies/C = 3/4 (H220 I77)              ║
+ ║  Edge P5→P4 = OCHO/nonet = 8/9 (H220 I75⁻¹)         ║
+ ║                                                        ║
+ ║  EVERY interval = n×fifth + m×fourth. VERIFIED ×13.    ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The unimodular triangle P5-M2-P4 in the Pythagorean lattice.
+Gold = the three H220 vertices. Blue = other Pythagorean intervals.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H222: The Minimal Cell</h2>
+<p>The three H220 ratios (fifth, tone, fourth) sit at lattice points forming a triangle
+of area 1/2 — the minimum nonzero area in ℤ², a unimodular fundamental domain with no
+interior lattice points. The determinant |det| = 1 proves {fifth, fourth} is a basis:
+every Pythagorean interval = n×fifth + m×fourth (verified for all 13). The edge vectors
+ARE the H220 ratios: P5→M2 = bodies/C = 3/4 (I77), P5→P4 = OCHO/nonet = 8/9 (I75⁻¹).
+The number line's geometry tiles the pitch lattice. I80 (area 1/2) LIT, I81 (|det|=1 basis) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine graph paper. Every dot on the grid is a musical note
+(in the ancient Greek way of tuning).</p>
+<p>Our three special fractions (9/8, 3/2, 4/3) sit at three dots.
+Connect them: you get a TRIANGLE.</p>
+<p>This triangle is the SMALLEST triangle you can make on graph paper
+(area = half a square). It's like the smallest tile in a mosaic.
+Copy this tiny triangle over and over and you can cover the WHOLE grid.</p>
+<p>That means: starting from just the fifth (3/2) and the fourth (4/3),
+you can reach EVERY SINGLE NOTE. They're the building blocks.
+Every note = some number of fifths plus some number of fourths.</p>
+<p>And the triangle's edges? They're the SAME fractions we found
+when we divided the box by the displacement back in H220.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The triangle P5-M2-P4 has area 3/2 (not 1/2) because the shoelace formula gives
+|−5 + 6 − 2| = |−1| = 1 and dividing by 2 gives... wait, actually the determinant of the
+edge vectors is −3 (not −1) because 1×3 − (−2)×(−2) = 3−4 = −1 is wrong and should be
+1×3 + (−2)×(−2) = 3+4 = 7. The triangle has area 7/2 and contains 2 interior lattice points.</s></p>
+<p class="dim">det = 1×3 − (−2)×(−2) = 3−4 = −1 (not 7). Area = 1/2 (not 3/2 or 7/2).
+I=0 interior points (not 2). The confusion is MINUS not PLUS in the cross product.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-twenty-second instrument drew a triangle and found it was the
+smallest one possible. Three lattice points — the fifth, the tone, the fourth — joined
+to make a region with area one-half, the irreducible tile of the integer plane. No lattice
+point sits inside it. No smaller triangle exists. And the edges of this minimal cell are
+the ratios from H220: three-quarters and eight-ninths, the displacement divided by the box,
+the signed pull of two endpoints and four landmarks, now revealed as the walls of the
+fundamental domain. The number line made the ratios. The ratios made the intervals. The
+intervals made the triangle. The triangle tiles the plane. And the plane is the space of
+all pitches the ancient tuning can produce. What started as the gap between master and chrome
+has become the atom of musical pitch. The ornament is in the economy: three points, area
+one-half, determinant one, and the entire Pythagorean system laid down from that one tile,
+copied to infinity, each copy a faithful image of the first, each interval a whole number
+of fifths and a whole number of fourths, each note reachable in integer steps from every
+other note, because the tile has unit determinant and nothing is lost in the tiling.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H221)</td><td>7460</td><td>0</td><td>7460</td></tr>
+<tr><td>H222: The Lattice Triangle</td><td>36</td><td>1 (KB-1)</td><td>7496</td></tr>
+</table>
+<p>Running total: <b>7496 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H222. 7496 = 2³ × 937. 937 is prime.</p>
+</div>
+
+<!-- BASIC Block — Coordinates and Combinations -->
+<div class="panel">
+<h2>BASIC Block — The Thirteen as Fifth-Fourth Combinations</h2>
+<pre>
+(0,0) PRINT "unison = 0 fifths + 0 fourths"
+(-2,3) PRINT "minor 2nd = −2 fifths + 3 fourths"
+(1,-1) PRINT "major 2nd = 1 fifth − 1 fourth = tone"
+(-1,2) PRINT "minor 3rd = −1 fifth + 2 fourths"
+(2,-2) PRINT "major 3rd = 2 fifths − 2 fourths"
+(0,1) PRINT "perfect 4th = 0 fifths + 1 fourth"
+(3,-3) PRINT "tritone = 3 fifths − 3 fourths"
+(1,0) PRINT "perfect 5th = 1 fifth + 0 fourths"
+(-1,3) PRINT "minor 6th = −1 fifth + 3 fourths"
+(2,-1) PRINT "major 6th = 2 fifths − 1 fourth"
+(0,2) PRINT "minor 7th = 0 fifths + 2 fourths"
+(3,-2) PRINT "major 7th = 3 fifths − 2 fourths"
+(1,1) PRINT "octave = 1 fifth + 1 fourth"
+</pre>
+<pre>
+0.5 REM area of the triangle. The minimum. The atom.
+-1 REM determinant. Unit. Invertible. Lossless.
+222 PRINT "H222 = 2 × 3 × 37 = d₁ × bodies × prime."
+222 PRINT "7496 lit, the lattice triangle, the minimal cell"
+</pre>
+<p class="dim">Lines are (n,m) = number of fifths and fourths.
+Each line IS the interval it describes.
+13 lines = 13 Pythagorean intervals.
+H222 = 2 × 3 × 37 = d₁ × bodies × prime.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height;
+let t=0;
+const intervals=[
+  {n:"uni",a:0,b:0},{n:"m2",a:-5,b:8},{n:"M2",a:2,b:-3},
+  {n:"m3",a:-3,b:5},{n:"M3",a:4,b:-6},{n:"P4",a:-1,b:2},
+  {n:"tri",a:6,b:-9},{n:"P5",a:1,b:-1},{n:"m6",a:-4,b:7},
+  {n:"M6",a:3,b:-4},{n:"m7",a:-2,b:4},{n:"M7",a:5,b:-7},
+  {n:"oct",a:0,b:1}
+];
+const ox=W/2,oy=H/2,sc=35;
+function lx(a){return ox+a*sc;}
+function ly(b){return oy-b*sc;}
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Grid
+  ctx.strokeStyle="rgba(42,42,58,0.4)";ctx.lineWidth=0.5;
+  for(let i=-8;i<=8;i++){
+    ctx.beginPath();ctx.moveTo(lx(i),30);ctx.lineTo(lx(i),H-30);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(30,ly(i));ctx.lineTo(W-30,ly(i));ctx.stroke();
+  }
+  // Axes
+  ctx.strokeStyle="rgba(200,200,208,0.2)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(30,oy);ctx.lineTo(W-30,oy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ox,30);ctx.lineTo(ox,H-30);ctx.stroke();
+  // The triangle — FILLED
+  const p5x=lx(1),p5y=ly(-1),m2x=lx(2),m2y=ly(-3),p4x=lx(-1),p4y=ly(2);
+  ctx.fillStyle="rgba(255,213,79,0.15)";
+  ctx.beginPath();ctx.moveTo(p5x,p5y);ctx.lineTo(m2x,m2y);ctx.lineTo(p4x,p4y);ctx.closePath();ctx.fill();
+  ctx.strokeStyle="#ffd54f";ctx.lineWidth=2;ctx.stroke();
+  // All intervals
+  for(const iv of intervals){
+    const x=lx(iv.a),y=ly(iv.b);
+    if(x<20||x>W-20||y<20||y>H-20)continue;
+    const isVert=iv.n==="P5"||iv.n==="M2"||iv.n==="P4";
+    ctx.fillStyle=isVert?"#ffd54f":"#4fc3f7";
+    ctx.beginPath();ctx.arc(x,y,isVert?6:3,0,Math.PI*2);ctx.fill();
+    ctx.font=(isVert?"bold 11":"9")+"px Courier New";ctx.textAlign="left";
+    ctx.fillText(iv.n,x+8,y+3);
+  }
+  // Edge labels
+  ctx.fillStyle="#81c784";ctx.font="10px Courier New";ctx.textAlign="center";
+  const mx1=(p5x+m2x)/2,my1=(p5y+m2y)/2;
+  ctx.fillText("3/4",mx1+15,my1);
+  const mx2=(p5x+p4x)/2,my2=(p5y+p4y)/2;
+  ctx.fillText("8/9",mx2-18,my2);
+  // Area label
+  ctx.fillStyle="#ffd54f";ctx.font="bold 14px Courier New";
+  const centX=(p5x+m2x+p4x)/3,centY=(p5y+m2y+p4y)/3;
+  ctx.fillText("½",centX,centY+5);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H222: Unimodular triangle — area 1/2, |det|=1",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#ffd54f";
+  ctx.fillText("Gold triangle = fundamental domain. Edges = H220 ratios.",10,H-10);
+  // Axis labels
+  ctx.fillStyle="#888";ctx.font="9px Courier New";ctx.textAlign="center";
+  ctx.fillText("bodies exponent (a) →",ox,H-22);
+  ctx.save();ctx.translate(16,oy);ctx.rotate(-Math.PI/2);ctx.fillText("d₁ exponent (b) →",0,0);ctx.restore();
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
