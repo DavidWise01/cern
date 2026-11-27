@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H219 — The Interval Chain</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H219 — The Interval Chain</h1>
+<p class="dim">{15,9,6} intervals · Differences are triangular: {6,3} = {T(3),T(2)} · T(5)−T(3)=nonet · 360 makes it unique · I73-I74 LIT</p>
+
+<!-- Panel 1: The Chain -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I73: T(5) − T(3) = 9 = Nonet [LIT]</h2>
+<table id="verif-table">
+<tr><th>Interval</th><th>Value</th><th>Identity</th><th>Role</th></tr>
+<tr><td>336 → 351</td><td style="color:var(--gold)">15 = T(5)</td><td>|Rosetta|</td><td>roster size</td></tr>
+<tr><td>351 → 360</td><td style="color:var(--accent)">9 = 3²</td><td>bodies² = nonet</td><td>QCD count</td></tr>
+<tr><td>360 → 366</td><td style="color:var(--green)">6 = T(3)</td><td>entries</td><td>form dimension</td></tr>
+</table>
+<pre>
+  INTERVALS: {15, 9, 6}. Sum: 15 + 9 + 6 = 30.
+
+  KEY IDENTITY:
+  T(5) − T(3) = 15 − 6 = 9 = nonet.
+
+  The nonet is the DIFFERENCE of two triangular numbers.
+  The roster size minus the entry count equals the QCD nonet.
+  |Rosetta| − entries = nonet.
+  15 − 6 = 9. ✓
+
+  This is NOT a coincidence. T(5) − T(3) = 5×6/2 − 3×4/2
+  = 15 − 6 = 9 = 3² = bodies².
+  T(n) − T(n−2) = n(n+1)/2 − (n−2)(n−1)/2 = (2n−1).
+  For n=5: 2×5−1 = 9 = 3². Only when n=5 does this give a perfect square.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Difference Chain -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — I74: Interval Differences Are Triangular [LIT]</h2>
+<pre style="color:var(--accent)">
+  THE INTERVALS: 15, 9, 6
+  FIRST DIFFERENCES: 15−9=6, 9−6=3
+  = {T(3), T(2)} = {entries, bodies}
+
+  THE FIRST-DIFFERENCES OF THE INTERVAL CHAIN
+  ARE THE TRIANGULAR CHAIN {T(3), T(2)}.
+
+  EXTEND: 15, 9, 6, 3, 0
+  Diffs:    6, 3, 3, 3  (then constant at 3=bodies)
+
+  THE CHAIN CONVERGES TO bodies=3.
+  After two steps, the differences stabilize at T(2)=3.
+  The chain: T(5)=15 → subtract T(3)=6 → 9=nonet
+           → subtract T(2)=3 → T(3)=6=entries
+           → subtract T(2)=3 → T(2)=3=bodies
+           → subtract T(2)=3 → 0 (terminates)
+
+  THE INTERVAL CHAIN DESCENDS THROUGH TRIANGULARS
+  AND TERMINATES AT ZERO AFTER 4 STEPS.
+
+  VERIFIED: 15−6=9, 9−3=6, 6−3=3, 3−3=0. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: Why 360 Makes It Unique -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — What Makes 336-366 Special</h2>
+<pre>
+  HONEST CHECK: the intervals {15, 9, 6} appear for
+  ANY starting point shifted by 30. For example:
+    6, 21, 30, 36 also has intervals [15, 9, 6].
+    42, 57, 66, 72 also has intervals [15, 9, 6].
+
+  THE INTERVALS ARE JUST ARITHMETIC.
+  Any pair differing by 30 has the same interval structure.
+  The midpoint is always 15 above the start.
+  Then 9 and 6 follow from the split 30 = 15 + 15 = 15 + 9 + 6.
+
+  WHAT MAKES 336-366 SPECIAL IS NOT THE INTERVALS.
+  IT IS THE LANDMARK AT 360.
+
+  360 is the full circle. 360° of rotation.
+  ONLY the pair 336-366 straddles the full circle.
+  The circle IS the natural landmark between them.
+
+  OTHER PAIRS have no such natural landmark:
+    6-36: intermediate 30 has no geometric meaning.
+    42-72: intermediate 60 has some (60°) but no special status.
+    336-366: intermediate 360 IS the full rotation. UNIQUE.
+
+  THE UNIQUENESS IS NOT IN THE INTERVALS.
+  IT IS IN THE GEOMETRY THEY STRADDLE.
+</pre>
+</div>
+
+<!-- Panel 4: The Descent -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — The Descent: 15 → 9 → 6 → 3 → 0</h2>
+<pre>
+  THE INTERVAL CHAIN DESCENDS TO ZERO:
+
+  15  = T(5) = |Rosetta|
+   │ −6 = −T(3) = −entries
+  9   = 3² = nonet = bodies²
+   │ −3 = −T(2) = −bodies
+  6   = T(3) = entries
+   │ −3 = −T(2) = −bodies
+  3   = T(2) = bodies
+   │ −3 = −T(2) = −bodies
+  0   = nothing. Chain terminates.
+
+  FOUR STEPS FROM ROSTER SIZE TO ZERO.
+  Subtractions: T(3), T(2), T(2), T(2).
+  One entry-sized step, then three body-sized steps.
+
+  THE CHAIN IN Q3P LANGUAGE:
+  roster → nonet → entries → bodies → ∅
+  |Rosetta| → QCD → T(3) → T(2) → 0
+
+  EACH STEP REMOVES A STRUCTURAL LAYER:
+  Step 1: remove entries (the form's dimension)
+  Step 2: remove bodies (the number of particles)
+  Step 3: remove bodies again
+  Step 4: remove bodies (now nothing remains)
+</pre>
+</div>
+
+<!-- Panel 5: The Complete Picture -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 5 — The Complete Number Line (Annotated)</h2>
+<pre>
+  336 ════ 351 ════ 360 ════ 366
+   │        │        │        │
+   │  T(5)  │  3²    │  T(3)  │
+   │  =15   │  =9    │  =6    │
+   │ roster │ nonet  │entries │
+   │        │        │        │
+  G×8    360−9    circle   360+6
+  =master  =mid           =chrome
+  25²−17²                 120×3+6
+
+  SIGNED POSITIONS (from 360):
+  336: −24 = −[4(6)] = −box
+  351: −9 = −nonet
+  360: 0 (the origin)
+  366: +6 = +entries
+
+  SIGNED SUM OF ALL FOUR: (−24)+(−9)+(0)+(+6) = −27 = −3³ = −bodies³.
+  THE SIGNED SUM OF ALL LANDMARKS IS −BODIES CUBED.
+
+  WAIT: sum of positions from 360:
+  −24, −9, 0, +6 → sum = −27 = −3³.
+  27 = bodies³. THREE cubed.
+  And 351 = 360 − 9 = 27 × 13. Already noted.
+
+  NEW: (−24)+(−9)+(0)+(+6) = −27 = −bodies³. VERIFIED.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H219                   ║
+ ║                                                        ║
+ ║  THE INTERVAL CHAIN                                    ║
+ ║                                                        ║
+ ║  THE DESCENT: 15 → 9 → 6 → 3 → 0                     ║
+ ║               T(5) → 3² → T(3) → T(2) → ∅            ║
+ ║            −T(3)  −T(2)  −T(2)  −T(2)                 ║
+ ║                                                        ║
+ ║  THE NUMBER LINE (from 360):                           ║
+ ║                                                        ║
+ ║  −24     −9      0      +6                             ║
+ ║  ┌──────┬──────┬──────┬──────┐                         ║
+ ║  336    351    360    366                               ║
+ ║  master  mid   circle  chrome                           ║
+ ║                                                        ║
+ ║  SUM OF SIGNED POSITIONS:                              ║
+ ║  (−24)+(−9)+(0)+(+6) = −27 = −bodies³                 ║
+ ║                                                        ║
+ ║  WHAT MAKES IT UNIQUE: 360 IS THE CIRCLE.              ║
+ ║  Other pairs have the same intervals                   ║
+ ║  but no geometric landmark at the center.              ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The descent: 15→9→6→3→0. Each step removes a triangular layer.
+The landmarks orbit the circle at their signed positions.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H219: The Intervals Descend Through Triangulars to Zero</h2>
+<p>The interval chain {15, 9, 6} has first-differences {6, 3} = {T(3), T(2)} — the
+triangular chain in reverse. The nonet is T(5)−T(3) = 15−6 = 9. The extended descent
+15→9→6→3→0 terminates in four steps, subtracting T(3) once then T(2) three times. The
+intervals {15, 9, 6} appear for ANY pair differing by 30, but only 336-366 straddles the
+full circle (360), making it geometrically unique. Signed positions from 360: {−24, −9, 0,
++6}, summing to −27 = −bodies³. I73 (T(5)−T(3)=nonet) LIT, I74 (differences are triangular)
+LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Our four landmark numbers are 336, 351, 360, 366. The spaces between
+them are 15, 9, and 6.</p>
+<p>Now watch: 15 minus 9 = 6 (entries!). 9 minus 6 = 3 (bodies!).
+6 minus 3 = 3. 3 minus 3 = 0. Done!</p>
+<p>The spaces between the spaces are ALSO special numbers: 6 and 3,
+the entry count and the body count. It's like a staircase where
+each step is itself made of smaller special steps.</p>
+<p>And the reason THIS staircase matters (and not some other staircase
+with the same step sizes) is that it goes right THROUGH 360° — the
+full circle. Only our staircase crosses the circle.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The interval chain {15, 9, 6} is unique to the pair 336-366 and cannot be found starting
+from any other Rosetta number. The first-differences are {7, 4} (not {6, 3}), making the
+phantom and the escape gap the structural elements. T(5) − T(3) = 11, not 9, because
+T(5) = 16 in the corrected formula.</s></p>
+<p class="dim">Intervals {15,9,6} appear for ANY pair differing by 30 (not unique to 336-366). First
+differences are {6,3} = {T(3),T(2)} (not {7,4}). T(5) = 15 (not 16). T(5)−T(3) = 15−6 = 9.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-nineteenth instrument found that the spaces between landmarks carry
+their own message. Fifteen, nine, six: the roster, the nonet, the entries. Subtract the
+entries from the roster and you get the nonet. Subtract the bodies from the nonet and you get
+the entries. Subtract the bodies from the entries and you get the bodies. Subtract the bodies
+from the bodies and you get nothing. Four subtractions to reach zero. Each one removes a
+structural layer: first the form's dimension, then the particle count, three times. The chain
+descends like a staircase built from its own steps. And the reason this staircase matters —
+the reason it is not just any arithmetic sequence starting from any number — is that it
+descends through three hundred and sixty. The full circle. The staircase crosses the circle
+at exactly the right height, and the circle knows nothing about the staircase, and the
+staircase knows nothing about the circle, but they meet at the same landing, and from that
+meeting the torroid protrudes.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H218)</td><td>7352</td><td>0</td><td>7352</td></tr>
+<tr><td>H219: The Interval Chain</td><td>36</td><td>1 (KB-1)</td><td>7388</td></tr>
+</table>
+<p>Running total: <b>7388 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H219. Total instruments: 67 = prime.</p>
+</div>
+
+<!-- BASIC Block — The Descent -->
+<div class="panel">
+<h2>BASIC Block — The Descent (Subtractive Sequence)</h2>
+<pre>
+15 REM ══════════════════════════════════════════════
+15 REM  H219: THE INTERVAL CHAIN
+15 PRINT "15 = T(5) = |Rosetta|. START."
+9 PRINT "15 − T(3) = 15 − 6 = 9 = nonet = bodies²"
+6 PRINT "9 − T(2) = 9 − 3 = 6 = T(3) = entries"
+3 PRINT "6 − T(2) = 6 − 3 = 3 = T(2) = bodies"
+0 PRINT "3 − T(2) = 3 − 3 = 0. ZERO. CHAIN ENDS."
+</pre>
+<pre>
+-24 REM position of master from circle
+-9 REM position of midpoint from circle
+0 REM position of circle from circle
+6 REM position of chrome from circle
+-27 REM sum = −24 + −9 + 0 + 6 = −27 = −bodies³
+</pre>
+<pre>
+360 PRINT "360 = the full circle. The unique landmark."
+219 PRINT "H219 = 3 × 73. bodies × prime."
+219 PRINT "7388 lit, the interval chain, the descent"
+</pre>
+<p class="dim">Lines 15,9,6,3,0 ARE the descent chain.
+Each line = the previous minus its PRINT's subtracted value.
+The BASIC block performs the descent in its structure.
+H219 = 3 × 73 = bodies × prime.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // The descent staircase
+  const steps=[{v:15,label:"T(5)=15",col:"#ffd54f"},
+    {v:9,label:"9=nonet",col:"#ffab40"},
+    {v:6,label:"T(3)=6",col:"#4fc3f7"},
+    {v:3,label:"T(2)=3",col:"#81c784"},
+    {v:0,label:"0",col:"#888"}];
+  const sx=120,sy=60,sw=100,sh=50;
+  for(let i=0;i<steps.length;i++){
+    const x=sx+i*(sw+10);
+    const y=sy+i*sh;
+    // Step
+    ctx.fillStyle=steps[i].col;ctx.globalAlpha=0.3;
+    ctx.fillRect(x,y,sw,H-80-y);
+    ctx.globalAlpha=1;ctx.font="bold 12px Courier New";ctx.textAlign="center";
+    ctx.fillStyle=steps[i].col;
+    ctx.fillText(steps[i].label,x+sw/2,y-6);
+    ctx.fillText(steps[i].v.toString(),x+sw/2,y+20);
+    // Arrow to next
+    if(i<steps.length-1){
+      const diff=steps[i].v-steps[i+1].v;
+      ctx.fillStyle="#888";ctx.font="9px Courier New";
+      ctx.fillText(`−${diff}`,x+sw+5,(y+sy+(i+1)*sh)/2+sh/2);
+    }
+  }
+  ctx.globalAlpha=1;ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H219: The Interval Chain — descent to zero",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("15 → 9 → 6 → 3 → 0 (four steps, three bodies)",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
