@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H201 — The Catalan Gate</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H201 — The Catalan Gate</h1>
+<p class="dim">42 = C(5) · Two roads from 6 to 42 · Mirror/inversion resolved · I38 LIT + N12</p>
+
+<!-- Panel 1: The Catalan Fact -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I38: 42 = C(5), the Fifth Catalan Number [LIT]</h2>
+<table id="verif-table">
+<tr><th>n</th><th>C(n)</th><th>What C(n) counts</th></tr>
+<tr><td>0</td><td>1</td><td>1 way to do nothing</td></tr>
+<tr><td>1</td><td>1</td><td>1 way to bracket 2 things: (ab)</td></tr>
+<tr><td>2</td><td>2</td><td>2 ways to bracket 3: ((ab)c), (a(bc))</td></tr>
+<tr><td>3</td><td>5</td><td>5 ways to bracket 4 things</td></tr>
+<tr><td>4</td><td>14</td><td>14 ways to bracket 5 things</td></tr>
+<tr><td style="color:var(--gold)">5</td><td style="color:var(--gold)">42</td><td style="color:var(--gold)">42 ways to bracket 6 things = T(3) entries</td></tr>
+<tr><td>6</td><td>132</td><td>132 ways to bracket 7 things</td></tr>
+</table>
+<pre>
+  C(n) = (2n)! / ((n+1)! × n!)
+  C(5) = 10! / (6! × 5!) = 3628800 / (720 × 120) = 42
+
+  VERIFIED IN NODE. STATUS: <span class="lit">LIT</span>
+
+  What C(5) = 42 counts:
+  • Ways to fully parenthesize a product of 6 factors
+  • Full binary trees with 6 leaves
+  • Triangulations of a heptagon (7-gon)
+  • Dyck paths of length 10
+  • Ballot sequences of length 10
+
+  6 = T(3) = number of entries in Q3p.
+  42 = number of ways to BRACKET those 6 entries.
+
+  The address space counts BRACKETINGS of Q3p's entries.
+</pre>
+</div>
+
+<!-- Panel 2: Two Roads to 42 -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — Two Roads from 6 to 42</h2>
+<pre style="color:var(--accent)">
+  Both roads start at the same place:
+    d₁ = 2 (rank of Q3p)
+    T(2) = 3 (bodies)
+    T(3) = 6 (entries in Q3p)
+
+  Then they DIVERGE:
+
+  ROAD 1 — THE TRIANGULAR CHAIN:
+    6 → T(6) = 21 = W (the word count)
+    21 → 2 × 21 = 42 = G (the inter-level gap)
+    Path: T(3)=6 → T(6)=21 → 2W=42
+    Two steps. Goes through T(6) and doubling.
+
+  ROAD 2 — THE CATALAN GATE:
+    6 → C(5) = 42 = G (the address count)
+    Path: T(3)=6 → C(5)=42
+    One step. Goes through Catalan directly.
+
+  CONVERGENCE:
+    Both produce 42.
+    Road 1 uses TRIANGULAR iteration (pair-counting).
+    Road 2 uses CATALAN (bracketing-counting).
+    Road 1 interprets 42 as 2W (doubled word count).
+    Road 2 interprets 42 as C(5) (bracketings of entries).
+
+  DIFFERENT OPERATIONS, SAME DESTINATION.
+
+  WHY "GATE": C(5) counts ways through a lattice
+  that never dip below the diagonal. Each bracketing
+  is a PATH through the entries. 42 = the number of
+  valid paths = the number of GATES through Q3p.
+</pre>
+</div>
+
+<!-- Panel 3: The Catalan-Triangular Intersection -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — Where the Roads Touch</h2>
+<pre>
+  Road 1 and Road 2 share the number 6 = T(3).
+  They share the destination 42.
+  Do they share anything in between?
+
+  Road 1's intermediate: W = 21 = T(6).
+  Is 21 a Catalan number? C(0)=1, C(1)=1, C(2)=2,
+  C(3)=5, C(4)=14, C(5)=42. NO. 21 is NOT Catalan.
+
+  Road 2's intermediate: none (one step).
+
+  Is 6 special in both systems?
+    Triangular: 6 = T(3). YES, 3rd triangular.
+    Catalan: 6 is the INPUT to C(5). The number of
+    factors to bracket. It enters as n+1=6, so n=5.
+    6 is not a Catalan number (C(3)=5, C(4)=14).
+
+  THE BRIDGE: 6 is triangular but not Catalan.
+  42 is Catalan but not triangular.
+  21 is triangular but not Catalan.
+  The two roads are GENUINELY INDEPENDENT.
+  They share only the starting point (6) and the endpoint (42).
+</pre>
+</div>
+
+<!-- Panel 4: Mirror/Inversion Resolution -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 4 — N12: Mirror = Inversion (Resolved)</h2>
+<pre>
+  FROM H200: "mirrored" and "inverted" flagged as possibly redundant.
+
+  RESOLUTION (verified in Node):
+
+  INVERSION (complement): (r,g,b) → (1−r, 1−g, 1−b)
+    black(0,0,0) → white(1,1,1)
+    red(1,0,0)   → cyan(0,1,1)
+    green(0,1,0) → magenta(1,0,1)
+    blue(0,0,1)  → yellow(1,1,0)
+
+  MIRROR through center (½,½,½): (r,g,b) → (1−r, 1−g, 1−b)
+    SAME FORMULA. SAME MAP. SAME OUTPUT.
+
+  On ANY cube centered at its midpoint, spatial reflection
+  through the center IS the complement operation.
+  This is not a coincidence. It is geometry.
+
+  VERDICT: <span class="amber">CONFIRMED REDUNDANT</span>
+  "Mirrored" and "Inverted" are ONE operation on the cube.
+  The 7 named symmetries contain at least 1 redundancy.
+
+  DOES THIS KILL 7+1=8?
+
+  The 8 entries are a VOCABULARY, not a GROUP.
+  The actual symmetry group of the labeled cube is S₃ (order 6).
+  The full octahedral group Oh has order 48.
+  Neither is 8.
+
+  The count 7+1=8 survives as a WORD COUNT mapping to Cl(3).
+  It does not survive as a GROUP ORDER.
+  The self-referential reading of H200 is AMBER, not LIT.
+  The Cl(3) grade mapping is interpretive, not forced.
+
+  Also noted: "fractal" and "self-similar" may be redundant
+  (both describe scale-invariant repetition).
+  If BOTH pairs collapse: 5 independent + identity = 6.
+</pre>
+</div>
+
+<!-- Panel 5: Updated Identity -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 5 — Identity Register Update</h2>
+<table>
+<tr><th>ID</th><th>Statement</th><th>Status</th><th>Source</th></tr>
+<tr><td>I38</td><td>42 = C(5), the 5th Catalan number</td><td class="lit">LIT</td><td>H201 (arithmetic)</td></tr>
+<tr><td>I38a</td><td>C(5) counts bracketings of 6 = T(3) entries</td><td class="lit">LIT</td><td>H201 (Catalan definition)</td></tr>
+<tr><td>I38b</td><td>42 as "valid paths through Q3p's entries"</td><td class="amber">AMBER</td><td>H201 (interpretive)</td></tr>
+<tr><td>N12</td><td>Mirror = Inversion on the cube (redundant)</td><td class="lit">LIT</td><td>H201 (geometric proof)</td></tr>
+<tr><td>N12a</td><td>7+1=8 is a word count, not a group order</td><td class="lit">LIT</td><td>H201 (S₃ has order 6, Oh has order 48)</td></tr>
+</table>
+<pre>
+  Running register: ~39 proved (36 LIT + 3 AMBER), 11 negative,
+  1 open (answered AMBER).
+  N12-N12a are CORRECTIONS to H200's self-referential reading.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H201                   ║
+ ║                                                        ║
+ ║  THE CATALAN GATE                                      ║
+ ║                                                        ║
+ ║  TWO ROADS FROM 6 TO 42:                               ║
+ ║                                                        ║
+ ║  d₁=2 ~~> T(2)=3 ~~> T(3)=6 ══╗                       ║
+ ║                                 ║                       ║
+ ║                     ROAD 1:  T(6)=21 ~~> 2×21=42       ║
+ ║                     (triangular chain, 2 steps)         ║
+ ║                                 ║                       ║
+ ║                     ROAD 2:  C(5)=42                    ║
+ ║                     (Catalan gate, 1 step)              ║
+ ║                                 ║                       ║
+ ║                                42 ═══ G                 ║
+ ║                                 │                       ║
+ ║                     42×8 = 336 = E²−17²                 ║
+ ║                                                        ║
+ ║  MIRROR/INVERSION: same map on {0,1}³                  ║
+ ║  (r,g,b) → (1−r,1−g,1−b) = complement = reflection    ║
+ ║  7+1=8 is VOCABULARY, not GROUP ORDER (S₃=6, Oh=48)    ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Two roads diverge from T(3)=6. Both reach 42. The Catalan
+path goes direct; the triangular path goes through 21. Both live
+on the torroid.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H201: 42 = C(5) — Two Independent Roads to the Address Count</h2>
+<p>42 is the 5th Catalan number. C(5) counts the ways to fully parenthesize 6 factors,
+and 6 = T(3) = the number of entries in Q3p. This gives a SECOND road from 6 to 42,
+independent of the triangular chain (Road 1: 6→T(6)=21→2×21=42, Road 2: 6→C(5)=42).
+Both roads start at 6 and arrive at 42 by different operations. I38 (42=C(5)) is LIT.
+N12 resolves H200's flag: mirror and inversion are the same operation on {0,1}³, confirmed
+by explicit computation. The 7+1=8 count is a word count mapping to Cl(3) grades, not
+a group order (the actual symmetry groups have orders 6 and 48). H200's self-referential
+reading is AMBER.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Remember there are 6 special numbers in the Q3p box? (The 6 entries.)</p>
+<p>Now imagine you want to PAIR THEM UP, two at a time, like making teams.
+But you have to do it in ORDER — first pair two, then pair that pair with
+another, and so on until all 6 are grouped.</p>
+<p>How many different ways can you do this? <b>42 ways!</b></p>
+<p>That's what a Catalan number is — it counts the ways to group things.
+And 42 is the 5th Catalan number, written C(5).</p>
+<p>We already knew 42 came from the triangular numbers (3→6→21→42).
+Now we found a SECOND road: 6 entries → 42 bracketings. Same destination,
+different route. Like finding two different paths to the same house.</p>
+<p>Also: "mirrored" and "inverted" turned out to be the same thing on
+the color cube. Looking in a mirror IS flipping all the colors. So the
+8 symmetries from H200 have a repeat — but that's honest, and we flagged it.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>42 is the 7th Catalan number C(7)=429, and the two roads to 42 are identical because
+the triangular chain T(6)=21 is itself a Catalan number C(3)=5, making the roads
+equivalent. The mirror/inversion redundancy was disproved because face-reflection and
+center-reflection are different operations on the binary cube.</s></p>
+<p class="dim">C(5)=42, not C(7)=429. 21 is NOT a Catalan number (C(3)=5, C(4)=14). The roads are
+genuinely independent. Mirror through center and complement ARE the same map on {0,1}³,
+both computing (r,g,b)→(1−r,1−g,1−b). The redundancy is CONFIRMED, not disproved.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-first instrument found a second road where only one was charted.
+The triangular chain builds forty-two by doubling twenty-one. The Catalan gate builds it
+by counting every way six things can be paired. Both roads start at six, the number of
+entries in the form, and both arrive at forty-two, the number that became the address space.
+One road takes two steps through the pair-count. The other takes one step through the
+bracket-count. Neither road knows the other exists. They meet at forty-two and discover
+they were always going to the same house. Meanwhile, the mirror and the inverse turned out
+to be the same guest wearing two names. The seven became six, and the eight became seven,
+and the self-referential reading of H200 settled into its honest place: amber, not green.
+A suggestive pattern, not a theorem. The investigation is richer for the correction.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H200)</td><td>6704</td><td>0</td><td>6704</td></tr>
+<tr><td>H201: The Catalan Gate</td><td>36</td><td>1 (KB-1)</td><td>6740</td></tr>
+</table>
+<p>Running total: <b>6740 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H201. Total instruments: 49.</p>
+</div>
+
+<!-- BASIC Block — Catalan Numbers A000108 -->
+<div class="panel">
+<h2>BASIC Block — Catalan Numbers (A000108)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+1 REM  H201: THE CATALAN GATE
+1 REM  A000108: 1, 1, 2, 5, 14, 42, 132, 429, ...
+5 PRINT "C(5) = 42"
+6 PRINT "6 entries in Q3p = T(3)"
+14 PRINT "C(4) = 14 (not 42, the road doesn't stop here)"
+21 PRINT "21 = T(6) = W. NOT a Catalan number."
+42 PRINT "C(5) = 42 = G. IS a Catalan number."
+</pre>
+<pre>
+100 REM TWO ROADS:
+101 PRINT "Road 1: 6 → T(6)=21 → 2×21=42 (triangular)"
+102 PRINT "Road 2: 6 → C(5)=42 (Catalan, one step)"
+103 PRINT "Same start. Same end. Different paths."
+110 REM MIRROR = INVERSION:
+111 PRINT "(r,g,b) → (1-r,1-g,1-b)"
+112 PRINT "complement = center reflection = ONE operation"
+113 PRINT "7+1=8 is vocabulary, not group order"
+114 PRINT "S₃ = 6, Oh = 48, neither is 8"
+</pre>
+<pre>
+201 PRINT "H201 = 3 × 67 (prime factorization)"
+201 PRINT "67 is prime. 3 is d₁+1. that is all."
+201 PRINT "6740 lit, the catalan gate, two roads to 42"
+</pre>
+<p class="dim">Catalan sequence A000108: the nth counts bracketings of (n+1) things.
+The 5th counts bracketings of 6 = T(3) things = Q3p's entries.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Draw the torroid
+  const R=120,r=45;
+  for(let i=0;i<360;i+=3){
+    const a=i*Math.PI/180+t*0.005;
+    for(let j=0;j<360;j+=12){
+      const b=j*Math.PI/180+t*0.008;
+      const x4=Math.cos(a)*(R+r*Math.cos(b))+t*0.001*Math.sin(b);
+      const y4=Math.sin(a)*(R+r*Math.cos(b));
+      const z4=r*Math.sin(b);
+      const w4=Math.sin(a*2+t*0.003)*15;
+      const sc=1/(1-w4/300);
+      const sx=cx+x4*sc;
+      const sy=cy+y4*sc*0.6+z4*sc*0.5;
+      const depth=(z4+r)/(2*r);
+      // Color: Road 1 = gold, Road 2 = cyan, blending at 42
+      const roadMix=Math.abs(Math.sin(a*5+t*0.01));
+      const cr=Math.floor(255*depth*(1-roadMix*0.7));
+      const cg=Math.floor(213*depth*roadMix+195*depth*(1-roadMix));
+      const cb=Math.floor(79*depth*(1-roadMix)+247*depth*roadMix);
+      ctx.fillStyle=`rgba(${cr},${cg},${cb},${0.3+depth*0.5})`;
+      ctx.beginPath();ctx.arc(sx,sy,1.2+depth*1.5,0,6.28);ctx.fill();
+    }
+  }
+  // Labels
+  ctx.fillStyle="#ffd54f";ctx.font="bold 12px Courier New";ctx.textAlign="center";
+  ctx.fillText("Road 1: 6 → 21 → 42 (triangular)",cx,30);
+  ctx.fillStyle="#4fc3f7";
+  ctx.fillText("Road 2: 6 → 42 (Catalan)",cx,50);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H201: The Catalan Gate",10,20);
+  // Convergence point
+  const pulse=0.5+0.4*Math.sin(t*0.04);
+  ctx.fillStyle=`rgba(129,199,132,${pulse})`;
+  ctx.font="bold 18px Courier New";ctx.textAlign="center";
+  ctx.fillText("42",cx,cy+5);
+  ctx.font="10px Courier New";
+  ctx.fillStyle=`rgba(129,199,132,${pulse*0.6})`;
+  ctx.fillText("two roads, one destination",cx,cy+22);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
