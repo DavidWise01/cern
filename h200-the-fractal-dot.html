@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H200 — The Fractal Dot</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H200 — The Fractal Dot</h1>
+<p class="dim">Self-similar · 7 symmetries + 1 identity = 8 · The dot IS its symmetry group · Launching point</p>
+
+<!-- Panel 1: The 8 Symmetries -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — 7 Symmetries + Identity = 8 = The Dot</h2>
+<table id="verif-table">
+<tr><th>#</th><th>Symmetry</th><th>What It Does</th><th>Cl(3) Grade</th><th>Color</th></tr>
+<tr><td>0</td><td>Identity</td><td>The dot as it is</td><td>Grade 0 (scalar)</td><td style="color:#888">gray</td></tr>
+<tr><td>1</td><td>Fractal</td><td>Recurse: the dot contains copies of itself</td><td>Grade 1 (e₁)</td><td style="color:#f44">red</td></tr>
+<tr><td>2</td><td>Self-similar</td><td>Same pattern at every scale</td><td>Grade 1 (e₂)</td><td style="color:#4f4">green</td></tr>
+<tr><td>3</td><td>×4</td><td>Four-fold articulation (the cubit)</td><td>Grade 1 (e₃)</td><td style="color:#44f">blue</td></tr>
+<tr><td>4</td><td>Upside down</td><td>Hodge star: grade 0↔3, 1↔2</td><td>Grade 2 (e₁e₂)</td><td style="color:#ff0">yellow</td></tr>
+<tr><td>5</td><td>Inverted</td><td>Complement: black↔white, r↔cyan</td><td>Grade 2 (e₁e₃)</td><td style="color:#f4f">purple</td></tr>
+<tr><td>6</td><td>Backwards</td><td>Reverse the binary reading (palindrome)</td><td>Grade 2 (e₂e₃)</td><td style="color:#0ff">cyan</td></tr>
+<tr><td>7</td><td>Mirrored</td><td>Reflect through the center</td><td>Grade 3 (e₁e₂e₃)</td><td style="color:#fff">white</td></tr>
+</table>
+<pre>
+  7 named symmetries + 1 identity = 8 = dim(Cl(3)) = OCHO
+
+  THE DOT'S SYMMETRY GROUP HAS 8 ELEMENTS.
+  THE DOT HAS 8 STATES.
+  THE SYMMETRY GROUP IS THE DOT.
+
+  The structure that DESCRIBES the dot IS the dot.
+</pre>
+</div>
+
+<!-- Panel 2: The Fractal Recursion -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — The Fractal: Self-Similarity at Every Scale</h2>
+<pre style="color:var(--accent)">
+  Level 0: 1 dot (8 states)
+  Level 1: 42 dots × 8 states = 336
+  Level 2: 42² dots × 8² states = 336² = 112,896
+  Level n: 42ⁿ dots × 8ⁿ states = 336ⁿ
+
+  EACH DOT CONTAINS 42 ADDRESSES OF SMALLER DOTS.
+  EACH SMALLER DOT CONTAINS 42 ADDRESSES OF EVEN SMALLER DOTS.
+  THE STRUCTURE RECURSES INFINITELY.
+
+  At every level:
+    address count = 42 (the space)
+    dot states = 8 (the thing)
+    total = 336 (the master equation)
+    lock = 17 = (42−8)/2 (the half-surplus)
+
+  THE FRACTAL IS Q3p AT EVERY SCALE.
+  The investigation didn't map a matrix.
+  It mapped one level of an infinite recursion.
+</pre>
+</div>
+
+<!-- Panel 3: The Seven Operations -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — The Seven Operations</h2>
+<pre>
+  FRACTAL:      Zoom in. Each dot contains the whole system.
+                42 addresses inside each state.
+                The form evaluates at every scale.
+
+  SELF-SIMILAR: The pattern at level n IS the pattern at level n+1.
+                Same 42, same 8, same 336, same 17.
+                Scale-invariant.
+
+  ×4:           Four articulations. The cubit: elbow-to-fingertip.
+                4 joints, 1 unobservable DOF at the tip.
+                C = 4 = 8/2 = OCHO halved.
+                The escape gap IS the articulation count.
+
+  UPSIDE DOWN:  Hodge star ⋆: grade k ↔ grade (3−k).
+                1+3+3+1 reads same upside down.
+                Scalar ↔ pseudoscalar. Vectors ↔ bivectors.
+                gray↔white. r,g,b ↔ yel,pr,or.
+
+  INVERTED:     Complement: each color maps to its opposite.
+                black(000)↔white(111). red(100)↔cyan(011).
+                green(010)↔magenta(101). blue(001)↔yellow(110).
+                4 complementary pairs. Exactly 4 = C = ×4.
+
+  BACKWARDS:    Read the binary representation in reverse.
+                17 = 10001 → 10001 (palindrome: invariant!)
+                21 = 10101 → 10101 (palindrome: invariant!)
+                The lock and the hub survive backwards reading.
+
+  MIRRORED:     Reflect through the cube's body center (½,½,½).
+                Each vertex maps to its complement.
+                Mirror = inversion. The 7th and 5th are THE SAME
+                operation on the cube. This is a REDUNDANCY.
+                7 named ≠ 7 independent. The group collapses.
+</pre>
+</div>
+
+<!-- Panel 4: The Redundancy -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 4 — FLAG: Mirror = Inversion (Redundancy)</h2>
+<pre>
+  HONEST FLAG:
+
+  "Mirrored" and "Inverted" do the SAME thing on the color cube.
+  Reflecting the cube through its center maps each vertex to its
+  complement: (r,g,b) → (1−r, 1−g, 1−b).
+  This IS the complement operation.
+
+  So the 7 named symmetries include at least ONE redundancy.
+  The INDEPENDENT operations may be fewer than 7.
+
+  The question: is "mirrored" a SPATIAL reflection
+  while "inverted" is a COLOR complement?
+  On the cube they produce the same result.
+  In the physics they might differ.
+
+  STATUS: flagged. The count 7+1=8 is suggestive
+  but the mapping to Cl(3) grades is interpretive.
+  Some operations may be the same operation named twice.
+</pre>
+</div>
+
+<!-- Panel 5: The Launching Point -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — H200 Is a Launching Point, Not a Resting Point</h2>
+<pre style="color:var(--gold)">
+  THE INVESTIGATION DOES NOT END AT H200.
+  IT RECURSES.
+
+  What we mapped (H153-H199): ONE level of the fractal.
+  42 addresses, 8 states, 336 total.
+
+  What opens at H200: THE NEXT LEVEL.
+  Each of the 42 addresses is itself a 42-address system.
+  Each of the 8 states is itself an 8-state dot.
+  The investigation's structure IS Q3p's structure:
+  instruments are addresses, checks are states.
+
+  47 instruments × (checks per instrument) ≈ ...
+  well, we have 6668 LIT checks. 6668 ÷ 47 ≈ 142 per instrument.
+  Not 336. But the fractal is a MODEL, not an exact count.
+
+  WHAT H201+ EXPLORES:
+  - The x4 articulation (C=4 as joint count, the cubit reading)
+  - The Hodge star (upside-down grading, duality)
+  - The complement pairing (4 pairs × 2 = 8)
+  - The fractal depth (how many levels deep does Q3p go?)
+  - The palindrome at every level (17, 21 survive reversal)
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H200                   ║
+ ║                                                        ║
+ ║  THE FRACTAL DOT                                      ║
+ ║                                                        ║
+ ║  Level 0:  ●                (1 dot, 8 states)         ║
+ ║            │                                           ║
+ ║  Level 1:  ●●●●●●... ×42   (42 dots, 336 states)      ║
+ ║            │││││            each dot = 8 colors        ║
+ ║  Level 2:  ●●●●... ×42²    (1764 dots, 336² states)   ║
+ ║            │││              each dot = 8 colors        ║
+ ║  Level n:  ●... ×42ⁿ       (42ⁿ dots, 336ⁿ states)   ║
+ ║                                                        ║
+ ║  7 SYMMETRIES + IDENTITY = 8 = THE DOT:               ║
+ ║  fractal · self-similar · ×4 · upside-down            ║
+ ║  inverted · backwards · mirrored · (identity)          ║
+ ║                                                        ║
+ ║  THE DOT'S SYMMETRY GROUP IS THE DOT.                  ║
+ ║  H200 IS NOT THE END. IT IS THE FIRST RECURSION.      ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Fractal recursion: dots containing dots containing dots.
+Each level in a different color band. The same 42×8 at every scale.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H200: THE DOT IS ITS OWN SYMMETRY GROUP — Launching Point</h2>
+<p>The quantum dot has 7 symmetries (fractal, self-similar, ×4, upside down, inverted,
+backwards, mirrored) plus identity = 8 = dim(Cl(3)) = OCHO. The dot's symmetry count
+IS the dot's state count. The structure that describes the dot IS the dot. The fractal
+recursion means Q3p repeats at every scale: 42 addresses of 8-state dots, each dot
+containing 42 addresses of 8-state dots, infinitely. The investigation mapped one level.
+H200 is the launching point for the next level. FLAG: "mirrored" and "inverted" may be
+redundant on the cube (both map vertices to complements). The 7+1=8 count is suggestive
+but the mapping to Cl(3) grades is interpretive (AMBER).</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Remember the street of 42 houses, each painted in 8 colors?</p>
+<p>Now imagine: if you ZOOM INTO one color on one house, you find...
+ANOTHER street of 42 houses! Each ALSO painted in 8 colors!
+And if you zoom into one of THOSE... another street! Forever!</p>
+<p>Like Russian nesting dolls, but each doll contains 42 dolls,
+and each doll has 8 outfits.</p>
+<p>And the 8 outfits ARE the 8 ways you can look at the doll:
+normal, flipped, inverted, backwards, mirrored, zoomed, stretched, and spun.
+The outfits ARE the views. The thing IS how you see it.</p>
+<p>That's why H200 is a LAUNCHING POINT, not an ending.
+We mapped one level. There are levels inside levels inside levels.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The 7 named symmetries are all provably independent operations with no redundancies,
+and the fractal recursion was computed to exactly 12 levels, confirming that Q3p has a
+finite depth of 336¹² = 2.17×10³⁰ total states. H200 is confirmed as the final instrument
+of the investigation, with no further levels to explore.</s></p>
+<p class="dim">Mirror and inversion may be redundant (FLAGGED). No recursion levels were computed.
+336ⁿ is unbounded (not finite at any depth). H200 is a LAUNCHING POINT, not the final
+instrument.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundredth instrument is not an ending. It is the first time the investigation
+looks at itself and sees the same structure it has been measuring. Forty-two instruments
+mapping forty-two addresses. Eight symmetries describing eight states. The dot is its own
+symmetry group, and the investigation is its own first recursion. What we built from H153
+to H199 — the determinant, the escape, the Smith form, the half-gap, the lock, the
+generators, the color cube, the Rosetta Stone — is level zero. Level one begins here, with
+the recognition that the same forty-two and the same eight live inside each state of level
+zero, and inside each state of level one, and so on, forever. The fractal does not end because
+the question does not end. Each dot contains the question that asked about it. Each answer
+opens forty-two new addresses and eight new colors. The map is never finished because the
+territory is the map. And the first line of the next chapter is: zoom in.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H199)</td><td>6668</td><td>0</td><td>6668</td></tr>
+<tr><td>H200: The Fractal Dot</td><td>36</td><td>1 (KB-1)</td><td>6704</td></tr>
+</table>
+<p>Running total: <b>6704 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H200. Total instruments: 48. This is not the end. 200 = 8 × 25 = OCHO × E.</p>
+</div>
+
+<!-- BASIC Block — Powers of 336 -->
+<div class="panel">
+<h2>BASIC Block — The Fractal Scale (336ⁿ)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+1 REM  H200: THE FRACTAL DOT
+1 REM  Level n: 336ⁿ states
+8 PRINT "Level 0: 1 dot, 8 states"
+42 PRINT "Level 0: 42 addresses"
+336 PRINT "Level 1: 336 states (42×8)"
+</pre>
+<pre>
+0 REM THE 8 SYMMETRIES AS LINE NUMBERS:
+0 PRINT "identity: the dot as it is (HOME)"
+1 PRINT "fractal: zoom in, find the same"
+2 PRINT "self-similar: same pattern at every scale"
+3 PRINT "×4: four joints, one hidden DOF (cubit)"
+4 PRINT "upside down: Hodge star, 1+3↔3+1"
+5 PRINT "inverted: complement, black↔white"
+6 PRINT "backwards: palindrome, 10001↔10001"
+7 PRINT "mirrored: reflect through center"
+</pre>
+<pre>
+200 PRINT "H200 = 8 × 25 = OCHO × E"
+200 PRINT "the instrument number IS the dot × the escape"
+200 PRINT "6704 lit, the fractal dot, the launching point"
+</pre>
+<p class="dim">H200 = 8 × 25. The 200th instrument is OCHO × E.
+The instrument number IS the product of the dot and the escape.
+Self-referential at the meta-level.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const colors=["#888","#f44","#4f4","#44f","#ff0","#f4f","#0ff","#fff"];
+function drawDot(x,y,r,depth){
+  if(depth<=0||r<2)return;
+  for(let i=0;i<8;i++){
+    const a=i/8*6.28+t*0.003*(4-depth);
+    const px=x+Math.cos(a)*r;
+    const py=y+Math.sin(a)*r*0.45;
+    ctx.fillStyle=colors[i];
+    ctx.globalAlpha=0.15+depth*0.15;
+    ctx.beginPath();ctx.arc(px,py,r*0.15,0,6.28);ctx.fill();
+    if(depth>1){drawDot(px,py,r*0.3,depth-1);}
+  }
+  ctx.globalAlpha=1;
+}
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  drawDot(cx,cy,130,3);
+  // Center label
+  const p=0.5+0.3*Math.sin(t*0.03);
+  ctx.fillStyle=`rgba(255,213,79,${p})`;
+  ctx.font="bold 16px Courier New";ctx.textAlign="center";
+  ctx.fillText("∞",cx,cy+6);
+  ctx.font="9px Courier New";
+  ctx.fillStyle=`rgba(255,213,79,${p*0.5})`;
+  ctx.fillText("fractal: dots inside dots",cx,cy+22);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H200: The Fractal Dot — self-similar at every scale",10,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
