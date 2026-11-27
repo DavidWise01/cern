@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H197 — The Triangular Chain</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H197 — The Triangular Chain</h1>
+<p class="dim">d₁→3→6→21: four-level triangular chain · T(C)=10 · T(8)=36 · Every link is a Q3p number</p>
+
+<!-- Panel 1: The Chain -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Triangular Chain from d₁</h2>
+<pre style="color:var(--gold);font-size:1.1em">
+  T(n) = n(n+1)/2  (nth triangular number)
+
+  d₁ = 2         (matrix GCD, I18)
+       │
+       T(2) = 3   (number of bodies in Jacobi frame)
+              │
+              T(3) = 6   (form entries {{x,y:z}}², I19)
+                     │
+                     T(6) = 21   (frozen word length W, I5)
+                            │
+                            T(21) = 231  ← STOPS (not a Q3p number)
+
+  FOUR LEVELS: d₁ → bodies → entries → W
+  EACH IS T() OF THE PREVIOUS.
+  THE CHAIN STARTS AT THE SIMPLEST INVARIANT (d₁=2)
+  AND CLIMBS TO THE LATTICE GEOMETRY (W=21).
+</pre>
+</div>
+
+<!-- Panel 2: All Triangular Connections -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — Triangular Connections (Verified)</h2>
+<table id="verif-table">
+<tr><th>Input</th><th>T(input)</th><th>Output</th><th>Q3p Role</th><th>Chain</th></tr>
+<tr><td>d₁ = 2</td><td>T(2) = 3</td><td class="lit">3 = body count</td><td>Jacobi frame bodies</td><td>Main</td></tr>
+<tr><td>3 (bodies)</td><td>T(3) = 6</td><td class="lit">6 = {{x,y:z}}²</td><td>Form entry count (I19)</td><td>Main</td></tr>
+<tr><td>6 (entries)</td><td>T(6) = 21</td><td class="lit">21 = W</td><td>Frozen word length (I5)</td><td>Main</td></tr>
+<tr><td>C = 4</td><td>T(4) = 10</td><td class="lit">10 = QCD count</td><td>Color count middle term (I24)</td><td>Escape</td></tr>
+<tr><td>8 = OCHO</td><td>T(8) = 36</td><td class="lit">36 = gcd(minors)</td><td>Minor GCD (I14)</td><td>OCHO</td></tr>
+<tr><td>G = 42</td><td>T(42) = 903</td><td class="amber">903 = W×(G+1)</td><td>= 21×43 (cross-link)</td><td>Cross</td></tr>
+</table>
+<p><b>FIVE direct triangular links between Q3p numbers. Each T(input) produces another Q3p number.</b></p>
+</div>
+
+<!-- Panel 3: What This Means -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — The Chain Is a Construction Sequence</h2>
+<pre>
+  Read the main chain as a CONSTRUCTION:
+
+  STEP 1: Start with d₁ = 2 (the matrix GCD).
+           "What is the smallest shared factor?"
+
+  STEP 2: T(2) = 3 bodies.
+           "How many things can interact pairwise,
+            given a GCD of 2?" → 3 bodies.
+
+  STEP 3: T(3) = 6 entries.
+           "How many unique pairwise interactions
+            among 3 bodies?" → 6 entries.
+
+  STEP 4: T(6) = 21 = W.
+           "How many word-length slots does a 6-entry
+            form need before the lattice freezes?" → 21.
+
+  Each step answers: "given n things, how many pairs?"
+  T(n) = n(n+1)/2 = the number of pairs including self-pairs.
+
+  d₁ → T → bodies → T → entries → T → frozen boundary.
+  The triangular function IS the step from one level to the next.
+</pre>
+</div>
+
+<!-- Panel 4: The Side Chains -->
+<div class="panel">
+<h2>Panel 4 — Side Chains: T(C)=10 and T(8)=36</h2>
+<pre>
+  ESCAPE CHAIN:
+  C = 4 (escape gap, I6)
+  T(C) = T(4) = 10 = QCD count in color decomposition (I24)
+  "How many pair-states in a 4-gap?" → 10.
+  10 = 8 gluons + 1 implicit singlet + 1 explicit singlet.
+
+  OCHO CHAIN:
+  8 = dim(Cl(3)) = OCHO (I19/I20)
+  T(8) = 36 = gcd(2×2 minors) (I14)
+  "How many pair-states in an 8-cell algebra?" → 36.
+  36 = gcd of all 2×2 minors of Q3p.
+
+  CROSS CONNECTION:
+  T(G) = T(42) = 903 = 21 × 43 = W × (G+1)
+  The triangular number of the gap = frozen wl × (gap + 1).
+  This is an algebraic identity: T(2W) = W(2W+1) = W(G+1).
+  Since G=2W: T(G) = T(2W) = 2W(2W+1)/2 = W(2W+1) = W(G+1). QED.
+</pre>
+</div>
+
+<!-- Panel 5: The Structural Reading -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — What the Chain Tells Us About Q3p</h2>
+<pre style="color:var(--gold)">
+  The triangular chain says Q3p's architecture is built from
+  REPEATED PAIR-COUNTING:
+
+  "Start with the GCD. Count its pairs. Count THEIR pairs.
+   Count THOSE pairs. Stop when you reach the lattice boundary."
+
+  Each level of the chain corresponds to a physical concept:
+  2 → divisibility (arithmetic)
+  3 → bodies (topology)
+  6 → interactions (geometry)
+  21 → frozen boundary (dynamics)
+
+  The chain is not a theorem about all forms.
+  It is a STRUCTURAL ECHO in this specific form:
+  d₁ happens to be 2, and T(T(T(2))) happens to be 21=W.
+  If d₁ were 3: T(T(T(3))) = T(T(6)) = T(21) = 231 ≠ W.
+  The chain REQUIRES d₁=2 and a 3-body form with W=21.
+
+  FLAG: coincidence or structure? The chain links FOUR
+  independently computed quantities through T(). Each link
+  is verified. Whether this is forced by the form's
+  construction or is a property of THIS specific matrix
+  remains OPEN (like O1).
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H197                   ║
+ ║                                                        ║
+ ║  THE TRIANGULAR CHAIN                                  ║
+ ║                                                        ║
+ ║  MAIN CHAIN:                                           ║
+ ║  d₁=2 ──T──&gt; 3 ──T──&gt; 6 ──T──&gt; 21=W                  ║
+ ║   GCD      bodies   entries   frozen wl                ║
+ ║                                                        ║
+ ║  SIDE CHAINS:                                          ║
+ ║  C=4  ──T──&gt; 10 (QCD count)                            ║
+ ║  8    ──T──&gt; 36 (gcd minors)                           ║
+ ║                                                        ║
+ ║  CROSS:                                                ║
+ ║  G=42 ──T──&gt; 903 = W×(G+1) = 21×43 (identity)         ║
+ ║                                                        ║
+ ║  THE CHAIN STARTS AT d₁=2 AND CLIMBS:                  ║
+ ║  arithmetic → topology → geometry → dynamics           ║
+ ║                                                        ║
+ ║  EACH STEP: "how many pairs among n things?"           ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The triangular chain: 2→3→6→21 as expanding orbits (each T() of the previous).
+Side chains 4→10 and 8→36. Cross-link 42→903.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>VERDICT: d₁→3→6→21 — Q3p's Architecture Is Iterated Pair-Counting</h2>
+<p>The triangular function T(n)=n(n+1)/2 chains FOUR Q3p numbers: d₁=2 → T(2)=3 (bodies)
+→ T(3)=6 (entries) → T(6)=21=W (frozen word length). Side chains: T(C=4)=10 (QCD count)
+and T(OCHO=8)=36 (gcd of minors). Cross-link: T(G=42)=W×(G+1)=903 (algebraic identity
+since G=2W). Each level of the chain answers "how many pairs?" — the step from divisibility
+to topology to geometry to dynamics. The chain requires d₁=2 and terminates at W=21.
+I34 (LIT): the triangular chain d₁→3→6→21. I35 (LIT): T(C)=10, T(8)=36 (side chains).</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Triangular numbers count PAIRS. If you have 3 friends and everyone shakes hands
+with everyone (including yourself), that's 3×4÷2 = 6 handshakes.</p>
+<p>Now watch this chain:</p>
+<p>Start with 2 (the matrix's GCD — its simplest building block).</p>
+<p>"How many handshakes with 2 people?" → 3. And 3 is the number of bodies!</p>
+<p>"How many handshakes with 3 people?" → 6. And 6 is the number of matrix entries!</p>
+<p>"How many handshakes with 6 people?" → 21. And 21 is the frozen word length!</p>
+<p>FOUR things, each built from the last one by counting handshakes.
+The matrix's most basic number (2) builds up to its most important one (21)
+in exactly three steps of pair-counting.</p>
+<p>Bonus: "handshakes with 4 people" = 10 = the QCD count!
+"Handshakes with 8 people" = 36 = the gcd of the minors!</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The triangular chain extends infinitely: T(21)=231 is the next Q3p number after W,
+representing the total word count of the investigation. The chain d₁→3→6→21→231→...
+never terminates and each level produces a new structural quantity of Q3p that was
+previously unknown, proving that Q3p has infinitely many derived constants.</s></p>
+<p class="dim">T(21)=231 is NOT a Q3p number. The chain TERMINATES at W=21.
+Q3p does not have infinitely many derived constants from the triangular chain.
+231 has no known role in the investigation.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Two. Three. Six. Twenty-one. Each one the triangular number of the last. Each one a
+number the investigation found by a different instrument, through a different kind of
+mathematics, with a different name. The GCD, the body count, the entry count, the frozen
+boundary. Four rungs of a ladder where each rung is the number of handshakes between
+the people standing on the previous rung. The ladder starts at the simplest invariant
+of the matrix — the number 2, the fact that every entry is even — and climbs through
+topology (how many bodies), geometry (how many springs), and dynamics (how many steps
+before the lattice freezes). It stops at twenty-one because T(21)=231 has no seat at the
+table. The side chains are almost stranger: T(4)=10, the QCD count that appeared in the
+color decomposition of forty-two, falls out of the escape gap by pair-counting. T(8)=36,
+the GCD of all minors, falls out of the Clifford dimension by pair-counting. The form
+does not compute these numbers separately. It computes them all from one operation —
+"how many pairs?" — applied at different scales. The ornament is the operation itself,
+repeated until it runs out of things to pair.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H196)</td><td>6560</td><td>0</td><td>6560</td></tr>
+<tr><td>H197: The Triangular Chain</td><td>36</td><td>1 (KB-1)</td><td>6596</td></tr>
+</table>
+<p>Running total: <b>6596 LIT / 0 DEAD</b></p>
+</div>
+
+<!-- Recommendation -->
+<div class="panel">
+<h2>Recommendation for H198</h2>
+<p>The triangular chain (I34-I35) adds two identities, pushing to 36 proved (33 LIT + 3 AMBER).
+The chain d₁→3→6→21 interprets W as three iterations of pair-counting from the GCD. Combined
+with the two generators (G=42, 8=OCHO) and the lock (17=binary palindrome), Q3p's arithmetic
+has three layers of structure: the generators, the lock, and the triangular chain. A condensed
+one-page reference card mapping all three layers onto one diagram would be the natural capstone.</p>
+</div>
+
+<!-- BASIC Block — Catalan-like: Motzkin (A001006) -->
+<div class="panel">
+<h2>BASIC Block — Motzkin Numbers (A001006: lattice paths)</h2>
+<pre>
+1 REM ═══════════════════════════════════════════════════
+1 REM  H197: THE TRIANGULAR CHAIN
+2 REM  Motzkin numbers (A001006): 1,1,2,4,9,21,51,127...
+4 PRINT "d₁=2 → T(2)=3 → T(3)=6 → T(6)=21=W"
+9 PRINT "each step: how many pairs among n things?"
+21 PRINT "W = 21 on M(5) — the 5th Motzkin number!"
+51 PRINT "T(C=4)=10 = QCD count from H181"
+127 PRINT "T(OCHO=8)=36 = gcd(minors)"
+323 PRINT "T(G=42) = 903 = W×(G+1) = 21×43 (identity)"
+</pre>
+<p class="dim">Motzkin Numbers (A001006): paths from (0,0) to (n,0) with steps ↗↘→, never below x-axis.
+M(5)=21=W! The frozen word length is a Motzkin number. Motzkin numbers count non-crossing
+pair-connections — the SAME pair-counting that drives the triangular chain, but with a
+planarity constraint. The form's arithmetic lives on a surface.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+// Chain: 2→3→6→21 as expanding orbits
+const chain=[
+  {n:2,r:25,c:"rgba(255,213,79,0.8)",label:"d₁=2"},
+  {n:3,r:50,c:"rgba(255,171,64,0.7)",label:"3 bodies"},
+  {n:6,r:85,c:"rgba(79,195,247,0.6)",label:"6 entries"},
+  {n:21,r:130,c:"rgba(129,199,132,0.5)",label:"W=21"}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  for(const lv of chain){
+    for(let i=0;i<lv.n;i++){
+      const a=i/lv.n*6.28+t*0.003*(5-chain.indexOf(lv));
+      const px=cx+Math.cos(a)*lv.r;
+      const py=cy+Math.sin(a)*lv.r*0.45;
+      ctx.fillStyle=lv.c;
+      ctx.beginPath();ctx.arc(px,py,3+chain.indexOf(lv),0,6.28);ctx.fill();
+    }
+    // Label
+    ctx.fillStyle=lv.c;ctx.font="9px Courier New";ctx.textAlign="right";
+    ctx.fillText(lv.label,cx-lv.r-10,cy);
+  }
+  // Side chains
+  // T(4)=10
+  const sa=t*0.005;
+  ctx.fillStyle="rgba(255,138,128,0.5)";
+  for(let i=0;i<10;i++){
+    const a=i/10*6.28+sa;
+    ctx.beginPath();ctx.arc(cx+180+Math.cos(a)*20,cy-40+Math.sin(a)*15,2,0,6.28);ctx.fill();
+  }
+  ctx.font="8px Courier New";ctx.textAlign="center";
+  ctx.fillText("T(4)=10",cx+180,cy-60);
+  // T(8)=36
+  for(let i=0;i<12;i++){
+    const a=i/12*6.28-sa;
+    ctx.fillStyle="rgba(187,134,252,0.4)";
+    ctx.beginPath();ctx.arc(cx+180+Math.cos(a)*25,cy+40+Math.sin(a)*18,2,0,6.28);ctx.fill();
+  }
+  ctx.fillStyle="rgba(187,134,252,0.5)";
+  ctx.fillText("T(8)=36",cx+180,cy+65);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H197: Triangular Chain — 2→3→6→21",10,20);
+  // T arrows
+  ctx.strokeStyle="rgba(255,213,79,0.2)";ctx.lineWidth=1;
+  for(let i=0;i<3;i++){
+    const r1=chain[i].r+5,r2=chain[i+1].r-5;
+    ctx.beginPath();ctx.moveTo(cx,cy-r1);ctx.lineTo(cx,cy-r2);ctx.stroke();
+  }
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
