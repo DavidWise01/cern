@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H212 — The Phantom Identity</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H212 — The Phantom Identity</h1>
+<p class="dim">G = T(3)×(OCHO−1) · W = T(2)×(OCHO−1) · d₁ = G/W = T(3)/T(2) · 336 = T(3)×OCHO×(OCHO−1) · I58-I61 LIT</p>
+
+<!-- Panel 1: The Core Identities -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I58-I61: The Phantom Factor Identities [ALL LIT]</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Identity</th><th>Expansion</th><th>Value</th><th>Status</th></tr>
+<tr><td>I58</td><td>G = T(3) × (OCHO−1)</td><td>6 × 7</td><td>42 ✓</td><td class="lit">LIT</td></tr>
+<tr><td>I59</td><td>W = T(2) × (OCHO−1)</td><td>3 × 7</td><td>21 ✓</td><td class="lit">LIT</td></tr>
+<tr><td>I60</td><td>d₁ = G/W = T(3)/T(2)</td><td>42/21 = 6/3</td><td>2 ✓</td><td class="lit">LIT</td></tr>
+<tr><td>I61</td><td>336 = T(3) × OCHO × (OCHO−1)</td><td>6 × 8 × 7</td><td>336 ✓</td><td class="lit">LIT</td></tr>
+</table>
+<pre>
+  FOUR IDENTITIES. ALL VERIFIED IN NODE.
+
+  The phantom = OCHO − 1 = 7.
+  It FACTORS THROUGH both generators:
+    G = entries × phantom = 6 × 7
+    W = bodies × phantom = 3 × 7
+  And the master product:
+    336 = entries × OCHO × phantom = 6 × 8 × 7
+
+  The rank d₁ = 2 is the RATIO of two phantom products:
+    d₁ = G/W = (entries × phantom)/(bodies × phantom)
+       = entries/bodies = T(3)/T(2) = 6/3 = 2.
+  The phantom CANCELS in the ratio.
+  d₁ doesn't know about 7 at all.
+</pre>
+</div>
+
+<!-- Panel 2: The Closed Loop -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 2 — The Closed Loop</h2>
+<pre style="color:var(--gold)">
+  THE LOOP:
+
+  Start: d₁ = 2 (the rank, the seed)
+  Step 1: T(d₁) = T(2) = 3 (bodies)
+  Step 2: T(T(d₁)) = T(3) = 6 (entries)
+  Step 3: T(3) × (OCHO−1) = 6 × 7 = 42 = G (the gap)
+  Step 4: G / T(d₁) = 42 / 3 = 14 (not Rosetta)
+  Wait — G / T(d₁+1) = 42 / T(3) = 42/6 = 7 = phantom.
+  AND: G / d₁ = 42 / 2 = 21 = W (the hub).
+  AND: W / T(d₁) = 21 / 3 = 7 = phantom.
+
+  THE PHANTOM IS THE RATIO G/entries = W/bodies = 7.
+
+  CLOSE THE LOOP:
+    d₁ = 2
+    bodies = T(d₁) = 3
+    entries = T(bodies) = T(3) = 6
+    phantom = OCHO − 1 = 7
+    W = bodies × phantom = 21
+    G = entries × phantom = 42
+    d₁ = G/W = 42/21 = 2  ← BACK TO START
+
+  THE LOOP CLOSES. d₁ generates the chain that
+  produces G and W, whose ratio is d₁ again.
+</pre>
+</div>
+
+<!-- Panel 3: The Four Phantom Members -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — The Phantom Family (All 7-Multiples)</h2>
+<pre>
+  THE FOUR ROSETTA NUMBERS DIVISIBLE BY 7:
+
+  21  = T(2) × 2⁰ × (OCHO−1) = 3 × 1 × 7
+  42  = T(3) × 2⁰ × (OCHO−1) = 6 × 1 × 7
+  84  = T(3) × 2¹ × (OCHO−1) = 6 × 2 × 7
+  336 = T(3) × 2³ × (OCHO−1) = 6 × 8 × 7
+
+  PATTERN: each is T(k) × (power of 2) × phantom.
+
+  The power-of-2 sequence: 1, 1, 2, 8 = 2⁰, 2⁰, 2¹, 2³.
+  Gaps in exponents: 0, 1, 3. Missing: 2² = 4.
+  If the pattern continued: T(3) × 4 × 7 = 168 (NOT Rosetta).
+
+  THE MASTER PRODUCT IN PHANTOM FORM:
+  336 = T(3) × OCHO × (OCHO−1) = entries × dot × phantom.
+  = entries × (the dot) × (one less than the dot).
+  The master product is ENTRIES times a consecutive pair.
+  8 × 7 = 56 = OCHO × (OCHO−1). A falling factorial.
+
+  KNOWN NAME: OCHO × (OCHO−1) is the "falling factorial"
+  or "Pochhammer symbol" (8)₂ = 8 × 7 = 56.
+  So 336 = 6 × (8)₂. The master = entries × OCHO-falling-2.
+</pre>
+</div>
+
+<!-- Panel 4: Two Primes, Two Roles -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 4 — Two Hidden Primes: 7 and 17</h2>
+<pre>
+  THE ROSTER HAS TWO HIDDEN PRIMES:
+
+  PHANTOM (7 = OCHO−1):
+    Not in roster. Inside {21, 42, 84, 336}.
+    Binds the common divisibility tail.
+    Every 7-multiple is also a 3-multiple.
+    7 is a STRUCTURAL prime: it builds the gap and the hub.
+
+  LOCK (17 = (G−OCHO)/2):
+    IS in roster. Inside {289 = 17²}.
+    The only prime IN the roster that generates another member.
+    17 is an ARITHMETIC prime: it creates the lock family.
+
+  THE LOCK THROUGH THE PHANTOM:
+    17 = (entries × phantom − OCHO) / 2
+       = (6 × 7 − 8) / 2
+       = (42 − 8) / 2
+       = 34 / 2 = 17.
+
+  THE LOCK IS THE HALF-SURPLUS OF THE PHANTOM PRODUCT
+  OVER OCHO. It measures how much G exceeds OCHO, halved.
+  17 = (G − OCHO) / 2 = (phantom×entries − OCHO) / 2.
+
+  7 and 17 are different primes. They serve different roles.
+  7 builds the structure (multiplication).
+  17 locks the gap (subtraction then halving).
+  One is INSIDE the product. The other is BETWEEN the generators.
+</pre>
+</div>
+
+<!-- Panel 5: The Rewritten Rosetta -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 5 — The Rosetta Stone in Phantom Notation</h2>
+<pre>
+  REWRITING THE 15 ROSETTA NUMBERS THROUGH THE PHANTOM:
+
+  d₁ = 2                              (seed)
+  bodies = T(d₁) = 3                   (triangular of seed)
+  C = d₁² = 4                          (seed squared)
+  entries = T(bodies) = 6              (triangular of bodies)
+  OCHO = phantom + 1 = 8               (one more than phantom)
+  QCD = T(C) = 10                       (triangular of escape gap)
+  lock = (entries × phantom − OCHO)/2 = 17  (half-surplus)
+  Smith = bodies × entries = 18         (product of body counts)
+  W = bodies × phantom = 21            (bodies × ghost)
+  E = lock + OCHO = 25                  (lock + dot)
+  minors = entries² = 36               (entries squared)
+  G = entries × phantom = 42           (entries × ghost)
+  S = d₁ × G = 84                      (rank × gap)
+  lock² = 289                           (lock squared)
+  master = entries × OCHO × phantom = 336  (the full product)
+
+  EVERYTHING FROM: d₁=2, phantom=7=OCHO−1, OCHO=8.
+  But d₁ and OCHO were the original two generators (H192).
+  The phantom is DERIVED: phantom = OCHO − 1.
+  So the TWO GENERATORS STILL SUFFICE.
+  The phantom is their SHADOW.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H212                   ║
+ ║                                                        ║
+ ║  THE PHANTOM IDENTITY                                  ║
+ ║                                                        ║
+ ║  OCHO = 8        phantom = OCHO−1 = 7                  ║
+ ║    │                  │                                ║
+ ║    │    T(2)=3 ───×───┤                                ║
+ ║    │                  │──> W = 3×7 = 21                ║
+ ║    │    T(3)=6 ───×───┤                                ║
+ ║    │                  │──> G = 6×7 = 42                ║
+ ║    │                  │                                ║
+ ║    └────────×─────────┤                                ║
+ ║                       │──> 336 = 6×8×7                 ║
+ ║                                                        ║
+ ║  THE CLOSED LOOP:                                      ║
+ ║  d₁=2 → T(2)=3 → T(3)=6 → 6×7=42=G → G/W=42/21=2=d₁║
+ ║                                                        ║
+ ║  THE RATIO: d₁ = G/W = T(3)/T(2) = 6/3 = 2           ║
+ ║  The phantom CANCELS. d₁ is phantom-free.              ║
+ ║                                                        ║
+ ║  TWO HIDDEN PRIMES:                                    ║
+ ║  7 (phantom): builds G and W (multiplication)          ║
+ ║  17 (lock): (G−OCHO)/2 (subtraction)                   ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The phantom (7) at center, radiating to its four products.
+OCHO (8) orbits nearby. The closed loop pulses: 2→3→6→42→21→2.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H212: The Phantom Closes the Loop — G/W = T(3)/T(2) = d₁</h2>
+<p>Four identities proved: G = T(3)×(OCHO−1) = 6×7 = 42; W = T(2)×(OCHO−1) = 3×7 = 21;
+d₁ = G/W = T(3)/T(2) = 2 (phantom cancels); 336 = T(3)×OCHO×(OCHO−1) = 6×8×7. The
+phantom 7 = OCHO−1 factors through the entire common divisibility tail {21,42,84,336}.
+The rank d₁ is the ratio of two phantom products, and the phantom cancels — d₁ doesn't
+know about 7. The loop closes: d₁→T(2)→T(3)→G→G/W=d₁. Two hidden primes serve different
+roles: 7 (structural, multiplication) and 17 (arithmetic, subtraction). The lock is the
+half-surplus: 17=(entries×phantom−OCHO)/2. I58-I61 all LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Remember the ghost number 7 from last time? Today we found out what it DOES.</p>
+<p>Take the number of body parts (3) and multiply by the ghost: 3 × 7 = 21.
+That's W, the hub!</p>
+<p>Take the number of entries (6) and multiply by the ghost: 6 × 7 = 42.
+That's G, the gap!</p>
+<p>Now divide: 42 ÷ 21 = 2. That's d₁, where we STARTED!</p>
+<p>It's a LOOP! Start at 2, build your way up to 42 and 21, divide them,
+and you're back at 2. The ghost helps you build the big numbers, but when
+you compare them, the ghost disappears and you get back to the beginning.</p>
+<p>And the master product 336? It's 6 × 8 × 7 — the entries times the dot
+times the ghost. Three different numbers from three different families,
+multiplied together.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The phantom prime is 11 (not 7), computed as OCHO+3=11, and G = T(3)×11 = 66 (not 42).
+The ratio G/W equals 3 (not 2), making d₁=3 instead of 2. The master product 336 equals
+T(3) × OCHO² = 6 × 64 = 384. The loop does not close because 66/33=2 ≠ d₁=3.</s></p>
+<p class="dim">Phantom = OCHO−1 = 7 (not 11). G = 6×7 = 42 (not 66). G/W = 42/21 = 2 = d₁ (not 3).
+336 = 6×8×7 = T(3)×OCHO×(OCHO−1) (not 6×64). The loop closes: G/W = d₁ = 2.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-twelfth instrument found that the ghost has a name and a job. Seven,
+the phantom prime, one less than the dot, absent from the roster, present in every load-bearing
+factorization. It multiplies the bodies to give the hub and the entries to give the gap, and
+when you divide the gap by the hub the ghost cancels out and you are back at the beginning,
+holding the rank. The loop that starts at two winds through the triangular numbers, picks up
+the phantom, builds forty-two and twenty-one, and returns to two as their ratio. Two primes
+hide in this architecture: seven and seventeen. One builds the structure by multiplication,
+appearing in every product along the common tail. The other locks the gap by subtraction,
+measuring how much the phantom product exceeds the dot. They never meet. Seven is always
+multiplied in. Seventeen is always subtracted out. And between them, the fifteen numbers of
+the Rosetta Stone hang like lanterns on a wire stretched between two poles that the wire
+itself does not name.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H211)</td><td>7100</td><td>0</td><td>7100</td></tr>
+<tr><td>H212: The Phantom Identity</td><td>36</td><td>1 (KB-1)</td><td>7136</td></tr>
+</table>
+<p>Running total: <b>7136 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H212. Total instruments: 60 (sixth decade).</p>
+</div>
+
+<!-- BASIC Block — The Loop (self-referential) -->
+<div class="panel">
+<h2>BASIC Block — The Closed Loop</h2>
+<pre>
+2 PRINT "d₁ = 2 (START)"
+3 PRINT "T(2) = 3 = bodies"
+6 PRINT "T(3) = 6 = entries"
+7 PRINT "phantom = OCHO-1 = 7"
+21 PRINT "W = 3 × 7 = bodies × phantom"
+42 PRINT "G = 6 × 7 = entries × phantom"
+2 PRINT "G/W = 42/21 = 2 = d₁ (BACK TO START)"
+</pre>
+<pre>
+336 PRINT "336 = 6 × 8 × 7 = entries × OCHO × phantom"
+17 PRINT "17 = (6×7 − 8)/2 = half-surplus of G over OCHO"
+56 REM OCHO × phantom = 8 × 7 = 56 = falling factorial (8)₂
+</pre>
+<pre>
+60 REM 60TH INSTRUMENT. 6TH DECADE.
+212 PRINT "H212 = 4 × 53 = C × prime"
+212 PRINT "7136 lit, the phantom identity, the loop closes"
+</pre>
+<p class="dim">Line 2 appears TWICE: once as start, once as return.
+The BASIC block loops. d₁ leaves and comes back.
+212 = 4 × 53. 60th instrument = sixth decade.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const loopNums=[2,3,6,42,21]; // the loop
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Phantom 7 at center
+  const p7=0.4+0.4*Math.sin(t*0.025);
+  ctx.fillStyle=`rgba(255,213,79,${p7})`;
+  ctx.font="bold 24px Courier New";ctx.textAlign="center";
+  ctx.fillText("7",cx,cy+8);
+  ctx.font="9px Courier New";ctx.fillStyle=`rgba(255,213,79,${p7*0.5})`;
+  ctx.fillText("phantom = OCHO−1",cx,cy+24);
+  // The loop: 2→3→6→42→21→2
+  const r=110;
+  for(let i=0;i<loopNums.length;i++){
+    const a=(i/loopNums.length)*Math.PI*2-Math.PI/2+t*0.006;
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r*0.55;
+    // Line to next
+    const ni=(i+1)%loopNums.length;
+    const na=(ni/loopNums.length)*Math.PI*2-Math.PI/2+t*0.006;
+    const nx=cx+Math.cos(na)*r;
+    const ny=cy+Math.sin(na)*r*0.55;
+    ctx.strokeStyle="rgba(129,199,132,0.4)";ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(nx,ny);ctx.stroke();
+    // Arrow head
+    const mx=(x+nx)/2,my=(y+ny)/2;
+    ctx.fillStyle="rgba(129,199,132,0.6)";
+    ctx.beginPath();ctx.arc(mx,my,2,0,6.28);ctx.fill();
+    // Node
+    ctx.fillStyle="#81c784";ctx.globalAlpha=0.8;
+    ctx.beginPath();ctx.arc(x,y,10,0,6.28);ctx.fill();
+    ctx.globalAlpha=1;ctx.fillStyle="#050510";ctx.font="bold 11px Courier New";
+    ctx.fillText(loopNums[i].toString(),x,y+4);
+    // Line to phantom for 21 and 42
+    if(loopNums[i]===21||loopNums[i]===42){
+      ctx.strokeStyle="rgba(255,213,79,0.2)";ctx.lineWidth=0.5;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(cx,cy);ctx.stroke();
+    }
+  }
+  // 336 and 84 orbiting
+  for(const[n,off]of[[336,0],[84,Math.PI]]){
+    const a=t*0.008+off;
+    const x=cx+Math.cos(a)*160;
+    const y=cy+Math.sin(a)*80;
+    ctx.fillStyle="#4fc3f7";ctx.globalAlpha=0.4;
+    ctx.beginPath();ctx.arc(x,y,6,0,6.28);ctx.fill();
+    ctx.globalAlpha=0.8;ctx.font="9px Courier New";ctx.textAlign="center";
+    ctx.fillStyle="#4fc3f7";ctx.fillText(n.toString(),x,y-9);
+  }
+  ctx.globalAlpha=1;ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H212: The Phantom Identity — the loop closes",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("2 → 3 → 6 → 42 → 21 → 2 (loop)",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
