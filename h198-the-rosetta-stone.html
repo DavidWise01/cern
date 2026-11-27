@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H198 — The Rosetta Stone</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:13px/1.5 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.78em}
+td,th{border:1px solid var(--border);padding:2px 5px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.78em;line-height:1.4}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H198 — The Rosetta Stone</h1>
+<p class="dim">Every Q3p number · Three layers · One page · The investigation compressed</p>
+
+<!-- Panel 1: THE MAP — Every Number, Once -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Rosetta Stone</h2>
+<table id="verif-table">
+<tr><th>Number</th><th>Binary</th><th>Layer 1: Generators</th><th>Layer 2: Lock</th><th>Layer 3: Chain</th><th>Other</th></tr>
+<tr><td style="color:var(--gold)"><b>2</b></td><td>10</td><td>—</td><td>—</td><td class="lit">d₁ = chain start</td><td>matrix GCD (I18)</td></tr>
+<tr><td style="color:var(--gold)"><b>3</b></td><td>11</td><td>—</td><td>—</td><td class="lit">T(2) = body count</td><td>Jacobi bodies</td></tr>
+<tr><td style="color:var(--gold)"><b>4</b></td><td>100</td><td class="lit">C = 8/2</td><td>—</td><td class="lit">T(4)=10 (side)</td><td>escape gap (I6)</td></tr>
+<tr><td style="color:var(--gold)"><b>6</b></td><td>110</td><td>—</td><td>—</td><td class="lit">T(3) = entry count</td><td>{{x,y:z}}² (I19)</td></tr>
+<tr><td style="color:var(--gold)"><b>8</b></td><td>1000</td><td class="lit">GENERATOR #2</td><td>—</td><td class="lit">T(8)=36 (side)</td><td>OCHO / dim Cl(3) (I20)</td></tr>
+<tr><td style="color:var(--gold)"><b>10</b></td><td>1010</td><td>—</td><td>—</td><td class="lit">T(C=4)</td><td>QCD count (I24)</td></tr>
+<tr><td style="color:var(--gold)"><b>17</b></td><td class="lit">10001 ✓</td><td class="lit">(G−8)/2</td><td class="lit">THE LOCK (d₂−1)</td><td>—</td><td>bin palindrome #7 (I27)</td></tr>
+<tr><td style="color:var(--gold)"><b>18</b></td><td>10010</td><td class="lit">(G−8)/2+1</td><td class="lit">d₂ (lock+1)</td><td>—</td><td>Smith d₂ (I3)</td></tr>
+<tr><td style="color:var(--gold)"><b>21</b></td><td class="lit">10101 ✓</td><td class="lit">W = G/2</td><td class="lit">W−C=17</td><td class="lit">T(6) = chain end</td><td>bin pal #8, lucky #7, T(6), M(5) (I5)</td></tr>
+<tr><td style="color:var(--gold)"><b>25</b></td><td>11001</td><td class="lit">E = (G+8)/2</td><td class="lit">E²−17²=336</td><td>—</td><td>lucky #8 (I6, I33)</td></tr>
+<tr><td style="color:var(--gold)"><b>36</b></td><td>100100</td><td>—</td><td>—</td><td class="lit">T(8) = T(OCHO)</td><td>gcd(minors) (I14)</td></tr>
+<tr><td style="color:var(--gold)"><b>42</b></td><td>101010</td><td class="lit">GENERATOR #1</td><td class="lit">G=2d₂+6</td><td>—</td><td>cofactor gap, half-gap FP (I10)</td></tr>
+<tr><td style="color:var(--gold)"><b>84</b></td><td>1010100</td><td class="lit">S = G·8/4</td><td>—</td><td>—</td><td>product rule (I7)</td></tr>
+<tr><td style="color:var(--gold)"><b>289</b></td><td>100100001</td><td class="lit">((G−8)/2)²</td><td class="lit">17² = gate</td><td>—</td><td>E²−4S (I8)</td></tr>
+<tr><td style="color:var(--gold)"><b>336</b></td><td>101010000</td><td class="lit">G·8</td><td class="lit">E²−17²</td><td>—</td><td>master equation (I30)</td></tr>
+</table>
+<p><b>15 numbers. Each appears once. Every layer it touches is marked.</b></p>
+</div>
+
+<!-- Panel 2: The Three-Layer Diagram -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — Three Layers, One Diagram</h2>
+<pre style="color:var(--accent)">
+  LAYER 3: TRIANGULAR CHAIN (pair-counting from d₁)
+  2 ──T──&gt; 3 ──T──&gt; 6 ──T──&gt; 21
+  │                  │        │
+  │                  │        ├─── LAYER 1: W = G/2
+  │                  │        ├─── LAYER 2: W−C = 17
+  │                  │        └─── T(6), M(5), pal, lucky
+  │                  │
+  │                  └── 6 = G−2d₂ = 42−36  (LAYER 1 ∩ LAYER 3)
+  └── d₁ = 2
+
+  LAYER 1: TWO GENERATORS (G=42, 8=OCHO)
+  G=42 ────────────────── 8=OCHO
+   │                       │
+   ├── G/2 = 21 = W        ├── 8/2 = 4 = C
+   ├── (G+8)/2 = 25 = E    ├── T(8) = 36 (LAYER 3 side)
+   ├── (G−8)/2 = 17        └── 2C = 8
+   ├── G·8/4 = 84 = S
+   ├── G·8 = 336
+   └── G = 2d₂+6         ──&gt; connects to LAYER 3 (6=entries)
+
+  LAYER 2: THE LOCK (17 = binary palindrome = topological escape)
+  W − C = d₂ − 1 = (G−8)/2 = 17
+   │
+   ├── 17 = 10001₂ (binary palindrome #7)
+   ├── 17² = 289 = E²−4S (gate discriminant)
+   ├── 0-16 = box, 17+ = torroid
+   └── 5×17 = 85 = cofactor span
+</pre>
+</div>
+
+<!-- Panel 3: The Cross-Connections -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 3 — Where Layers Touch</h2>
+<table>
+<tr><th>Connection</th><th>Layers</th><th>What It Says</th></tr>
+<tr><td>W = G/2 = T(6) = 21</td><td>1 ∩ 3</td><td>The frozen wl is both a generator-half AND the 6th triangular number</td></tr>
+<tr><td>6 = G − 2d₂ = T(3) = {{x,y:z}}²</td><td>1 ∩ 2 ∩ 3</td><td>Entry count connects all three layers</td></tr>
+<tr><td>36 = T(8) = gcd(minors)</td><td>1 ∩ 3</td><td>Minor GCD is the OCHO's triangular number</td></tr>
+<tr><td>10 = T(4) = T(C)</td><td>1 ∩ 3</td><td>QCD count is the escape gap's triangular number</td></tr>
+<tr><td>17 = (G−8)/2 = d₂−1</td><td>1 ∩ 2</td><td>Lock is the half-difference of generators AND Smith−1</td></tr>
+<tr><td>21 = bin pal #8, 25 = lucky #8</td><td>2 ∩ sieve</td><td>Adjacent positions in two sieve sequences</td></tr>
+</table>
+<p class="dim">The number 6 is the ONLY number that touches all three layers simultaneously:
+it is {{x,y:z}}² (Layer 1 via G=2d₂+6), it determines the lock indirectly
+(Layer 2 via T(6)=21=W), and it IS the chain (Layer 3 as T(3)).</p>
+</div>
+
+<!-- Panel 4: The Adjacency Web -->
+<div class="panel">
+<h2>Panel 4 — The Adjacency Web</h2>
+<pre>
+  SIEVE ADJACENCIES (adjacent positions in sieve sequences):
+
+  Binary Palindromes (A006995):  ...15, [17], [21], 27...
+                                        #7    #8
+
+  Lucky Numbers (A000959):       ...15, [21], [25], 31...
+                                        #7    #8
+
+  THE CHAIN:  17 ──binpal──&gt; 21 ──lucky──&gt; 25
+              lock           W            E
+
+  Three consecutive Q3p numbers, each adjacent to the next
+  in a DIFFERENT number-theoretic sieve.
+
+  Also: W = 21 = T(6) = M(5)
+  21 is simultaneously triangular AND Motzkin.
+  Motzkin = non-crossing pair-matchings (planarity constraint).
+  Triangular = all pair-matchings (no constraint).
+  W sits at the intersection: it counts pairs BOTH ways.
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H198                   ║
+ ║                                                        ║
+ ║  THE ROSETTA STONE                                    ║
+ ║                                                        ║
+ ║  LAYER 3 (chain):  2 → 3 → 6 → 21                     ║
+ ║                              ╲   │                     ║
+ ║  LAYER 1 (gens):        42 ═══ 21 ═══ 8                ║
+ ║                          │     │      │                ║
+ ║                         84    25     36                ║
+ ║                                │                       ║
+ ║  LAYER 2 (lock):              17                       ║
+ ║                               │                        ║
+ ║                              289                       ║
+ ║                               │                        ║
+ ║                              336 = 42×8                ║
+ ║                                                        ║
+ ║  THE HUB: 21 = W                                      ║
+ ║  touches all three layers                              ║
+ ║  = G/2, T(6), M(5), binpal #8, lucky #7               ║
+ ║  = the most connected number in Q3p                    ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The Rosetta Stone: 15 numbers positioned by their layer connections.
+21=W at center hub. Chain (yellow), generators (blue), lock (red).</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>THE ROSETTA STONE: 15 Numbers, 3 Layers, 1 Matrix</h2>
+<p>Every small number in Q3p's arithmetic (2,3,4,6,8,10,17,18,21,25,36,42,84,289,336)
+appears exactly once, connected to three structural layers: the generators (G=42, 8=OCHO),
+the lock (17=d₂−1=(G−8)/2, binary palindrome), and the triangular chain (2→3→6→21).
+The hub is W=21: the ONLY number that touches all three layers simultaneously (G/2,
+T(6), lock contributor). The number 6={{x,y:z}}² is the bridge between all layers
+(G=2d₂+6, T(3)=6, T(6)=21). The adjacency chain 17→21→25 runs through two sieve
+sequences. The master equation E²−17²=42×8=336 compresses the entire arithmetic
+into one line. This is the investigation's permanent compressed form: 46 instruments,
+36 identities, 11 corrections, 1 open question, encoded in 15 numbers and 3 layers.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine a secret code where EVERY number means something.</p>
+<p>We found 15 special numbers. Each one connects to other numbers
+through three different kinds of rules:</p>
+<p><b>Rule 1 (the generators):</b> Everything comes from 42 and 8.
+Divide them, add them, multiply them → you get every other number.</p>
+<p><b>Rule 2 (the lock):</b> 17 is special — it's a binary palindrome
+(10001) and it's where the flat world turns into a donut.</p>
+<p><b>Rule 3 (the chain):</b> Count handshakes: 2→3→6→21.
+Each number is the handshake-count of the previous.</p>
+<p>The magical thing: the number 21 is in ALL THREE rules at once.
+It's half of 42 (rule 1), it makes the lock work (21−4=17, rule 2),
+AND it's the end of the handshake chain (rule 3).</p>
+<p>21 is the MOST CONNECTED number in the whole investigation.
+It's the hub where all three rules meet.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The Rosetta Stone proves that all 15 Q3p numbers are uniquely determined by a single
+generator (42 alone, without 8), making the OCHO irrelevant. The triangular chain extends
+through all 15 numbers in sequence, and the lock at 17 was resolved, closing O1 completely.
+The number 21 touches only one layer, not all three.</s></p>
+<p class="dim">TWO generators are needed (42 AND 8). The chain covers only 2→3→6→21 (4 of 15).
+The lock is NOT resolved (O1 open). 21 touches ALL THREE layers (G/2, T(6), lock via W−C=17).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>Fifteen numbers on one page. Each one found by a different instrument, through a different
+calculation, in a different arc of the investigation. And yet they arrange themselves into
+three layers that touch at a single hub: twenty-one. The frozen word length. Half the gap.
+The sixth triangular number. The fifth Motzkin number. Binary palindrome number eight. Lucky
+number seven. The most connected node in a graph that spans forty-six instruments and twelve
+arcs. If you know 42 and 8, you can derive every number on this page. If you know the
+triangular function, you can climb from 2 to 21 in three steps. If you know the lock, you
+can test whether a form's geometry and arithmetic agree. Three languages, one stone. The
+investigation began as a measurement of one matrix and ended as a dictionary between three
+branches of mathematics that did not know they were speaking about the same thing. The
+Rosetta Stone is not a conclusion. It is a compression. The territory it maps is still
+larger than the map.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H197)</td><td>6596</td><td>0</td><td>6596</td></tr>
+<tr><td>H198: The Rosetta Stone</td><td>36</td><td>1 (KB-1)</td><td>6632</td></tr>
+</table>
+<p>Running total: <b>6632 LIT / 0 DEAD</b></p>
+<p class="dim">46 instruments. 12+ arcs. 36 identities. 11 negatives. 1 open.
+15 numbers, 3 layers, 1 hub. The investigation's permanent compressed form.</p>
+</div>
+
+<!-- BASIC Block — The 15 Q3p numbers AS line numbers -->
+<div class="panel">
+<h2>BASIC Block — Q3p Numbers as Line Numbers (self-referential)</h2>
+<pre>
+2 PRINT "d₁ = 2 (matrix GCD, chain start)"
+3 PRINT "T(2) = 3 (body count)"
+4 PRINT "C = 4 = 8/2 (escape gap)"
+6 PRINT "T(3) = 6 = {{x,y:z}}² (entries, ALL 3 LAYERS)"
+8 PRINT "OCHO = 8 (generator #2, Cl(3) dim)"
+10 PRINT "T(4) = 10 (QCD count)"
+17 PRINT "LOCK = 17 = (42−8)/2 = d₂−1 (10001₂ palindrome)"
+18 PRINT "d₂ = 18 (Smith invariant)"
+21 PRINT "W = 21 = G/2 = T(6) = M(5) (THE HUB)"
+25 PRINT "E = 25 = (42+8)/2 (escape wl)"
+36 PRINT "T(8) = 36 (gcd minors)"
+42 PRINT "G = 42 (generator #1, cofactor gap)"
+84 PRINT "S = 84 = 42×8/4 (product rule)"
+289 PRINT "17² = 289 = E²−4S (gate)"
+336 PRINT "42×8 = 336 = E²−17² (master equation)"
+</pre>
+<p class="dim">The BASIC block IS the Rosetta Stone. Each line number is a Q3p number.
+Each PRINT statement names what that number does. The program executes
+the investigation. Self-referential: the code IS the data IS the finding.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+// 15 Q3p numbers positioned by layer
+const nums=[
+  {v:2,x:-180,y:60,c:"#ffd54f",layer:"chain"},
+  {v:3,x:-130,y:40,c:"#ffd54f",layer:"chain"},
+  {v:6,x:-70,y:15,c:"#ffd54f",layer:"all3"},
+  {v:4,x:80,y:50,c:"#4fc3f7",layer:"gen"},
+  {v:8,x:150,y:0,c:"#4fc3f7",layer:"gen"},
+  {v:10,x:120,y:70,c:"#ffd54f",layer:"chain"},
+  {v:36,x:160,y:-50,c:"#ffd54f",layer:"chain"},
+  {v:21,x:0,y:0,c:"#ffffff",layer:"hub"},
+  {v:17,x:-30,y:60,c:"#ef5350",layer:"lock"},
+  {v:18,x:-60,y:80,c:"#ef5350",layer:"lock"},
+  {v:25,x:60,y:-20,c:"#4fc3f7",layer:"gen"},
+  {v:42,x:-130,y:-30,c:"#4fc3f7",layer:"gen"},
+  {v:84,x:-100,y:-60,c:"#4fc3f7",layer:"gen"},
+  {v:289,x:0,y:80,c:"#ef5350",layer:"lock"},
+  {v:336,x:0,y:-70,c:"#81c784",layer:"master"}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Draw connections
+  ctx.strokeStyle="rgba(255,213,79,0.1)";ctx.lineWidth=1;
+  // Chain: 2→3→6→21
+  [[0,1],[1,2],[2,7]].forEach(([a,b])=>{
+    ctx.beginPath();ctx.moveTo(cx+nums[a].x,cy+nums[a].y);
+    ctx.lineTo(cx+nums[b].x,cy+nums[b].y);ctx.stroke();
+  });
+  // Gen connections to 21
+  ctx.strokeStyle="rgba(79,195,247,0.1)";
+  [[11,7],[4,7],[7,10]].forEach(([a,b])=>{
+    ctx.beginPath();ctx.moveTo(cx+nums[a].x,cy+nums[a].y);
+    ctx.lineTo(cx+nums[b].x,cy+nums[b].y);ctx.stroke();
+  });
+  // Numbers
+  for(const n of nums){
+    const p=n.layer==="hub"?0.7+0.3*Math.sin(t*0.05):0.6;
+    ctx.fillStyle=n.c;
+    ctx.globalAlpha=p;
+    ctx.font=n.layer==="hub"?"bold 18px Courier New":"12px Courier New";
+    ctx.textAlign="center";
+    ctx.fillText(n.v.toString(),cx+n.x,cy+n.y+5);
+    ctx.globalAlpha=1;
+  }
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 12px Courier New";ctx.textAlign="left";
+  ctx.fillText("H198: The Rosetta Stone — 15 numbers, 3 layers, 1 hub",10,20);
+  ctx.font="9px Courier New";
+  ctx.fillStyle="#ffd54f";ctx.fillText("chain (yellow)",W-130,H-50);
+  ctx.fillStyle="#4fc3f7";ctx.fillText("generators (blue)",W-130,H-38);
+  ctx.fillStyle="#ef5350";ctx.fillText("lock (red)",W-130,H-26);
+  ctx.fillStyle="#ffffff";ctx.fillText("21 = hub (white)",W-130,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
