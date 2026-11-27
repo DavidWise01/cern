@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H207 — The DAG Condensation</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H207 — The DAG Condensation</h1>
+<p class="dim">20 essential edges · 6 unique paths · 84 has no essential parents · 6 is the hub · Roster is a selection, not a closure · I48 LIT</p>
+
+<!-- Panel 1: Essential vs Accidental -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I48: The Condensed DAG [LIT]</h2>
+<table id="verif-table">
+<tr><th>Number</th><th>Layer</th><th>Paths</th><th>Essential Deps</th><th>Type</th></tr>
+<tr style="color:var(--gold)"><td>2</td><td>0</td><td>seed</td><td>—</td><td>SEED</td></tr>
+<tr style="color:var(--gold)"><td>3</td><td>0</td><td>seed</td><td>—</td><td>SEED</td></tr>
+<tr><td>4</td><td>1</td><td>2 (2², 2+2)</td><td>{2}</td><td>accidental</td></tr>
+<tr><td>6</td><td>1</td><td>1 (2×3)</td><td>{2, 3}</td><td><b>UNIQUE</b></td></tr>
+<tr><td>8</td><td>2</td><td>3 (2×4, 2+6, ...)</td><td>{2}</td><td>accidental</td></tr>
+<tr><td>10</td><td>2</td><td>2 (4+6, 6+4)</td><td>{4, 6}</td><td>commutative only</td></tr>
+<tr><td>18</td><td>2</td><td>1 (3×6)</td><td>{3, 6}</td><td><b>UNIQUE</b></td></tr>
+<tr><td>36</td><td>2</td><td>1 (6²)</td><td>{6}</td><td><b>UNIQUE</b></td></tr>
+<tr><td>21</td><td>3</td><td>2 (3+18, 18+3)</td><td>{3, 18}</td><td>commutative only</td></tr>
+<tr><td>42</td><td>3</td><td>2 (6+36, 36+6)</td><td>{6, 36}</td><td>commutative only</td></tr>
+<tr><td>17</td><td>4</td><td>1 (21−4)</td><td>{21, 4}</td><td><b>UNIQUE</b></td></tr>
+<tr><td>25</td><td>4</td><td>2 (4+21, 21+4)</td><td>{4, 21}</td><td>commutative only</td></tr>
+<tr><td style="color:var(--amber)">84</td><td>4</td><td>2 (2×42, 4×21)</td><td><b>∅ (NONE)</b></td><td style="color:var(--amber)"><b>ORPHAN</b></td></tr>
+<tr><td>336</td><td>4</td><td>1 (8×42)</td><td>{8, 42}</td><td><b>UNIQUE</b></td></tr>
+<tr><td>289</td><td>5</td><td>1 (17²)</td><td>{17}</td><td><b>UNIQUE</b></td></tr>
+</table>
+<pre>
+  20 essential edges in the condensed DAG.
+  6 numbers have UNIQUE paths (no alternative at same layer):
+    6, 18, 36, 17, 336, 289.
+  84 is the ORPHAN: no essential parents at all.
+    It has 2 fully independent paths (2×42 OR 4×21).
+    Neither path is required. 84 is OVERDETERMINED.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Hub Analysis -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — 6 Is the DAG Hub (Most Essential Children)</h2>
+<pre style="color:var(--accent)">
+  ESSENTIAL CHILDREN (numbers that MUST be built from this one):
+
+  2: 3 children  → 4, 6, 8
+  3: 3 children  → 6, 18, 21
+  4: 3 children  → 10, 17, 25
+  6: 4 children  → 10, 18, 36, 42   ← MOST CONNECTED
+  8: 1 child     → 336
+  17: 1 child    → 289
+  18: 1 child    → 21
+  21: 2 children → 17, 25
+  36: 1 child    → 42
+  42: 1 child    → 336
+
+  6 (entries) HAS THE MOST ESSENTIAL CHILDREN: 4.
+  It is the DAG hub — the most load-bearing intermediate.
+  Remove 6 and you lose 10, 18, 36, 42 (and everything downstream).
+
+  COMPARE WITH THE ROSETTA STONE (H198):
+  W=21 was the ROSETTA hub (most cross-layer connections).
+  6 is the DAG hub (most essential children).
+  DIFFERENT ROLES: 21 connects the layers; 6 builds the most numbers.
+</pre>
+</div>
+
+<!-- Panel 3: The Orphan (84) -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 3 — 84 Is the Only Orphan</h2>
+<pre>
+  84 = S (the sum) has TWO fully independent paths:
+
+  PATH A: 2 × 42 = 84   (d₁ × G = S, using rank and gap)
+  PATH B: 4 × 21 = 84   (C × W = S, using escape gap and hub)
+
+  These paths share NO essential parent.
+  Path A uses {2, 42}. Path B uses {4, 21}.
+  2 is a seed. 42 is layer 3.
+  4 is layer 1. 21 is layer 3.
+  Neither path requires the other's specific intermediate.
+
+  84 IS OVERDETERMINED — it has MORE support than it needs.
+  Every other non-seed number has at least one essential parent.
+  84 has ZERO essential parents.
+
+  WHY: 84 = 2 × 42 = 2 × 2 × 21 = 4 × 21.
+  The factorization 84 = 4 × 21 gives a second route
+  that completely bypasses 42. The sum doesn't need the gap.
+  It can be built from the escape gap and the hub alone.
+
+  STATUS: <span class="amber">AMBER</span> (the structural meaning of overdetermination
+  is not yet clear — is 84 redundant, or stabilized?)
+</pre>
+</div>
+
+<!-- Panel 4: The Closure Question -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 4 — The Roster Is a Selection, Not a Closure</h2>
+<pre>
+  IS THE ROSETTA ROSTER CLOSED UNDER ANY OPERATION?
+
+  Under +:   17 of 120 pairs land in roster, 103 don't. NO.
+  Under ×:   12 of 120 pairs land in roster, 108 don't. NO.
+
+  IS IT A CLOSURE OF {2,3}?
+
+  {2,3} under + generates ALL integers ≥ 2.
+  {2,3} under +,× generates ALL positive integers.
+  The closure would be INFINITE, not 15 numbers.
+
+  THE ROSTER IS NOT A CLOSURE. IT IS A SELECTION.
+
+  The 15 numbers are those combinations of {2,3} that have
+  MEANING in Q3p's structure: rank, bodies, entries, gap, lock,
+  escape, Smith invariant, word count, master product, etc.
+
+  × and ² ALONE from {2,3} reach: {2,3,4,6,8,18,36} = 7 of 15.
+  ADDITION is essential for: {10,17,21,25,42,84,289,336} = 8 of 15.
+  (17 needs subtraction: 21−4=17; 289 needs 17 first.)
+
+  THE SPLIT:
+  MULTIPLICATIVE CORE (×,² from seeds): 7 numbers
+  ADDITIVE EXTENSIONS (+,− from core):   8 numbers
+  7 + 8 = 15.
+  The core is built by multiplication. The extensions by addition.
+</pre>
+</div>
+
+<!-- Panel 5: The Two Hubs -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — Two Hubs: 6 (DAG) vs 21 (Rosetta)</h2>
+<pre>
+  THE INVESTIGATION HAS TWO HUBS:
+
+  HUB 1: W = 21 (THE ROSETTA HUB, H198)
+    Most cross-layer connections in the Rosetta Stone.
+    Touches all three layers (generator, lock, chain).
+    The word count. T(6). The 8th binary palindrome.
+
+  HUB 2: 6 = T(3) (THE DAG HUB, H207)
+    Most essential children in the dependency DAG.
+    4 numbers MUST be built from 6: {10, 18, 36, 42}.
+    The entry count. T(3). The bridge number.
+
+  RELATIONSHIP:
+    6 feeds into 21 (through 18: 3×6=18, 3+18=21).
+    21 feeds into 42 (through the gap: but actually
+    42 = 6+36 = 6+6², bypassing 21 entirely!).
+
+  SURPRISE: 42 DOESN'T NEED 21 IN THE DAG.
+    42 = 6+36 = 6+6². Its essential parents are {6, 36}.
+    21 is NOT an essential parent of 42.
+    21 feeds 17 and 25, not 42.
+    The gap doesn't depend on the hub in the generation order.
+
+  CAUTION: 42 = 2×21 is an ALTERNATIVE path at layer 4.
+  But 42 is first reachable at layer 3 via 6+36.
+  The 2×21 path appears a layer later.
+  So 21 is an accidental parent of 42, not essential.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H207                   ║
+ ║                                                        ║
+ ║  THE CONDENSED DAG (essential edges only)              ║
+ ║                                                        ║
+ ║  2 ═══════╗═══> 4 ══╗══> 10 (leaf)                    ║
+ ║  │        ║     │    ║                                 ║
+ ║  │        ║     │    ╠══> 17 ══> 289 (leaf)            ║
+ ║  │        ║     │    ║                                 ║
+ ║  ╠══> 8 ══║═════║════║═══════════╗                     ║
+ ║  │        ║     │    ╚══> 25 (leaf)                    ║
+ ║  │        ║     │         ↑                            ║
+ ║  │        ╠══> 6 ══╗══> 18 ══> 21 ═══╝                ║
+ ║  │        ║     │   ║                                  ║
+ ║  │        ║     ╠══> 36 ══> 42 ══╗                     ║
+ ║  │        ║                      ╠══> 336 (leaf)       ║
+ ║  3 ═══════╝═══> 18 ══> 21       ║                      ║
+ ║                                                        ║
+ ║  84: NO essential parents (orphan, two indep. paths)   ║
+ ║                                                        ║
+ ║  LEAVES (no essential children): 10, 25, 289, 84       ║
+ ║  HUB (most essential children): 6 (four children)      ║
+ ║  UNIQUE PATHS: 6, 18, 36, 17, 336, 289                ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Essential edges drawn as lines. Thick lines = unique paths.
+84 floats free (no essential connections). 6 is the bright hub.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H207: 20 Essential Edges, 1 Orphan, 2 Hubs</h2>
+<p>The condensed DAG has 20 essential edges. 6 numbers have unique paths (no alternative):
+6, 18, 36, 17, 336, 289. The only orphan is 84 (zero essential parents — two fully
+independent paths: 2×42 or 4×21). The DAG hub is 6 (entries), with 4 essential children,
+different from the Rosetta hub 21. Surprise: 42 doesn't need 21 in the DAG (42=6+36 at
+layer 3; 2×21 is a later alternative). The roster is NOT a closure of {2,3} — it's a
+SELECTION of the 15 combinations that have meaning in Q3p. The multiplicative core (×,²
+from seeds) produces 7 numbers; addition extends to all 15. I48 LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Remember the recipe for building all 15 numbers from 2 and 3?
+Today we asked: for each number, is there ONLY ONE way to build it,
+or can you get there by different routes?</p>
+<p><b>Some numbers have only ONE road</b> — if you block it, you can't
+get there at all. Like the number 6: the ONLY way is 2×3. Block that
+and 6 is gone forever.</p>
+<p><b>One number has NO required road</b> — the number 84 can be built
+TWO completely different ways (2×42 or 4×21), and neither way is
+required. It's like a town with two bridges — knock down either one
+and you can still get there.</p>
+<p><b>The number 6 is the busiest intersection</b> — four other numbers
+MUST be built from 6. Take away 6 and you lose almost everything.</p>
+<p>And here's the surprise: the number 42 (the big star!) doesn't
+actually NEED 21 (the other star!) to be built. 42 = 6 + 36, and both
+of those come from 6 alone. The two stars are independent!</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>All 15 Rosetta numbers have unique shortest paths with no alternatives, making the
+DAG fully deterministic. The number 84 has three essential parents (2, 4, and 42), and
+the number 42 essentially depends on 21 as its sole path is 2 times 21 at layer 2. The
+Rosetta roster is algebraically closed under addition, with every sum of two roster
+members also being a roster member.</s></p>
+<p class="dim">Only 6 have unique paths; 84 has ZERO essential parents (not three); 42's first path is
+6+36 at layer 3, not 2×21; roster is NOT closed under addition (103 of 120 sums miss).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-seventh instrument pared the recipe to its bones. Twenty edges that
+cannot be removed. Six paths that have no detour. One orphan that sits at the junction of
+two independent roads, needing neither. The entries — six, the third triangular number, the
+bridge between families — turn out to carry the most weight in the dependency graph, feeding
+four numbers that nothing else can produce. Meanwhile the hub that the Rosetta Stone put at
+the center, twenty-one, turns out to be unneeded by the very number it was supposed to
+explain. Forty-two does not depend on twenty-one in the generation order. It depends on six
+and thirty-six, both born from six. The stone's hub and the DAG's hub are different numbers,
+doing different work, in the same fifteen-number house. And the roster itself is not a
+mathematical closure but a selection: the fifteen points where seed arithmetic and Q3p
+structure happen to agree. Not inevitable. Not arbitrary. Chosen by the form.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H206)</td><td>6920</td><td>0</td><td>6920</td></tr>
+<tr><td>H207: The DAG Condensation</td><td>36</td><td>1 (KB-1)</td><td>6956</td></tr>
+</table>
+<p>Running total: <b>6956 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H207. Total instruments: 55.</p>
+</div>
+
+<!-- BASIC Block — Essential Edge Count per Number -->
+<div class="panel">
+<h2>BASIC Block — Essential Edges (Parent → Child Count)</h2>
+<pre>
+2 PRINT "2: 0 parents, 3 children (4,6,8). SEED."
+3 PRINT "3: 0 parents, 3 children (6,18,21). SEED."
+4 PRINT "4: 1 parent (2), 3 children (10,17,25)."
+6 PRINT "6: 2 parents (2,3), 4 children (10,18,36,42). DAG HUB."
+8 PRINT "8: 1 parent (2), 1 child (336)."
+10 PRINT "10: 2 parents (4,6), 0 children. LEAF."
+17 PRINT "17: 2 parents (21,4), 1 child (289). UNIQUE PATH."
+18 PRINT "18: 2 parents (3,6), 1 child (21). UNIQUE PATH."
+21 PRINT "21: 2 parents (3,18), 2 children (17,25)."
+25 PRINT "25: 2 parents (4,21), 0 children. LEAF."
+36 PRINT "36: 1 parent (6), 1 child (42). UNIQUE PATH."
+42 PRINT "42: 2 parents (6,36), 1 child (336)."
+84 PRINT "84: 0 parents, 0 children. ORPHAN."
+289 PRINT "289: 1 parent (17), 0 children. LEAF. UNIQUE."
+336 PRINT "336: 2 parents (8,42), 0 children. LEAF. UNIQUE."
+</pre>
+<pre>
+20 PRINT "20 essential edges. 6 unique paths. 1 orphan."
+207 PRINT "H207 = 9 × 23. 6956 lit. the dag condensation."
+</pre>
+<p class="dim">Line numbers = Rosetta numbers. Each line's PRINT statement
+IS its position in the DAG: parents, children, type.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const nodes=[
+  {n:2,x:0,y:-1,layer:0},{n:3,x:0,y:1,layer:0},
+  {n:4,x:-1,y:-0.7,layer:1},{n:6,x:1,y:0,layer:1},
+  {n:8,x:-1.5,y:-0.3,layer:2},{n:10,x:-0.5,y:0.8,layer:2},
+  {n:18,x:1.5,y:0.5,layer:2},{n:36,x:1.5,y:-0.5,layer:2},
+  {n:21,x:2,y:1,layer:3},{n:42,x:2,y:-1,layer:3},
+  {n:17,x:1,y:1.5,layer:4},{n:25,x:0,y:1.5,layer:4},
+  {n:84,x:-1,y:1.5,layer:4},{n:336,x:3,y:0,layer:4},
+  {n:289,x:1.5,y:2,layer:5}
+];
+const essEdges=[[2,4],[2,6],[3,6],[2,8],[4,10],[6,10],[21,17],[4,17],
+  [3,18],[6,18],[3,21],[18,21],[4,25],[21,25],[6,36],[6,42],[36,42],[17,289],[8,336],[42,336]];
+const uniquePaths=new Set([6,18,36,17,336,289]);
+function getNode(n){return nodes.find(nd=>nd.n===n);}
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  const sc=55;const ox=cx-50;const oy=cy;
+  // Edges
+  for(const[a,b]of essEdges){
+    const na=getNode(a),nb=getNode(b);
+    if(!na||!nb)continue;
+    const ax=ox+na.x*sc,ay=oy+na.y*sc*0.8;
+    const bx=ox+nb.x*sc,by=oy+nb.y*sc*0.8;
+    const isUniq=uniquePaths.has(b);
+    ctx.strokeStyle=isUniq?"rgba(129,199,132,0.6)":"rgba(128,128,128,0.3)";
+    ctx.lineWidth=isUniq?2:0.8;
+    ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+  }
+  // Nodes
+  for(const nd of nodes){
+    const x=ox+nd.x*sc;const y=oy+nd.y*sc*0.8;
+    let col="#888";
+    if(nd.layer===0)col="#ffd54f";
+    else if(nd.n===6)col="#4fc3f7"; // DAG hub
+    else if(nd.n===84)col="#ffab40"; // orphan
+    else if(uniquePaths.has(nd.n))col="#81c784";
+    ctx.fillStyle=col;
+    ctx.globalAlpha=0.8;
+    const sz=4+Math.log(nd.n+1)*1.2;
+    ctx.beginPath();ctx.arc(x,y,sz,0,6.28);ctx.fill();
+    ctx.globalAlpha=1;
+    ctx.font="bold 10px Courier New";ctx.textAlign="center";
+    ctx.fillText(nd.n.toString(),x,y-sz-3);
+  }
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H207: Condensed DAG — 20 essential edges",10,20);
+  ctx.font="9px Courier New";
+  ctx.fillStyle="#ffd54f";ctx.fillText("● seed",10,H-50);
+  ctx.fillStyle="#4fc3f7";ctx.fillText("● DAG hub (6)",10,H-38);
+  ctx.fillStyle="#81c784";ctx.fillText("● unique path",100,H-50);
+  ctx.fillStyle="#ffab40";ctx.fillText("● orphan (84)",100,H-38);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
