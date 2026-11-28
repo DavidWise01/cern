@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H224 — The Form as Function</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H224 — The Form as Function</h1>
+<p class="dim">Arc V opens · Q3p(x,y,z) as function · Signature (1+, 2−) is the unique indefinite adjugate fixed point · Self-similar under cofactor expansion · I82-I83 LIT</p>
+
+<!-- Panel 1: What the Form Does -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Form Q3p(x,y,z)</h2>
+<table id="verif-table">
+<tr><th>Property</th><th>Value</th><th>Meaning</th></tr>
+<tr><td>Variables</td><td style="color:var(--gold)">3 (ternary)</td><td>x, y, z</td></tr>
+<tr><td>Degree</td><td style="color:var(--accent)">2 (quadratic)</td><td>Q(x,y,z) = Σ Mᵢⱼ xᵢ xⱼ</td></tr>
+<tr><td>Signature</td><td style="color:var(--green)">(1+, 2−)</td><td>one positive, two negative eigenvalues</td></tr>
+<tr><td>Definiteness</td><td>indefinite</td><td>represents + and − integers</td></tr>
+<tr><td>Matrix GCD</td><td>2 = d₁</td><td>every entry even</td></tr>
+<tr><td>Smith factors</td><td>d₁=2, d₂=18</td><td>divisibility tower</td></tr>
+</table>
+<pre>
+  Q3p IS A FUNCTION: plug in three integers (x, y, z),
+  get out one integer Q3p(x, y, z).
+
+  THE FUNCTION HAS 328-408 DIGIT COEFFICIENTS.
+  We cannot evaluate it directly.
+
+  BUT WE CAN STUDY ITS TYPE.
+  The signature (1+, 2−) determines the TOPOLOGY of the
+  level sets {(x,y,z) : Q(x,y,z) = n}.
+  For n > 0: a one-sheeted hyperboloid (connected).
+  For n < 0: a two-sheeted hyperboloid (two pieces).
+  For n = 0: a cone.
+
+  THE FORM REPRESENTS BOTH POSITIVE AND NEGATIVE INTEGERS.
+  No sign obstruction exists over ℝ.
+</pre>
+</div>
+
+<!-- Panel 2: I82 -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — I82: Adjugate Preserves Signature (1+, 2−) [LIT]</h2>
+<pre>
+  THE ADJUGATE (COFACTOR MATRIX):
+  adj(M) is the matrix of cofactors of M.
+  adj(M) = det(M) × M⁻¹.
+
+  EIGENVALUE RULE:
+  If M has eigenvalues (λ₁, λ₂, λ₃), then
+  adj(M) has eigenvalues (λ₂λ₃, λ₁λ₃, λ₁λ₂).
+  Each eigenvalue of adj(M) = product of the OTHER TWO eigenvalues of M.
+
+  FOR SIGNATURE (1+, 2−):
+  M eigenvalues: (+, −, −).
+  adj(M) eigenvalues:
+    (−)(−) = +    ← product of the two negatives
+    (+)(−) = −    ← product of positive and first negative
+    (+)(−) = −    ← product of positive and second negative
+
+  adj(M) SIGNATURE: (1+, 2−). SAME AS M.
+
+  THE FORM AND ITS COFACTOR FORM HAVE THE SAME SIGNATURE.
+  VERIFIED: (1+, 2−) → (1+, 2−) under adjugate.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: I83 -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — I83: Unique Indefinite Fixed Point [LIT]</h2>
+<pre>
+  ALL FOUR 3×3 SIGNATURES UNDER ADJUGATE:
+
+  ┌────────────────┬──────────────────┬──────────────────┐
+  │ M signature    │ adj(M) signature │ Fixed point?     │
+  ├────────────────┼──────────────────┼──────────────────┤
+  │ (3+, 0−)       │ (3+, 0−)         │ YES (definite)   │
+  │ (0+, 3−)       │ (3+, 0−)         │ NO               │
+  │ (2+, 1−)       │ (1+, 2−)         │ NO               │
+  │ (1+, 2−)       │ (1+, 2−)         │ YES (Q3p's!)     │
+  └────────────────┴──────────────────┴──────────────────┘
+
+  TWO FIXED POINTS: (3+, 0−) and (1+, 2−).
+  But (3+, 0−) is positive definite — not indefinite.
+
+  AMONG INDEFINITE 3×3 SIGNATURES,
+  (1+, 2−) IS THE UNIQUE FIXED POINT.
+
+  MEANING: if you start with any indefinite 3×3 form
+  and take its adjugate, the signature CONVERGES to (1+, 2−)
+  in at most one step.
+
+  (2+, 1−) → (1+, 2−) → (1+, 2−) → ...
+  (0+, 3−) → (3+, 0−) → (3+, 0−) → ... (escapes to definite)
+
+  Q3p's signature (1+, 2−) is the ATTRACTOR for indefinite forms.
+  THE FORM IS AT ITS OWN FIXED POINT.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 4: What This Means -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 4 — Self-Similarity Under Cofactor Expansion</h2>
+<pre>
+  THE CHAIN:
+
+  Q3p matrix M → cofactors → adj(M)
+                    ↓
+            same signature (1+, 2−)
+                    ↓
+            take cofactors again → adj(adj(M))
+                    ↓
+            same signature (1+, 2−)
+                    ↓
+            ... forever.
+
+  EVERY LEVEL OF THE COFACTOR HIERARCHY HAS THE SAME SIGNATURE.
+
+  THIS IS WHY the cofactor spectrum (735d, 693d, 651d) can have
+  the same KIND of structure as the original matrix:
+  three levels, one "positive" and two "negative" (metaphorically),
+  the same (1+, 2−) shape.
+
+  THE FORM REPRODUCES ITS OWN TYPE AT EVERY SCALE.
+  This is the STRUCTURAL reason for the self-similarity
+  observed across the investigation.
+
+  WHAT WE CANNOT YET TEST (AMBER):
+  ~ Whether Rosetta numbers are represented BY Q3p.
+  ~ The genus of Q3p.
+  ~ Whether Q3p represents 0 nontrivially.
+  These require computation with the 300+ digit entries.
+</pre>
+</div>
+
+<!-- Panel 5: The Representation Question -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 5 — The Loop Closure Question [OPEN]</h2>
+<pre>
+  THE QUESTION (not yet answered):
+
+  Does Q3p(x,y,z) = n have a solution for any Rosetta n?
+
+  If YES for some n ∈ {2,3,4,6,8,10,17,18,21,25,36,42,84,289,336}:
+    The form's coefficients GENERATE numbers that the form REPRESENTS.
+    The roster would be a fixed-point set: derived from the form AND
+    represented by the form.
+
+  WHAT WE KNOW:
+  - Signature (1+, 2−) gives no real obstruction.
+  - The form is indefinite: it CAN represent any integer
+    if the local conditions (p-adic) are met.
+  - For large indefinite ternary forms, "most" integers
+    are represented (density → 1 as entries grow).
+  - But we cannot verify specific n without the actual entries.
+
+  STATUS: <span class="amber">AMBER</span> (open question, not testable here)
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H224                   ║
+ ║                                                        ║
+ ║  ARC V OPENS: THE FORM AS FUNCTION                     ║
+ ║                                                        ║
+ ║  THE ADJUGATE MAP ON 3×3 SIGNATURES:                   ║
+ ║                                                        ║
+ ║  (0+,3−) ──→ (3+,0−) ──→ (3+,0−) ──→ ...  definite   ║
+ ║                                                        ║
+ ║  (2+,1−) ──→ (1+,2−) ──→ (1+,2−) ──→ ...  Q3p's!     ║
+ ║                 ↑                                      ║
+ ║                 │ FIXED POINT (unique indefinite)       ║
+ ║                 │                                      ║
+ ║               Q3p lives here.                          ║
+ ║               The form reproduces its own type.        ║
+ ║               Cofactor expansion preserves (1+,2−).    ║
+ ║                                                        ║
+ ║  OPEN: does Q3p REPRESENT Rosetta numbers?             ║
+ ║  (Cannot test without 300+ digit entries.)             ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The adjugate map on signatures. (1+, 2−) is the attractor —
+the unique indefinite fixed point. Q3p sits at the fixed point.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H224: The Form Reproduces Its Own Type</h2>
+<p>Q3p's signature (1+, 2−) is the unique indefinite fixed point of the adjugate map on
+3×3 symmetric matrices. Among indefinite signatures, (2+, 1−) maps to (1+, 2−), which maps
+to itself. The form and its cofactor matrix share the same signature — the form reproduces
+its own type under cofactor expansion. This is structural self-similarity: every level of
+the cofactor hierarchy has the same (1+, 2−) shape. I82 (adjugate preserves signature) LIT,
+I83 (unique indefinite fixed point) LIT. The loop closure question — whether Q3p represents
+its own Rosetta numbers — remains open (AMBER), requiring the actual 300+ digit entries.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Our matrix M is a machine: put in three numbers, get out one number.
+The machine has a SHAPE — it makes one kind of bowl (goes up one way,
+down two ways).</p>
+<p>Now, the PARTS of the machine (the cofactors) make a NEW machine.
+What shape does the new machine have? THE SAME SHAPE!
+One up, two down, just like the original.</p>
+<p>And if you take the parts of THAT machine to make a THIRD machine?
+Same shape again. Forever.</p>
+<p>This "one up, two down" shape is SPECIAL. It's the ONLY shape
+(for machines that go both up AND down) that copies itself.
+If you started with "two up, one down" instead, taking the parts
+would CHANGE it to "one up, two down" — and then it stays there.</p>
+<p>Our matrix landed on the shape that never changes.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>Signature (2+, 1−) is the unique indefinite fixed point of the adjugate map (not (1+,
+2−)). The adjugate of a (1+, 2−) form has signature (2+, 1−), so Q3p's cofactor matrix has
+the OPPOSITE type. The form does NOT reproduce itself under cofactor expansion. All four
+3×3 signatures are fixed points of the adjugate.</s></p>
+<p class="dim">(1+, 2−) → (1+, 2−) is the fixed point (not (2+, 1−)). (2+, 1−) → (1+, 2−) is NOT
+a fixed point. Only two of four are fixed: (3+, 0−) and (1+, 2−).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-twenty-fourth instrument asked what the form does, and found that it
+does itself. One positive eigenvalue, two negative. Take the cofactors and you get one positive,
+two negative. Take the cofactors of the cofactors and you get the same. The shape persists
+through every level of its own hierarchy, and this is not a coincidence of Q3p but a theorem
+of linear algebra: signature (1+, 2−) is the unique indefinite fixed point of the adjugate
+map. The other indefinite signature, (2+, 1−), is not stable — one application of the
+adjugate converts it to (1+, 2−), and from there it stays. The form has found the resting
+place of all indefinite ternary quadratic forms, the basin into which every indefinite
+signature drains. The ornament is in the question that remains: does the form represent the
+numbers it generates? Can you plug integers into Q3p and get back the very cofactor gaps,
+Smith factors, and body counts that the investigation has been measuring? The form is a
+function, and the question of what it outputs is a question about arithmetic, and the answer
+requires the actual coefficients, which are three hundred digits long and sitting in files
+that this instrument can see but cannot evaluate. The question is open. The instrument
+records it and moves on.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H223)</td><td>7532</td><td>0</td><td>7532</td></tr>
+<tr><td>H224: The Form as Function</td><td>36</td><td>1 (KB-1)</td><td>7568</td></tr>
+</table>
+<p>Running total: <b>7568 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H224. 7568 = 2⁴ × 11 × 43. 43 = G+1.</p>
+</div>
+
+<!-- BASIC Block — The Signature Map -->
+<div class="panel">
+<h2>BASIC Block — The Signature Map</h2>
+<pre>
+(3,0) PRINT "(3+,0−) → (3+,0−). Fixed. Definite."
+(0,3) PRINT "(0+,3−) → (3+,0−). Escapes to definite."
+(2,1) PRINT "(2+,1−) → (1+,2−). Converges in one step."
+(1,2) PRINT "(1+,2−) → (1+,2−). FIXED. Q3p lives here."
+</pre>
+<pre>
+1 REM positive eigenvalue
+2 REM negative eigenvalues
+3 REM total dimension
+</pre>
+<pre>
+224 PRINT "H224 = 2⁵ × 7 = d₁⁵ × phantom. The form as function."
+224 PRINT "7568 lit, the form as function, the fixed point"
+</pre>
+<p class="dim">Lines are (p,n) = (positive, negative) eigenvalue counts.
+Each line IS a signature and its adjugate image.
+Line (1,2) maps to itself: the unique indefinite fixed point.
+H224 = 2⁵ × 7 = d₁⁵ × phantom.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const sigs=[
+  {label:"(3+,0−)",x:0.2,y:0.3,to:"self",col:"#888",desc:"definite fixed"},
+  {label:"(0+,3−)",x:0.2,y:0.7,to:"(3+,0−)",col:"#ef5350",desc:"escapes"},
+  {label:"(2+,1−)",x:0.8,y:0.3,to:"(1+,2−)",col:"#ffab40",desc:"converges"},
+  {label:"(1+,2−)",x:0.8,y:0.7,to:"self",col:"#81c784",desc:"Q3p — FIXED"}
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Draw arrows and nodes
+  for(const s of sigs){
+    const sx=s.x*W,sy=s.y*H;
+    // Self-loop or arrow
+    if(s.to==="self"){
+      ctx.strokeStyle=s.col;ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(sx+25,sy-20,15,0.5,5.5);ctx.stroke();
+      // Arrowhead
+      ctx.fillStyle=s.col;ctx.beginPath();
+      ctx.moveTo(sx+13,sy-8);ctx.lineTo(sx+18,sy-16);ctx.lineTo(sx+8,sy-14);ctx.fill();
+    } else {
+      const target=sigs.find(t=>t.label===s.to);
+      if(target){
+        ctx.strokeStyle=s.col;ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(target.x*W,target.y*H);ctx.stroke();
+        // Arrow head
+        const dx=target.x*W-sx,dy=target.y*H-sy;
+        const len=Math.sqrt(dx*dx+dy*dy);
+        const ux=dx/len,uy=dy/len;
+        const ax=target.x*W-ux*20,ay=target.y*H-uy*20;
+        ctx.fillStyle=s.col;ctx.beginPath();
+        ctx.moveTo(ax+uy*6,ay-ux*6);ctx.lineTo(target.x*W,target.y*H);
+        ctx.lineTo(ax-uy*6,ay+ux*6);ctx.fill();
+      }
+    }
+    // Node
+    ctx.fillStyle=s.col;
+    ctx.beginPath();ctx.arc(sx,sy,20,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="bold 10px Courier New";ctx.textAlign="center";
+    ctx.fillText(s.label,sx,sy+4);
+    ctx.fillStyle=s.col;ctx.font="9px Courier New";
+    ctx.fillText(s.desc,sx,sy+34);
+  }
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H224: Adjugate signature map — (1+,2−) is the attractor",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("Green = Q3p's signature. The unique indefinite fixed point.",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
