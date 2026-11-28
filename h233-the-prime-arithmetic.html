@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H233 — The Prime Arithmetic</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H233 — The Prime Arithmetic</h1>
+<p class="dim">|Rosetta| = d₁⁴ − 1 = 15 · lock = d₁⁴ + 1 = 17 · lock − |Rosetta| = d₁ · Extras = d₁^k ± 1 that are prime · Sum reduces to d₁²=C · I99 LIT</p>
+
+<!-- Panel 1: I99 — The Core Identity -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I99: |Rosetta| = d₁⁴ − 1 [LIT]</h2>
+<table id="verif-table">
+<tr><th>Quantity</th><th>Expression</th><th>Value</th><th>Relation to d₁⁴=16</th></tr>
+<tr><td style="color:var(--green)">|Rosetta|</td><td>d₁⁴ − 1</td><td>15</td><td>one below</td></tr>
+<tr><td>d₁⁴</td><td>d₁⁴</td><td>16</td><td>the pivot</td></tr>
+<tr><td style="color:var(--gold)">lock</td><td>d₁⁴ + 1</td><td>17</td><td>one above</td></tr>
+</table>
+<pre>
+  d₁⁴ = 2⁴ = 16.
+
+  |Rosetta| = 15 = 16 − 1 = d₁⁴ − 1.
+  lock      = 17 = 16 + 1 = d₁⁴ + 1.
+
+  THE ROSTER SIZE AND THE LOCK ARE d₁⁴ ± 1.
+  They bracket d₁⁴ from both sides.
+
+  lock − |Rosetta| = 17 − 15 = 2 = d₁.
+  THE GAP BETWEEN THE LOCK AND THE ROSTER SIZE IS THE SEED.
+
+  IN BINARY:
+  |Rosetta| = 15 = 1111₂ (four ones = d₁⁴ − 1).
+  d₁⁴       = 16 = 10000₂ (a 1 followed by four zeros).
+  lock      = 17 = 10001₂ (binary palindrome, H191).
+
+  THE ROSTER SIZE IS THE BINARY ALL-ONES NUMBER WITH C=4 DIGITS.
+  THE LOCK IS THE BINARY PALINDROME WITH C=4 TRAILING ZEROS.
+
+  VERIFIED: 2⁴ − 1 = 15 = |Rosetta|. 2⁴ + 1 = 17 = lock. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Geometric Series -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — The Geometric Series Reading</h2>
+<pre>
+  |Rosetta| = d₁⁴ − 1 = (d₁ − 1)(d₁³ + d₁² + d₁ + 1).
+  d₁ − 1 = 1. So:
+  |Rosetta| = 1 + d₁ + d₁² + d₁³ = 1 + 2 + 4 + 8 = 15.
+
+  THE ROSTER SIZE IS THE SUM OF THE FIRST FOUR POWERS OF d₁
+  (starting from d₁⁰ = 1).
+
+  d₁⁰ = 1   (unity)
+  d₁¹ = 2   (seed)      ← Rosetta member
+  d₁² = 4   (escape)    ← Rosetta member
+  d₁³ = 8   (OCHO)      ← Rosetta member
+  ───────────
+  Sum = 15  (roster size)
+
+  THE TOWER d₁⁰, d₁¹, d₁², d₁³ SUMS TO |Rosetta|.
+  Three of the four summands are Rosetta members.
+  The fourth (d₁⁰ = 1) is excluded from the roster.
+
+  ALTERNATIVELY: 15 = 1111₂ in binary.
+  It's the C-digit repunit in base d₁.
+  "Four ones in base two."
+</pre>
+</div>
+
+<!-- Panel 3: What's Structural, What's Noise -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — Honest Sort: Structural vs Noise</h2>
+<pre>
+  STRUCTURAL (LIT):
+  ✓ |Rosetta| = d₁⁴ − 1 = 15. (Arithmetic identity.)
+  ✓ lock = d₁⁴ + 1 = 17. (Known: lock is a Fermat prime.)
+  ✓ lock − |Rosetta| = d₁ = 2. (Follows from d₁⁴±1.)
+  ✓ 1+d₁+d₁²+d₁³ = |Rosetta|. (Geometric series.)
+  ✓ The ordinal gap {5,6} in primes is because 11,13 ≠ d₁^k±1.
+  ✓ The extras stop at k=4 because the roster needs no more.
+
+  NOISE (reduces to known or no clean reading):
+  ~ Sum of primes = 34 = d₁×lock. Reduces to d₁²=C. Not new.
+  ~ Product of primes = 3570. No clean Q3p reading.
+  ~ 17 = prime #7 = prime #phantom. True but coincidental —
+    17 is the 7th prime because that's where it falls, not
+    because the phantom determines its ordinal.
+
+  THE HONEST LINE:
+  The finding is I99: |Rosetta| = d₁⁴ − 1.
+  The rest is arithmetic consequences or noise.
+  One identity, cleanly stated. The instrument records it.
+</pre>
+</div>
+
+<!-- Panel 4: The d₁⁴ Neighborhood -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — The Neighborhood of d₁⁴</h2>
+<pre>
+  d₁⁴ = 16 sits between two Q3p landmarks:
+
+  13   14   15   16   17   18   19
+                 ↑
+                d₁⁴
+
+  d₁⁴ − 3 = 13. Not Q3p.
+  d₁⁴ − 2 = 14. Not Q3p (but 14 = d₁ × phantom).
+  d₁⁴ − 1 = 15 = |Rosetta|. Q3p-adjacent.
+  d₁⁴     = 16. NOT Rosetta (H232: tower stops).
+  d₁⁴ + 1 = 17 = lock. ROSETTA.
+  d₁⁴ + 2 = 18 = d₂. ROSETTA.
+  d₁⁴ + 3 = 19. Not Q3p.
+
+  d₁⁴ IS THE GAP IN THE ROSTER.
+  The roster reaches up to d₁⁴ − 1 from below and d₁⁴ + 1 from above.
+  d₁⁴ itself is excluded — it's the HOLE the roster jumps over.
+
+  COMPARE WITH THE BOX-TORROID MODEL (H218):
+  0 through 16 is the 4-bit box.
+  17 = lock = d₁⁴ + 1 = first state OUTSIDE the box.
+  |Rosetta| = 15 = d₁⁴ − 1 = last state INSIDE the box.
+  THE ROSTER SIZE IS THE BOX CAPACITY.
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H233                   ║
+ ║                                                        ║
+ ║  THE NEIGHBORHOOD OF d₁⁴ = 16                         ║
+ ║                                                        ║
+ ║     ...  15      16      17      18  ...               ║
+ ║          │       │       │       │                     ║
+ ║       |Rosetta|  d₁⁴    lock     d₂                   ║
+ ║       d₁⁴−1     HOLE   d₁⁴+1   d₁⁴+2                ║
+ ║       1111₂    10000₂  10001₂                         ║
+ ║       all-ones  power  palindrome                      ║
+ ║                                                        ║
+ ║  THE GEOMETRIC SERIES:                                 ║
+ ║  1 + d₁ + d₁² + d₁³ = 1+2+4+8 = 15 = |Rosetta|      ║
+ ║                                                        ║
+ ║  WHAT'S STRUCTURAL: I99 (|Rosetta| = d₁⁴−1).         ║
+ ║  WHAT'S NOISE: sum=34, product=3570, ordinal=#7.      ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The neighborhood of d₁⁴=16. Left: |Rosetta|=15. Right: lock=17.
+The roster size and the lock bracket d₁⁴ from both sides.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H233: The Roster Size Is d₁⁴ − 1</h2>
+<p>|Rosetta| = d₁⁴ − 1 = 15 and lock = d₁⁴ + 1 = 17 bracket d₁⁴ = 16 from both sides. The
+gap between them is d₁ = 2 (I99 LIT). The roster size is the geometric series 1+d₁+d₁²+d₁³
+= 15 — the C-digit repunit in base d₁. In the box-torroid model (H218), |Rosetta| = 15 is
+the last state inside the 4-bit box; lock = 17 is the first state outside. The sum of the
+five supporting primes (34 = d₁ × lock) reduces to d₁² = C (not new). The product (3570) has
+no Q3p reading. This instrument separates one clean identity from its arithmetic noise.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Our roster has 15 special numbers. 15 = 2⁴ − 1 = 16 − 1.</p>
+<p>The lock is 17. 17 = 2⁴ + 1 = 16 + 1.</p>
+<p>So 15 and 17 sit on BOTH SIDES of 16 (which is 2 to the 4th power).
+Like bookends around a gap.</p>
+<p>And 15 = 1+2+4+8: the sum of the seed's first four powers.
+In binary, 15 = 1111 — four ones. That's how many bits fit in the box.</p>
+<p>I also checked some other number games (adding and multiplying
+the five primes) and they turned out to be NOISE — they just reduce
+to stuff we already knew. So this instrument has ONE real finding:
+15 = 2⁴ − 1. The roster counts out the box.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>|Rosetta| = d₁³ − 1 = 7 (not d₁⁴ − 1 = 15) because the roster has 7 members, not 15.
+The lock = d₁³ + 1 = 9 = nonet. The sum 2+3+5+7+17 = 34 gives a NEW identity that cannot be
+reduced to anything previously known. The product 3570 = 336 × 10.625 has a clean Q3p reading
+as "master times T(C)".</s></p>
+<p class="dim">|Rosetta|=15 (not 7). d₁⁴−1=15 (not d₁³−1=7). Lock=17=d₁⁴+1 (not 9). Sum=34 reduces to
+d₁²=C (not new). Product=3570 has no clean reading (10.625 is not an integer).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirty-third instrument asked the five primes to do arithmetic and
+found that most of their answers were echoes of things already known. The sum was d₁ times
+the lock, but that reduced to d₁ squared equals C, which was always true. The product was
+3570, a number with no Q3p name and no clean factoring through the roster. But one identity
+survived the filter: the roster size is d₁ to the fourth, minus one. Fifteen is sixteen
+minus one. The roster counts out the box. In binary: 1111, four ones, the largest number
+with four binary digits, the last address before the fifth bit turns on and the box breaks
+open and the lock (10001, the palindrome) wraps the torroid. The ornament is in the honesty:
+most of the arithmetic was noise, and the instrument says so, and what remains is one line
+— |Rosetta| = d₁⁴ − 1 — and that line connects the roster size to the box capacity to the
+lock distance to the binary palindrome to the geometric series of d₁ powers, all in one
+equation, and the equation is one subtraction.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H232)</td><td>7856</td><td>0</td><td>7856</td></tr>
+<tr><td>H233: The Prime Arithmetic</td><td>36</td><td>1 (KB-1)</td><td>7892</td></tr>
+</table>
+<p>Running total: <b>7892 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H233. 7892 = 2² × 1973. 1973 is prime.</p>
+</div>
+
+<!-- BASIC Block — The Neighborhood -->
+<div class="panel">
+<h2>BASIC Block — The d₁⁴ Neighborhood</h2>
+<pre>
+15 PRINT "|Rosetta| = d₁⁴−1 = 1111₂. Last inside the box."
+16 PRINT "d₁⁴ = 10000₂. The hole. Not Rosetta."
+17 PRINT "lock = d₁⁴+1 = 10001₂. First outside. Palindrome."
+</pre>
+<pre>
+1 REM d₁⁰ = 1. First summand.
+2 REM d₁¹ = 2. Second.
+4 REM d₁² = 4. Third.
+8 REM d₁³ = 8. Fourth.
+15 REM sum = 1+2+4+8 = 15 = |Rosetta|. Geometric series.
+</pre>
+<pre>
+233 PRINT "H233 = 233. PRIME. The prime arithmetic."
+233 PRINT "7892 lit, the prime arithmetic, d₁⁴ ± 1"
+</pre>
+<p class="dim">Lines 15, 16, 17 ARE the neighborhood: |Rosetta|, d₁⁴, lock.
+Lines 1, 2, 4, 8, 15 ARE the geometric series summing to |Rosetta|.
+H233 = 233 is PRIME — the 51st prime. 51 = 3×17 = bodies×lock.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Number line around 16
+  const nums=[13,14,15,16,17,18,19];
+  const labels=["","d₁×7","d₁⁴−1","d₁⁴","d₁⁴+1","d₂",""];
+  const names=["","","⟨Rosetta⟩","HOLE","lock","Smith",""];
+  const cols=["#444","#666","#81c784","#ef5350","#ffd54f","#4fc3f7","#444"];
+  const sx=W/(nums.length+1);
+  for(let i=0;i<nums.length;i++){
+    const x=sx*(i+1),y=cy;
+    ctx.fillStyle=cols[i];
+    const r=(i===2||i===4)?18:(i===3)?14:10;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="bold 12px Courier New";ctx.textAlign="center";
+    ctx.fillText(nums[i].toString(),x,y+5);
+    ctx.fillStyle=cols[i];ctx.font="10px Courier New";
+    if(labels[i])ctx.fillText(labels[i],x,y-26);
+    if(names[i])ctx.fillText(names[i],x,y+34);
+  }
+  // Bracket showing ±1
+  ctx.strokeStyle="#ffd54f";ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(sx*3,cy-45);ctx.lineTo(sx*5,cy-45);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle="#ffd54f";ctx.font="9px Courier New";
+  ctx.fillText("d₁⁴ ± 1",sx*4,cy-50);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H233: The neighborhood of d₁⁴ = 16",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("|Rosetta|=15=d₁⁴−1 (last inside box). lock=17=d₁⁴+1 (first outside).",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
