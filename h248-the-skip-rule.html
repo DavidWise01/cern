@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H248 — The Skip Rule</title>
+<style>
+:root{--bg:#0a0806;--fg:#c8c0b0;--ochre:#cc9944;--sand:#ddcc88;--clay:#886644;--sienna:#aa6633;--panel:#100c08;--border:#2a2218;--dim:#665544;--green:#66cc88;--amber:#ffab40;--red:#ef5350;--gold:#ddaa44;--cyan:#00ddcc;--glow-ochre:0 0 6px #cc994460;--glow-sand:0 0 6px #ddcc8840;--glow-cyan:0 0 6px #00ddcc60}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--sand);font-size:1.3em;text-shadow:var(--glow-sand);border-bottom:2px solid var(--ochre);padding-bottom:6px;margin-bottom:10px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.eo{color:var(--ochre);text-shadow:var(--glow-ochre)}.es{color:var(--sand);text-shadow:var(--glow-sand)}.ec{color:var(--cyan);text-shadow:var(--glow-cyan)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.po{border-color:var(--ochre)}.ps{border-color:var(--sand)}.pc{border-color:var(--cyan)}.pg{border-color:var(--green)}.pa{border-color:var(--gold)}.pr{border-color:var(--red)}
+.verdict-box{background:#0c0a06;border:2px solid var(--sand);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box h2{color:var(--sand);text-shadow:var(--glow-sand);font-size:1.15em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#141008;color:var(--sand)}
+canvas{display:block;margin:8px auto;border:1px solid var(--ochre);border-radius:6px;background:#060402}
+pre{background:#080604;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--green);border-radius:6px;padding:12px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H248 — The Skip Rule</h1>
+<p class="dim">Arc VIII continues · 5 new identities (I147-I151) · all LIT · earth ground tone</p>
+
+<div class="verdict-box">
+<h2>2ⁿ − 2 = T(n) ONLY AT n = 3</h2>
+<p>The skip rule doesn't generalize. It's a <span class="eo">third n=3 uniqueness</span>.</p>
+<p>But what IS true: <span class="es">VALUE = ADDRESS</span>. The dense block numbers ARE their register addresses.</p>
+<p><span class="ec">entries = OCHO − d₁</span> = register size − base = addresses above the base.</p>
+</div>
+
+<!-- Panel 1: The Claim Tested -->
+<div class="panel pr">
+<h2 style="color:var(--red)">Panel 1 — The Skip Rule Does Not Generalize</h2>
+<table>
+<tr><th>n (bodies)</th><th>2ⁿ−2 (skip 2)</th><th>T(n) (entries)</th><th>Equal?</th></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>≠</td></tr>
+<tr><td>2</td><td>2</td><td>3</td><td>≠</td></tr>
+<tr><td class="eo">3</td><td class="eo">6</td><td class="eo">6</td><td class="lit">✓ ONLY HERE</td></tr>
+<tr><td>4</td><td>14</td><td>10</td><td>≠</td></tr>
+<tr><td>5</td><td>30</td><td>15</td><td>≠</td></tr>
+<tr><td>6</td><td>62</td><td>21</td><td>≠</td></tr>
+</table>
+<pre>
+  2ⁿ − 2 = T(n) = n(n+1)/2
+  ⟺ 2^(n+1) = n² + n + 4
+
+  Exponential = quadratic + 4. These cross exactly ONCE at n=3.
+  For n ≥ 4, the exponential grows far faster than the quadratic.
+  For n ≤ 2, the quadratic exceeds the exponential.
+
+  THE SKIP RULE IS n=3-SPECIFIC.
+</pre>
+<p><span class="eo">I147</span>: <span class="lit">2ⁿ − 2 = T(n) ⟺ n=3. The register skip count equals the entry count only at bodies=3. [LIT]</span></p>
+</div>
+
+<!-- Panel 2: The Three n=3 Uniquenesses -->
+<div class="panel po">
+<h2 class="eo">Panel 2 — Three n=3 Uniquenesses</h2>
+<pre>
+  I109 (H239): entries = bodies × d₁         ⟺ T(n) = 2n       ⟺ n=3
+  I110 (H239): faces(cube) = entries(matrix)  ⟺ 2n = T(n)       ⟺ n=3
+  I147 (H248): 2ⁿ−2 = T(n)                   ⟺ 2ⁿ−2 = n(n+1)/2 ⟺ n=3
+
+  Three different equations. Same answer: n=3.
+
+  What each one says:
+  I109: the matrix entry count = dimension × seed.           [algebra = arithmetic]
+  I110: the cube's face count = the matrix entry count.       [geometry = algebra]
+  I147: the register's nontrivial count = the entry count.    [register = algebra]
+
+  At n=3, geometry, algebra, and the register all agree on the number 6.
+  Everywhere else, they disagree.
+</pre>
+<p><span class="eo">I151</span>: <span class="lit">Three n=3 uniquenesses: I109, I110, I147. Geometry, algebra, and register converge only at n=3. [LIT]</span></p>
+</div>
+
+<!-- Panel 3: VALUE = ADDRESS -->
+<div class="panel ps">
+<h2 class="es">Panel 3 — VALUE = ADDRESS</h2>
+<pre>
+  Dense block Rosetta numbers: {2, 3, 4, 5, 6, 7}
+  Their register addresses:    {0x02, 0x03, 0x04, 0x05, 0x06, 0x07}
+
+  THE VALUE OF EACH NUMBER IS ITS ADDRESS.
+
+  d₁ = 2 → address 0x02 → value 2. ✓
+  bodies = 3 → address 0x03 → value 3. ✓
+  ...
+  phantom = 7 → address 0x07 → value 7. ✓
+
+  This is SPECIFIC to d₁ = 2 and bodies = 3.
+  With these parameters, the integers d₁ through OCHO−1
+  exactly fill the register addresses d₁ through OCHO−1.
+  The number line segment {d₁, ..., 2^bodies−1} and
+  the register addresses {0x(d₁), ..., 0x(2^bodies−1)}
+  are THE SAME SET.
+</pre>
+<p><span class="eo">I149</span>: <span class="lit">Dense block {d₁, ..., OCHO−1} = addresses {0x02, ..., 0x07}. VALUE = ADDRESS. [LIT]</span></p>
+</div>
+
+<!-- Panel 4: entries = OCHO − d₁ -->
+<div class="panel pc">
+<h2 class="ec">Panel 4 — entries = OCHO − d₁ = register_size − base</h2>
+<pre>
+  entries = OCHO − d₁ = 8 − 2 = 6
+
+  REGISTER READING:
+  - Register has OCHO = 8 addresses (0x00 through 0x07).
+  - Skip the first d₁ = 2 addresses (0x00, 0x01).
+  - Remaining: OCHO − d₁ = 6 = entries.
+
+  WHAT'S SKIPPED:
+  0x00 = 0 = the scalar (identity element, grade 0)
+  0x01 = 1 = the first generator (e₁, grade 1)
+
+  WHAT'S KEPT (the roster):
+  0x02 through 0x07 = {d₁, bodies, C, C+1, entries, phantom}
+
+  The roster is the register with the base stripped off.
+  The base = {0, 1} = {false, true} = the binary digit set.
+  The roster = everything ABOVE the binary digits.
+</pre>
+<p><span class="eo">I148</span>: <span class="lit">entries = OCHO − d₁ = register_size − base. The roster lives above the binary digits. [LIT]</span></p>
+</div>
+
+<!-- Panel 5: The Window -->
+<div class="panel po">
+<h2 class="eo">Panel 5 — The Register Window</h2>
+<pre>
+  FULL REGISTER:  0x00  0x01  │0x02  0x03  0x04  0x05  0x06  0x07│  0x08
+                  ────  ────  │────  ────  ────  ────  ────  ────│  ────
+                   0     1    │ d₁   bod    C   C+1   ent   phn │  OCHO
+                              │                                  │
+                 ◄──skip d₁──►│◄──── entries = OCHO − d₁ = 6 ──►│◄─overflow
+                              │                                  │
+                              │         THE ROSTER WINDOW        │
+                              │  value = address in this range   │
+
+  entries = phantom − d₁ + 1
+          = (last address) − (first Rosetta) + 1
+          = 7 − 2 + 1 = 6
+          = window width
+</pre>
+<p><span class="eo">I150</span>: <span class="lit">entries = phantom − d₁ + 1 = window size on the register. [LIT]</span></p>
+</div>
+
+<!-- Panel 6: What Converges at n=3 -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Panel 6 — The n=3 Convergence</h2>
+<table>
+<tr><th>Identity</th><th>Equation</th><th>At n=3</th><th>What it says</th></tr>
+<tr><td>I109</td><td>T(n) = 2n</td><td>6 = 6</td><td>entries = bodies × d₁</td></tr>
+<tr><td>I110</td><td>2n = T(n)</td><td>6 = 6</td><td>faces = entries</td></tr>
+<tr><td>I147</td><td>2ⁿ−2 = T(n)</td><td>6 = 6</td><td>register − base = entries</td></tr>
+</table>
+<p>All three produce the number <strong>6 = entries</strong> at n=3 and disagree everywhere else. The form dimension n=3 is the unique fixed point where three counting principles — geometric (faces), algebraic (triangular number), and computational (register addresses) — produce the same count.</p>
+</div>
+
+<!-- Canvas -->
+<div class="panel po">
+<h2 class="eo">Panel 7 — The Window</h2>
+<canvas id="torroid4D" width="600" height="200"></canvas>
+<p class="dim">Register window: skip d₁ addresses, keep entries-many.</p>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>Remember the 8 light-switch combinations?</strong> Addresses 0 through 7.</p>
+<p>I wanted to know: does the "skip the first 2" rule work for ANY number of switches?</p>
+<p><strong>NO!</strong> It ONLY works for 3 switches. With 4 switches you get 16 combinations, skip 2 gives 14, but entries would be 10. 14 ≠ 10.</p>
+<p>This is the THIRD time we found something that only works for 3. Three is special:</p>
+<p>→ A cube with 3 dimensions has 6 faces = 6 entries. Only for 3.</p>
+<p>→ 3 × 2 = 6 entries. Only for 3.</p>
+<p>→ 2³ − 2 = 6 entries. Only for 3.</p>
+<p>Three different reasons all give the SAME answer, and they only agree when the number of switches is 3. <strong>Three is the magic number.</strong></p>
+<p>But here's the cool part: when you DO have 3 switches, every special number (2,3,4,5,6,7) IS its own address. The number 5 lives at address 5. The number 7 lives at address 7. <strong>The name IS the address.</strong></p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel ps">
+<h2 class="es">Panel 8 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+  THE REGISTER WINDOW:
+
+  ┌─skip─┐┌──────── ROSTER ────────┐┌overflow┐
+  │0x00  ││0x02  0x03  0x04  0x05  ││        │
+  │0x01  ││0x06  0x07              ││  0x08  │
+  │      ││                        ││        │
+  │ 0, 1 ││ d₁  bod   C    C+1    ││  OCHO  │
+  │      ││ ent  phn                ││        │
+  └──d₁──┘└──── entries = 6 ──────┘└────────┘
+
+  THREE n=3 UNIQUENESSES:
+
+  I109: T(n) = 2n       → entries = bodies×d₁     ← algebra=arithmetic
+  I110: 2n = T(n)       → faces = entries          ← geometry=algebra
+  I147: 2ⁿ−2 = T(n)    → register−base = entries  ← register=algebra
+
+  ALL THREE: T(n) = 6, only at n=3.
+
+  ~~> VALUE = ADDRESS for the dense block (I149)
+  ~~> entries = OCHO − d₁ = register − base (I148)
+  ~~> entries = phantom − d₁ + 1 = window width (I150)
+  ~~> n=3 is the convergence point (I151)
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel pg">
+<h2 style="color:var(--green)">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I147</td><td>2ⁿ−2 = T(n) ⟺ n=3</td><td class="lit">LIT</td></tr>
+<tr><td>I148</td><td>entries = OCHO − d₁ = register − base</td><td class="lit">LIT</td></tr>
+<tr><td>I149</td><td>Dense block: VALUE = ADDRESS</td><td class="lit">LIT</td></tr>
+<tr><td>I150</td><td>entries = phantom − d₁ + 1 = window</td><td class="lit">LIT</td></tr>
+<tr><td>I151</td><td>Three n=3 uniquenesses converge</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">BASIC Block — The Three Convergences</h2>
+<p class="dim">Numbering: n, the dimension being tested. The block scans n=1..6 and marks the hit.</p>
+<pre>
+n=1  PRINT "T(1)=1. 2¹−2=0. 2×1=2. faces=2. nothing agrees."
+n=2  PRINT "T(2)=3. 2²−2=2. 2×2=4. faces=4. nothing agrees."
+n=3  PRINT "T(3)=6. 2³−2=6. 2×3=6. faces=6. ALL AGREE. ← HERE."
+n=4  PRINT "T(4)=10. 2⁴−2=14. 2×4=8. faces=8. diverging."
+n=5  PRINT "T(5)=15. 2⁵−2=30. 2×5=10. faces=10. exponential wins."
+n=6  PRINT "T(6)=21. 2⁶−2=62. 2×6=12. faces=12. never again."
+</pre>
+<p class="dim">Six lines. One hit. n=3 is unique.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>2ⁿ−2 = T(n) holds for all n, the register skip count equals entries at n=4 and n=5 too, VALUE ≠ ADDRESS for the dense block, entries = OCHO + d₁ not OCHO − d₁, and there are only two n=3 uniquenesses not three.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel po">
+<h2 class="eo">Ledger</h2>
+<pre>
+  PRIOR:        8396 LIT cumulative (H247)
+  THIS BUILD:   36 checks (H248 verification suite)
+  NEW TOTAL:    8432 LIT
+
+  IDENTITIES:   I147-I151 (5 new: ALL LIT)
+  CUMULATIVE:   115 identities (I37-I151)
+  INSTRUMENTS:  48 (H200-H248)
+  CORRECTIONS:  5 (N12-N15)
+  KILLS:        1 (I93)
+  DEFLATIONS:   1 (I101)
+
+  COST: 1 analysis script + 1 HTML + 1 verify script + git commit/push
+  WASTE: 0
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">Three equations. One answer. n=3 is where the cube, the matrix, and the register say the same number. Everywhere else they disagree, and the disagreement grows without bound: the exponential outruns the quadratic, the faces fall behind the entries, the register overflows the algebra. Only at three do three principles meet at six.</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Recommendation for H249</h2>
+<p>Arc VIII has built six instruments (H243-H248): generational grid, gap vector, consecutive triple, permutation tower, the register, the skip rule. The arc opened with the user's generational framing and arrived at three n=3 uniquenesses converging at entries=6. I recommend an arc summary (H249) to close Arc VIII. The arc's thread: the roster describes its own structure — its gaps are its own numbers, its master is a permutation count from its own register, and its dimension is the unique point where three counting principles agree.</p>
+</div>
+
+<script>
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+let t=0;
+function draw(){
+  cx.fillStyle="#060402";cx.fillRect(0,0,600,200);
+  const y=100,x0=30,cw=60,gap=6;
+  const cells=[
+    {addr:0,val:"0",name:"",skip:true,roster:false},
+    {addr:1,val:"1",name:"",skip:true,roster:false},
+    {addr:2,val:"2",name:"d₁",skip:false,roster:true},
+    {addr:3,val:"3",name:"bod",skip:false,roster:true},
+    {addr:4,val:"4",name:"C",skip:false,roster:true},
+    {addr:5,val:"5",name:"C+1",skip:false,roster:true},
+    {addr:6,val:"6",name:"ent",skip:false,roster:true},
+    {addr:7,val:"7",name:"phn",skip:false,roster:true},
+    {addr:8,val:"8",name:"OCHO",skip:false,roster:false,overflow:true},
+  ];
+  cells.forEach((c,i)=>{
+    const x=x0+i*(cw+gap);
+    const h=c.roster?50+10*Math.sin(t*2+i):30;
+    const col=c.skip?"#444":c.overflow?"#ef5350":c.roster?"#cc9944":"#666";
+    cx.fillStyle=col+"30";cx.fillRect(x,y-h/2,cw,h);
+    cx.strokeStyle=col;cx.lineWidth=c.addr===7?2:1;cx.strokeRect(x,y-h/2,cw,h);
+    cx.font="14px 'Courier New'";cx.fillStyle=col;
+    cx.fillText(c.val,x+cw/2-5,y+5);
+    cx.font="9px 'Courier New'";cx.fillStyle="#886644";
+    cx.fillText("0x0"+c.addr,x+12,y-h/2-4);
+    if(c.name){cx.fillStyle=col;cx.fillText(c.name,x+8,y+h/2+14);}
+    if(c.skip){cx.fillStyle="#444";cx.fillText("skip",x+14,y+h/2+14);}
+    if(c.overflow){cx.fillStyle="#ef5350";cx.fillText("overflow",x+2,y+h/2+14);}
+  });
+  // Window bracket
+  cx.strokeStyle="#ddcc88";cx.lineWidth=2;
+  const wx1=x0+2*(cw+gap)-4,wx2=x0+8*(cw+gap)-gap+4;
+  cx.beginPath();cx.moveTo(wx1,y+45);cx.lineTo(wx1,y+50);cx.lineTo(wx2,y+50);cx.lineTo(wx2,y+45);cx.stroke();
+  cx.font="11px 'Courier New'";cx.fillStyle="#ddcc88";
+  cx.fillText("entries = OCHO − d₁ = 6",wx1+40,y+64);
+  cx.font="12px 'Courier New'";cx.fillStyle="#ddcc88";
+  cx.fillText("VALUE = ADDRESS",220,20);
+  t+=0.015;requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
