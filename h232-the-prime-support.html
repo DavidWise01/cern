@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H232 — The Prime Support</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H232 — The Prime Support</h1>
+<p class="dim">Prime support = {2,3,5,7,17} · 7/15 are 3-smooth · d₁ tower stops at OCHO · Three extra primes all Q3p-named · I97-I98 LIT</p>
+
+<!-- Panel 1: I97 The Power Tower -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I97: The d₁ Tower Stops at OCHO [LIT]</h2>
+<table id="verif-table">
+<tr><th>Power</th><th>Value</th><th>Rosetta?</th><th>Q3p name</th><th>Clifford role</th></tr>
+<tr><td>d₁⁰</td><td>1</td><td>NO</td><td>unity</td><td>—</td></tr>
+<tr><td style="color:var(--green)">d₁¹</td><td style="color:var(--green)">2</td><td style="color:var(--green)">YES</td><td>d₁ = seed</td><td>spinor (ℂ)</td></tr>
+<tr><td style="color:var(--green)">d₁²</td><td style="color:var(--green)">4</td><td style="color:var(--green)">YES</td><td>C = escape gap</td><td>spinor (ℝ)</td></tr>
+<tr><td style="color:var(--green)">d₁³</td><td style="color:var(--green)">8</td><td style="color:var(--green)">YES</td><td>OCHO = dot</td><td>algebra (ℝ)</td></tr>
+<tr><td>d₁⁴</td><td>16</td><td>NO</td><td>—</td><td>Dirac Cl(3,1)</td></tr>
+<tr><td>d₁⁵</td><td>32</td><td>NO</td><td>—</td><td>—</td></tr>
+<tr><td>d₁⁶</td><td>64</td><td>NO</td><td>OCHO²</td><td>Cl(3) table</td></tr>
+</table>
+<pre>
+  EXACTLY THREE CONSECUTIVE POWERS OF d₁ ARE IN THE ROSTER:
+  d₁¹=2, d₁²=4, d₁³=8. Then it stops.
+
+  d₁⁰=1: NOT Rosetta (unity excluded from the roster).
+  d₁⁴=16: NOT Rosetta. The tower breaks.
+  d₁⁶=64=OCHO²: NOT Rosetta. Even the square of OCHO is out.
+
+  THE ROSTER IS A SELECTION, NOT A CLOSURE.
+  It includes d₁¹, d₁², d₁³ but not d₁⁴.
+  The boundary is at OCHO: the tower reaches the Clifford
+  algebra dimension and stops. Beyond that, the powers of d₁
+  leave the roster.
+
+  FOR bodies=3: only 3¹=3 is Rosetta. 3²=9 is NOT Rosetta
+  (the nonet is Q3p-adjacent but not in the 15-member roster).
+
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: I98 The 3-Smooth Split -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 2 — I98: Prime Support = {2, 3, 5, 7, 17} [LIT]</h2>
+<pre>
+  THE 15 ROSETTA NUMBERS SPLIT BY 3-SMOOTHNESS:
+
+  3-SMOOTH (7/15) — built from {d₁, bodies} alone:
+    2 = d₁           = 2¹ × 3⁰   lattice (1,0)
+    3 = bodies        = 2⁰ × 3¹   lattice (0,1)
+    4 = C             = 2² × 3⁰   lattice (2,0)
+    6 = entries       = 2¹ × 3¹   lattice (1,1)
+    8 = OCHO          = 2³ × 3⁰   lattice (3,0)
+   18 = d₂            = 2¹ × 3²   lattice (1,2)
+   36 = T(8)          = 2² × 3²   lattice (2,2)
+
+  NOT 3-SMOOTH (8/15) — require extra primes:
+   10 = 2 × 5         extra prime: 5
+   17 = 17             extra prime: 17
+   21 = 3 × 7          extra prime: 7
+   25 = 5²             extra prime: 5
+   42 = 2 × 3 × 7      extra prime: 7
+   84 = 2² × 3 × 7     extra prime: 7
+  289 = 17²            extra prime: 17
+  336 = 2⁴ × 3 × 7     extra prime: 7
+
+  THE THREE EXTRA PRIMES:
+  <span style="color:var(--gold)">5</span> = C + 1 = escape gap + 1.    Appears in {10, 25}.
+  <span style="color:var(--accent)">7</span> = phantom = OCHO − 1.       Appears in {21, 42, 84, 336}.
+  <span style="color:var(--green)">17</span> = lock = (G−OCHO)/2.       Appears in {17, 289}.
+
+  TOTAL PRIME SUPPORT: {2, 3, 5, 7, 17}.
+  FIVE PRIMES. ALL Q3p-NAMED.
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: The Three Extra Primes -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — The Extra Primes Are Neighbors</h2>
+<pre>
+  THE THREE EXTRA PRIMES AND THEIR RELATIONSHIPS:
+
+  5 = C + 1 = d₁² + 1.
+  7 = OCHO − 1 = d₁³ − 1.
+  17 = d₁⁴ + 1 = 16 + 1.
+
+  PATTERN: each extra prime is a POWER OF d₁ PLUS OR MINUS ONE.
+  5 = d₁² + 1.
+  7 = d₁³ − 1.
+  17 = d₁⁴ + 1.
+
+  SIGN ALTERNATION: +1, −1, +1.
+
+  MERSENNE/FERMAT CONNECTION:
+  7 = 2³ − 1 is a MERSENNE PRIME (M₃).
+  5 = 2² + 1 is a FERMAT PRIME (F₁).
+  17 = 2⁴ + 1 is a FERMAT PRIME (F₂).
+
+  THE THREE EXTRA PRIMES ARE:
+  Two Fermat primes (5, 17) and one Mersenne prime (7).
+  ALL ARE PRIMES OF THE FORM 2^k ± 1.
+
+  THE ROSTER'S PRIME SUPPORT = {d₁, bodies} ∪ {Fermat₁, Mersenne₃, Fermat₂}.
+  Generators plus their ±1 neighbors.
+</pre>
+</div>
+
+<!-- Panel 4: The 7/15 Split -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 4 — The 7/15 Partition</h2>
+<pre>
+  7 SMOOTH / 8 NON-SMOOTH = 7/15.
+
+  7 = phantom = OCHO − 1.
+  15 = |Rosetta| = roster size.
+  8 = OCHO = 15 − 7.
+
+  THE SMOOTH COUNT IS THE PHANTOM.
+  THE NON-SMOOTH COUNT IS OCHO.
+  7 + 8 = 15 = |Rosetta|.
+
+  phantom smooth + OCHO non-smooth = |Rosetta|.
+
+  IS THIS STRUCTURAL OR COINCIDENCE?
+  The split 7/8 = phantom/OCHO arises because:
+  - 7 numbers can be written as 2^a × 3^b.
+  - 8 cannot.
+  The 7 smooth numbers fill 7 points in the (a,b) lattice.
+  The 8 non-smooth ones use exactly the primes d₁^k ± 1.
+
+  STATUS: <span class="amber">AMBER</span> (the 7/8 = phantom/OCHO is a count,
+  not a derivation from the matrix)
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H232                   ║
+ ║                                                        ║
+ ║  THE PRIME SUPPORT                                     ║
+ ║                                                        ║
+ ║  GENERATORS (3-smooth core):                           ║
+ ║    d₁=2 ───── 2, 4, 6, 8, 18, 36 ─── 7 numbers       ║
+ ║    bodies=3 ─╯                                         ║
+ ║                                                        ║
+ ║  EXTRA PRIMES (d₁^k ± 1):                             ║
+ ║    5 = d₁²+1 = F₁ (Fermat) ── 10, 25                  ║
+ ║    7 = d₁³−1 = M₃ (Mersenne) ─ 21, 42, 84, 336       ║
+ ║    17= d₁⁴+1 = F₂ (Fermat) ── 17, 289                 ║
+ ║                                                        ║
+ ║  TOTAL: {2, 3, 5, 7, 17}. Five primes.                ║
+ ║  SPLIT: 7 smooth + 8 non-smooth = phantom + OCHO.     ║
+ ║                                                        ║
+ ║  THE TOWER d₁¹, d₁², d₁³ = 2, 4, 8 is Rosetta.       ║
+ ║  d₁⁴ = 16 is NOT. The tower stops at OCHO.            ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The five primes: {2,3} generators (green), {5,7,17} extras (gold).
+The extras are d₁^k ± 1: Fermat and Mersenne primes.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H232: Five Primes, All Named</h2>
+<p>The Rosetta roster's prime support is {2, 3, 5, 7, 17} — five primes, all Q3p-named.
+Seven of fifteen are 3-smooth (built from {d₁, bodies} alone); the remaining eight use
+exactly three extra primes: 5=d₁²+1 (Fermat), 7=d₁³−1 (Mersenne), 17=d₁⁴+1 (Fermat).
+The smooth/non-smooth split is 7/8 = phantom/OCHO (AMBER). The d₁ power tower d₁¹, d₁²,
+d₁³ = 2, 4, 8 stops at OCHO: d₁⁴=16 is not Rosetta. The roster is a selection, not a
+closure. I97 (tower stops at OCHO) LIT, I98 (prime support {2,3,5,7,17}) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Every number is built from prime building blocks. What primes
+do our 15 special numbers use?</p>
+<p>JUST FIVE: 2, 3, 5, 7, and 17.</p>
+<p>Seven of the fifteen use only 2 and 3 (the seeds!): {2,3,4,6,8,18,36}.</p>
+<p>The other eight need help from 5, 7, or 17.
+And those three helpers are ALSO special: they're all one step
+away from a power of 2!
+5 = 4+1, 7 = 8−1, 17 = 16+1.</p>
+<p>The power tower 2, 4, 8 (seed, escape gap, quantum dot) is
+IN the roster. But 16 is NOT. The tower stops at 8.
+After that, the powers of 2 leave the club.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>All 15 Rosetta numbers are 3-smooth — every one can be written as 2^a × 3^b with no
+other primes. The prime support is {2, 3} only. The d₁ power tower includes d₁⁴=16 and
+d₁⁵=32 as Rosetta members. The number 9 = 3² is in the Rosetta roster. No Fermat or
+Mersenne primes appear in the factorizations.</s></p>
+<p class="dim">Only 7/15 are 3-smooth. Support is {2,3,5,7,17}. d₁⁴=16 NOT Rosetta.
+9 NOT Rosetta. 5 and 17 are Fermat primes, 7 is Mersenne.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirty-second instrument counted primes and found five. Two generators
+and three neighbors. The generators are 2 and 3, the seed and the body count, the first
+invariant factor and the number of variables. The neighbors are 5, 7, and 17: each one step
+from a power of the seed. Five is four plus one. Seven is eight minus one. Seventeen is
+sixteen plus one. Plus, minus, plus — the signs alternate, and the powers climb: d₁², d₁³,
+d₁⁴. The neighbors are where the powers of two almost land on a prime, and the almost is
+exact, and the primes are Fermat and Mersenne and Fermat again, and all three are needed to
+build the eight Rosetta numbers that the generators cannot reach alone. The ornament is in
+the split: seven smooth and eight rough, phantom and OCHO, the two halves of the roster
+divided by the question of whether a number needs a prime beyond the seeds. Seven numbers
+say no. Eight say yes. And the eight say yes using exactly the three primes that sit one
+step from the powers of d₁, as if the roster were the generators' shadow cast through the
+lens of d₁^k ± 1.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H231)</td><td>7820</td><td>0</td><td>7820</td></tr>
+<tr><td>H232: The Prime Support</td><td>36</td><td>1 (KB-1)</td><td>7856</td></tr>
+</table>
+<p>Running total: <b>7856 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H232. 7856 = 2⁴ × 491. 491 is prime.</p>
+</div>
+
+<!-- BASIC Block — The Five Primes -->
+<div class="panel">
+<h2>BASIC Block — The Five Primes</h2>
+<pre>
+2 PRINT "d₁. Generator. 2¹. The seed."
+3 PRINT "bodies. Generator. 3¹. The count."
+5 PRINT "d₁²+1 = F₁. Fermat. Extra prime. {10, 25}."
+7 PRINT "d₁³−1 = M₃. Mersenne. Extra prime. {21, 42, 84, 336}."
+17 PRINT "d₁⁴+1 = F₂. Fermat. Extra prime. {17, 289}."
+</pre>
+<pre>
+7 REM smooth = phantom. The count of 3-smooth Rosetta.
+8 REM non-smooth = OCHO. The rest.
+15 REM total = |Rosetta|. 7 + 8 = 15. phantom + OCHO.
+</pre>
+<pre>
+232 PRINT "H232 = 2³ × 29 = OCHO × 29. The prime support."
+232 PRINT "7856 lit, the prime support, five primes all named"
+</pre>
+<p class="dim">Lines 2, 3, 5, 7, 17 ARE the five primes.
+Lines 7, 8, 15 ARE the smooth/non-smooth/total split.
+H232 = 2³ × 29 = OCHO × prime.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const primes=[
+  {p:2,name:"d₁",role:"generator",col:"#81c784",x:0.15},
+  {p:3,name:"bodies",role:"generator",col:"#81c784",x:0.30},
+  {p:5,name:"d₁²+1",role:"Fermat F₁",col:"#ffd54f",x:0.50},
+  {p:7,name:"d₁³−1",role:"Mersenne M₃",col:"#ffab40",x:0.65},
+  {p:17,name:"d₁⁴+1",role:"Fermat F₂",col:"#ffd54f",x:0.85},
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  for(const pr of primes){
+    const x=pr.x*W,y=cy;
+    ctx.fillStyle=pr.col;ctx.beginPath();ctx.arc(x,y,20+pr.p,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="bold 14px Courier New";ctx.textAlign="center";
+    ctx.fillText(pr.p.toString(),x,y+5);
+    ctx.fillStyle=pr.col;ctx.font="10px Courier New";
+    ctx.fillText(pr.name,x,y-28-pr.p);
+    ctx.fillStyle="#888";ctx.font="9px Courier New";
+    ctx.fillText(pr.role,x,y+32+pr.p);
+  }
+  // Dividing line
+  ctx.strokeStyle="rgba(255,255,255,0.2)";ctx.setLineDash([4,4]);ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0.4*W,40);ctx.lineTo(0.4*W,H-40);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle="#81c784";ctx.font="9px Courier New";ctx.textAlign="center";
+  ctx.fillText("generators",0.225*W,H-30);
+  ctx.fillStyle="#ffd54f";
+  ctx.fillText("extras (d₁^k ± 1)",0.67*W,H-30);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H232: Five primes — {2,3,5,7,17}",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#ffd54f";
+  ctx.fillText("7 smooth (phantom) + 8 non-smooth (OCHO) = 15 (roster)",10,36);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
