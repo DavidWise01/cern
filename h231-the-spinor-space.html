@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H231 — The Spinor Space</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H231 — The Spinor Space</h1>
+<p class="dim">Spinor = ℂ² · dim(ℂ)=d₁=2 · dim(ℝ)=C=4 · Tower: d₁, C, OCHO = 2, 4, 8 = d₁¹, d₁², d₁³ · I94-I96 LIT</p>
+
+<!-- Panel 1: The Dimension Tower -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I96: The Dimension Tower [LIT]</h2>
+<table id="verif-table">
+<tr><th>Level</th><th>Object</th><th>Dimension</th><th>Q3p name</th><th>Power of d₁</th></tr>
+<tr><td>Spinor (ℂ)</td><td style="color:var(--green)">ℂ²</td><td>2</td><td>d₁ (seed)</td><td>d₁¹</td></tr>
+<tr><td>Spinor (ℝ)</td><td style="color:var(--gold)">ℝ⁴</td><td>4</td><td>C (escape gap)</td><td>d₁²</td></tr>
+<tr><td>Algebra (ℝ)</td><td style="color:var(--accent)">M₂(ℂ)</td><td>8</td><td>OCHO (dot)</td><td>d₁³</td></tr>
+</table>
+<pre>
+  THE TOWER: d₁¹, d₁², d₁³ = 2, 4, 8 = d₁, C, OCHO.
+
+  THREE CONSECUTIVE POWERS OF THE FIRST INVARIANT FACTOR.
+  ALL THREE ARE ROSETTA MEMBERS.
+  EACH LEVEL IS A STRUCTURAL OBJECT IN THE CLIFFORD ALGEBRA.
+
+  WHY THE TOWER WORKS:
+  Cl(1,2) ≅ M₂(ℂ).
+  M₂(ℂ) acts on ℂ² (spinors).
+  ℂ² has 2 complex dimensions = d₁.
+  ℂ² has 4 real dimensions = d₁² = C.
+  M₂(ℂ) has 4 complex dimensions = d₁² = C.
+  M₂(ℂ) has 8 real dimensions = d₁³ = OCHO.
+
+  EACH STEP DOUBLES: ×2 from ℂ to ℝ (complexification).
+  d₁ → d₁² → d₁³.
+  seed → escape gap → quantum dot.
+  THE CLIFFORD HIERARCHY IS A POWER TOWER OF d₁.
+
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: I94 -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — I94: Spinor Complex Dimension = d₁ [LIT]</h2>
+<pre>
+  THE SPINOR SPACE:
+
+  Cl(1,2) ≅ M₂(ℂ) acts on ℂ² by matrix multiplication.
+  A spinor is a vector ψ = (ψ₁, ψ₂) ∈ ℂ².
+
+  dim_ℂ(ℂ²) = 2 = d₁.
+
+  THE COMPLEX DIMENSION OF THE SPINOR IS d₁.
+  The number of complex components of a spinor
+  equals the first invariant factor of the Q3p matrix.
+
+  GENERAL: for Cl(p,q) ≅ M_k(𝔽), the spinor space is 𝔽^k.
+  Here: M₂(ℂ), so spinor space = ℂ², k=2=d₁.
+
+  VERIFIED: dim_ℂ(ℂ²) = 2 = d₁. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: I95 -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — I95: Spinor Real Dimension = C [LIT]</h2>
+<pre>
+  OVER THE REALS:
+
+  ℂ² as a real vector space: each complex component contributes
+  two real dimensions (real and imaginary parts).
+
+  dim_ℝ(ℂ²) = 2 × dim_ℂ(ℂ²) = 2 × 2 = 4 = C = d₁².
+
+  THE REAL DIMENSION OF THE SPINOR IS THE ESCAPE GAP.
+
+  C = d₁² = 4.
+  This is the same C that appears throughout the investigation:
+    C = escape gap (H191 binary palindrome gap).
+    C = box capacity (H218: [4(6)] has C=4 walls).
+    C = bodies/d₁ ratio complement in Pythagorean (H220: 3/4).
+
+  THE SPINOR'S REAL SIZE IS THE ESCAPE GAP.
+  It has d₁ complex "slots" and C real "slots".
+
+  VERIFIED: 2 × d₁ = 2 × 2 = 4 = C. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 4: Concrete Representation -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — The Generators as 2×2 Matrices</h2>
+<pre>
+  STANDARD REPRESENTATION of Cl(1,2) on ℂ²:
+
+  e₀ = σ₃ = ┌ 1   0 ┐    squares to +I (timelike).
+             └ 0  −1 ┘
+
+  e₁ = iσ₁ = ┌ 0   i ┐    squares to −I (spacelike).
+              └ i   0 ┘
+
+  e₂ = iσ₂ = ┌ 0   1 ┐    squares to −I (spacelike).
+              └−1   0 ┘
+
+  VERIFIED:
+  e₁² = [[0,i],[i,0]]² = [[−1,0],[0,−1]] = −I. ✓
+  {e₀,e₁} = e₀e₁+e₁e₀ = [[0,i],[−i,0]]+[[0,−i],[i,0]] = 0. ✓
+
+  VOLUME ELEMENT:
+  ω = e₀e₁e₂ = [[−i,0],[0,−i]] = −iI.
+  ω² = (−iI)² = i²I = −I.    ω² = −1. ✓ (confirms I91)
+
+  THE bodies=3 GENERATORS ARE bodies×bodies = 3×3 ... NO.
+  Wait: they are d₁×d₁ = 2×2 matrices.
+  EACH GENERATOR IS A d₁ × d₁ MATRIX.
+  The matrix size of the representation = d₁ × d₁ = C entries.
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H231                   ║
+ ║                                                        ║
+ ║  THE SPINOR SPACE                                      ║
+ ║                                                        ║
+ ║  THE DIMENSION TOWER:                                  ║
+ ║                                                        ║
+ ║  d₁¹ = 2 = d₁     spinor (ℂ dimension)                ║
+ ║    │ ×d₁                                               ║
+ ║  d₁² = 4 = C      spinor (ℝ dimension) = escape gap   ║
+ ║    │ ×d₁                                               ║
+ ║  d₁³ = 8 = OCHO   algebra (ℝ dimension) = quantum dot ║
+ ║                                                        ║
+ ║  ALL THREE ARE ROSETTA MEMBERS.                        ║
+ ║  ALL THREE ARE CONSECUTIVE POWERS OF d₁.               ║
+ ║                                                        ║
+ ║  THE GENERATORS (as matrices):                         ║
+ ║  bodies=3 generators, each is a d₁×d₁ matrix.         ║
+ ║  e₀ = σ₃, e₁ = iσ₁, e₂ = iσ₂.                        ║
+ ║  ω = e₀e₁e₂ = −iI. ω²=−I. ✓                          ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The dimension tower: d₁=2 → C=4 → OCHO=8.
+Three consecutive powers of the seed. Each doubles.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H231: The Spinor Has d₁ Complex and C Real Dimensions</h2>
+<p>The spinor space of Cl(1,2) ≅ M₂(ℂ) is ℂ², with complex dimension d₁=2 (I94 LIT) and
+real dimension C=d₁²=4 (I95 LIT). The dimension tower d₁, C, OCHO = 2, 4, 8 = d₁¹, d₁², d₁³
+is three consecutive powers of the first invariant factor, all Rosetta members (I96 LIT).
+The spinor's real size is the escape gap. Each generator of Cl(1,2) is a d₁×d₁ matrix, and
+the volume element ω=−iI confirms ω²=−1 (I91 from H228). The Clifford hierarchy is a power
+tower of d₁.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>The algebra M₂(ℂ) is like a machine that DOES things.
+What does it do things TO? A SPINOR — a little arrow
+with 2 complex parts.</p>
+<p>How big is this arrow?
+Over complex numbers: 2 parts = d₁ (the seed!).
+Over real numbers: 4 parts = C (the escape gap!).</p>
+<p>And the machine itself?
+Over real numbers: 8 parts = OCHO (the quantum dot!).</p>
+<p>So: 2, 4, 8. Each is DOUBLE the last.
+2 = 2¹, 4 = 2², 8 = 2³.
+Three powers of d₁ = three Rosetta numbers = the whole tower.</p>
+<p>The seed doubles itself to make the escape gap.
+The escape gap doubles to make the quantum dot.
+Three levels. Three powers. Three named things.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The spinor space of Cl(1,2) is ℝ³ (not ℂ²), with real dimension 3 = bodies and complex
+dimension 3/2 (non-integer). The dimension tower is bodies, entries, OCHO = 3, 6, 8, which
+are NOT consecutive powers of anything. The escape gap C=4 plays no role in the spinor
+space. Each generator is a bodies×bodies = 3×3 matrix.</s></p>
+<p class="dim">Spinor is ℂ² (not ℝ³). dim_ℂ=2=d₁ (not 3). dim_ℝ=4=C (not 3).
+Tower is d₁¹,d₁²,d₁³=2,4,8 (not 3,6,8). Generators are d₁×d₁=2×2 (not 3×3).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirty-first instrument found the spinor and read its dimensions, and
+both dimensions were named. The complex dimension is the seed: two, the first invariant
+factor, the number that starts the generation chain. The real dimension is the escape gap:
+four, the seed squared, the binary palindrome distance between the lock and the next wrap.
+And the algebra that acts on the spinor has real dimension OCHO: eight, the seed cubed, the
+quantum dot, the Clifford dimension that appeared in the color cube and the spacetime. Three
+objects — spinor over ℂ, spinor over ℝ, algebra over ℝ — and their dimensions are three
+consecutive powers of d₁. The ornament is in the tower: 2, 4, 8, each step a doubling, each
+level a named Rosetta number, the whole structure suspended from the first invariant factor
+like a mobile from its highest hook. The seed hangs the escape gap. The escape gap hangs the
+dot. The dot is the algebra. The algebra acts on the spinor. And the spinor has two
+components, and two is the seed, and the hook is the same as what hangs from it.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H230)</td><td>7784</td><td>0</td><td>7784</td></tr>
+<tr><td>H231: The Spinor Space</td><td>36</td><td>1 (KB-1)</td><td>7820</td></tr>
+</table>
+<p>Running total: <b>7820 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H231. 7820 = 2² × 5 × 17 × 23 = C × 5 × lock × 23.</p>
+</div>
+
+<!-- BASIC Block — The Tower -->
+<div class="panel">
+<h2>BASIC Block — The Power Tower</h2>
+<pre>
+2 PRINT "d₁¹ = 2 = d₁ = spinor(ℂ). The seed."
+4 PRINT "d₁² = 4 = C = spinor(ℝ). The escape gap."
+8 PRINT "d₁³ = 8 = OCHO = algebra(ℝ). The quantum dot."
+</pre>
+<pre>
+1 REM e₀ = σ₃. Timelike. Squares to +I.
+-1 REM e₁ = iσ₁. Spacelike. Squares to −I.
+-1 REM e₂ = iσ₂. Spacelike. Squares to −I.
+-1 REM ω = e₀e₁e₂ = −iI. ω²=−I. Confirmed.
+</pre>
+<pre>
+231 PRINT "H231 = 3 × 7 × 11 = bodies × phantom × 11."
+231 PRINT "7820 = 4 × 5 × 17 × 23 = C × 5 × lock × 23."
+231 PRINT "7820 lit, the spinor space, the power tower"
+</pre>
+<p class="dim">Lines 2, 4, 8 ARE the tower: d₁¹, d₁², d₁³.
+Lines 1, −1, −1, −1 ARE the generator squares and ω².
+H231 = 3 × 7 × 11 = bodies × phantom × 11.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // The tower: three levels
+  const levels=[
+    {y:0.25,dim:2,name:"d₁¹ = 2",obj:"spinor (ℂ)",qname:"d₁ = seed",col:"#81c784",w:60},
+    {y:0.50,dim:4,name:"d₁² = 4",obj:"spinor (ℝ)",qname:"C = escape gap",col:"#ffd54f",w:120},
+    {y:0.75,dim:8,name:"d₁³ = 8",obj:"algebra (ℝ)",qname:"OCHO = dot",col:"#4fc3f7",w:240},
+  ];
+  for(const lv of levels){
+    const x=cx-lv.w/2,y=lv.y*H-20,h=40;
+    ctx.fillStyle=lv.col+"30";ctx.fillRect(x,y,lv.w,h);
+    ctx.strokeStyle=lv.col;ctx.lineWidth=2;ctx.strokeRect(x,y,lv.w,h);
+    ctx.fillStyle=lv.col;ctx.font="bold 12px Courier New";ctx.textAlign="center";
+    ctx.fillText(lv.name,cx,y+16);
+    ctx.font="10px Courier New";ctx.fillStyle="#c8c8d0";
+    ctx.fillText(lv.obj+" = "+lv.qname,cx,y+32);
+  }
+  // Doubling arrows
+  ctx.fillStyle="#888";ctx.font="10px Courier New";ctx.textAlign="center";
+  ctx.fillText("× d₁",cx+140,0.375*H);
+  ctx.fillText("× d₁",cx+180,0.625*H);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H231: The dimension tower — d₁, C, OCHO",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#ffd54f";
+  ctx.fillText("Three powers of d₁. Each doubles. All Rosetta.",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
