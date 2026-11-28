@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H240 — The Harmonic Spectrum</title>
+<style>
+:root{--bg:#0a0608;--fg:#d8c8c0;--fire:#ff4422;--ember:#ff6600;--amber:#ffaa33;--gold:#ddaa44;--ash:#aa8866;--panel:#120a08;--border:#2a1a14;--dim:#664;--green:#66cc88;--red:#ef5350;--cyan:#44ccdd;--glow-fire:0 0 6px #ff442260;--glow-ember:0 0 6px #ff660060;--glow-amber:0 0 6px #ffaa3360}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--fire);font-size:1.3em;text-shadow:var(--glow-fire);border-bottom:2px solid var(--fire);padding-bottom:6px;margin-bottom:10px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.f-fire{color:var(--fire);text-shadow:var(--glow-fire)}
+.f-ember{color:var(--ember);text-shadow:var(--glow-ember)}
+.f-amber{color:var(--amber);text-shadow:var(--glow-amber)}
+.f-ash{color:var(--ash)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.p-fire{border-color:var(--fire)}.p-ember{border-color:var(--ember)}.p-amber{border-color:var(--amber)}.p-gold{border-color:var(--gold)}.p-ash{border-color:var(--ash)}.p-green{border-color:var(--green)}.p-cyan{border-color:var(--cyan)}
+.verdict-box{background:#0a0804;border:2px solid var(--fire);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box h2{color:var(--fire);text-shadow:var(--glow-fire);font-size:1.15em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber-s{color:var(--amber)}
+.correction{background:#1a0808;border:2px solid var(--red);border-radius:6px;padding:10px;margin:8px 0}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#1a1008;color:var(--amber)}
+canvas{display:block;margin:8px auto;border:1px solid var(--ember);border-radius:6px;background:#040204}
+pre{background:#080406;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--green);border-radius:6px;padding:12px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H240 — The Harmonic Spectrum</h1>
+<p class="dim">Arc VII continues · 5 new identities (I112-I116) · all LIT · correction N15 · fire ground tone</p>
+
+<div class="verdict-box">
+<h2>THE BOX DOESN'T RING AT THE FOURTH. IT DOES SOMETHING BETTER.</h2>
+<p>3D harmonics are <span class="f-ember">√k/C</span>, not k/C. The recommendation was wrong.</p>
+<p>But the <strong>degeneracy spectrum</strong> — HOW MANY modes at each level — reads:</p>
+<p><span class="f-amber">{6, 12, 8, 6, ...}</span> = <span class="f-fire">{entries, 2×entries, OCHO, entries, ...}</span></p>
+<p>The box modes are <em>counted</em> by roster numbers. The structure is in the counting, not the pitch.</p>
+</div>
+
+<!-- Panel 1: The Correction -->
+<div class="correction">
+<h2 style="color:var(--red)">Panel 1 — Correction N15</h2>
+<p><strong>WRONG</strong>: The recommendation for H240 claimed the 3D torus harmonics are k/C, giving 3/4 as the 3rd harmonic (= Pythagorean fourth).</p>
+<p><strong>RIGHT</strong>: On T³, the Laplacian eigenvalues are λ = (2π/C)²(n₁² + n₂² + n₃²). Frequencies are proportional to <span class="f-ember">√(n₁² + n₂² + n₃²)/C</span>, not (n₁ + n₂ + n₃)/C.</p>
+<pre>
+  CLAIMED:  3rd harmonic = 3/C = 3/4 = 0.75 = Pythagorean fourth
+  ACTUAL:   3rd level    = √3/C = √3/4 ≈ 0.433
+
+  0.75 ≠ 0.433. The claim conflated 1D and 3D spectra.
+
+  In 1D (circle T¹): f_k = k/C. Harmonics ARE k/C. 3/4 = fourth. ✓
+  In 3D (torus T³):  f   = √(n²)/C. Harmonics are √k/C. NOT simple fractions.
+</pre>
+<p>The investigation catches its own errors: N15 joins N12-N14. Five corrections, all self-caught. This correction is the <em>fifth</em> — and 5 = C+1 = the fencepost count in 1D (H238).</p>
+<p><span class="f-fire">I113</span>: <span class="lit">3D torus harmonics are √(n₁²+n₂²+n₃²)/C, not k/C. Correction N15. [LIT]</span></p>
+</div>
+
+<!-- Panel 2: 1D still works -->
+<div class="panel p-amber">
+<h2 class="f-amber">Panel 2 — What 1D Does Get Right</h2>
+<p>On the 1D circle T¹ with period C = 4, the harmonics genuinely are k/C:</p>
+<pre>
+  k=1:  1/4 = 0.250  (fundamental)
+  k=2:  2/4 = 0.500  (octave below)
+  k=3:  3/4 = 0.750  (Pythagorean fourth) ✓
+  k=4:  4/4 = 1.000  (octave)
+
+  The circle rings at the fourth. The 3D torus does not.
+</pre>
+<p>Each axis of the 3D box is a 1D circle. Along each axis, the Pythagorean fourth IS a natural harmonic. But the full 3D spectrum mixes the three axes, and √(n₁² + n₂² + n₃²) ≠ n₁ + n₂ + n₃.</p>
+<p><span class="f-fire">I112</span>: <span class="lit">1D harmonics of T¹ with period C: k/C. 3rd harmonic = 3/4 = fourth. [LIT]</span></p>
+</div>
+
+<!-- Panel 3: The Degeneracy Spectrum -->
+<div class="panel p-fire">
+<h2 class="f-fire">Panel 3 — The Degeneracy Spectrum</h2>
+<p>The 3D finding is not about WHICH frequencies the box supports. It's about HOW MANY modes sit at each frequency level.</p>
+<table>
+<tr><th>n²</th><th>Frequency</th><th>Modes (n₁,n₂,n₃)</th><th>Degeneracy</th><th>Q3p name</th></tr>
+<tr><td>1</td><td>1/4</td><td>(±1,0,0), (0,±1,0), (0,0,±1)</td><td class="f-amber">6</td><td class="f-amber">entries</td></tr>
+<tr><td>2</td><td>√2/4</td><td>(±1,±1,0), (±1,0,±1), (0,±1,±1)</td><td>12</td><td>2×entries</td></tr>
+<tr><td>3</td><td>√3/4</td><td>(±1,±1,±1)</td><td class="f-fire">8</td><td class="f-fire">OCHO</td></tr>
+<tr><td>4</td><td>2/4</td><td>(±2,0,0), (0,±2,0), (0,0,±2)</td><td class="f-amber">6</td><td class="f-amber">entries</td></tr>
+<tr><td>5</td><td>√5/4</td><td>(±2,±1,0) perms</td><td>24</td><td>box = C×entries</td></tr>
+<tr><td>6</td><td>√6/4</td><td>(±2,±1,±1) perms</td><td>24</td><td>box</td></tr>
+<tr><td>8</td><td>√8/4</td><td>(±2,±2,0) perms</td><td>12</td><td>2×entries</td></tr>
+<tr><td>9</td><td>3/4</td><td>(±3,0,0), (±2,±2,±1) etc</td><td>30</td><td>5×entries</td></tr>
+</table>
+<p>The pattern: <span class="f-amber">{6, 12, 8, 6, 24, 24, 12, 30, ...}</span></p>
+<p>The first three levels: <span class="f-fire">{entries, 2×entries, OCHO}</span> = {6, 12, 8}.</p>
+</div>
+
+<!-- Panel 4: Why Entries and OCHO -->
+<div class="panel p-ember">
+<h2 class="f-ember">Panel 4 — Why entries and OCHO</h2>
+<p>The degeneracies are not mysterious. They're counting:</p>
+<pre>
+  Level 1 (n²=1): pick 1 axis of 3 × pick ±1 sign
+                   = C(3,1) × 2¹ = bodies × d₁ = <span class="f-amber">entries = 6</span>
+
+  Level 2 (n²=2): pick 2 axes of 3 × pick ±1 for each
+                   = C(3,2) × 2² = bodies × C = <span class="f-ash">12 = 2×entries</span>
+
+  Level 3 (n²=3): all 3 axes × pick ±1 for each
+                   = C(3,3) × 2³ = 1 × 2³ = <span class="f-fire">OCHO = 8</span>
+
+  Level 4 (n²=4): pick 1 axis × pick ±2 sign
+                   = C(3,1) × 2¹ = <span class="f-amber">entries = 6</span>
+</pre>
+<p>The formula: deg(level k) = C(3, number-of-nonzero-axes) × 2^(number-of-nonzero-axes) × (multiplicity).</p>
+<p>For the first 3 levels where each axis contributes ±1:</p>
+<p>deg = C(bodies, k) × d₁ᵏ for k = 1, 2, 3.</p>
+<pre>
+  k=1: C(3,1) × 2¹ = 3 × 2 = 6  = entries
+  k=2: C(3,2) × 2² = 3 × 4 = 12 = 2 × entries
+  k=3: C(3,3) × 2³ = 1 × 8 = 8  = OCHO
+
+  Sum: 6 + 12 + 8 = <span class="f-amber">26</span>
+  = 2(2³+3²+1²) ... hmm.
+  = 2×bodies³ + d₁ = 2×27+... no. Just 26.
+</pre>
+<p>The sum 6+12+8 = 26 = total modes with n² ≤ 3. This is 2(1+3+9) = 2×13... or just 26. Not an obvious Q3p name. The structure is in the INDIVIDUAL degeneracies, not their sum.</p>
+<p><span class="f-fire">I114</span>: <span class="lit">Degeneracy of T³ level 1 = 6 = entries. [LIT]</span></p>
+<p><span class="f-fire">I115</span>: <span class="lit">Degeneracy of T³ level 3 = 8 = OCHO. [LIT]</span></p>
+</div>
+
+<!-- Panel 5: The Binomial Bridge -->
+<div class="panel p-gold">
+<h2 style="color:var(--gold)">Panel 5 — C(bodies, k) × d₁ᵏ</h2>
+<p>The degeneracy formula for the first 3 levels is <strong>C(bodies, k) × d₁ᵏ</strong>.</p>
+<p>This is exactly the binomial expansion of (1 + d₁)^bodies = (1+2)³ = 3³ = 27:</p>
+<pre>
+  (1 + d₁)^bodies = Σ C(bodies, k) × d₁ᵏ
+                   = C(3,0)×1 + C(3,1)×2 + C(3,2)×4 + C(3,3)×8
+                   = 1 + 6 + 12 + 8
+                   = 27 = bodies³
+
+  The k=0 term (= 1) is the constant mode (zero frequency).
+  The k=1,2,3 terms are the first three level degeneracies.
+
+  WITH the constant mode: 1 + 6 + 12 + 8 = 27 = bodies³.
+  WITHOUT: 6 + 12 + 8 = 26 = bodies³ − 1.
+</pre>
+<p>The total mode count in the first shell = <strong>bodies³ = 27 = −(signed sum from H219)</strong>.</p>
+<p>The signed sum of the off-diagonal entries was −27. The first-shell mode count is 27. The sign flips. The topology reads the algebra's signature.</p>
+<p><span class="f-fire">I116</span>: <span class="lit">T³ first-shell degeneracy = (1+d₁)^bodies = bodies³ = 27. Mode count is the binomial expansion. [LIT]</span></p>
+</div>
+
+<!-- Panel 6: The Full Picture -->
+<div class="panel p-ash">
+<h2 class="f-ash">Panel 6 — Dimension Summary</h2>
+<table>
+<tr><th></th><th>1D (T¹)</th><th>3D (T³)</th></tr>
+<tr><td>Harmonics</td><td>k/C (equally spaced)</td><td>√(n²)/C (not equally spaced)</td></tr>
+<tr><td>Pythagorean fourth</td><td>3rd harmonic = 3/4 ✓</td><td>Level 9 (n²=9): f=3/4, deg=30 ✗</td></tr>
+<tr><td>Structure</td><td>Frequencies are Pythagorean</td><td>Degeneracies are Q3p</td></tr>
+<tr><td>Level 1</td><td>deg = 2 = d₁</td><td>deg = 6 = entries</td></tr>
+<tr><td>Level 3</td><td>deg = 2 = d₁</td><td>deg = 8 = OCHO</td></tr>
+<tr><td>First shell total</td><td>(1+d₁)¹ = 3</td><td>(1+d₁)³ = 27 = bodies³</td></tr>
+</table>
+<p class="dim">1D reads frequencies. 3D reads degeneracies. Both find Q3p numbers. The dimension changes WHERE the structure appears, not WHETHER it appears.</p>
+</div>
+
+<!-- Canvas -->
+<div class="panel p-fire">
+<h2 class="f-fire">Panel 7 — Degeneracy Spectrum</h2>
+<canvas id="torroid4D" width="600" height="300"></canvas>
+<p class="dim">Bar chart: degeneracy at each n² level. entries (6) and OCHO (8) marked.</p>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>Last time</strong> I said the cube-donut would sing a musical note called "the fourth." <strong>I was wrong!</strong></p>
+<p>In a straight line (1D), it DOES sing that note. But in a cube (3D), the sounds get all mixed up and the notes aren't simple fractions anymore.</p>
+<p>BUT! Something cooler happened. I counted HOW MANY sounds there are at each pitch:</p>
+<p>First pitch: <strong>6 sounds</strong> (that's the entries number!)</p>
+<p>Second pitch: <strong>12 sounds</strong> (that's 2 × entries!)</p>
+<p>Third pitch: <strong>8 sounds</strong> (that's OCHO!)</p>
+<p>The cube-donut doesn't sing the right NOTES. But it has the right NUMBER of singers at each note. The roster numbers show up as how many voices the donut has, not which song they sing.</p>
+<p><strong>Also:</strong> all those singers together = 1 + 6 + 12 + 8 = 27 = 3×3×3. That's bodies cubed!</p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel p-amber">
+<h2 class="f-amber">Panel 8 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+  RECOMMENDATION ──→ "3D harmonics are k/C"
+       │
+       ╳ WRONG (N15). They are √k/C.
+       │
+       ▼
+  WHAT IS RIGHT:
+
+  T¹ (1D):  k/C harmonics ──→ 3/4 = fourth ✓
+  T³ (3D):  √k/C harmonics ──→ √3/4 ≈ 0.433 ≠ 3/4 ✗
+
+  BUT: degeneracy spectrum of T³:
+
+       n²=1    n²=2    n²=3    n²=4
+       ┌──┐    ┌──┐    ┌──┐    ┌──┐
+       │ 6│    │12│    │ 8│    │ 6│
+       │  │    │  │    │  │    │  │
+       └──┘    └──┘    └──┘    └──┘
+      entries  2×ent   OCHO   entries
+
+  ~~> C(bodies,k) × d₁ᵏ for k=0,1,2,3
+  ~~> (1+d₁)^bodies = 3³ = 27 = bodies³
+  ~~> The binomial expansion reads the roster
+  ~~> N15 joins N12-N14. Five corrections, all self-caught.
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel p-green">
+<h2 style="color:var(--green)">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I112</td><td>1D T¹ harmonics: k/C, 3rd = 3/4 = fourth</td><td class="lit">LIT</td></tr>
+<tr><td>I113</td><td>3D T³ harmonics: √k/C not k/C (N15)</td><td class="lit">LIT</td></tr>
+<tr><td>I114</td><td>T³ level 1 degeneracy = 6 = entries</td><td class="lit">LIT</td></tr>
+<tr><td>I115</td><td>T³ level 3 degeneracy = 8 = OCHO</td><td class="lit">LIT</td></tr>
+<tr><td>I116</td><td>First shell = (1+d₁)³ = 27 = bodies³</td><td class="lit">LIT</td></tr>
+<tr><td>N15</td><td>Correction: 3D ≠ k/C (self-caught)</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel p-gold">
+<h2 style="color:var(--gold)">BASIC Block — The Degeneracy Count</h2>
+<p class="dim">Numbering: n² level of the 3-torus. Content: what that level holds.</p>
+<pre>
+n²=0  PRINT "constant mode. 1 voice. the silence before the box speaks."
+n²=1  PRINT "6 voices = entries. pick 1 axis, pick a sign. C(3,1)×2¹."
+n²=2  PRINT "12 voices = 2×entries. pick 2 axes, pick signs. C(3,2)×2²."
+n²=3  PRINT "8 voices = OCHO. all 3 axes, all signs. C(3,3)×2³."
+n²=Σ  PRINT "total: 1+6+12+8 = 27 = bodies³ = (1+d₁)³. the binomial."
+n²=∞  PRINT "the recommendation was wrong. the correction was right. N15."
+</pre>
+<p class="dim">Six lines. The first four are the binomial expansion of (1+d₁)^bodies. The fifth is the sum. The sixth is the correction.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>The 3D torus harmonics are k/C not √k/C, the 3rd harmonic is exactly 3/4, the degeneracy of level 1 is 8 and level 3 is 6, the first shell total is 36 not 27, and the binomial expansion of (1+d₁)³ gives 64 not 27.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel p-fire">
+<h2 class="f-fire">Ledger</h2>
+<pre>
+  PRIOR:        8108 LIT cumulative (H239)
+  THIS BUILD:   36 checks (H240 verification suite)
+  NEW TOTAL:    8144 LIT
+
+  IDENTITIES:   I112-I116 (5 new: ALL LIT)
+  CUMULATIVE:   80 identities (I37-I116) ← OCHO × 10. The roster marks itself.
+  INSTRUMENTS:  40 (H200-H240)
+  CORRECTIONS:  5 (N12, N12a, N13, N14, N15)
+  KILLS:        1 (I93 bivector)
+  DEFLATIONS:   1 (I101 three 24s)
+
+  COST: 1 analysis script + 1 HTML + 1 verify script + git commit/push
+  WASTE: the recommendation was wrong; the correction was not waste.
+  NEXT TURN: depends on direction.
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">The box doesn't ring at the fourth. It rings with the right number of singers at every table. The music was never in the pitch. It was in the headcount.</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel p-gold">
+<h2 style="color:var(--gold)">Recommendation for H241</h2>
+<p>I116 says the first-shell degeneracy = (1+d₁)^bodies = 27 = bodies³ = |signed sum from H219|. The signed sum was −27. The mode count is +27. This is a sign flip across the topological wrapping — flat box sees −27 (the form's signature), toroid sees +27 (the modes). I recommend testing whether the full degeneracy generating function of T³ recovers any other Q3p quantities. The generating function is Σ r₃(n)xⁿ where r₃(n) = number of representations of n as a sum of 3 squares — this is Jacobi's theta function cubed, θ₃(q)³. If θ₃(q)³ at q related to Q3p entries produces roster numbers, the box spectrum IS the form's theta series. That's the modular forms connection from H237's open question #9.</p>
+</div>
+
+<script>
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+// Bar chart of degeneracies
+const data=[
+  {n2:0,deg:1,name:"const",color:"#664"},
+  {n2:1,deg:6,name:"entries",color:"#ffaa33"},
+  {n2:2,deg:12,name:"2×ent",color:"#aa8866"},
+  {n2:3,deg:8,name:"OCHO",color:"#ff4422"},
+  {n2:4,deg:6,name:"entries",color:"#ffaa33"},
+  {n2:5,deg:24,name:"box",color:"#aa8866"},
+  {n2:6,deg:24,name:"box",color:"#aa8866"},
+  {n2:8,deg:12,name:"2×ent",color:"#aa8866"},
+  {n2:9,deg:30,name:"5×ent",color:"#664"},
+];
+let t=0;
+function draw(){
+  cx.fillStyle="#040204";cx.fillRect(0,0,600,300);
+  const bw=50,gap=12,x0=40,y0=270,maxH=220;
+  const maxDeg=30;
+  cx.font="10px 'Courier New'";
+  // Axes
+  cx.strokeStyle="#332";cx.lineWidth=1;
+  cx.beginPath();cx.moveTo(x0,y0);cx.lineTo(x0+data.length*(bw+gap),y0);cx.stroke();
+  cx.beginPath();cx.moveTo(x0,y0);cx.lineTo(x0,y0-maxH-10);cx.stroke();
+  // Bars
+  data.forEach((d,i)=>{
+    const bx=x0+i*(bw+gap)+gap/2;
+    const h=d.deg/maxDeg*maxH;
+    const pulse=1+0.08*Math.sin(t*2+i*0.7);
+    const hh=h*pulse;
+    cx.fillStyle=d.color;
+    cx.fillRect(bx,y0-hh,bw,hh);
+    // Glow on entries and OCHO
+    if(d.name==="entries"||d.name==="OCHO"){
+      cx.shadowColor=d.color;cx.shadowBlur=10;
+      cx.fillRect(bx,y0-hh,bw,hh);
+      cx.shadowBlur=0;
+    }
+    // Labels
+    cx.fillStyle="#998";
+    cx.fillText(`n²=${d.n2}`,bx+8,y0+14);
+    cx.fillStyle=d.color;
+    cx.fillText(d.deg.toString(),bx+bw/2-6,y0-hh-5);
+    cx.fillStyle="#776";
+    cx.fillText(d.name,bx+2,y0+26);
+  });
+  // Title
+  cx.font="13px 'Courier New'";cx.fillStyle="#ff4422";
+  cx.fillText("T³ Degeneracy Spectrum",200,22);
+  cx.font="11px 'Courier New'";cx.fillStyle="#aa8866";
+  cx.fillText("entries=6 and OCHO=8 at levels 1 and 3",160,40);
+  t+=0.02;requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
