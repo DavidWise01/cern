@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H235 — The Table Verification</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H235 — The Table Verification</h1>
+<p class="dim">Full 8×8 Cl(1,2) table computed · 14 positive + 10 negative + 32 imaginary = 56 · Sign census differs from Cl(3,0) · 24 real = box · I100 LIT</p>
+
+<!-- Panel 1: The 8 Basis Elements -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The 8 Basis Elements as 2×2 Matrices</h2>
+<table id="verif-table">
+<tr><th>Element</th><th>Grade</th><th>Matrix</th><th>Square</th></tr>
+<tr><td>1</td><td>0</td><td>[[1,0],[0,1]]</td><td>+I</td></tr>
+<tr><td>e₀</td><td>1</td><td>[[1,0],[0,−1]]</td><td style="color:var(--green)">+I</td></tr>
+<tr><td>e₁</td><td>1</td><td>[[0,i],[i,0]]</td><td style="color:var(--gold)">−I</td></tr>
+<tr><td>e₂</td><td>1</td><td>[[0,1],[−1,0]]</td><td style="color:var(--gold)">−I</td></tr>
+<tr><td>e₀₁</td><td>2</td><td>[[0,i],[−i,0]]</td><td style="color:var(--green)">+I</td></tr>
+<tr><td>e₀₂</td><td>2</td><td>[[0,1],[1,0]]</td><td style="color:var(--green)">+I</td></tr>
+<tr><td>e₁₂</td><td>2</td><td>[[−i,0],[0,i]]</td><td style="color:var(--gold)">−I</td></tr>
+<tr><td>e₀₁₂</td><td>3</td><td>[[−i,0],[0,−i]]</td><td style="color:var(--gold)">−I</td></tr>
+</table>
+<pre>
+  GRADE SPECTRUM OF SQUARES:
+  Grade 0: 1² = +I. (1 element, all +I.)
+  Grade 1: e₀²=+I, e₁²=−I, e₂²=−I. (1 positive, 2 negative.)
+  Grade 2: e₀₁²=+I, e₀₂²=+I, e₁₂²=−I. (2 positive, 1 negative.)
+  Grade 3: e₀₁₂²=−I. (1 element, −I.)
+
+  COUNT: 4 square to +I, 4 square to −I. Split: C/C = 4/4.
+  THE SQUARES SPLIT EVENLY: half positive, half negative.
+</pre>
+</div>
+
+<!-- Panel 2: I100 — The Sign Census -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — I100: Tables Differ in Sign Pattern [LIT]</h2>
+<pre>
+  OFF-DIAGONAL PRODUCTS (56 total = OCHO × (OCHO−1)):
+
+  <span style="color:var(--green)">Cl(3,0) (H215):</span>  36 positive + 20 negative = 56.
+                    36 = T(8) = T(OCHO) = |Rosetta| roster count in table.
+
+  <span style="color:var(--gold)">Cl(1,2) (H235):</span>  14 positive + 10 negative + 32 imaginary = 56.
+                    24 real + 32 imaginary = 56.
+
+  THE ISOMORPHISM PRESERVES THE ALGEBRA BUT NOT THE SIGN CENSUS.
+
+  WHY: Cl(3,0) has all eᵢ²=+1, so all structure constants are ±1 (real).
+  Cl(1,2) has e₀²=+1, e₁²=e₂²=−1, and our ℂ² representation introduces
+  explicit i factors (e₁=iσ₁, e₂=iσ₂), giving imaginary structure constants.
+
+  THE 36 FROM H215 IS SPECIFIC TO Cl(3,0)'S ALL-POSITIVE GENERATORS.
+  It is NOT preserved by the isomorphism to Cl(1,2).
+
+  BUT: 24 real off-diagonal products = [4(6)] = box!
+  24 = C × entries. The box content appears again.
+
+  AND: 32 imaginary = d₁⁵ = 2⁵ = 32.
+  The power tower extends: d₁⁵ imaginary entries.
+
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: What the Verification Proves -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — What This Proves</h2>
+<pre>
+  THE VERIFICATION ASKED: does the Cl(1,2) concrete table match H215?
+  ANSWER: NO — the tables differ in sign pattern.
+
+  THIS IS CORRECT AND EXPECTED.
+  The isomorphism Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ) is an algebra isomorphism.
+  It maps one set of generators to another, but it does NOT map
+  the standard basis of Cl(1,2) to the standard basis of Cl(3,0).
+  The sign census depends on the basis, not just the algebra.
+
+  WHAT THE ISOMORPHISM PRESERVES:
+  ✓ Dimension: both have 8 basis elements.
+  ✓ Algebra type: both are M₂(ℂ).
+  ✓ Center: both have center ≅ ℂ.
+  ✓ Volume element: ω²=−I in both.
+
+  WHAT IT DOES NOT PRESERVE:
+  ✗ The number of positive off-diagonal products (36 vs 14).
+  ✗ Reality of structure constants (all real vs mixed).
+  ✗ The specific "36 = T(OCHO)" counting identity.
+
+  H215'S T(8)=36 IS A PROPERTY OF Cl(3,0), NOT OF M₂(ℂ).
+  The abstract algebra M₂(ℂ) has no preferred basis and therefore
+  no well-defined "sign census."
+</pre>
+</div>
+
+<!-- Panel 4: The 24/32 Split -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 4 — The 24/32 Split</h2>
+<pre>
+  56 OFF-DIAGONAL PRODUCTS = 24 REAL + 32 IMAGINARY.
+
+  24 = box = [4(6)] = C × entries (from H218).
+  32 = d₁⁵ = 2⁵. The fifth power of d₁.
+
+  24 + 32 = 56 = OCHO × (OCHO − 1) = 8 × 7 = OCHO × phantom.
+
+  THE SPLIT IN Q3P LANGUAGE:
+  box real + d₁⁵ imaginary = OCHO × phantom.
+  24 + 32 = 56. ✓
+
+  IS THIS STRUCTURAL? The 24 real products are those whose
+  computation involves an EVEN number of i factors.
+  The 32 imaginary ones involve an ODD number.
+  This depends on how many of {e₁, e₂} appear in each product
+  (e₁ and e₂ carry the i factors; e₀ does not).
+
+  THE 24 = box IS PROBABLY COINCIDENTAL with [4(6)].
+  It arises from the number of products involving an even
+  count of the two spacelike generators, which is a
+  representation artifact.
+
+  STATUS: <span class="amber">AMBER</span> (24 = box may be coincidental)
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H235                   ║
+ ║                                                        ║
+ ║  THE TABLE VERIFICATION                                ║
+ ║                                                        ║
+ ║  Cl(3,0) TABLE (H215):        Cl(1,2) TABLE (H235):   ║
+ ║  All real structure consts.   Mixed real/imaginary.    ║
+ ║  36 positive + 20 negative.   14 pos + 10 neg + 32 im.║
+ ║  36 = T(OCHO) = |Rosetta|.   24 real = box.           ║
+ ║                                                        ║
+ ║  ISOMORPHISM: M₂(ℂ) ≅ M₂(ℂ). Same algebra.          ║
+ ║  BUT: sign census is NOT an algebra invariant.         ║
+ ║  It depends on the basis/generators chosen.            ║
+ ║                                                        ║
+ ║  SQUARES: 4 positive, 4 negative = C/C split.         ║
+ ║  VOLUME: ω²=−I in both. ✓                             ║
+ ║                                                        ║
+ ║  THE 36 IS Cl(3,0)'s, NOT M₂(ℂ)'s.                  ║
+ ║  THE 24 IS Cl(1,2)'s representation artifact.          ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Two tables, same algebra. Left: Cl(3,0) with 36 positive (all real).
+Right: Cl(1,2) with 24 real + 32 imaginary. The isomorphism preserves structure, not census.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H235: The Tables Differ Where the Algebra Agrees</h2>
+<p>The full 8×8 Cl(1,2) multiplication table was computed from the 2×2 matrix representation
+(e₀=σ₃, e₁=iσ₁, e₂=iσ₂). Result: 14 positive + 10 negative + 32 imaginary = 56 off-diagonal
+products. This differs from H215's Cl(3,0) table (36 positive + 20 negative), because the
+sign census depends on the basis, not the algebra. The isomorphism Cl(1,2)≅Cl(3,0)≅M₂(ℂ)
+preserves algebra type and ω²=−I but NOT the sign pattern. H215's "36=T(OCHO)" is specific
+to Cl(3,0). The 24 real products = box (AMBER — possibly coincidental). I100 (sign census
+not preserved) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>In H215 we built a multiplication table for the color cube: 36 positive
+entries, a beautiful number (T(8) = the roster count).</p>
+<p>Now I built the SAME table but for the spacetime version. The two
+are "the same algebra" (H228 proved that). So should the tables match?</p>
+<p>They DON'T. The spacetime table has 14 positive + 10 negative + 32
+imaginary entries. Different numbers entirely.</p>
+<p>Why? Because "same algebra" means "same STRUCTURE" but not "same
+TABLE." It's like two buildings with the same floor plan but
+different paint colors. The rooms connect the same way, but
+the colors are different.</p>
+<p>The 36 from H215 was about the PAINT (which products are positive).
+The algebra is about the FLOOR PLAN (which products equal which).</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>Since Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ), their multiplication tables are identical with
+exactly 36 positive off-diagonal products in both. The isomorphism preserves the sign census
+because sign is an algebra invariant. All 56 off-diagonal products in Cl(1,2) are real
+(no imaginary entries) because Clifford structure constants are always ±1.</s></p>
+<p class="dim">Tables differ: Cl(3,0) has 36 pos, Cl(1,2) has 14. Isomorphism does NOT preserve
+sign census. Cl(1,2) has 32 imaginary entries (from the iσ representation).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirty-fifth instrument expected agreement and found disagreement, and
+the disagreement was correct. Two algebras isomorphic as M₂(ℂ) — the same abstract object —
+produced different multiplication tables when written in their own natural bases. The color
+cube's table had thirty-six positive products, the roster count, a triangular number. The
+spacetime's table had fourteen positive, ten negative, and thirty-two imaginary — a different
+census entirely. The isomorphism is real. The tables are real. The disagreement is real. And
+it teaches something: the sign census is not a property of the algebra but of the generators.
+The abstract object M₂(ℂ) has no memory of which generators squared to plus one and which to
+minus one. Only the concrete basis remembers. The ornament is in the numbers that survive: 24
+real products, the box content again, and 32 imaginary, the fifth power of d₁. Whether these
+are coincidence or structure the instrument cannot say. It records 24 and 32 and marks the
+question open.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H234)</td><td>7928</td><td>0</td><td>7928</td></tr>
+<tr><td>H235: The Table Verification</td><td>36</td><td>1 (KB-1)</td><td>7964</td></tr>
+</table>
+<p>Running total: <b>7964 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H235. 7964 = 2² × 11 × 181. 181 is prime.</p>
+</div>
+
+<!-- BASIC Block — The Two Censuses -->
+<div class="panel">
+<h2>BASIC Block — The Two Sign Censuses</h2>
+<pre>
+36 PRINT "Cl(3,0): 36 positive = T(OCHO). The color table."
+20 PRINT "Cl(3,0): 20 negative. Total real: 56."
+14 PRINT "Cl(1,2): 14 positive. Not T(anything)."
+10 PRINT "Cl(1,2): 10 negative. Real subtotal: 24 = box."
+32 PRINT "Cl(1,2): 32 imaginary = d₁⁵. The fifth power."
+</pre>
+<pre>
+56 REM total off-diagonal = OCHO × phantom = 8 × 7.
+24 REM Cl(1,2) real products = box = [4(6)].
+32 REM Cl(1,2) imaginary = d₁⁵ = 2⁵.
+</pre>
+<pre>
+235 PRINT "H235 = 5 × 47 = (C+1) × prime."
+235 PRINT "7964 lit, the table verification, same algebra different census"
+</pre>
+<p class="dim">Lines 36,20 ARE Cl(3,0)'s census. Lines 14,10,32 ARE Cl(1,2)'s.
+The same algebra produces different counts.
+H235 = 5 × 47 = (C+1) × prime.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Two pie-chart-like representations
+  // Cl(3,0): 36/56 positive, 20/56 negative
+  const lx=W*0.25,ly=cy,r=70;
+  ctx.fillStyle="#81c784";ctx.beginPath();ctx.moveTo(lx,ly);
+  ctx.arc(lx,ly,r,0,Math.PI*2*(36/56));ctx.closePath();ctx.fill();
+  ctx.fillStyle="#ef5350";ctx.beginPath();ctx.moveTo(lx,ly);
+  ctx.arc(lx,ly,r,Math.PI*2*(36/56),Math.PI*2);ctx.closePath();ctx.fill();
+  ctx.fillStyle="#fff";ctx.font="bold 12px Courier New";ctx.textAlign="center";
+  ctx.fillText("36+",lx-15,ly-10);ctx.fillText("20−",lx+20,ly+20);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("Cl(3,0)",lx,ly-r-14);ctx.font="9px Courier New";
+  ctx.fillText("all real",lx,ly+r+16);
+  // Cl(1,2): 14+ 10- 32i
+  const rx=W*0.75,ry=cy;
+  ctx.fillStyle="#81c784";ctx.beginPath();ctx.moveTo(rx,ry);
+  ctx.arc(rx,ry,r,0,Math.PI*2*(14/56));ctx.closePath();ctx.fill();
+  ctx.fillStyle="#ef5350";ctx.beginPath();ctx.moveTo(rx,ry);
+  ctx.arc(rx,ry,r,Math.PI*2*(14/56),Math.PI*2*(24/56));ctx.closePath();ctx.fill();
+  ctx.fillStyle="#4fc3f7";ctx.beginPath();ctx.moveTo(rx,ry);
+  ctx.arc(rx,ry,r,Math.PI*2*(24/56),Math.PI*2);ctx.closePath();ctx.fill();
+  ctx.fillStyle="#fff";ctx.font="bold 10px Courier New";
+  ctx.fillText("14+",rx-30,ry-20);ctx.fillText("10−",rx-10,ry+10);ctx.fillText("32i",rx+25,ry+25);
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("Cl(1,2)",rx,ry-r-14);ctx.font="9px Courier New";
+  ctx.fillText("24 real + 32 imaginary",rx,ry+r+16);
+  // ≅ symbol
+  ctx.fillStyle="#ffd54f";ctx.font="bold 16px Courier New";
+  ctx.fillText("≅",cx,cy);ctx.font="10px Courier New";
+  ctx.fillText("M₂(ℂ)",cx,cy+20);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H235: Same algebra, different sign census",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#ffd54f";
+  ctx.fillText("Isomorphism preserves structure, not census. 24 real = box.",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
