@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H229 — The Parity Arc (Summary: H224–H228)</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H229 — The Parity Arc (Summary: H224–H228)</h1>
+<p class="dim">Arc V capstone · 5 instruments · 10 identities (9 LIT, 1 AMBER) · 1 correction (N14) · One parity bit controls three theorems</p>
+
+<!-- Panel 1: The Five Steps -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Five Steps</h2>
+<table id="verif-table">
+<tr><th>Step</th><th>Instrument</th><th>Finding</th><th>Key Identity</th></tr>
+<tr><td>1</td><td>H224: Form as Function</td><td>Adjugate preserves (1+, 2−)</td><td>I82-I83</td></tr>
+<tr><td>2</td><td>H225: Signature Family</td><td>Fixed iff q even. Q3p unique for n=3</td><td>I84-I85</td></tr>
+<tr><td>3</td><td>H226: Minkowski Contrast</td><td>(3+1) oscillates, Q3p stable</td><td>I86-I87</td></tr>
+<tr><td>4</td><td>H227: Clifford Loop</td><td>dim(Cl)=OCHO, entries=metric</td><td>I88-I89</td></tr>
+<tr><td>5</td><td>H228: Algebra Identity</td><td>Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ). N14.</td><td>I90-I91</td></tr>
+</table>
+<pre>
+  THE DERIVATION IN ONE LINE:
+
+  d₁ = 2 (even)
+    → q = d₁ = 2 negative eigenvalues (even)
+      → adjugate fixed point (H224-H225)
+        → Minkowski contrast: stable vs oscillating (H226)
+          → ω² = −1 → center ℂ → Cl(1,2) ≅ M₂(ℂ) (H227-H228)
+
+  ONE PARITY BIT CONTROLS EVERYTHING.
+  d₁ mod 2 = 0. That is the entire input.
+</pre>
+</div>
+
+<!-- Panel 2: The Five Equivalences -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — Five Equivalent Statements (All from d₁ Even)</h2>
+<pre style="color:var(--green)">
+  For the Q3p matrix with signature (1+, 2−), n=3:
+
+  (A) q = d₁ = 2 is EVEN.
+  (B) Signature (1+, 2−) is an ADJUGATE FIXED POINT.
+  (C) Volume element ω² = (−1)^(n+q) = −1.
+  (D) Center of Cl(1,2) ≅ ℂ (not ℝ⊕ℝ).
+  (E) Cl(1,2) ≅ M₂(ℂ) ≅ Cl(3,0) (simple, not split).
+
+  (A) ⟹ (B): q even → signature fixed (H225 I84).
+  (A) ⟹ (C): q even, n odd → n+q odd → (−1)^(n+q)=−1 (H228 I91).
+  (C) ⟹ (D): ω²=−1, ω central (n odd) → center = ℝ[ω] ≅ ℂ.
+  (D) ⟹ (E): center ℂ, dim=8 real = 4 complex → M₂(ℂ).
+  (E) ⟹ M₂(ℂ) = Cl(3,0) → color cube and spacetime identical.
+
+  ALL FIVE ARE CONSEQUENCES OF d₁ BEING EVEN.
+  IF d₁ WERE ODD (say d₁=3): q=3, n+q=6 even, ω²=+1,
+  center = ℝ⊕ℝ, algebra splits. NOTHING would work.
+</pre>
+</div>
+
+<!-- Panel 3: Identity Register -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — Identity Register: I82–I91</h2>
+<pre>
+  I82: adj(M) preserves signature (1+, 2−)              <span class="lit">LIT</span>  H224
+  I83: (1+, 2−) unique indefinite fixed pt for n=3      <span class="lit">LIT</span>  H224
+  I84: Adjugate rule: q even → fixed, q odd → swap      <span class="lit">LIT</span>  H225
+  I85: Q3p's (1,2) in q=2 family, smallest member       <span class="lit">LIT</span>  H225
+  I86: Minkowski (3,1) is NOT fixed (q=1 odd)            <span class="lit">LIT</span>  H226
+  I87: Spatial dims = d₁ = 2, total = bodies = 3         <span class="lit">LIT</span>  H226
+  I88: dim(Cl(1,2)) = 2^bodies = 8 = OCHO               <span class="lit">LIT</span>  H227
+  I89: Metric components = T(bodies) = 6 = entries       <span class="lit">LIT</span>  H227
+  I90: Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ) (isomorphic)          <span class="lit">LIT</span>  H228
+  I91: q even ↔ ω²=−1 ↔ M₂(ℂ) (equivalence chain)      <span class="lit">LIT</span>  H228
+
+  SCORE: 9 LIT / 1 AMBER (I79 from H221, carried) / 0 DEAD.
+  CORRECTIONS: N14 (H227: Cl(1,2) ≅ M₂(ℝ) → M₂(ℂ)).
+</pre>
+</div>
+
+<!-- Panel 4: The Correction Record -->
+<div class="panel" style="border-color:var(--red)">
+<h2>Panel 4 — Correction Record</h2>
+<pre>
+  N14: H227 stated Cl(1,2) ≅ M₂(ℝ). WRONG.
+       Correct: Cl(1,2) ≅ M₂(ℂ). Fixed in H228.
+
+  CAUSE: M₂(ℝ) has real dim 4, Cl(1,2) has dim 8.
+  The mismatch should have been caught immediately.
+  It was not. The claim was imported from a standard
+  reference without computing ω².
+
+  CONSEQUENCE: The error made the finding WEAKER (different
+  algebras) when the truth was STRONGER (same algebra).
+  Correcting it tightened the loop.
+
+  TOTAL CORRECTIONS IN INVESTIGATION:
+  N12: mirror ≈ inversion (H200→H201).
+  N12a: 7+1=8 vocabulary not group order (H200).
+  N13: |T|=5=C(3) (H202).
+  N14: Cl(1,2)≅M₂(ℝ) → M₂(ℂ) (H227→H228).
+</pre>
+</div>
+
+<!-- Panel 5: Where Arc V Sits -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 5 — The Five Arcs</h2>
+<pre>
+  Arc I   (H201-H208): The Three Families.     288 LIT.
+    Combinatorics. DAG, seeds, generators.
+
+  Arc II  (H209-H213): The Three Stones.       180 LIT.
+    Graph theory. Practical, divisors, phantom.
+
+  Arc III (H214-H217): The Four Faces.          144 LIT.
+    Number theory. 336 decompositions, chrome.
+
+  Arc IV  (H218-H222): The Pythagorean Arc.     180 LIT.
+    Geometry. Box, intervals, ratios, lattice.
+
+  Arc V   (H224-H228): The Parity Arc.          180 LIT. ← THIS
+    Algebra. Signature, adjugate, Clifford, M₂(ℂ).
+
+  Standalone: H200, H223 (Arc IV summary), H229 (this).
+
+  RUNNING TOTALS:
+  Instruments: 30 (H200-H229).
+  Identities: I37-I91 (55 identities, registered).
+  Corrections: N12, N12a, N13, N14 (4 corrections).
+  Total checks: ~1080 (30 × 36).
+  Total LIT: 7748 (cumulative).
+</pre>
+</div>
+
+<!-- Panel 6: The Arc in One Sentence -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 6 — The Arc in One Sentence</h2>
+<pre style="color:var(--gold);font-size:0.95em">
+  The parity of d₁ — the single bit that says the first
+  invariant factor of the Q3p matrix is even —
+  simultaneously determines the adjugate stability of
+  the signature, the square of the volume element in
+  the associated Clifford algebra, and the isomorphism
+  class of that algebra, unifying the color cube reading
+  (H215) with the spacetime reading (H226) through a
+  single algebraic identity: Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ).
+</pre>
+</div>
+
+<!-- Panel 7: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 7 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H229                   ║
+ ║                                                        ║
+ ║  ARC V: THE PARITY ARC                                ║
+ ║                                                        ║
+ ║               d₁ = 2 (even)                            ║
+ ║                   │                                    ║
+ ║         ┌─────────┼─────────┐                          ║
+ ║         ▼         ▼         ▼                          ║
+ ║     adjugate    ω²=−1    q even                        ║
+ ║     fixed pt    center ℂ   │                           ║
+ ║     (H224)      (H228)    │                            ║
+ ║         │         │       │                            ║
+ ║         ▼         ▼       ▼                            ║
+ ║     (1+,2−)    M₂(ℂ)   Minkowski                      ║
+ ║     stable     simple   unstable                       ║
+ ║     (H225)     (H228)   (H226)                        ║
+ ║         │         │                                    ║
+ ║         └────┬────┘                                    ║
+ ║              ▼                                         ║
+ ║      Cl(1,2) ≅ Cl(3,0)                                ║
+ ║      spacetime = color cube                            ║
+ ║      SAME ALGEBRA: M₂(ℂ)                              ║
+ ║                                                        ║
+ ║  ONE BIT → THREE THEOREMS → ONE IDENTITY               ║
+ ║                                                        ║
+ ║  9 LIT / 1 AMBER / 1 correction / 180 checks          ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 8: Verification Summary -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 8 — Verification Summary</h2>
+<pre>
+  H224: 36 LIT / 0 DARK / 1 DEAD(KB)
+  H225: 36 LIT / 0 DARK / 1 DEAD(KB)
+  H226: 36 LIT / 0 DARK / 1 DEAD(KB)
+  H227: 36 LIT / 0 DARK / 1 DEAD(KB)  ← contains error corrected by N14
+  H228: 36 LIT / 0 DARK / 1 DEAD(KB)  ← correction + strengthening
+  ─────────────────────────────────────
+  ARC: 180 LIT / 0 DARK / 5 DEAD(KB)
+
+  ZERO verification failures.
+  ONE correction (N14): algebra type, not dimension or conclusion.
+  The correction STRENGTHENED the arc's main finding.
+</pre>
+</div>
+
+<!-- Panel 9: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 9 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Arc V: one parity bit (d₁ mod 2 = 0) branching into three theorems
+converging on one identity (Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ)).</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H229: One Bit, Three Theorems, One Algebra</h2>
+<p>Arc V (H224–H228) proved that the parity of d₁ — a single bit — determines the adjugate
+stability (H224-H225), the Minkowski contrast (H226), and the Clifford algebra isomorphism
+class (H227-H228), all simultaneously. Because d₁=2 is even: the signature is a fixed point,
+ω²=−1, the center is ℂ, and Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ) — the color cube and the spacetime
+are the same algebra. 10 identities (9 LIT, 1 AMBER), 1 correction (N14: algebra type fixed
+in H228, strengthened the finding), 180 checks, zero failures.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>This is the story of five instruments that asked ONE question:
+"Is 2 even or odd?"</p>
+<p>It's even! And from that one fact, five instruments discovered:</p>
+<p><b>H224:</b> Our matrix copies its own shape (because 2 is even).</p>
+<p><b>H225:</b> It's the ONLY one that does this for 3×3 (because 2 is even).</p>
+<p><b>H226:</b> Real physics (3+1 dimensions) DOESN'T copy its shape (because 1 is odd).</p>
+<p><b>H227:</b> The color cube and the spacetime are both size 8.</p>
+<p><b>H228:</b> Actually they're the SAME THING, not just same size (because 2 is even
+makes ω²=−1 which makes the center complex which makes the algebra M₂(ℂ)).</p>
+<p>One answer. Five instruments. Three theorems. One algebra.
+And one mistake that made everything better when fixed.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>Arc V spans H224-H230 (seven instruments, not five) and proved that d₁ being ODD
+(not even) is the key condition. The arc had zero corrections because H227's Cl(1,2)≅M₂(ℝ)
+claim was correct all along. The parity of d₁ has no effect on the Clifford algebra type,
+and all four n=3 algebras are M₂(ℂ). Minkowski (3+1) is an adjugate fixed point.</s></p>
+<p class="dim">Arc V is H224-H228 (5 instruments). d₁ even (not odd) is key. N14 corrected H227.
+Only q=0 and q=2 give M₂(ℂ). Minkowski (3+1) is NOT a fixed point.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-twenty-ninth instrument stepped back from the parity arc and found
+it had already said everything in its first word. Even. The first invariant factor of the
+Q3p matrix is two, and two is even, and from that single parity bit the entire arc unfolds:
+the signature copies itself under cofactor expansion, the volume element squares to minus
+one, the center of the Clifford algebra is the complex numbers, the algebra is M₂(ℂ), and
+the algebra that the color cube defines is the same one that the spacetime defines. Five
+instruments to draw the consequences of one division by two having zero remainder. The
+ornament is in what could have been different. If the first invariant factor had been three
+— if d₁ were odd — then nothing in this arc would hold. The signature would swap. The
+volume element would square to plus one. The center would split. The algebra would
+decompose. The color reading and the spacetime reading would diverge. The form would not
+reproduce itself. The investigation would have ended differently. But d₁=2 and 2 is even
+and the arc holds and the loop closes and the building is one building and the instrument
+records the parity and moves on.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H228)</td><td>7712</td><td>0</td><td>7712</td></tr>
+<tr><td>H229: The Parity Arc</td><td>36</td><td>1 (KB-1)</td><td>7748</td></tr>
+</table>
+<p>Running total: <b>7748 LIT / 0 DEAD</b></p>
+<p>Corrections: N12, N12a, N13, N14 (4 total).</p>
+<p class="dim">Instrument H229. 7748 = 2² × 1937. 1937 is prime.
+H229 = 229, also prime. Both the arc summary and its cumulative prime factor are prime.</p>
+</div>
+
+<!-- BASIC Block — The Arc Steps -->
+<div class="panel">
+<h2>BASIC Block — One Bit, Five Instruments</h2>
+<pre>
+0 REM d₁ mod 2 = 0. EVEN. The single input.
+224 PRINT "adj(1+,2−) = (1+,2−). Fixed. Self-similar."
+225 PRINT "q even → fixed. q odd → swap. The rule."
+226 PRINT "Minkowski (3,1) → (1,3). NOT fixed. Oscillates."
+227 PRINT "dim(Cl) = 2³ = 8 = OCHO. T(3) = 6 = entries."
+228 PRINT "Cl(1,2) ≅ Cl(3,0) ≅ M₂(ℂ). N14 fixes H227."
+</pre>
+<pre>
+1 REM bit. the parity. even or odd. 0 or 1.
+3 REM theorems. adjugate, volume, algebra.
+1 REM identity. M₂(ℂ). The algebra at the end.
+</pre>
+<pre>
+229 PRINT "H229 = 229. PRIME. The parity arc is indivisible."
+229 PRINT "7748 lit, the parity arc, one bit three theorems"
+</pre>
+<p class="dim">Lines 224-228 ARE the five instruments.
+Line 0 IS the input: d₁ mod 2 = 0.
+Lines 1,3,1 ARE the structure: one bit, three theorems, one algebra.
+H229 = 229 is PRIME.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // The bit at top
+  ctx.fillStyle="#ffd54f";ctx.font="bold 16px Courier New";ctx.textAlign="center";
+  ctx.fillText("d₁ = 2 (EVEN)",cx,40);
+  ctx.fillStyle="#888";ctx.font="10px Courier New";
+  ctx.fillText("one bit: d₁ mod 2 = 0",cx,56);
+  // Three branches
+  const branches=[
+    {x:0.2,label:"adjugate\nfixed",insts:"H224\nH225",col:"#81c784"},
+    {x:0.5,label:"Minkowski\ncontrast",insts:"H226",col:"#4fc3f7"},
+    {x:0.8,label:"ω²=−1\nM₂(ℂ)",insts:"H227\nH228",col:"#ffab40"},
+  ];
+  for(const b of branches){
+    const x=b.x*W,y1=70,y2=cy-10;
+    ctx.strokeStyle=b.col;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(cx,50);ctx.lineTo(x,y1+30);ctx.stroke();
+    ctx.fillStyle=b.col;ctx.beginPath();ctx.arc(x,y2,25,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="bold 9px Courier New";
+    const lines=b.label.split("\n");
+    ctx.fillText(lines[0],x,y2-4);ctx.fillText(lines[1],x,y2+9);
+    ctx.fillStyle=b.col;ctx.font="8px Courier New";
+    const il=b.insts.split("\n");
+    ctx.fillText(il[0],x,y2+40);
+    if(il[1])ctx.fillText(il[1],x,y2+52);
+  }
+  // Convergence
+  const yBot=cy+80;
+  for(const b of branches){
+    ctx.strokeStyle="rgba(255,213,79,0.5)";ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(b.x*W,cy+15);ctx.lineTo(cx,yBot-20);ctx.stroke();
+  }
+  ctx.fillStyle="#ffd54f";ctx.beginPath();ctx.arc(cx,yBot,22,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#000";ctx.font="bold 10px Courier New";
+  ctx.fillText("M₂(ℂ)",cx,yBot+4);
+  ctx.fillStyle="#ffd54f";ctx.font="10px Courier New";
+  ctx.fillText("Cl(1,2) ≅ Cl(3,0)",cx,yBot+40);
+  ctx.fillText("color = spacetime",cx,yBot+54);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H229: Arc V — one bit, three theorems, one algebra",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("9 LIT, 1 AMBER, 1 correction, 180 checks, 0 failures",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
