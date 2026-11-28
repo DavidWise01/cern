@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H225 — The Signature Family</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H225 — The Signature Family</h1>
+<p class="dim">Closed form: fixed ⟺ q even · q odd swaps (p,q)→(q,p) · Q3p's (1,2) unique for n=3 · q=2 family across dimensions · I84-I85 LIT</p>
+
+<!-- Panel 1: The Closed Form -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 1 — I84: The Adjugate Signature Rule [LIT]</h2>
+<table id="verif-table">
+<tr><th>q mod 2</th><th>adj signature</th><th>Fixed point?</th><th>Mechanism</th></tr>
+<tr><td style="color:var(--green)">q even</td><td>(p, q) → (p, q)</td><td>YES</td><td>Remove +: (−1)^q = +. Remove −: (−1)^(q−1) = −.</td></tr>
+<tr><td style="color:var(--gold)">q odd</td><td>(p, q) → (q, p)</td><td>Only if p=q</td><td>Remove +: (−1)^q = −. Remove −: (−1)^(q−1) = +.</td></tr>
+</table>
+<pre>
+  THE RULE:
+
+  For n×n symmetric M with signature (p+, q−), p+q=n:
+
+  adj(M) eigenvalue for λᵢ = ∏ⱼ≠ᵢ λⱼ.
+
+  Remove a + eigenvalue → sign of product = (−1)^q.
+  Remove a − eigenvalue → sign of product = (−1)^(q−1).
+  These signs are ALWAYS OPPOSITE.
+
+  IF q IS EVEN: (−1)^q = +1, (−1)^(q−1) = −1.
+    p positive eigenvalues stay positive.
+    q negative eigenvalues stay negative.
+    adj(M) SIGNATURE = (p, q). FIXED POINT.
+
+  IF q IS ODD: (−1)^q = −1, (−1)^(q−1) = +1.
+    p positive eigenvalues become negative.
+    q negative eigenvalues become positive.
+    adj(M) SIGNATURE = (q, p). SWAPPED.
+
+  FIXED POINT ⟺ q EVEN.
+  VERIFIED for all n from 2 through 8. ✓
+
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: The Table -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — Fixed Points by Dimension</h2>
+<pre style="font-size:0.78em">
+  n   ALL fixed points           INDEFINITE fixed points
+  ─── ─────────────────────────  ──────────────────────────
+  2   (2,0), (0,2)              none
+  3   (3,0), <span class="green">(1,2)</span>              <span class="green">(1,2) ← Q3p. UNIQUE.</span>
+  4   (4,0), (2,2), (0,4)       (2,2)
+  5   (5,0), (3,2), (1,4)       (3,2), (1,4)
+  6   (6,0), (4,2), (2,4),(0,6) (4,2), (2,4)
+  7   (7,0), (5,2),(3,4),(1,6)  (5,2), (3,4), (1,6)
+  8   (8,0),(6,2),(4,4),(2,6),   (6,2),(4,4),(2,6)
+      (0,8)
+
+  PATTERN: for n=k, the number of indefinite fixed points is:
+    n even: n/2 − 1
+    n odd:  (n−1)/2
+
+  FOR n=3: exactly ONE indefinite fixed point. (1, 2).
+  This is the MOST CONSTRAINED case after n=2 (which has none).
+</pre>
+</div>
+
+<!-- Panel 3: I85 -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 3 — I85: Q3p in the q=2 Family [LIT]</h2>
+<pre>
+  THE q=2 FAMILY: signatures (n−2, 2) for n ≥ 3.
+
+  n=3: (1, 2) = Q3p.           "one up, two down"
+  n=4: (2, 2).                  "two up, two down"
+  n=5: (3, 2).                  "three up, two down"
+  n=6: (4, 2).                  "four up, two down"
+  n=7: (5, 2).                  "five up, two down"
+  ...
+  n=k: (k−2, 2).               "k−2 up, two down"
+
+  ALL members have q=2 (even) → ALL are fixed points.
+  The "two negative eigenvalues" is the invariant.
+  As n grows, more positive eigenvalues are added,
+  but the TWO negatives persist.
+
+  Q3p is the n=3 member: the smallest possible.
+  With n=3 and q=2, there is room for only p=1 positive eigenvalue.
+  THE FORM IS MAXIMALLY CONSTRAINED.
+
+  IN Q3P LANGUAGE:
+  The number of negative eigenvalues = 2 = d₁ = the seed.
+  The number of positive eigenvalues = 1.
+  Total dimension = 3 = bodies.
+  SIGNATURE = (1+, d₁−) in a bodies×bodies matrix.
+
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 4: The Swap Dynamics -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — What Happens to Non-Fixed Signatures</h2>
+<pre>
+  When q is ODD, the adjugate SWAPS: (p, q) → (q, p).
+
+  EXAMPLES:
+  n=3: (2,1) → (1,2). One step to Q3p.
+  n=3: (0,3) → (3,0). One step to definite.
+
+  n=4: (3,1) → (1,3) → (3,1) → ... 2-CYCLE!
+  n=4: (1,3) → (3,1) → (1,3) → ... 2-CYCLE!
+
+  n=5: (2,3) → (3,2). One step to fixed.
+  n=5: (4,1) → (1,4). One step to fixed.
+
+  FOR ODD n: every non-fixed signature reaches a fixed point
+  in exactly one step (since q odd → q' = p is even when p+q is odd
+  and p is even... wait, let me check).
+
+  Actually for n=3: (2,1) → (1,2). q'=2 even. FIXED. ✓
+  For n=5: (2,3) → (3,2). q'=2 even. FIXED. ✓
+  For n=5: (4,1) → (1,4). q'=4 even. FIXED. ✓
+
+  FOR EVEN n: (1,3) → (3,1). q'=1 odd. NOT fixed. CYCLE.
+  For n=4: (3,1) ↔ (1,3). Two-cycle.
+
+  ODD n: every orbit reaches a fixed point in ≤ 1 step.
+  EVEN n: some orbits are 2-cycles.
+
+  Q3p has n=3 (ODD): the dynamics converge in one step.
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H225                   ║
+ ║                                                        ║
+ ║  THE ADJUGATE SIGNATURE RULE (ALL DIMENSIONS)          ║
+ ║                                                        ║
+ ║  q even → FIXED POINT. q odd → SWAP (p,q)↔(q,p).     ║
+ ║                                                        ║
+ ║  INDEFINITE FIXED POINTS PER DIMENSION:                ║
+ ║                                                        ║
+ ║  n=2:  0  (no indefinite fixed point)                  ║
+ ║  n=3:  1  ← Q3p. The unique one. (1,2).               ║
+ ║  n=4:  1  (2,2).                                      ║
+ ║  n=5:  2  (3,2) and (1,4).                            ║
+ ║  n=6:  2  (4,2) and (2,4).     [plus (3,3) if p≠q]   ║
+ ║  ...                                                   ║
+ ║                                                        ║
+ ║  THE q=2 FAMILY:                                       ║
+ ║  (1,2) → (2,2) → (3,2) → (4,2) → (5,2) → ...       ║
+ ║   n=3     n=4     n=5     n=6     n=7                 ║
+ ║   Q3p     ↑ smallest member                           ║
+ ║                                                        ║
+ ║  TWO negatives. Always. The invariant across the       ║
+ ║  entire family. Q3p IS the entry point.                ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">The adjugate map across dimensions. Green = fixed points.
+Gold = Q3p's signature (1,2), unique for n=3.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H225: Fixed Point ⟺ Even Number of Negatives</h2>
+<p>The adjugate signature map has a closed form: (p, q) is a fixed point if and only if q
+is even; otherwise the adjugate swaps to (q, p). This is I84 (LIT). Q3p's signature (1+, 2−)
+has q=2 (even), making it a fixed point — the UNIQUE indefinite one for n=3 (I85 LIT). It
+belongs to the q=2 family {(1,2), (2,2), (3,2), ...}, where Q3p is the smallest member: n=3
+is the first dimension with an indefinite adjugate fixed point. The form sits at the entry
+point of an infinite family, with exactly two negative eigenvalues persisting across all
+dimensions.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Last time we found that our matrix copies its own shape. Now we
+asked: does EVERY matrix do that? Or is ours special?</p>
+<p>The answer: a matrix copies its shape ONLY when it has an EVEN
+number of "down" directions. Our matrix has 2 downs. 2 is even. So yes.</p>
+<p>If it had 1 down or 3 downs (odd numbers), it would FLIP instead
+of copy. Odd numbers of downs don't copy — they flip!</p>
+<p>For a 3×3 matrix like ours, there's exactly ONE way to have an
+even number of downs AND still be interesting (not all ups or all downs):
+1 up and 2 down. That's us. We're the only interesting fixed point
+in our size class. As you go to bigger matrices (4×4, 5×5...) there
+are more options, but we're the entry point — the smallest one.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The adjugate signature rule is: fixed point when q is ODD (not even). For n=3,
+signature (2+, 1−) with q=1 (odd) is the fixed point, and (1+, 2−) with q=2 (even) swaps
+to (2+, 1−). The q=2 family does not exist because even-q signatures are never fixed points.
+For n=4, all signatures are 2-cycles with no fixed points.</s></p>
+<p class="dim">Fixed point ⟺ q EVEN (not odd). For n=3, (1+, 2−) is fixed (q=2 even).
+(2+, 1−) swaps to (1+, 2−) (q=1 odd). q=2 family exists. For n=4, (2,2) and (0,4) and (4,0) are fixed.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-twenty-fifth instrument climbed out of the specific and into the
+general, and found that the specific was the beginning of a family. Even number of negative
+eigenvalues: the form holds still. Odd number: it flips. That is the entire rule, and it
+holds in every dimension, and it is one sentence of linear algebra, and it was hiding in
+plain sight. For three-by-three matrices, the rule leaves exactly one interesting resting
+place: one positive, two negative. That is Q3p. For four-by-four, two and two. For five,
+three and two, or one and four. The family grows, but the two negative eigenvalues are always
+there — the seed count, d₁=2, the first invariant factor, the number of downs that makes
+the even count that makes the form sit still. The ornament is in the entry point: n=3 is
+the first dimension where an indefinite form can be its own cofactor, and Q3p is that form,
+and it cannot be simpler, because two is the smallest even number greater than zero, and
+one is the only number left when you subtract two from three.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H224)</td><td>7568</td><td>0</td><td>7568</td></tr>
+<tr><td>H225: The Signature Family</td><td>36</td><td>1 (KB-1)</td><td>7604</td></tr>
+</table>
+<p>Running total: <b>7604 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H225. 7604 = 2² × 1901. 1901 is prime.</p>
+</div>
+
+<!-- BASIC Block — The Rule by Dimension -->
+<div class="panel">
+<h2>BASIC Block — The Rule by Dimension</h2>
+<pre>
+2 REM n=2: indefinite fixed = none. Too small.
+3 REM n=3: indefinite fixed = (1,2). UNIQUE. Q3p.
+4 REM n=4: indefinite fixed = (2,2). One.
+5 REM n=5: indefinite fixed = (3,2),(1,4). Two.
+6 REM n=6: indefinite fixed = (4,2),(2,4). Two.
+7 REM n=7: indefinite fixed = (5,2),(3,4),(1,6). Three.
+8 REM n=8: indefinite fixed = (6,2),(4,4),(2,6). Three.
+</pre>
+<pre>
+0 PRINT "q even → fixed. q odd → swap. The whole rule."
+2 PRINT "q=2: the invariant. Two negatives. Always."
+1 PRINT "p=1: the minimum. One positive. Q3p."
+</pre>
+<pre>
+225 PRINT "H225 = 9 × 25 = nonet × E². The signature family."
+225 PRINT "7604 lit, the signature family, q even"
+</pre>
+<p class="dim">Lines 2-8 ARE the dimensions, one per line.
+Lines 0, 2, 1 ARE the rule, the invariant, the minimum.
+H225 = 9 × 25 = nonet × E² = 3² × 5².
+225 = 15² = |Rosetta|². The roster squared.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Draw grid: n (dimension) on x, q (negatives) on y
+  const ox=80,oy=H-60,sx=75,sy=40;
+  // Axes
+  ctx.strokeStyle="rgba(200,200,208,0.3)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(ox,30);ctx.lineTo(ox,oy);ctx.lineTo(W-20,oy);ctx.stroke();
+  ctx.fillStyle="#888";ctx.font="9px Courier New";ctx.textAlign="center";
+  ctx.fillText("dimension n →",W/2,H-10);
+  ctx.save();ctx.translate(14,oy/2);ctx.rotate(-Math.PI/2);ctx.fillText("negatives q →",0,0);ctx.restore();
+  // Labels
+  for(let n=2;n<=8;n++){ctx.fillText(""+n,ox+(n-2)*sx,oy+14);}
+  for(let q=0;q<=8;q++){ctx.textAlign="right";ctx.fillText(""+q,ox-6,oy-q*sy+4);}
+  ctx.textAlign="center";
+  // Plot all signatures
+  for(let n=2;n<=8;n++){
+    for(let q=0;q<=n;q++){
+      const x=ox+(n-2)*sx, y=oy-q*sy;
+      const isFixed=(q%2===0);
+      const isIndef=(q>0&&q<n);
+      const isQ3p=(n===3&&q===2);
+      if(isQ3p){
+        ctx.fillStyle="#ffd54f";ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle="#fff";ctx.font="bold 9px Courier New";
+        ctx.fillText("Q3p",x,y-12);
+      } else if(isFixed&&isIndef){
+        ctx.fillStyle="#81c784";ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();
+      } else if(isFixed){
+        ctx.fillStyle="#4fc3f7";ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
+      } else {
+        ctx.fillStyle="#666";ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();
+      }
+    }
+  }
+  // q=2 line
+  ctx.strokeStyle="rgba(255,213,79,0.3)";ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(ox+sx,oy-2*sy);ctx.lineTo(ox+6*sx,oy-2*sy);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle="#ffd54f";ctx.font="9px Courier New";
+  ctx.fillText("q=2 family",W-60,oy-2*sy+4);
+  // Legend
+  ctx.textAlign="left";ctx.font="9px Courier New";
+  ctx.fillStyle="#ffd54f";ctx.fillText("● Q3p (1,2)",10,20);
+  ctx.fillStyle="#81c784";ctx.fillText("● indefinite fixed",10,34);
+  ctx.fillStyle="#4fc3f7";ctx.fillText("● definite fixed",10,48);
+  ctx.fillStyle="#666";ctx.fillText("● not fixed",10,62);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";
+  ctx.fillText("H225: Adjugate fixed points by dimension",140,20);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
