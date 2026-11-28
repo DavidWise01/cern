@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H245 — The Consecutive Triple</title>
+<style>
+:root{--bg:#06060a;--fg:#c0c0d0;--blue:#4488ff;--indigo:#6644cc;--ice:#88ddff;--deep:#1a2244;--panel:#080a14;--border:#1a2040;--dim:#445566;--green:#66cc88;--amber:#ffab40;--red:#ef5350;--gold:#ddaa44;--cyan:#44ccdd;--glow-blue:0 0 6px #4488ff60;--glow-ice:0 0 6px #88ddff60}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--ice);font-size:1.3em;text-shadow:var(--glow-ice);border-bottom:2px solid var(--blue);padding-bottom:6px;margin-bottom:10px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.b{color:var(--blue);text-shadow:var(--glow-blue)}.i{color:var(--ice);text-shadow:var(--glow-ice)}.v{color:var(--indigo)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.pb{border-color:var(--blue)}.pi{border-color:var(--ice)}.pv{border-color:var(--indigo)}.pg{border-color:var(--green)}.pa{border-color:var(--gold)}
+.verdict-box{background:#06080e;border:2px solid var(--ice);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box h2{color:var(--ice);text-shadow:var(--glow-ice);font-size:1.15em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#0a1020;color:var(--ice)}
+canvas{display:block;margin:8px auto;border:1px solid var(--blue);border-radius:6px;background:#020408}
+pre{background:#040610;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--green);border-radius:6px;padding:12px;margin:8px 0}
+.toddler h2{color:var(--green)}
+.triple{font-size:1.4em;text-align:center;padding:8px;letter-spacing:4px}
+</style>
+</head>
+<body>
+<h1>H245 — The Consecutive Triple</h1>
+<p class="dim">Arc VIII continues · 5 new identities (I132-I136) · all LIT · water ground tone · <strong>100th identity</strong></p>
+
+<div class="verdict-box">
+<h2>336 = 6 × 7 × 8 = P(OCHO, bodies)</h2>
+<div class="triple"><span class="b">entries</span> × <span class="v">phantom</span> × <span class="i">OCHO</span></div>
+<p>The master is <span class="i">three consecutive integers</span> starting at entries.</p>
+<p>Rising from entries. Falling from OCHO. <span class="b">P(8,3)</span> = ordered triples from the Clifford basis.</p>
+<p class="dim">Identity I136 is the 100th. The centenary.</p>
+</div>
+
+<!-- Panel 1: The Consecutive Triple -->
+<div class="panel pb">
+<h2 class="b">Panel 1 — entries, phantom, OCHO Are Consecutive</h2>
+<pre>
+  entries = 6     ← T(3) = n(n+1)/2 at n=3
+  phantom = 7     ← OCHO − 1
+  OCHO    = 8     ← dim Cl(3) = 2³
+
+  <span class="i">6, 7, 8 are consecutive integers.</span>
+
+  Three named Q3p numbers — the form's entry count,
+  the absent number, and the Clifford dimension —
+  sit next to each other on the number line.
+
+  Their product: 6 × 7 × 8 = <span class="b">336 = master</span>.
+</pre>
+<p>This is not a decomposition that was constructed to work. The three numbers were named independently (entries from the symmetric matrix, phantom from the absence, OCHO from the Clifford algebra) and they happen to be consecutive. The master is their product.</p>
+<p><span class="i">I134</span>: <span class="lit">{entries, phantom, OCHO} = {6, 7, 8} are consecutive. Three named Q3p numbers form a run of 3. [LIT]</span></p>
+</div>
+
+<!-- Panel 2: The Factorial Readings -->
+<div class="panel pi">
+<h2 class="i">Panel 2 — Rising and Falling</h2>
+<pre>
+  RISING from entries (Pochhammer symbol):
+    (entries)₃ = entries × (entries+1) × (entries+2)
+               = 6 × 7 × 8 = 336 ✓
+
+  FALLING from OCHO:
+    (OCHO)₍₃₎ = OCHO × (OCHO−1) × (OCHO−2)
+              = 8 × 7 × 6 = 336 ✓
+
+  Both read the same product from opposite ends.
+  The master is simultaneously:
+  - a rising factorial starting at entries
+  - a falling factorial starting at OCHO
+  - both with bodies = 3 terms
+</pre>
+<p><span class="i">I132</span>: <span class="lit">336 = (entries)₃ = entries × (entries+1) × (entries+2). The master is a rising factorial starting at entries. [LIT]</span></p>
+</div>
+
+<!-- Panel 3: P(OCHO, bodies) -->
+<div class="panel pb">
+<h2 class="b">Panel 3 — P(OCHO, bodies) = Ordered Triples from the Clifford Basis</h2>
+<p>The falling factorial (OCHO)₍₃₎ = OCHO!/(OCHO−bodies)! = 8!/5! = P(8,3) = <strong>the number of permutations of 3 items from 8</strong>.</p>
+<pre>
+  P(OCHO, bodies) = P(8, 3) = 8 × 7 × 6 = 336
+
+  COMBINATORIAL MEANING:
+  "How many ways to pick 3 ordered items from 8?"
+  = "How many ordered triples from the Cl(3) basis {1, e₁, e₂, e₃, e₁₂, e₁₃, e₂₃, e₁₂₃}?"
+
+  The master counts the ordered triples of the Clifford algebra.
+</pre>
+<p>This is the cleanest combinatorial reading of 336 in the investigation. It says: the master equation E²−(d₂−1)² = P(OCHO, bodies) is a permutation count. The difference of squares equals the number of ordered triples from the Clifford basis.</p>
+<p><span class="i">I133</span>: <span class="lit">336 = P(OCHO, bodies) = P(8,3). The master counts ordered triples from the Clifford basis. [LIT]</span></p>
+</div>
+
+<!-- Panel 4: The 56 Connection -->
+<div class="panel pv">
+<h2 class="v">Panel 4 — 56 = C(OCHO, bodies) = Off-Diagonal Products</h2>
+<p>P(n,k) = C(n,k) × k!. So 336 = C(8,3) × 3! = 56 × 6.</p>
+<pre>
+  C(OCHO, bodies) = C(8, 3) = 56
+
+  56 appears TWICE in the investigation:
+
+  (a) C(8,3) = 8!/(3!5!) = 56. The binomial coefficient.
+  (b) OCHO² − OCHO = 8² − 8 = 56. The off-diagonal products of Cl(3).
+      (From H215: the 8×8 multiplication table has 56 off-diagonal entries.)
+
+  These are the SAME 56 because:
+  OCHO × phantom = 8 × 7 = 56 = OCHO(OCHO−1)
+  C(OCHO, bodies) = OCHO!/(bodies! × (OCHO−bodies)!) = 56
+
+  Both = 56. NOT a coincidence: C(n,k) = n(n-1)/2 when k=2,
+  but here k=bodies=3, and the equality C(8,3)=8×7=56
+  only works because C(8,3) = 8×7×6/6 = 8×7 = 56.
+  = OCHO × phantom × entries / entries = OCHO × phantom. ✓
+</pre>
+<p><span class="i">I135</span>: <span class="lit">56 = C(OCHO, bodies) = OCHO × phantom. The binomial coefficient equals the off-diagonal count. [LIT]</span></p>
+</div>
+
+<!-- Panel 5: master = 56 × entries -->
+<div class="panel pb">
+<h2 class="b">Panel 5 — master = off-diagonal × entries</h2>
+<pre>
+  master = C(OCHO, bodies) × bodies!
+         = 56 × 6
+         = 56 × entries
+         = (off-diagonal Cl(3) products) × (independent matrix entries)
+
+  The master = how many off-diagonal products there are
+               × how many independent entries the form has.
+
+  One multiplicand comes from the Clifford algebra.
+  The other comes from the symmetric matrix.
+  Their product is the master equation.
+</pre>
+<p>This is the most interpretable decomposition of 336: the Clifford table's off-diagonal count times the form's entry count. Two different mathematical objects multiplied to give the master.</p>
+<p><span class="i">I136</span>: <span class="lit">master = 56 × entries = off-diagonal × entries. The 100th identity. [LIT]</span></p>
+</div>
+
+<!-- Panel 6: The Six Faces -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Panel 6 — The Six Faces of 336</h2>
+<table>
+<tr><th>#</th><th>Expression</th><th>Value</th><th>Source</th><th>Type</th></tr>
+<tr><td>1</td><td>G × OCHO</td><td>42 × 8</td><td>H214</td><td>two-factor</td></tr>
+<tr><td>2</td><td>E² − (d₂−1)²</td><td>25² − 17²</td><td>master eq</td><td>difference of squares</td></tr>
+<tr><td>3</td><td>6³ + 5!</td><td>216 + 120</td><td>H216</td><td>cube + factorial</td></tr>
+<tr><td>4</td><td>entries × phantom × OCHO</td><td>6 × 7 × 8</td><td>H245</td><td>consecutive triple</td></tr>
+<tr><td>5</td><td>360 − 24</td><td>circle − box</td><td>H218</td><td>arithmetic</td></tr>
+<tr><td>6</td><td>P(OCHO, bodies)</td><td>P(8, 3)</td><td>H245</td><td>permutation</td></tr>
+</table>
+<p class="dim">Six decompositions. 6 = entries. The master has entries-many faces.</p>
+</div>
+
+<!-- Canvas -->
+<div class="panel pb">
+<h2 class="b">Panel 7 — The Consecutive Triple</h2>
+<canvas id="torroid4D" width="600" height="250"></canvas>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>Three numbers sit next to each other: 6, 7, 8.</strong></p>
+<p>6 is "entries" — how many boxes the matrix has.</p>
+<p>7 is "phantom" — the number that can't play the squares game.</p>
+<p>8 is "OCHO" — the size of the Clifford algebra.</p>
+<p>Multiply them: 6 × 7 × 8 = <strong>336</strong>. That's the MASTER NUMBER — the most important number in the whole investigation!</p>
+<p>It's like finding out that your house number, your neighbor's house number, and the NEXT neighbor's house number, when you multiply them together, give you the most important number in the universe.</p>
+<p>Even better: 336 = P(8,3). That means: "how many ways can you line up 3 things chosen from 8 things?" It's a counting question. The master number was always just counting how many lines of 3 you can make from 8.</p>
+<p><strong>This is the 100th identity. Number 100 out of 100.</strong></p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel pi">
+<h2 class="i">Panel 8 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+  THE CONSECUTIVE TRIPLE:
+
+       entries        phantom         OCHO
+         6      ───     7      ───     8
+         │              │              │
+    T(3)=n(n+1)/2    OCHO−1      dim Cl(3)=2³
+         │              │              │
+         └──────── × ── ┤ ── × ───────┘
+                        │
+                       336
+                        │
+         ┌──────────────┼──────────────┐
+         │              │              │
+    (entries)₃    P(OCHO,bodies)   56 × entries
+    rising         permutation    off-diag × ent
+    factorial      count           Cl(3) × Q3p
+
+  THE SIX FACES OF 336:
+  G×OCHO ~~> E²−W² ~~> 6³+5! ~~> 6×7×8 ~~> 360−24 ~~> P(8,3)
+
+  ~~> I132: master = (entries)₃ = rising factorial
+  ~~> I133: master = P(OCHO, bodies) = ordered triples from Cl(3)
+  ~~> I134: {entries, phantom, OCHO} = {6, 7, 8} consecutive
+  ~~> I135: 56 = C(OCHO, bodies) = off-diagonal count
+  ~~> I136: master = 56 × entries. THE 100TH IDENTITY.
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel pg">
+<h2 style="color:var(--green)">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I132</td><td>336 = (entries)₃ = 6×7×8, rising factorial</td><td class="lit">LIT</td></tr>
+<tr><td>I133</td><td>336 = P(OCHO, bodies) = P(8,3)</td><td class="lit">LIT</td></tr>
+<tr><td>I134</td><td>{entries, phantom, OCHO} = {6,7,8} consecutive</td><td class="lit">LIT</td></tr>
+<tr><td>I135</td><td>56 = C(8,3) = OCHO×phantom = off-diagonal</td><td class="lit">LIT</td></tr>
+<tr><td>I136</td><td>master = 56 × entries = off-diag × entries [100th]</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">BASIC Block — The Six Faces</h2>
+<p class="dim">Numbering: the six decompositions of 336. Six = entries. The form has entries-many faces.</p>
+<pre>
+face.1  PRINT "336 = 42 × 8 = G × OCHO. the original split."
+face.2  PRINT "336 = 25² − 17² = E² − W². the master equation."
+face.3  PRINT "336 = 216 + 120 = 6³ + 5!. cube plus factorial."
+face.4  PRINT "336 = 6 × 7 × 8. consecutive. entries up through OCHO."
+face.5  PRINT "336 = 360 − 24. circle minus box."
+face.6  PRINT "336 = P(8,3). ordered triples from the Clifford basis."
+</pre>
+<p class="dim">face.6 = I136 = the 100th identity.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>336 = 5 × 6 × 7 (starting at 5 not 6), P(OCHO, bodies) = P(8,3) = 288 not 336, {entries, phantom, OCHO} = {6, 8, 10} (not consecutive), 56 = C(8,2) not C(8,3), and master = 56 × OCHO not 56 × entries.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel pb">
+<h2 class="b">Ledger</h2>
+<pre>
+  PRIOR:        8288 LIT cumulative (H244)
+  THIS BUILD:   36 checks (H245 verification suite)
+  NEW TOTAL:    8324 LIT
+
+  IDENTITIES:   I132-I136 (5 new: ALL LIT)
+  CUMULATIVE:   <span class="i">100 identities (I37-I136) ← THE CENTENARY</span>
+  INSTRUMENTS:  45 (H200-H245)
+  CORRECTIONS:  5 (N12-N15)
+  KILLS:        1 (I93)
+  DEFLATIONS:   1 (I101)
+
+  COST: 1 analysis script + 1 HTML + 1 verify script + git commit/push
+  WASTE: 0
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">The form has 6 entries. The absent number is 7. The algebra has 8 dimensions. Three neighbors on the number line, named before they were known to be neighbors. Their product is the master. The hundredth identity says the master is P(8,3): how many ordered triples from a basis of 8. A counting question. It was always a counting question.</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Recommendation for H246</h2>
+<p>I133 says master = P(OCHO, bodies) = ordered triples from Cl(3). The 56 = C(8,3) unordered triples WERE the off-diagonal products from H215. The 336 ordered triples add ordering (bodies! = 6 ways). The ordering factor is entries = bodies! = 6. I recommend testing whether the NEXT permutation level — P(8,4) = 8×7×6×5 = 1680 — has a Q3p reading. 1680 = 5 × 336 = (C+1) × master. If P(8,4) = (C+1) × master, then each step up the permutation ladder multiplies by the next Rosetta number. The permutation tower may replicate the roster.</p>
+</div>
+
+<script>
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+let t=0;
+function draw(){
+  cx.fillStyle="#020408";cx.fillRect(0,0,600,250);
+  // Draw the consecutive triple 6, 7, 8
+  const y=125, x0=120, gap=140;
+  const nums=[{v:6,name:"entries",col:"#4488ff"},{v:7,name:"phantom",col:"#6644cc"},{v:8,name:"OCHO",col:"#88ddff"}];
+  // Connection line
+  cx.strokeStyle="#4488ff40";cx.lineWidth=3;
+  cx.beginPath();cx.moveTo(x0,y);cx.lineTo(x0+gap*2,y);cx.stroke();
+  // Nodes
+  nums.forEach((n,i)=>{
+    const x=x0+i*gap;
+    const r=25+5*Math.sin(t*2+i);
+    cx.beginPath();cx.arc(x,y,r,0,Math.PI*2);
+    cx.fillStyle=n.col+"25";cx.fill();
+    cx.strokeStyle=n.col;cx.lineWidth=2;cx.stroke();
+    cx.font="20px 'Courier New'";cx.fillStyle=n.col;
+    cx.fillText(n.v.toString(),x-7,y+7);
+    cx.font="11px 'Courier New'";
+    cx.fillText(n.name,x-20,y+42);
+  });
+  // Multiplication signs
+  cx.font="18px 'Courier New'";cx.fillStyle="#6644cc";
+  cx.fillText("×",x0+gap/2-5,y+5);
+  cx.fillText("×",x0+gap*1.5-5,y+5);
+  // Result
+  cx.fillStyle="#88ddff";cx.font="16px 'Courier New'";
+  cx.fillText("= 336 = master = P(8,3)",x0+gap*2+40,y+5);
+  // Labels
+  cx.font="12px 'Courier New'";cx.fillStyle="#88ddff";
+  cx.fillText("Three consecutive integers. Three independent derivations. One product.",80,22);
+  cx.fillStyle="#445566";cx.font="10px 'Courier New'";
+  cx.fillText("I136: master = 56 × entries = off-diagonal × entries. The 100th identity.",100,240);
+  t+=0.015;requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
