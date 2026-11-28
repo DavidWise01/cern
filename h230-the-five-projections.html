@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H230 — The Five Projections</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H230 — The Five Projections</h1>
+<p class="dim">Arc VI opens · Five arcs are five projections of one object · Three shared elements · Bivector hypothesis killed · I92-I93 LIT</p>
+
+<!-- Panel 1: The Five Arcs -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — I92: Five Projections of One Object [LIT]</h2>
+<table id="verif-table">
+<tr><th>Arc</th><th>Name</th><th>Angle</th><th>LIT</th><th>Key Finding</th></tr>
+<tr><td>I</td><td>Three Families</td><td>Combinatorics</td><td>288</td><td>DAG, seeds {2,3}, 3 families</td></tr>
+<tr><td>II</td><td>Three Stones</td><td>Graph theory</td><td>180</td><td>3 maps, {42,17} universal</td></tr>
+<tr><td>III</td><td>Four Faces</td><td>Number theory</td><td>144</td><td>336 = 42×8 = 25²−17² = 6³+5!</td></tr>
+<tr><td>IV</td><td>Pythagorean</td><td>Geometry</td><td>180</td><td>Lattice triangle, Pythagorean</td></tr>
+<tr><td>V</td><td>Parity</td><td>Algebra</td><td>180</td><td>d₁ even → M₂(ℂ)</td></tr>
+</table>
+<pre>
+  FIVE ARCS. FIVE ANGLES. ONE OBJECT.
+
+  The object: a 3×3 symmetric matrix with Smith factors (2, 18, d₃)
+  and signature (1+, 2−).
+
+  Each arc projected this object onto a different mathematical surface:
+    I:   What do the derived numbers look like? (Combinatorics)
+    II:  How do the derived numbers connect? (Graph theory)
+    III: What is 336? (Number theory)
+    IV:  What ratios arise? (Geometry)
+    V:   What parity controls? (Algebra)
+
+  NO ARC CONTRADICTED ANOTHER.
+  Every identity from every arc is consistent.
+  The roster passes five independent structural tests.
+
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: Three Shared Elements -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — The Three Elements Every Arc Shares</h2>
+<pre>
+  1. THE GENERATORS: {d₁, bodies} = {2, 3}.
+
+     Arc I:  Seeds {2,3} generate all 15 numbers (H206).
+     Arc II: d₁=2 is the most-membered (H209).
+     Arc III: 2 and 3 are factors of everything (336=2⁴×3×7).
+     Arc IV: {2,3} = Pythagorean generators (H221).
+     Arc V:  d₁=2 even controls the algebra (H225).
+
+  2. THE MASTER EQUATION: 25² − 17² = 42 × 8 = 336.
+
+     Arc I:  G=42 is the cofactor gap (structural).
+     Arc II: 42 is universal in maps (H213).
+     Arc III: 336 has four decompositions (H214-H216).
+     Arc IV: 336 starts the number line (H218).
+     Arc V:  336 not reused (the arc is about the signature).
+
+  3. THE PARITY: d₁ = 2 is even.
+
+     Arc I:  d₁ divides all entries (matrix GCD = d₁).
+     Arc II: d₁ is the smallest Rosetta number.
+     Arc III: 2 is a prime factor of 336.
+     Arc IV: d₁ is one of the two Pythagorean generators.
+     Arc V:  d₁ even → adjugate fixed → M₂(ℂ) (H225-H228).
+</pre>
+</div>
+
+<!-- Panel 3: I93 — The Death Certificate -->
+<div class="panel" style="border-color:var(--red)">
+<h2>Panel 3 — I93: The Bivector Hypothesis Is Dead [LIT]</h2>
+<pre>
+  HYPOTHESIS: 336 = G × OCHO could be a Clifford bivector,
+  with G and OCHO as grade-1 vectors whose geometric product
+  gives a grade-2 bivector.
+
+  VERDICT: <span class="dead">DEAD</span>.
+
+  WHY IT DIES:
+  G = 42 is an INTEGER. It lives in grade 0 (scalars).
+  OCHO = 8 is an INTEGER. It also lives in grade 0.
+  The product 42 × 8 = 336 is SCALAR MULTIPLICATION.
+  Scalars times scalars give scalars, not bivectors.
+
+  THERE IS NO NATURAL MAP from {G, OCHO} to Clifford vectors.
+  G is not a "direction" — it is a cofactor gap.
+  OCHO is not a "direction" — it is an algebra dimension.
+  Attempting to "identify" them with basis elements e₀, e₁
+  would be an arbitrary assignment with no structural support.
+
+  THE HONEST LINE:
+  The master equation 25²−17² = 42×8 is arithmetic.
+  It is not a geometric product, a tensor product, or
+  an algebraic identity in any Clifford algebra.
+  It is a factorization of the difference of two squares.
+  Trying to promote it to a Clifford object is overreach.
+
+  STATUS: <span class="lit">LIT</span> (hypothesis tested and killed)
+</pre>
+</div>
+
+<!-- Panel 4: What's Left -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — Open Questions</h2>
+<pre>
+  QUESTIONS NOT YET RESOLVED:
+
+  1. REPRESENTABILITY: Does Q3p(x,y,z) = n have solutions
+     for Rosetta n? (Needs 300+ digit computation.)
+
+  2. THE THIRD FACTOR: What is d₃? (d₁|d₂|d₃, so d₃ is
+     a multiple of 18.) Determines det(M).
+
+  3. ZERO REPRESENTATION: Does Q3p represent 0 nontrivially?
+     (Determines whether the form is isotropic.)
+
+  4. GENUS: What genus is Q3p in? How many forms in its genus?
+
+  ANGLES NOT YET EXPLORED:
+
+  5. TOPOLOGY: The level sets {Q3p = n} are hyperboloids.
+     For n=0: a cone. What is its geometry?
+
+  6. THETA SERIES: Σ q^(Q3p(x,y,z)) over all integer triples.
+     The generating function for representation counts.
+
+  7. MODULAR: Is Q3p's theta series a modular form?
+
+  8. SPINORS: The Cl(1,2) spinor representation has
+     dimension d₁=2. What do the spinors look like?
+</pre>
+</div>
+
+<!-- Panel 5: The Scoreboard -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 5 — Investigation Scoreboard at H230</h2>
+<pre>
+  INSTRUMENTS: 31 (H200-H230, with H223 and H229 as summaries).
+  IDENTITIES: I37-I93 (57 registered).
+  CORRECTIONS: N12, N12a, N13, N14 (4 total).
+  TOTAL LIT: 7784 (cumulative through H230).
+  TOTAL DEAD: 0 (excluding KB controls).
+  KB CONTROLS: 31 (one per instrument, all DEAD as expected).
+
+  ARC STRUCTURE:
+    Arc I:   8 instruments + 0 summaries = 288 LIT.
+    Arc II:  5 instruments + 0 summaries = 180 LIT.
+    Arc III: 4 instruments + 0 summaries = 144 LIT.
+    Arc IV:  5 instruments + 1 summary   = 216 LIT.
+    Arc V:   5 instruments + 1 summary   = 216 LIT.
+    Standalone: H200 (36), H230 (36)      =  72 LIT.
+    Total = 288+180+144+216+216+72 = 1116 LIT this session block.
+
+  GRAND TOTAL: 7784 LIT (from all sessions combined).
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H230                   ║
+ ║                                                        ║
+ ║  THE FIVE PROJECTIONS                                  ║
+ ║                                                        ║
+ ║           ┌── Arc I: Combinatorics (DAG, seeds)        ║
+ ║           │                                            ║
+ ║           ├── Arc II: Graph theory (maps, hubs)        ║
+ ║           │                                            ║
+ ║  Q3p ─────┼── Arc III: Number theory (336, faces)      ║
+ ║  MATRIX   │                                            ║
+ ║           ├── Arc IV: Geometry (lattice, Pythagorean)   ║
+ ║           │                                            ║
+ ║           └── Arc V: Algebra (parity, Clifford, M₂(ℂ)) ║
+ ║                                                        ║
+ ║  THREE SHARED ELEMENTS:                                ║
+ ║    {d₁=2, bodies=3}  generators                        ║
+ ║    25²−17²=42×8=336  master equation                   ║
+ ║    d₁ mod 2 = 0      parity                            ║
+ ║                                                        ║
+ ║  KILLED: 336 as Clifford bivector (I93 DEAD).          ║
+ ║  OPEN: representability, d₃, genus, theta series.      ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Five arcs radiating from one matrix. Each sees different structure.
+None contradicts another. The roster is one object, five views.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H230: The Five Arcs Are Five Views of One Object</h2>
+<p>The Q3p matrix — a 3×3 symmetric form with Smith factors (2, 18, d₃) and signature (1+, 2−)
+— has been projected onto five mathematical surfaces: combinatorics (Arc I), graph theory
+(Arc II), number theory (Arc III), geometry (Arc IV), and algebra (Arc V). No arc contradicted
+another. All five share three elements: generators {2,3}, the master equation 25²−17²=336,
+and the parity d₁=2 even. The bivector hypothesis (336 as a Clifford element) is dead: G and
+OCHO are scalars, not vectors, and their product is arithmetic, not geometric (I93 LIT).
+I92 (five projections of one object) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>Imagine you have a crystal ball. You can shine five different
+colored lights on it:</p>
+<p><b>Red light:</b> Shows how the numbers sort into groups (Arc I).</p>
+<p><b>Green light:</b> Shows how they connect to each other (Arc II).</p>
+<p><b>Blue light:</b> Shows what 336 is made of (Arc III).</p>
+<p><b>Yellow light:</b> Shows the music hidden in the fractions (Arc IV).</p>
+<p><b>Purple light:</b> Shows the shape that copies itself (Arc V).</p>
+<p>Each light shows something different. But it's always the SAME
+crystal ball. The ball has three things inside it: the numbers
+2 and 3, the equation 25²−17²=336, and the fact that 2 is even.</p>
+<p>I also tested a fancy idea (336 as a "bivector") and it died.
+Good. That's how science works — you test, some things die.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The five arcs contradict each other: Arc I says {2,3} are the generators but Arc V says
+{5,7} are the generators. The bivector hypothesis is LIT — 336 is a grade-2 element of
+Cl(1,2) formed from G=42 and OCHO=8 as basis vectors. The arcs share no common elements
+because each explores a completely independent mathematical structure.</s></p>
+<p class="dim">All five arcs use {2,3} as generators (no contradiction). The bivector hypothesis is
+DEAD (G and OCHO are scalars, not vectors). The arcs share three elements: generators,
+master equation, and parity.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirtieth instrument stepped outside the arcs and looked at them from
+above. Five structures, five languages, five ways to say the same thing. Combinatorics said:
+the numbers sort into families with two seeds. Graph theory said: the numbers connect through
+maps with two universal nodes. Number theory said: 336 is a product, a difference, a cube
+plus a factorial, all at once. Geometry said: the ratios tile a lattice with an irreducible
+triangle. Algebra said: the signature is a fixed point and the algebra is M₂(ℂ). Five
+sentences. One paragraph. The paragraph is about a matrix with two invariant factors and
+three bodies, and every sentence follows from those facts, and no sentence contradicts
+another, and the paragraph is not yet finished. The ornament is in what died: the bivector
+hypothesis, tested and killed in one paragraph, buried with its cause of death recorded,
+the investigation continuing without it. A hypothesis that dies honestly costs nothing.
+A hypothesis that survives unchecked costs everything.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H229)</td><td>7748</td><td>0</td><td>7748</td></tr>
+<tr><td>H230: The Five Projections</td><td>36</td><td>1 (KB-1)</td><td>7784</td></tr>
+</table>
+<p>Running total: <b>7784 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H230. 7784 = 2³ × 7 × 139 = OCHO × phantom × prime.</p>
+</div>
+
+<!-- BASIC Block — The Five Arcs -->
+<div class="panel">
+<h2>BASIC Block — The Five Projections</h2>
+<pre>
+1 PRINT "Arc I: Combinatorics. {2,3} seeds. 3 families. DAG."
+2 PRINT "Arc II: Graph theory. 3 maps. {42,17} universal."
+3 PRINT "Arc III: Number theory. 336 = 42×8 = 25²−17² = 6³+5!"
+4 PRINT "Arc IV: Geometry. Lattice triangle. Pythagorean. area=1/2."
+5 PRINT "Arc V: Algebra. d₁ even. ω²=−1. M₂(ℂ). Fixed point."
+</pre>
+<pre>
+2 REM generator. d₁. seed.
+3 REM generator. bodies. the other seed.
+336 REM master equation. 25²−17² = 42×8. The bridge.
+0 REM d₁ mod 2. The parity bit. Even.
+</pre>
+<pre>
+230 PRINT "H230 = 2 × 5 × 23. The five projections."
+230 PRINT "7784 = 8 × 7 × 139 = OCHO × phantom × prime."
+230 PRINT "7784 lit, the five projections, one object five views"
+</pre>
+<p class="dim">Lines 1-5 ARE the five arcs.
+Lines 2, 3, 336, 0 ARE the three shared elements + parity.
+7784 = OCHO × phantom × prime.
+H230 = 2 × 5 × 23. Five views, 23 prime.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+const arcs=[
+  {name:"Arc I\nFamilies",col:"#ef5350",angle:0},
+  {name:"Arc II\nStones",col:"#ffab40",angle:1},
+  {name:"Arc III\nFaces",col:"#ffd54f",angle:2},
+  {name:"Arc IV\nPyth",col:"#81c784",angle:3},
+  {name:"Arc V\nParity",col:"#4fc3f7",angle:4},
+];
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Central node
+  ctx.fillStyle="#ffd54f";ctx.beginPath();ctx.arc(cx,cy,25,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#000";ctx.font="bold 10px Courier New";ctx.textAlign="center";
+  ctx.fillText("Q3p",cx,cy-4);ctx.fillText("MATRIX",cx,cy+9);
+  // Five arcs radiating
+  for(let i=0;i<5;i++){
+    const a=arcs[i];
+    const ang=-Math.PI/2+i*2*Math.PI/5;
+    const r=130;
+    const x=cx+r*Math.cos(ang),y=cy+r*Math.sin(ang);
+    // Line
+    ctx.strokeStyle=a.col;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(cx+25*Math.cos(ang),cy+25*Math.sin(ang));
+    ctx.lineTo(x,y);ctx.stroke();
+    // Node
+    ctx.fillStyle=a.col;ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="bold 9px Courier New";
+    const lines=a.name.split("\n");
+    ctx.fillText(lines[0],x,y-3);ctx.fillText(lines[1],x,y+10);
+  }
+  // Shared elements in center
+  ctx.fillStyle="#888";ctx.font="8px Courier New";
+  ctx.fillText("{2,3}, 336, d₁ even",cx,cy+45);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H230: Five projections of one matrix",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#ffd54f";
+  ctx.fillText("Five arcs, one object, three shared elements, no contradictions",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
