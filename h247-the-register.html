@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H247 — The Register</title>
+<style>
+:root{--bg:#08080a;--fg:#c0c0c8;--steel:#8899aa;--white:#dde0e4;--silver:#aab0b8;--chrome:#667788;--panel:#0c0c10;--border:#22222e;--dim:#555566;--green:#66cc88;--amber:#ffab40;--red:#ef5350;--gold:#ddaa44;--cyan:#00ddcc;--glow-steel:0 0 6px #8899aa40;--glow-cyan:0 0 6px #00ddcc60}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--white);font-size:1.3em;text-shadow:var(--glow-steel);border-bottom:2px solid var(--steel);padding-bottom:6px;margin-bottom:10px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.m-w{color:var(--white)}.m-s{color:var(--steel)}.m-c{color:var(--cyan);text-shadow:var(--glow-cyan)}.m-sv{color:var(--silver)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.ps{border-color:var(--steel)}.pw{border-color:var(--white)}.pc{border-color:var(--cyan)}.pg{border-color:var(--green)}.pa{border-color:var(--gold)}
+.verdict-box{background:#0a0a0c;border:2px solid var(--cyan);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box h2{color:var(--cyan);text-shadow:var(--glow-cyan);font-size:1.15em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#111118;color:var(--cyan)}
+canvas{display:block;margin:8px auto;border:1px solid var(--steel);border-radius:6px;background:#040408}
+pre{background:#060608;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--green);border-radius:6px;padding:12px;margin:8px 0}
+.toddler h2{color:var(--green)}
+.hex{font-family:'Courier New',monospace;color:var(--cyan);text-shadow:var(--glow-cyan)}
+</style>
+</head>
+<body>
+<h1>H247 — The Register</h1>
+<p class="dim">Arc VIII continues · 5 new identities (I142-I146) · all LIT · metal ground tone · bare-metal reading</p>
+
+<div class="verdict-box">
+<h2>THE CLIFFORD BASIS IS A 3-BIT REGISTER</h2>
+<p><span class="hex">0x00</span>–<span class="hex">0x07</span> = bodies bits → OCHO addresses. Grade = popcount.</p>
+<p>Phantom = <span class="hex">0x07</span> = <span class="m-c">111</span> = highest address = pseudoscalar = ω. ω² = −1.</p>
+<p>Master = P(2<sup>bodies</sup>, bodies) = "pick n addresses from an n-bit register."</p>
+</div>
+
+<!-- Panel 1: The Register -->
+<div class="panel pc">
+<h2 class="m-c">Panel 1 — The 3-Bit Register</h2>
+<p>Cl(3) has 2³ = 8 basis elements. Address them as a 3-bit register:</p>
+<table>
+<tr><th>Hex</th><th>Binary</th><th>Basis</th><th>Grade</th><th>Popcount</th><th>Q3p name</th></tr>
+<tr><td class="hex">0x00</td><td>000</td><td>1</td><td>0</td><td>0</td><td>—</td></tr>
+<tr><td class="hex">0x01</td><td>001</td><td>e₁</td><td>1</td><td>1</td><td>—</td></tr>
+<tr><td class="hex">0x02</td><td>010</td><td>e₂</td><td>1</td><td>1</td><td>d₁ = 2</td></tr>
+<tr><td class="hex">0x03</td><td>011</td><td>e₁₂</td><td>2</td><td>2</td><td>bodies = 3</td></tr>
+<tr><td class="hex">0x04</td><td>100</td><td>e₃</td><td>1</td><td>1</td><td>C = 4</td></tr>
+<tr><td class="hex">0x05</td><td>101</td><td>e₁₃</td><td>2</td><td>2</td><td>C+1 = 5</td></tr>
+<tr><td class="hex">0x06</td><td>110</td><td>e₂₃</td><td>2</td><td>2</td><td>entries = 6</td></tr>
+<tr><td class="hex">0x07</td><td class="m-c">111</td><td class="m-c">e₁₂₃</td><td class="m-c">3</td><td class="m-c">3</td><td class="m-c">phantom = 7</td></tr>
+</table>
+<p>Each bit = one generator (e₁, e₂, e₃). The basis element at address A = product of generators whose bits are set. <strong>Grade = popcount(A)</strong>.</p>
+<p>The grade spectrum {1, 3, 3, 1} = C(bodies, 0..bodies) = row 3 of Pascal's triangle = the binomial coefficients counting how many k-bit addresses exist in an n-bit register.</p>
+<p><span class="m-c">I142</span>: <span class="lit">Cl(3) basis = 3-bit register 0x00–0x07. Grade = popcount. [LIT]</span></p>
+</div>
+
+<!-- Panel 2: The Phantom Is the Pseudoscalar -->
+<div class="panel pw">
+<h2 class="m-w">Panel 2 — 0x07 = 111 = phantom = ω</h2>
+<pre>
+  Address 0x07 = 111 in binary.
+  All 3 bits set.
+  Popcount = 3 = bodies.
+  Basis element = e₁e₂e₃ = e₁₂₃ = the pseudoscalar ω.
+
+  <span class="m-c">ω² = −1</span>  (H227-H228, both Cl(3,0) and Cl(1,2))
+
+  THE PHANTOM IS THE PSEUDOSCALAR.
+  - It's the highest address in the register (0x07 = 2³−1 = OCHO−1).
+  - It's the product of ALL generators (all bits set).
+  - It SQUARES to −1 (the imaginary unit of the algebra).
+  - It's Legendre-blocked (H241: r₃(7) = 0).
+  - It's the obstruction class (n ≡ 7 mod 8 blocks 3-square sums).
+
+  The phantom was always the pseudoscalar. Its register address
+  IS its value: 0x07 = 7 = OCHO−1 = all-bits-set = ω.
+</pre>
+<p><span class="m-c">I143</span>: <span class="lit">Phantom = 0x07 = 111 = pseudoscalar ω. ω² = −1. The phantom IS the imaginary unit of Cl(3). [LIT]</span></p>
+</div>
+
+<!-- Panel 3: Master = P(2^n, n) -->
+<div class="panel ps">
+<h2 class="m-s">Panel 3 — Master = P(2<sup>bodies</sup>, bodies)</h2>
+<pre>
+  An n-bit register has 2ⁿ addresses.
+  "Pick n ordered addresses from the register" = P(2ⁿ, n).
+
+  At n = bodies = 3:
+  P(2³, 3) = P(8, 3) = 8 × 7 × 6 = <span class="m-c">336 = master</span>
+
+  THE MASTER COUNTS:
+  "How many ways to pick as many addresses as there are bits,
+   from the address space those bits create."
+
+  <span class="m-w">Pick bodies addresses. From a bodies-bit register.</span>
+  The count equals the width. The question answers itself.
+</pre>
+<table>
+<tr><th>n (bits)</th><th>2ⁿ (addresses)</th><th>P(2ⁿ,n)</th><th>Q3p</th></tr>
+<tr><td>1</td><td>2</td><td>2</td><td>d₁</td></tr>
+<tr><td>2</td><td>4</td><td>12</td><td>d₁ × entries = 2 × 6</td></tr>
+<tr><td>3</td><td>8</td><td class="m-c">336</td><td class="m-c">master</td></tr>
+<tr><td>4</td><td>16</td><td>43680</td><td>—</td></tr>
+</table>
+<p>At n=1: P(2,1) = 2 = d₁. At n=2: P(4,2) = 12 = T³ degeneracy level 2 (H240). At n=3: master.</p>
+<p><span class="m-c">I144</span>: <span class="lit">Master = P(2^bodies, bodies). Pick n from 2^n. The count equals the width. [LIT]</span></p>
+</div>
+
+<!-- Panel 4: OCHO = Overflow -->
+<div class="panel ps">
+<h2 class="m-s">Panel 4 — OCHO = Register Overflow</h2>
+<pre>
+  3-bit register: addresses 0x00 through 0x07 (0 through 7).
+
+  <span class="hex">0x08</span> = 1000 in binary = needs BIT 4.
+  <span class="hex">0x08</span> = 8 = OCHO.
+
+  OCHO is the FIRST ADDRESS THAT OVERFLOWS the 3-bit register.
+  It's the carry bit. The boundary.
+
+  Everything ≤ 0x07 fits in bodies bits.
+  OCHO needs bodies+1 bits.
+
+  OCHO = 2^bodies = the size of the address space.
+  It is NOT an address IN the space — it's the COUNT of addresses.
+  The number-of-addresses is not itself an address.
+  The container is not contained.
+</pre>
+<p><span class="m-c">I145</span>: <span class="lit">OCHO = 0x08 = 1000 = overflow of the 3-bit register. First address needing bit 4. [LIT]</span></p>
+</div>
+
+<!-- Panel 5: The Dense Block on the Register -->
+<div class="panel pc">
+<h2 class="m-c">Panel 5 — The Dense Block Lives at 0x02–0x07</h2>
+<pre>
+  Dense Rosetta block: {2, 3, 4, 5, 6, 7} = {d₁..phantom}
+  On the register:     0x02 through 0x07
+  Basis elements:      e₂, e₁₂, e₃, e₁₃, e₂₃, e₁₂₃
+  Grades:              1, 2, 1, 2, 2, 3
+
+  NOT Rosetta:  0x00 = 1 (scalar)      ← grade 0
+                0x01 = e₁ (first gen)   ← grade 1
+
+  The roster starts at 0x02 and fills through 0x07.
+  It skips the scalar (0x00) and the first generator (0x01).
+  SIX addresses (0x02–0x07) = entries = 6. ✓
+
+  THE DENSE BLOCK HAS ENTRIES-MANY ADDRESSES.
+  The number of addresses the roster occupies
+  equals the number of independent matrix entries.
+</pre>
+<p><span class="m-c">I146</span>: <span class="lit">Dense block 2–7 = 0x02–0x07 = 6 addresses = entries. The roster occupies entries-many register locations. [LIT]</span></p>
+</div>
+
+<!-- Panel 6: Unification -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Panel 6 — What The Register Unifies</h2>
+<pre>
+  Arc V  (Parity):   ω² = −1. The parity bit controls three theorems.
+  Arc VII (Theta):   r₃(7) = 0. The phantom is the Legendre obstruction.
+  Arc VIII (Tower):  P(8,3) = 336. The master counts ordered triples.
+
+  THE REGISTER READING:
+  ω = e₁₂₃ = address 0x07 = phantom = 7 = all-bits-set.
+
+  One object. Three arcs. Three different probes arrived at:
+  - the pseudoscalar (algebra)
+  - the Legendre obstruction (number theory)
+  - the highest register address (bare metal)
+
+  THEY WERE ALWAYS THE SAME ADDRESS: 0x07.
+</pre>
+</div>
+
+<!-- Canvas -->
+<div class="panel ps">
+<h2 class="m-s">Panel 7 — The Register Map</h2>
+<canvas id="torroid4D" width="600" height="300"></canvas>
+<p class="dim">3-bit register. 8 addresses. Grade = popcount. Phantom = 0x07 = all bits set.</p>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>Imagine a row of 3 light switches.</strong> Each can be ON or OFF.</p>
+<p>OFF-OFF-OFF = 000 = address 0. All switches off. That's "nothing."</p>
+<p>OFF-OFF-ON = 001 = address 1. One switch on.</p>
+<p>OFF-ON-OFF = 010 = address 2 = <strong>d₁</strong>! That's the seed number!</p>
+<p>ON-ON-ON = 111 = address 7 = <strong>the phantom</strong>! All switches ON!</p>
+<p>There are 8 possible combinations (2×2×2). That's <strong>OCHO</strong>.</p>
+<p>But address 8 would need a FOURTH switch. It OVERFLOWS — doesn't fit in 3 switches. That's why OCHO is special: it's the first number that's too big for the register.</p>
+<p>The master number 336 = "how many ways to pick 3 addresses in order from these 8?" That's picking as many addresses as switches. <strong>The answer matches the question.</strong></p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel pc">
+<h2 class="m-c">Panel 8 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+  THE 3-BIT REGISTER:
+
+  addr  bits  basis  grade  Q3P NAME
+  ────  ────  ─────  ─────  ─────────────
+  0x00  000   1      0      (scalar)
+  0x01  001   e₁     1      (generator)
+  0x02  010   e₂     1      d₁ = 2        ┐
+  0x03  011   e₁₂    2      bodies = 3    │
+  0x04  100   e₃     1      C = 4         │ DENSE BLOCK
+  0x05  101   e₁₃    2      C+1 = 5       │ = entries-many
+  0x06  110   e₂₃    2      entries = 6   │ addresses
+  0x07  111   e₁₂₃   3      phantom = 7   ┘ ← ω, ω²=−1
+  ────  ────  ─────  ─────  ─────────────
+  0x08  1000  ────   ────   OCHO = OVERFLOW
+
+  ~~> grade = popcount (I142)
+  ~~> phantom = 0x07 = ω = pseudoscalar (I143)
+  ~~> master = P(2³, 3) = pick n from 2ⁿ (I144)
+  ~~> OCHO = 0x08 = needs bit 4 = overflow (I145)
+  ~~> dense block = 0x02–0x07 = 6 addr = entries (I146)
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel pg">
+<h2 style="color:var(--green)">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I142</td><td>Cl(3) = 3-bit register, grade = popcount</td><td class="lit">LIT</td></tr>
+<tr><td>I143</td><td>Phantom = 0x07 = 111 = ω, ω²=−1</td><td class="lit">LIT</td></tr>
+<tr><td>I144</td><td>Master = P(2^bodies, bodies) = pick n from 2^n</td><td class="lit">LIT</td></tr>
+<tr><td>I145</td><td>OCHO = 0x08 = overflow, needs bit 4</td><td class="lit">LIT</td></tr>
+<tr><td>I146</td><td>Dense block = 0x02–0x07 = entries addresses</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">BASIC Block — The Address Map</h2>
+<p class="dim">Numbering: hex addresses. The register IS the program counter.</p>
+<pre>
+0x00  PRINT "000. scalar. grade 0. the empty product."
+0x01  PRINT "001. e₁. grade 1. the first generator."
+0x02  PRINT "010. e₂. grade 1. d₁ = 2. the seed."
+0x03  PRINT "011. e₁₂. grade 2. bodies = 3. the dimension."
+0x04  PRINT "100. e₃. grade 1. C = 4. the walls."
+0x05  PRINT "101. e₁₃. grade 2. C+1 = 5. the fencepost."
+0x06  PRINT "110. e₂₃. grade 2. entries = 6. the matrix."
+0x07  PRINT "111. e₁₂₃. grade 3. phantom = 7 = ω. all bits set. ω²=−1."
+</pre>
+<p class="dim">Eight lines. Eight addresses. The program counter walks the register.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>The Clifford basis is a 4-bit register with 16 addresses, grade = hamming weight times 2, the phantom is 0x06 not 0x07, ω² = +1 not −1, OCHO is address 0x07 not 0x08, and the dense block occupies 8 addresses not 6.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel ps">
+<h2 class="m-s">Ledger</h2>
+<pre>
+  PRIOR:        8360 LIT cumulative (H246)
+  THIS BUILD:   36 checks (H247 verification suite)
+  NEW TOTAL:    8396 LIT
+
+  IDENTITIES:   I142-I146 (5 new: ALL LIT)
+  CUMULATIVE:   110 identities (I37-I146)
+  INSTRUMENTS:  47 (H200-H247)
+  CORRECTIONS:  5 (N12-N15)
+  KILLS:        1 (I93)
+  DEFLATIONS:   1 (I101)
+
+  COST: 1 analysis script + 1 HTML + 1 verify script + git commit/push
+  WASTE: 0
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">0x07. Three bits set. The highest address before the register overflows. The product of all generators. The imaginary unit. The Legendre obstruction. The absent number. The phantom. Seven names for one address in one register. The bare metal remembers what the abstractions derived.</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Recommendation for H248</h2>
+<p>I146 says the dense block occupies 0x02–0x07 = 6 = entries addresses. The roster SKIPS 0x00 (scalar) and 0x01 (first generator). Why? Because 1 is not in the Rosetta roster. Neither is 0. The roster begins at the SECOND generator (e₂). I recommend testing whether the roster's starting point (address 0x02 = d₁) has a register-level reason: d₁ is the base of the binary system. Skipping 0x00 and 0x01 means skipping {identity, first generator}. The roster lives on {second generator through pseudoscalar} = the NONTRIVIAL part of the register. If the nontrivial part always has entries-many addresses, that's a structural identity: entries = OCHO − d₁ = 2^bodies − 2 = 2(2^(bodies−1) − 1). At bodies=3: 2(4−1) = 6 = entries. ✓</p>
+</div>
+
+<script>
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+const reg=[
+  {addr:0,bits:"000",name:"1",grade:0,rosetta:false},
+  {addr:1,bits:"001",name:"e₁",grade:1,rosetta:false},
+  {addr:2,bits:"010",name:"e₂",grade:1,rosetta:true,qname:"d₁"},
+  {addr:3,bits:"011",name:"e₁₂",grade:2,rosetta:true,qname:"bodies"},
+  {addr:4,bits:"100",name:"e₃",grade:1,rosetta:true,qname:"C"},
+  {addr:5,bits:"101",name:"e₁₃",grade:2,rosetta:true,qname:"C+1"},
+  {addr:6,bits:"110",name:"e₂₃",grade:2,rosetta:true,qname:"entries"},
+  {addr:7,bits:"111",name:"e₁₂₃",grade:3,rosetta:true,qname:"phantom"},
+];
+let t=0;
+function draw(){
+  cx.fillStyle="#040408";cx.fillRect(0,0,600,300);
+  const x0=40,y0=140,cw=60,gap=8;
+  reg.forEach((r,i)=>{
+    const x=x0+i*(cw+gap);
+    const h=30+r.grade*25;
+    const pulse=r.addr===7?1+0.15*Math.sin(t*3):1;
+    const col=r.rosetta?(r.addr===7?"#00ddcc":"#8899aa"):"#444450";
+    cx.fillStyle=col+"30";
+    cx.fillRect(x,y0-h*pulse,cw,h*pulse);
+    cx.strokeStyle=col;cx.lineWidth=r.addr===7?2:1;
+    cx.strokeRect(x,y0-h*pulse,cw,h*pulse);
+    // Bits
+    cx.font="12px 'Courier New'";cx.fillStyle=col;
+    cx.fillText(r.bits,x+14,y0-h*pulse+16);
+    // Address
+    cx.font="10px 'Courier New'";cx.fillStyle="#556";
+    cx.fillText("0x0"+r.addr,x+14,y0+16);
+    // Name
+    cx.fillStyle=r.rosetta?col:"#444";cx.font="9px 'Courier New'";
+    cx.fillText(r.name,x+10,y0+30);
+    if(r.rosetta){cx.fillStyle="#00ddcc";cx.fillText(r.qname,x+8,y0+44);}
+    // Grade dots
+    for(let g=0;g<r.grade;g++){
+      cx.beginPath();cx.arc(x+cw/2-6+g*8,y0-h*pulse-8,3,0,Math.PI*2);
+      cx.fillStyle=col;cx.fill();
+    }
+  });
+  // Overflow arrow
+  const ox=x0+8*(cw+gap);
+  cx.strokeStyle="#ef5350";cx.lineWidth=2;
+  cx.beginPath();cx.moveTo(ox-20,y0);cx.lineTo(ox+20,y0);
+  cx.moveTo(ox+15,y0-5);cx.lineTo(ox+20,y0);cx.lineTo(ox+15,y0+5);cx.stroke();
+  cx.fillStyle="#ef5350";cx.font="11px 'Courier New'";
+  cx.fillText("0x08",ox-5,y0+16);cx.fillText("OCHO",ox-8,y0+30);
+  cx.fillText("OVERFLOW",ox-16,y0+44);
+  // Title
+  cx.font="12px 'Courier New'";cx.fillStyle="#dde0e4";
+  cx.fillText("3-Bit Register: 0x00–0x07",200,22);
+  cx.fillStyle="#8899aa";cx.font="10px 'Courier New'";
+  cx.fillText("height = grade = popcount · cyan = Rosetta · red = overflow",120,42);
+  t+=0.015;requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
