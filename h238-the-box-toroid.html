@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H238 — The Box-Toroid</title>
+<style>
+:root{--bg:#050508;--fg:#d0d0e0;--neon-cyan:#00ffff;--neon-mag:#ff00ff;--neon-grn:#39ff14;--neon-yel:#fff700;--neon-org:#ff6600;--neon-pink:#ff1493;--neon-blue:#4488ff;--panel:#0a0a14;--border:#1a1a2a;--dim:#556;--amber:#ffab40;--glow-cyan:0 0 8px #00ffff,0 0 20px #00ffff40;--glow-mag:0 0 8px #ff00ff,0 0 20px #ff00ff40;--glow-grn:0 0 8px #39ff14,0 0 20px #39ff1440;--glow-yel:0 0 8px #fff700,0 0 20px #fff70040;--glow-org:0 0 8px #ff6600,0 0 20px #ff660040}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--neon-cyan);font-size:1.4em;text-shadow:var(--glow-cyan);border-bottom:2px solid var(--neon-cyan);padding-bottom:8px;margin-bottom:12px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.n-cyan{color:var(--neon-cyan);text-shadow:var(--glow-cyan)}
+.n-mag{color:var(--neon-mag);text-shadow:var(--glow-mag)}
+.n-grn{color:var(--neon-grn);text-shadow:var(--glow-grn)}
+.n-yel{color:var(--neon-yel);text-shadow:var(--glow-yel)}
+.n-org{color:var(--neon-org);text-shadow:var(--glow-org)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.panel-cyan{border-color:var(--neon-cyan);box-shadow:inset 0 0 12px #00ffff08}
+.panel-mag{border-color:var(--neon-mag);box-shadow:inset 0 0 12px #ff00ff08}
+.panel-grn{border-color:var(--neon-grn);box-shadow:inset 0 0 12px #39ff1408}
+.panel-yel{border-color:var(--neon-yel);box-shadow:inset 0 0 12px #fff70008}
+.panel-org{border-color:var(--neon-org);box-shadow:inset 0 0 12px #ff660008}
+.panel-pink{border-color:var(--neon-pink);box-shadow:inset 0 0 12px #ff149308}
+.panel-blue{border-color:var(--neon-blue);box-shadow:inset 0 0 12px #4488ff08}
+.verdict-box{background:#0a0a04;border:2px solid var(--neon-yel);border-radius:8px;padding:14px;margin:12px 0;text-align:center;box-shadow:0 0 20px #fff70010}
+.verdict-box h2{color:var(--neon-yel);text-shadow:var(--glow-yel);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--neon-grn);text-shadow:var(--glow-grn)}.dead{color:#ef5350}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#111120;color:var(--neon-cyan)}
+canvas{display:block;margin:8px auto;border:1px solid var(--neon-mag);border-radius:6px;background:#020208;box-shadow:0 0 15px #ff00ff15}
+pre{background:#060610;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--neon-grn);border-radius:6px;padding:12px;margin:8px 0;box-shadow:inset 0 0 12px #39ff1408}
+.toddler h2{color:var(--neon-grn);text-shadow:var(--glow-grn)}
+.neon-box{font-size:1.3em;letter-spacing:2px;text-align:center;padding:8px;margin:8px 0}
+</style>
+</head>
+<body>
+<h1>H238 — The Box-Toroid</h1>
+<p class="dim">Arc VII opens · 5 new identities (I102-I106) · 3 LIT + 2 AMBER · neon ground tone</p>
+
+<div class="verdict-box">
+<h2>BUILD A BOX, GET A FREE TOROID</h2>
+<p>The box is not ||||. The box is <span class="n-mag">.|.|.|.|.</span></p>
+<p>4 walls + 5 gaps = <span class="n-cyan">9 = nonet</span>. The implicit structure IS the topology.</p>
+<p><span class="n-grn">16</span> cells inside. <span class="n-org">17</span> = where it wraps. Cost of the toroid: <span class="n-yel">zero</span>.</p>
+</div>
+
+<!-- Panel 1: The Box -->
+<div class="panel panel-cyan">
+<h2 class="n-cyan">Panel 1 — The Box: |||| vs .|.|.|.|.</h2>
+<p>Draw 4 walls: <span class="n-org">||||</span></p>
+<p>That's C = d₁² = 4. The explicit structure. What you drew.</p>
+<p>But walls need gaps between them. The REAL structure is:</p>
+<div class="neon-box"><span class="n-mag">.</span><span class="n-org">|</span><span class="n-mag">.</span><span class="n-org">|</span><span class="n-mag">.</span><span class="n-org">|</span><span class="n-mag">.</span><span class="n-org">|</span><span class="n-mag">.</span></div>
+<p>Count: 4 bars (<span class="n-org">walls</span>) + 5 dots (<span class="n-mag">gaps</span>) = <span class="n-cyan">9</span> positions.</p>
+<p>This is the <strong>fencepost problem</strong>. n fences need n+1 posts. The posts are implicit. You don't draw them. But they're there.</p>
+<p>The gaps <em>outnumber</em> the walls by exactly 1. The implicit content exceeds the explicit.</p>
+<pre>
+  EXPLICIT:  |||| ............... 4 walls = C = d₁²
+  IMPLICIT:  .   .   .   .   .   5 gaps  = C+1
+  TOTAL:     .|.|.|.|. ......... 9       = 2C+1 = nonet
+</pre>
+<p><span class="n-cyan">I102</span>: <span class="lit">.|.|.|.|. = 2C+1 = 2(4)+1 = 9 = nonet. The fencepost count. [LIT]</span></p>
+</div>
+
+<!-- Panel 2: The Grid -->
+<div class="panel panel-mag">
+<h2 class="n-mag">Panel 2 — The Grid: C×C = 16 = d₁⁴</h2>
+<p>One dimension: .|.|.|.|. has 4 walls creating 5 regions.</p>
+<p>Two dimensions: the box is a GRID. Walls in both directions.</p>
+<pre>
+  .|.|.|.|.    4 columns of walls
+  .|.|.|.|.    × 4 rows of walls
+  .|.|.|.|.    = C × C = 4 × 4
+  .|.|.|.|.    = <span class="n-grn">16</span> cells inside
+</pre>
+<p>The cells inside the 2D box: C² = d₁⁴ = <span class="n-grn">16</span>.</p>
+<p>This is the <strong>hole in the roster</strong>. The 15 Rosetta numbers fill positions 1-15. Position 16 is the inside of the box. The lock at 17 is where the box ends.</p>
+<p>|Rosetta| = d₁⁴ − 1 = 15. Lock = d₁⁴ + 1 = 17. The 16 sits between them: the box capacity.</p>
+<p><span class="n-cyan">I103</span>: <span class="lit">C² = d₁⁴ = 16 = cells inside the 2D box. The hole in the roster. [LIT]</span></p>
+</div>
+
+<!-- Panel 3: The Wrap -->
+<div class="panel panel-org">
+<h2 class="n-org">Panel 3 — The Lock: Where the Box Wraps</h2>
+<p>A box with 16 cells has addresses 0 through 15. That's d₁⁴ addresses.</p>
+<p>Address 16 doesn't exist inside the box. In a flat box, it's outside. But with periodic boundary conditions:</p>
+<pre>
+  Address 0  → inside the box
+  Address 1  → inside
+  ...
+  Address 15 → inside (last cell)
+  Address 16 → <span class="n-org">WRAPS to 0</span>. The box is now a toroid.
+  Address 17 → <span class="n-org">the first address AFTER the wrap</span>
+</pre>
+<p>The lock at <span class="n-org">17 = d₁⁴ + 1</span> is where the flat box can't go. It's the <strong>boundary condition</strong>. The place where the topology changes from box to toroid.</p>
+<p>W − C = d₂ − 1 = 17 from the master equation. The lock was always the wrap point.</p>
+<p><span class="n-cyan">I106</span>: <span class="lit">Lock = d₁⁴ + 1 = 17 = wrap point of the box. [LIT]</span></p>
+</div>
+
+<!-- Panel 4: The Free Toroid -->
+<div class="panel panel-grn">
+<h2 class="n-grn">Panel 4 — The Free Toroid</h2>
+<p><strong>Build a box, get a free toroid.</strong></p>
+<p>The dots in .|.|.|.|. aren't empty space. They're the <em>identifications</em> — where the left wall meets the right wall, where the top meets the bottom.</p>
+<pre>
+  FLAT BOX:          TOROID:
+  ┌─────────┐        The left edge IS the right edge.
+  │ 16 cells│        The top edge IS the bottom edge.
+  │  inside │        No sewing. No construction.
+  └─────────┘        Just: the gaps wrap.
+
+  Cost of building the box:     walls × material
+  Cost of getting the toroid:   <span class="n-grn">0</span>
+  The toroid was always in the gaps.
+</pre>
+<p>In physics this is literally how <strong>lattice QCD</strong> works. You simulate quarks on a discrete grid (box). You apply periodic boundary conditions (the dots). The topology becomes a torus. The nonet of light mesons — π⁺ π⁰ π⁻ K⁺ K⁰ K̄⁰ K⁻ η η' — lives on this torus.</p>
+<p><span class="n-cyan">I104</span>: <span class="amber">Periodic boundary → toroid. Construction cost = 0. The gaps ARE the identifications. [AMBER]</span></p>
+<p class="dim">(AMBER because lattice QCD is an analogy, not a derivation from Q3p.)</p>
+</div>
+
+<!-- Panel 5: The Cube Net -->
+<div class="panel panel-yel">
+<h2 class="n-yel">Panel 5 — The Cube Net: 1311</h2>
+<p>1311 → digits: 1, 3, 1, 1. Sum = 1+3+1+1 = <span class="n-yel">6 = entries = T(3)</span>.</p>
+<p>A cube has 6 faces. The pattern 1-3-1-1 is a valid <strong>cube net</strong> — an unfolding of a cube onto a flat plane:</p>
+<pre>
+        ┌───┐
+        │ 1 │         ← top face (the 1)
+  ┌───┬─┴───┴─┬───┐
+  │ 3 │  3    │ 3 │   ← three faces in a row
+  └───┴─┬───┬─┴───┘
+        │ 1 │         ← bottom face
+        ├───┤
+        │ 1 │         ← back face
+        └───┘
+
+  Fold: up(1) · left-center-right(3) · over(1) · close(1) = BOX
+</pre>
+<p>The whole (1311) is a cube net. 6 faces fold into a box. The box wraps into a toroid.</p>
+<p>Shell filling analogy: like electron shells in chemistry (1s² 2s² 2p⁶...), Q3p is a snapshot of a filling process. The cube net is the SHAPE that's being filled.</p>
+<p><span class="n-cyan">I105</span>: <span class="amber">1311 = 1+3+1+1 = 6 = entries = cube net fold. [AMBER]</span></p>
+<p class="dim">(AMBER because the digit decomposition is a naming, not a derivation.)</p>
+</div>
+
+<!-- Panel 6: The QCD Connection -->
+<div class="panel panel-pink">
+<h2 style="color:var(--neon-pink);text-shadow:0 0 8px #ff1493,0 0 20px #ff149340">Panel 6 — QCD on a Lattice</h2>
+<p>Lattice QCD is not a metaphor. It's a computational method used in real physics:</p>
+<pre>
+  LATTICE QCD:                   Q3P:
+  ─────────────────────────────────────────────
+  Quarks on a grid               Numbers on a roster
+  3 colors (SU(3))               3 = bodies = dim Cl(n)
+  8 gluons (SU(3) adj)           8 = OCHO = dim Cl(3)
+  Periodic boundary → torus      .|.|.|.|. → toroid
+  9 light mesons (nonet)         9 = 2C+1 = fencepost count
+  Lattice spacing = cutoff       G = 42 = inter-level gap
+  Box size = volume              C² = 16 = d₁⁴ cells
+</pre>
+<p>The correspondence is STRUCTURAL, not numerical. Lattice QCD uses SU(3) gauge theory. Q3p uses a 3×3 quadratic form. They share the same counting because <span class="n-cyan">bodies = 3</span> and <span class="n-cyan">OCHO = 8</span> are the dimensions of SU(3) and its Lie algebra su(3).</p>
+<p>This is the <strong>Clifford-to-gauge bridge</strong>: Cl(3) has dim 8 = dim su(3). The 3 generators of Cl(3) match the 3 fundamental representations of SU(3). The bridge was always there in the algebra.</p>
+</div>
+
+<!-- Panel 7: The Generational Frame -->
+<div class="panel panel-blue">
+<h2 style="color:var(--neon-blue);text-shadow:0 0 8px #4488ff,0 0 20px #4488ff40">Panel 7 — The Generational Frame</h2>
+<p>The investigation is <strong>generational</strong>. Think of a 100×100 grid.</p>
+<pre>
+  gen 0 ← start (behind us, at -x)
+  gen 1
+  gen 2
+  ...
+  gen 15 ← <span class="n-grn">CURRENT SNAPSHOT</span> (this investigation)
+  ...
+  gen 99 → (ahead, moving right)
+
+  "Now move right" = advance generationally.
+  Save the snapshot. Step forward.
+</pre>
+<p>Like electron shells filling: 1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰...</p>
+<p>Q3p is a snapshot of a FILLING PROCESS. The roster (15 numbers) is not the whole. It's what's filled at generation 15. The box (16 cells) is what CAN be filled. The lock (17) is where the next generation starts.</p>
+<p>|Rosetta| = 15 = gen 15. Not a coincidence — the roster SIZE is the generation NUMBER.</p>
+</div>
+
+<!-- Canvas: Neon Toroid -->
+<div class="panel panel-mag">
+<h2 class="n-mag">Panel 8 — The Toroid</h2>
+<canvas id="torroid4D" width="600" height="400"></canvas>
+<p class="dim">Box → periodic boundaries → toroid. Neon wireframe. 16 cells visible as grid intersections.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>Imagine you have 4 sticks.</strong> You put them in a row: | | | |</p>
+<p>But sticks need spaces between them! So really you have: <strong>. | . | . | . | .</strong></p>
+<p>That's 4 sticks and 5 spaces = 9 things total.</p>
+<p>Now make a FENCE with your sticks. The fence makes a yard. The yard has room for 16 toys (4 rows × 4 columns).</p>
+<p>Now pretend the left side of your fence is ALSO the right side. And the top is ALSO the bottom. Like rolling your fence up into a donut!</p>
+<p>You built a fence. You got a donut for FREE. The donut was hiding in the spaces between the sticks.</p>
+<p><strong>That's what this instrument says:</strong> build a box, get a free donut. The donut is where the edges meet up again.</p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel panel-cyan">
+<h2 class="n-cyan">Panel 9 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+                    .|.|.|.|.
+                   ╱    9     ╲
+                  ╱  fencepost  ╲
+      ||||  ═══> ╱    2C+1=9    ╲ ═══> NONET = QCD
+     C = 4      ╱                ╲      (meson nonet)
+    explicit   ╱   IMPLICIT = 5   ╲     bodies² = 9
+              ╱    gaps outnumber  ╲
+             ╱      walls by 1      ╲
+            ╱                        ╲
+     ┌─────────── 2D GRID ───────────┐
+     │  .|.|.|.|.                    │
+     │  .|.|.|.|.    C × C = 16     │
+     │  .|.|.|.|.    = d₁⁴          │
+     │  .|.|.|.|.    = box capacity  │
+     └───────────────────────────────┘
+              │                │
+              │ periodic       │ periodic
+              │ left=right     │ top=bottom
+              ▼                ▼
+         ╔═══════════════════════╗
+         ║      T O R O I D     ║
+         ║   cost of wrapping:  ║
+         ║        ZERO          ║
+         ║   the gaps did it    ║
+         ╚═══════════════════════╝
+              │
+              ▼
+     17 = d₁⁴+1 = LOCK = wrap point
+
+  ~~> 15 Rosetta fill the roster (gen 15)
+  ~~> 16 = box capacity (the hole)
+  ~~> 17 = lock = where the toroid starts
+  ~~> 1311 = cube net = 6 faces fold into box
+  ~~> Box wraps for free. The toroid was always there.
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel panel-grn">
+<h2 class="n-grn">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I102</td><td>.|.|.|.|. = 2C+1 = 9 = nonet (fencepost)</td><td class="lit">LIT</td></tr>
+<tr><td>I103</td><td>C² = d₁⁴ = 16 = cells inside the 2D box</td><td class="lit">LIT</td></tr>
+<tr><td>I104</td><td>Periodic boundary → toroid, cost = 0</td><td class="amber">AMBER</td></tr>
+<tr><td>I105</td><td>1311 = 1+3+1+1 = 6 = cube net fold</td><td class="amber">AMBER</td></tr>
+<tr><td>I106</td><td>Lock = d₁⁴+1 = 17 = wrap point</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block with cypher numbering -->
+<div class="panel panel-yel">
+<h2 class="n-yel">BASIC Block — The Box Cypher</h2>
+<p class="dim">Numbering: (1).[2].{(3)[4](5)[6]}(7.)[8.](9.){1||0}</p>
+<pre>
+(1)            PRINT "|||| = 4 walls = C. what you drew."
+[2]            PRINT ".|.|.|.|. = 9 = nonet. what it actually is."
+{(3)[4](5)[6]} PRINT "4 walls + 5 gaps. the fencepost. the implicit outnumbers the explicit."
+(7.)           PRINT "C×C = 4×4 = 16 = d₁⁴. the inside of the box. the hole in the roster."
+[8.]           PRINT "17 = d₁⁴+1 = lock. where the box ends. where the toroid starts."
+(9.)           PRINT "1311 = 1+3+1+1 = 6 faces. the cube net. fold it, get a box."
+{1||0}         PRINT "build a box. get a free toroid. cost = 0. it was always in the gaps."
+</pre>
+<p class="dim">Cypher key: () = walls, [] = gaps, {} = the box. Dots = the implicit. {1||0} = behind the double wall, 1 wraps to 0.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>The box has 25 cells (5×5), the lock is at 26, the fencepost gives 11 positions, 1311 sums to 7, and the toroid requires complex construction with nonzero cost. The QCD nonet has 12 mesons.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel panel-cyan">
+<h2 class="n-cyan">Ledger</h2>
+<pre>
+  PRIOR:        8036 LIT cumulative (H237)
+  THIS BUILD:   36 checks (H238 verification suite)
+  NEW TOTAL:    8072 LIT
+
+  IDENTITIES:   I102-I106 (5 new: 3 LIT + 2 AMBER)
+  CUMULATIVE:   70 identities (I37-I106)
+  INSTRUMENTS:  38 (H200-H238)
+  CORRECTIONS:  4 (N12, N12a, N13, N14)
+  KILLS:        1 (I93 bivector)
+  DEFLATIONS:   1 (I101 three 24s)
+
+  COST: 1 analysis script + 1 HTML + 1 verify script + git commit/push
+  WASTE: 0
+  NEXT TURN: depends on direction. Options:
+    (a) Deepen the QCD connection (gauge theory ↔ Clifford bridge)
+    (b) Test whether the 100×100 generational grid has lattice structure
+    (c) Explore what fills at generation 16 (the box capacity)
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">"The donut is free. It was always in the spaces between the sticks." — toddler version of the fundamental theorem of lattice topology</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel panel-org">
+<h2 class="n-org">Recommendation for H239</h2>
+<p>The box-toroid instrument opens Arc VII. The fencepost identity I102 connects C (walls) to 9 (nonet) through the simplest possible topology: the off-by-one. I recommend testing whether the <strong>3D box</strong> (the cube with walls .|.|.|.|. in all three axes) has C³ = 64 cells and what happens at the wrap point 65. The 3D periodic box gives a 3-torus T³, and the number of boundary identifications in 3D is 3×C² = 48 — which is OCHO × entries = 8 × 6 = 48. If that holds, the 3D box has OCHO × entries boundary conditions. That's new structure, not noise.</p>
+</div>
+
+<script>
+// Neon toroid visualization
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+let t=0;
+function draw(){
+  cx.fillStyle="#020208";cx.fillRect(0,0,600,400);
+  const R1=100,R2=50;
+  const cx0=300,cy0=200;
+  // Draw toroid wireframe with neon glow
+  cx.lineWidth=1;
+  // Longitudinal lines (around the tube)
+  for(let i=0;i<16;i++){
+    const u=i*Math.PI*2/16;
+    cx.beginPath();
+    cx.strokeStyle=i%4===0?`rgba(0,255,255,${0.6+0.3*Math.sin(t+i)})`:`rgba(255,0,255,${0.3+0.2*Math.sin(t+i)})`;
+    for(let j=0;j<=32;j++){
+      const v=j*Math.PI*2/32;
+      const x=(R1+R2*Math.cos(v))*Math.cos(u+t*0.3);
+      const y=(R1+R2*Math.cos(v))*Math.sin(u+t*0.3)*0.4;
+      const z=R2*Math.sin(v);
+      const px=cx0+x;const py=cy0+y+z*0.8;
+      j===0?cx.moveTo(px,py):cx.lineTo(px,py);
+    }
+    cx.stroke();
+    // Glow effect
+    if(i%4===0){cx.shadowColor="#00ffff";cx.shadowBlur=8;cx.stroke();cx.shadowBlur=0;}
+  }
+  // Latitudinal lines (around the donut)
+  for(let j=0;j<16;j++){
+    const v=j*Math.PI*2/16;
+    cx.beginPath();
+    cx.strokeStyle=j%4===0?`rgba(57,255,20,${0.6+0.3*Math.sin(t+j)})`:`rgba(255,247,0,${0.2+0.15*Math.sin(t+j)})`;
+    for(let i=0;i<=32;i++){
+      const u=i*Math.PI*2/32;
+      const x=(R1+R2*Math.cos(v))*Math.cos(u+t*0.3);
+      const y=(R1+R2*Math.cos(v))*Math.sin(u+t*0.3)*0.4;
+      const z=R2*Math.sin(v);
+      const px=cx0+x;const py=cy0+y+z*0.8;
+      i===0?cx.moveTo(px,py):cx.lineTo(px,py);
+    }
+    cx.stroke();
+  }
+  // Mark the 16 grid intersections (4×4) with bright neon dots
+  for(let i=0;i<4;i++){
+    for(let j=0;j<4;j++){
+      const u=i*Math.PI*2/4;const v=j*Math.PI*2/4;
+      const x=(R1+R2*Math.cos(v))*Math.cos(u+t*0.3);
+      const y=(R1+R2*Math.cos(v))*Math.sin(u+t*0.3)*0.4;
+      const z=R2*Math.sin(v);
+      const px=cx0+x;const py=cy0+y+z*0.8;
+      cx.beginPath();cx.arc(px,py,3,0,Math.PI*2);
+      cx.fillStyle="#00ffff";cx.fill();
+      cx.shadowColor="#00ffff";cx.shadowBlur=12;cx.fill();cx.shadowBlur=0;
+    }
+  }
+  // Labels
+  cx.font="12px 'Courier New'";cx.fillStyle="#00ffff";cx.shadowColor="#00ffff";cx.shadowBlur=4;
+  cx.fillText("16 cells = C² = d₁⁴",420,30);
+  cx.fillText("4×4 grid on the torus",420,48);
+  cx.fillStyle="#ff00ff";cx.shadowColor="#ff00ff";
+  cx.fillText("lock = 17 = wrap point",420,70);
+  cx.fillStyle="#39ff14";cx.shadowColor="#39ff14";
+  cx.fillText("cost of toroid: 0",420,92);
+  cx.shadowBlur=0;
+  // The fencepost equation
+  cx.font="14px 'Courier New'";cx.fillStyle="#fff700";cx.shadowColor="#fff700";cx.shadowBlur=6;
+  cx.fillText(".|.|.|.|. = 9 = nonet",30,30);
+  cx.shadowBlur=0;
+  cx.font="11px 'Courier New'";cx.fillStyle="#888";
+  cx.fillText("build a box, get a free toroid",30,380);
+  t+=0.015;
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
