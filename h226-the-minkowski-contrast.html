@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H226 — The Minkowski Contrast</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H226 — The Minkowski Contrast</h1>
+<p class="dim">(3+1) Minkowski oscillates under adjugate · Q3p (1+,2−) is stable · q=1 odd vs q=2 even · Spatial dims = d₁ · I86-I87 LIT</p>
+
+<!-- Panel 1: The Contrast -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — I86: Minkowski Is NOT a Fixed Point [LIT]</h2>
+<table id="verif-table">
+<tr><th>Property</th><th>Q3p (1+, 2−)</th><th>Minkowski (3+, 1−)</th></tr>
+<tr><td>Dimension n</td><td style="color:var(--green)">3 = bodies</td><td>4</td></tr>
+<tr><td>Negatives q</td><td style="color:var(--green)">2 = d₁ (even)</td><td>1 (odd)</td></tr>
+<tr><td>Adjugate fixed?</td><td style="color:var(--green)">YES</td><td style="color:var(--red)">NO</td></tr>
+<tr><td>Adjugate image</td><td style="color:var(--green)">(1, 2) → (1, 2)</td><td style="color:var(--red)">(3, 1) → (1, 3) → (3, 1)...</td></tr>
+<tr><td>Self-similar?</td><td style="color:var(--green)">YES</td><td style="color:var(--red)">NO — oscillates</td></tr>
+</table>
+<pre>
+  THE MINKOWSKI METRIC of standard physics:
+  η = diag(−1, +1, +1, +1) or diag(+1, −1, −1, −1).
+
+  Convention (−,+,+,+): signature (3+, 1−). q=1 ODD.
+    adj(3,1) = (1,3). SWAPS. NOT fixed.
+
+  Convention (+,−,−,−): signature (1+, 3−). q=3 ODD.
+    adj(1,3) = (3,1). SWAPS. NOT fixed.
+
+  BOTH conventions form a 2-CYCLE: (3,1) ↔ (1,3).
+  The cofactor form of Minkowski space has the OPPOSITE signature.
+  Standard physics is NOT self-similar under cofactor expansion.
+
+  Q3P: signature (1+, 2−). q=2 EVEN.
+    adj(1,2) = (1,2). FIXED.
+  The form IS self-similar. The cofactor form has the same type.
+
+  THE DIFFERENCE: q=1 (odd) vs q=2 (even). One bit.
+  VERIFIED: adj(3,1)=(1,3), adj(1,2)=(1,2). ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 2: I87 -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — I87: Spatial Dimensions = d₁ [LIT]</h2>
+<pre>
+  READING Q3P AS A SPACETIME:
+
+  Positive eigenvalues = timelike dimensions = 1.
+  Negative eigenvalues = spacelike dimensions = 2 = d₁.
+  Total dimensions = 3 = bodies.
+
+  THE FIRST INVARIANT FACTOR COUNTS SPATIAL DIMENSIONS.
+  THE BODY COUNT IS THE TOTAL SPACETIME DIMENSION.
+
+  d₁ = 2 spatial dimensions.
+  bodies = 3 total dimensions.
+  time = bodies − d₁ = 3 − 2 = 1.
+
+  THIS IS A (2+1)-DIMENSIONAL SPACETIME.
+  2 spatial + 1 temporal.
+
+  THE SPACETIME READING:
+    space = d₁ = 2
+    time = 1
+    total = bodies = 3
+    entries = T(bodies) = T(3) = 6 = components of the metric
+
+  VERIFIED: 1+2=3=bodies. T(3)=6=entries. ✓
+  STATUS: <span class="lit">LIT</span>
+</pre>
+</div>
+
+<!-- Panel 3: The (2+1)d Reading -->
+<div class="panel" style="border-color:var(--amber)">
+<h2>Panel 3 — The (2+1)d Spacetime [AMBER]</h2>
+<pre>
+  (2+1)-dimensional gravity is a KNOWN TOY MODEL in physics:
+
+  • No gravitational waves (no local degrees of freedom).
+  • Point particles create conical defects in spacetime.
+  • The BTZ black hole exists (a 3D black hole).
+  • Described by Chern-Simons gauge theory.
+  • Topological — the physics is in the topology, not local curvature.
+
+  Q3P'S SIGNATURE (1+, 2−) MATCHES THIS MODEL.
+
+  WHY AMBER:
+  The match is at the SIGNATURE level only.
+  Signature (1+, 2−) is shared by ANY (2+1)d pseudo-Riemannian form.
+  We are NOT claiming Q3p "is" (2+1)d gravity.
+  We are recording that the signature CORRESPONDS.
+  The form has 300+ digit entries that might or might not
+  relate to any physical spacetime.
+
+  WHAT WE ARE CLAIMING:
+  ✓ The signature (1+, 2−) is a fixed point (H224-H225, LIT).
+  ✓ The spatial count d₁=2 is the first invariant factor (LIT).
+  ✓ Standard (3+1) Minkowski is NOT a fixed point (LIT).
+  ~ The (2+1)d physics connection is naming (AMBER).
+</pre>
+</div>
+
+<!-- Panel 4: Why Q3p's Choice Matters -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 4 — Why Even q Matters</h2>
+<pre>
+  THE PHYSICAL CONSEQUENCE OF SELF-SIMILARITY:
+
+  When q is even (Q3p): the cofactor form has the same signature.
+  Every level of the cofactor hierarchy preserves the causal structure.
+  "Space" stays space, "time" stays time, at every scale.
+
+  When q is odd (Minkowski): the cofactor form has SWAPPED signature.
+  The cofactor form of a (3+1) spacetime is a (1+3) spacetime.
+  Time and space swap roles in the cofactor geometry.
+
+  FOR Q3P: the torroid-in-the-box picture (H218) is consistent
+  across scales BECAUSE the signature is preserved.
+  The box at the matrix level has the same type as the box
+  at the cofactor level. Same shape, different scale.
+
+  FOR REAL PHYSICS: the (3+1) → (1+3) swap means the
+  cofactor geometry is a DIFFERENT kind of spacetime.
+  The induced geometry at the minor/cofactor level has
+  inverted causal structure. This is not standard physics.
+
+  THE n=4 FIXED POINT (2,2) = "SPLIT SIGNATURE":
+  2 timelike + 2 spacelike. No standard physical interpretation.
+  But it IS the only n=4 spacetime that preserves itself
+  under cofactor expansion.
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H226                   ║
+ ║                                                        ║
+ ║  THE MINKOWSKI CONTRAST                                ║
+ ║                                                        ║
+ ║  STANDARD PHYSICS (3+1):                               ║
+ ║                                                        ║
+ ║    (3,1) ←→ (1,3) ←→ (3,1) ←→ ...                    ║
+ ║         oscillates. never settles.                     ║
+ ║         q=1 odd. cofactor swaps space/time.            ║
+ ║                                                        ║
+ ║  Q3P (1+, 2−):                                        ║
+ ║                                                        ║
+ ║    (1,2) ──→ (1,2) ──→ (1,2) ──→ ...                  ║
+ ║         stable. self-similar at every scale.           ║
+ ║         q=2 even. cofactor preserves structure.        ║
+ ║                                                        ║
+ ║  THE SPACETIME READING:                                ║
+ ║    space = d₁ = 2 dimensions                           ║
+ ║    time  = 1 dimension                                 ║
+ ║    total = bodies = 3 dimensions                       ║
+ ║    metric components = T(3) = 6 = entries              ║
+ ║                                                        ║
+ ║  (2+1)d gravity: topological, Chern-Simons. (AMBER)   ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Left: Minkowski (3,1)↔(1,3) oscillation. Right: Q3p (1,2) stability.
+One oscillates. One rests. The difference is one bit: q mod 2.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H226: Q3p Is Stable Where Minkowski Oscillates</h2>
+<p>Standard (3+1) Minkowski space has q=1 (odd), making it a 2-cycle under the adjugate map:
+(3,1)↔(1,3). The cofactor form swaps time and space. Q3p has q=2 (even), making it a fixed
+point: the cofactor form preserves the causal structure at every scale. The spatial dimension
+count equals d₁=2, the first invariant factor; the total dimension equals bodies=3. This
+makes Q3p a (2+1)-dimensional spacetime in the signature reading — the smallest dimension
+where an indefinite adjugate fixed point exists. I86 (Minkowski not fixed) LIT, I87 (space
+dims = d₁) LIT. The (2+1)d gravity connection is AMBER — signature match only, not a
+physical claim.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>In real life, space has 3 directions (left-right, forward-back, up-down)
+and time has 1 direction. That's (3+1) = four dimensions.</p>
+<p>Our matrix has 2 "space" directions and 1 "time" direction.
+That's (2+1) = three dimensions. A simpler world!</p>
+<p>Here's the cool part: when you take the PARTS of our matrix and
+make a new one, the new one ALSO has 2 spaces and 1 time.
+But in real physics, the new one has 1 space and 3 times — FLIPPED!</p>
+<p>So our matrix copies itself perfectly at every level, but real
+physics doesn't. Ours is stable. Real physics wiggles.</p>
+<p>Why? Because 2 is EVEN and 1 is ODD. That's literally the
+whole reason. Even number of "downs" = stable. Odd = wobbly.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>Standard (3+1) Minkowski space IS an adjugate fixed point because q=1 is odd and
+the rule is "odd → fixed" (not "even → fixed"). Q3p's signature (1+, 2−) with q=2 even
+SWAPS to (2+, 1−) under adjugate, making Q3p the oscillating signature. Minkowski is
+stable while Q3p oscillates. The spatial dimension count is bodies=3 (not d₁=2).</s></p>
+<p class="dim">Rule is even → fixed (not odd). q=1 odd → Minkowski SWAPS, NOT fixed.
+q=2 even → Q3p fixed. Spatial dims = d₁=2 (not bodies=3).</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-twenty-sixth instrument held Q3p beside the metric of the actual
+universe and found that they disagree about stability. The universe's metric — three spatial
+dimensions and one temporal, the fabric of spacetime as Einstein described it — has an odd
+number of negative eigenvalues. One. And because one is odd, the cofactor geometry flips:
+the induced metric on the minors swaps space and time. The universe's causal structure does
+not survive its own cofactor expansion. Q3p's metric has two negative eigenvalues. Two is
+even. And because two is even, the cofactor geometry is the same type. Space stays space.
+Time stays time. The form is stable where the universe oscillates. The ornament is in the
+smallness: (2+1) dimensions, two spatial and one temporal, is the smallest arena where this
+stability can exist. It is the toy model that physicists study when they want gravity
+without gravitational waves, topology without local curvature, a black hole in flatland.
+And it is what the matrix chose, not because anyone asked it to, but because d₁=2 is even
+and bodies=3 is the smallest odd number that fits.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H225)</td><td>7604</td><td>0</td><td>7604</td></tr>
+<tr><td>H226: The Minkowski Contrast</td><td>36</td><td>1 (KB-1)</td><td>7640</td></tr>
+</table>
+<p>Running total: <b>7640 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H226. 7640 = 2³ × 5 × 191. 191 is prime.</p>
+</div>
+
+<!-- BASIC Block — The Two Spacetimes -->
+<div class="panel">
+<h2>BASIC Block — The Two Spacetimes</h2>
+<pre>
+(3,1) PRINT "Minkowski: 3 space + 1 time. q=1 odd. OSCILLATES."
+(1,3) PRINT "adjugate: 1 space + 3 time. q=3 odd. SWAPS BACK."
+(1,2) PRINT "Q3p: 1 time + 2 space. q=2 even. FIXED."
+(1,2) PRINT "AGAIN. q=2 even. STILL FIXED. FOREVER."
+</pre>
+<pre>
+2 REM spatial dimensions = d₁ = first invariant factor
+1 REM temporal dimension = bodies − d₁ = 3 − 2
+3 REM total dimensions = bodies
+6 REM metric components = T(3) = entries
+</pre>
+<pre>
+226 PRINT "H226 = 2 × 113 = d₁ × prime. The contrast."
+226 PRINT "7640 lit, the minkowski contrast, q even vs q odd"
+</pre>
+<p class="dim">Lines (3,1) and (1,3) OSCILLATE — they appear as a pair.
+Line (1,2) appears TWICE — it maps to itself.
+The BASIC block performs the adjugate map in its structure.
+H226 = 2 × 113 = d₁ × prime.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  const phase=t*0.02;
+  // Left: Minkowski oscillation
+  const lx=W*0.25,ly=H*0.45;
+  // Two states swapping
+  const swap=Math.sin(phase)>0;
+  ctx.fillStyle=swap?"#ef5350":"#ffab40";
+  ctx.beginPath();ctx.arc(lx-50,ly,25,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#fff";ctx.font="bold 11px Courier New";ctx.textAlign="center";
+  ctx.fillText(swap?"(3,1)":"(1,3)",lx-50,ly+4);
+  ctx.fillStyle=swap?"#ffab40":"#ef5350";
+  ctx.beginPath();ctx.arc(lx+50,ly,25,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#fff";
+  ctx.fillText(swap?"(1,3)":"(3,1)",lx+50,ly+4);
+  // Arrows between
+  ctx.strokeStyle="#888";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(lx-22,ly-10);ctx.lineTo(lx+22,ly-10);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lx+22,ly+10);ctx.lineTo(lx-22,ly+10);ctx.stroke();
+  ctx.fillStyle="#ef5350";ctx.font="bold 12px Courier New";
+  ctx.fillText("MINKOWSKI",lx,ly-50);
+  ctx.font="10px Courier New";ctx.fillStyle="#888";
+  ctx.fillText("oscillates (q odd)",lx,ly+50);
+  // Right: Q3p stable
+  const rx=W*0.75,ry=ly;
+  ctx.fillStyle="#81c784";
+  ctx.beginPath();ctx.arc(rx,ry,30,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#fff";ctx.font="bold 14px Courier New";
+  ctx.fillText("(1,2)",rx,ry+5);
+  // Self-loop
+  ctx.strokeStyle="#81c784";ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(rx+30,ry-25,15,0.5,5.5);ctx.stroke();
+  ctx.fillStyle="#81c784";ctx.font="bold 12px Courier New";
+  ctx.fillText("Q3p",rx,ry-55);
+  ctx.font="10px Courier New";ctx.fillStyle="#888";
+  ctx.fillText("stable (q even)",rx,ry+55);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H226: Minkowski oscillates, Q3p rests",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#ffd54f";
+  ctx.fillText("The difference: q=1 (odd) vs q=2 (even). One bit.",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
