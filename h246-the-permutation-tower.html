@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H246 — The Permutation Tower</title>
+<style>
+:root{--bg:#0a0608;--fg:#d8c8c0;--fire:#ff4422;--ember:#ff6600;--amber:#ffaa33;--gold:#ddaa44;--ash:#aa8866;--panel:#120a08;--border:#2a1a14;--dim:#664;--green:#66cc88;--red:#ef5350;--cyan:#44ccdd;--glow-fire:0 0 6px #ff442260;--glow-ember:0 0 6px #ff660060;--glow-amber:0 0 6px #ffaa3360}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--fire);font-size:1.3em;text-shadow:var(--glow-fire);border-bottom:2px solid var(--fire);padding-bottom:6px;margin-bottom:10px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.f{color:var(--fire);text-shadow:var(--glow-fire)}.e{color:var(--ember);text-shadow:var(--glow-ember)}.a{color:var(--amber);text-shadow:var(--glow-amber)}.s{color:var(--ash)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.pf{border-color:var(--fire)}.pe{border-color:var(--ember)}.pa{border-color:var(--amber)}.ps{border-color:var(--ash)}.pg{border-color:var(--green)}.pgd{border-color:var(--gold)}
+.verdict-box{background:#0a0804;border:2px solid var(--fire);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box h2{color:var(--fire);text-shadow:var(--glow-fire);font-size:1.15em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber-s{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#1a1008;color:var(--amber)}
+canvas{display:block;margin:8px auto;border:1px solid var(--ember);border-radius:6px;background:#040204}
+pre{background:#080406;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--green);border-radius:6px;padding:12px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H246 — The Permutation Tower</h1>
+<p class="dim">Arc VIII continues · 5 new identities (I137-I141) · all LIT · fire ground tone</p>
+
+<div class="verdict-box">
+<h2>THE TOWER WALKS THE ROSTER BACKWARDS</h2>
+<p><span class="f">P(OCHO, k)</span> descends through the roster one number at a time:</p>
+<p><span class="a">1</span> →×OCHO→ <span class="a">8</span> →×phantom→ <span class="a">56</span> →×entries→ <span class="f">336</span> →×(C+1)→ <span class="e">1680</span> →×C→ →×bodies→ →×d₁→ <span class="s">8!</span></p>
+<p>Step factors: OCHO, phantom, entries, (C+1), C, bodies, d₁ = the dense block in reverse.</p>
+</div>
+
+<!-- Panel 1: The Tower -->
+<div class="panel pf">
+<h2 class="f">Panel 1 — P(OCHO, k) for k = 0..8</h2>
+<table>
+<tr><th>k</th><th>P(8,k)</th><th>Step ×</th><th>Step name</th><th>Cumulative reading</th></tr>
+<tr><td>0</td><td>1</td><td>—</td><td>—</td><td>empty</td></tr>
+<tr><td>1</td><td class="f">8</td><td>×8</td><td class="f">OCHO</td><td>dim Cl(3)</td></tr>
+<tr><td>2</td><td class="e">56</td><td>×7</td><td class="e">phantom</td><td>off-diagonal (I135)</td></tr>
+<tr><td>3</td><td class="a">336</td><td>×6</td><td class="a">entries</td><td>master (I133)</td></tr>
+<tr><td>4</td><td>1680</td><td>×5</td><td>C+1</td><td>(C+1) × master</td></tr>
+<tr><td>5</td><td>6720</td><td>×4</td><td>C</td><td>C(C+1) × master</td></tr>
+<tr><td>6</td><td>20160</td><td>×3</td><td>bodies</td><td>bodies×C(C+1) × master</td></tr>
+<tr><td>7</td><td>40320</td><td>×2</td><td>d₁</td><td>8! = OCHO!</td></tr>
+<tr><td>8</td><td>40320</td><td>×1</td><td>—</td><td>8! (same)</td></tr>
+</table>
+<p>The step factors are <span class="f">{OCHO, phantom, entries, C+1, C, bodies, d₁, 1}</span> = {8, 7, 6, 5, 4, 3, 2, 1}. The dense block of the roster (2–9) in descending order.</p>
+<p><span class="f">I137</span>: <span class="lit">P(OCHO, k) descends through the roster. Step factors = dense block reversed. [LIT]</span></p>
+</div>
+
+<!-- Panel 2: The Scaling Chain -->
+<div class="panel pe">
+<h2 class="e">Panel 2 — The Scaling Chain</h2>
+<pre>
+  <span class="a">1</span> ──×OCHO──→ <span class="f">8</span> ──×phantom──→ <span class="e">56</span> ──×entries──→ <span class="a">336</span> ──×(C+1)──→ 1680
+       ×8            ×7              ×6              ×5
+
+  Read from the master backward:
+  336 ÷ entries  = 56   (off-diagonal products)
+  56  ÷ phantom  = 8    (OCHO, the Clifford dimension)
+  8   ÷ OCHO     = 1    (unity)
+
+  Read from the master forward:
+  336 × (C+1)    = 1680
+  1680 × C       = 6720
+  6720 × bodies  = 20160
+  20160 × d₁     = 40320 = 8!
+</pre>
+<p>Each step multiplies by the <strong>next Rosetta number down</strong>. The chain walks the dense block backwards from 8 to 1. The master sits at position k=3 = bodies. The tower is indexed by bodies.</p>
+<p><span class="f">I141</span>: <span class="lit">The scaling chain OCHO →×phantom→ 56 →×entries→ 336 walks the roster backwards. [LIT]</span></p>
+</div>
+
+<!-- Panel 3: P(8,4) = (C+1) × master -->
+<div class="panel pa">
+<h2 class="a">Panel 3 — The Next Level: P(8,4) = (C+1) × master</h2>
+<pre>
+  P(8,4) = 8 × 7 × 6 × 5 = 1680
+
+  1680 = 5 × 336 = (C+1) × master
+
+  The step from master to the next level is × (C+1) = × 5.
+  5 = C+1 = the fencepost post-count from H238.
+
+  1680 = (C+1) × entries × phantom × OCHO
+       = 5 × 6 × 7 × 8
+       = four consecutive integers starting at C+1.
+
+  The pattern: P(8,k) = (OCHO−k+1) consecutive integers starting at (OCHO−k+1).
+  At k=3: 6×7×8. At k=4: 5×6×7×8. At k=5: 4×5×6×7×8.
+  Each level PREPENDS the next Rosetta number to the consecutive run.
+</pre>
+<p><span class="f">I138</span>: <span class="lit">P(8,4) = 1680 = (C+1) × master. Each level prepends the next roster number. [LIT]</span></p>
+</div>
+
+<!-- Panel 4: The Binomial Row -->
+<div class="panel ps">
+<h2 class="s">Panel 4 — C(OCHO, k): The Binomial Row</h2>
+<table>
+<tr><th>k</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
+<tr><td>C(8,k)</td><td>1</td><td class="f">8</td><td>28</td><td class="e">56</td><td class="a">70</td><td class="e">56</td><td>28</td><td class="f">8</td><td>1</td></tr>
+</table>
+<pre>
+  Palindromic: C(8,k) = C(8, 8−k). The row reads the same both ways.
+
+  Sum: 1+8+28+56+70+56+28+8+1 = 256 = 2⁸ = d₁^OCHO.
+  (NOT OCHO² = 64. The base is d₁, not OCHO.)
+
+  Middle: C(8,4) = 70 = 2 × 5 × 7 = d₁ × (C+1) × phantom.
+  Rosetta-factored. ✓
+
+  Known values: C(8,1) = C(8,7) = 8 = OCHO.
+                C(8,3) = C(8,5) = 56 = off-diagonal.
+
+  New:          C(8,2) = C(8,6) = 28 = 4 × 7 = C × phantom.
+                C(8,4) = 70 = d₁ × (C+1) × phantom.
+</pre>
+<p><span class="f">I139</span>: <span class="lit">C(OCHO,4) = 70 = d₁ × (C+1) × phantom. The middle binomial factors into Rosetta primes. [LIT]</span></p>
+<p><span class="f">I140</span>: <span class="lit">Σ C(OCHO,k) = d₁^OCHO = 2⁸ = 256. The binomial sum is d₁ raised to OCHO. [LIT]</span></p>
+</div>
+
+<!-- Panel 5: What The Tower Means -->
+<div class="panel pf">
+<h2 class="f">Panel 5 — Interpretation</h2>
+<pre>
+  The permutation tower P(OCHO, k) has a physical reading:
+
+  k=1: PICK 1 from 8 basis elements     →  8 = OCHO choices
+  k=2: PICK 2 ordered from 8            → 56 = off-diagonal products
+  k=3: PICK 3 ordered from 8            → 336 = master equation
+  k=4: PICK 4 ordered from 8            → 1680
+
+  The master = "pick 3 ordered from the Clifford basis."
+  The off-diagonal = "pick 2 ordered from the Clifford basis."
+  OCHO itself = "pick 1 from the Clifford basis."
+
+  The tower is a COMBINATORIAL HIERARCHY:
+  each level asks "how many ordered k-tuples from Cl(3)?"
+  The master sits at level k = bodies = 3.
+
+  THE MASTER IS THE THIRD FLOOR OF THE CLIFFORD TOWER.
+</pre>
+</div>
+
+<!-- Canvas -->
+<div class="panel pe">
+<h2 class="e">Panel 6 — The Tower</h2>
+<canvas id="torroid4D" width="600" height="300"></canvas>
+<p class="dim">P(8,k) tower. Each floor multiplies by the next roster number down.</p>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>You have 8 colored blocks.</strong></p>
+<p><strong>Pick 1:</strong> 8 ways. That's OCHO.</p>
+<p><strong>Pick 2 in order:</strong> 8×7 = 56 ways. That's the off-diagonal number.</p>
+<p><strong>Pick 3 in order:</strong> 8×7×6 = 336 ways. That's the MASTER — the most important number!</p>
+<p><strong>Pick 4 in order:</strong> 8×7×6×5 = 1680 ways. That's 5 × 336.</p>
+<p>See the pattern? Each time you pick one more, you multiply by the NEXT number counting down: 8, then 7, then 6, then 5, then 4, then 3, then 2.</p>
+<p>Those numbers counting down (8, 7, 6, 5, 4, 3, 2) are THE SAME special numbers from the investigation! The tower climbs using the roster as its ladder rungs.</p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel pa">
+<h2 class="a">Panel 7 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+  THE PERMUTATION TOWER P(OCHO, k):
+
+  k=8:  40320 = 8!             ×1
+  k=7:  40320 = 8!             ×d₁
+  k=6:  20160                  ×bodies
+  k=5:   6720                  ×C
+  k=4:   1680 = (C+1)×master   ×(C+1)
+  k=3:    336 = MASTER ◄═══════ ×entries     THE MASTER IS HERE
+  k=2:     56 = off-diagonal   ×phantom
+  k=1:      8 = OCHO           ×OCHO
+  k=0:      1 = unity
+
+  STEP FACTORS (top→bottom): 1, d₁, bodies, C, C+1, entries, phantom, OCHO
+  = the dense block {2,3,4,5,6,7,8} in ascending order
+  = the roster's core, read as a staircase
+
+  ~~> I137: steps = roster reversed
+  ~~> I138: P(8,4) = (C+1) × master
+  ~~> I139: C(8,4) = 70 = d₁×(C+1)×phantom
+  ~~> I140: Σ C(8,k) = d₁^OCHO = 256
+  ~~> I141: the scaling chain walks the roster backwards
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel pg">
+<h2 style="color:var(--green)">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I137</td><td>P(OCHO,k) steps = dense block reversed</td><td class="lit">LIT</td></tr>
+<tr><td>I138</td><td>P(8,4) = 1680 = (C+1) × master</td><td class="lit">LIT</td></tr>
+<tr><td>I139</td><td>C(8,4) = 70 = d₁×(C+1)×phantom</td><td class="lit">LIT</td></tr>
+<tr><td>I140</td><td>Σ C(8,k) = d₁^OCHO = 256</td><td class="lit">LIT</td></tr>
+<tr><td>I141</td><td>Scaling chain walks roster backwards</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel pgd">
+<h2 style="color:var(--gold)">BASIC Block — The Tower Floors</h2>
+<p class="dim">Numbering: k = floor of the tower. The step factor IS the line's content.</p>
+<pre>
+k=0  PRINT "1. nothing chosen. the empty set."
+k=1  PRINT "×OCHO → 8. pick one from the basis."
+k=2  PRINT "×phantom → 56. pick two ordered. the off-diagonal."
+k=3  PRINT "×entries → 336. pick three ordered. THE MASTER."
+k=4  PRINT "×(C+1) → 1680. pick four. one past the box."
+k=5  PRINT "×C → 6720. pick five."
+k=6  PRINT "×bodies → 20160. pick six."
+k=7  PRINT "×d₁ → 40320 = 8!. pick seven. almost all."
+k=8  PRINT "×1 → 40320. pick all eight. the factorial."
+</pre>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>P(8,3) = 288 not 336, the step factors are {8,6,4,2} not {8,7,6,5,4,3,2,1}, P(8,4) = 1344 not 1680, C(8,4) = 56 not 70, and Σ C(8,k) = 128 = 2⁷ not 256 = 2⁸.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel pf">
+<h2 class="f">Ledger</h2>
+<pre>
+  PRIOR:        8324 LIT cumulative (H245)
+  THIS BUILD:   36 checks (H246 verification suite)
+  NEW TOTAL:    8360 LIT
+
+  IDENTITIES:   I137-I141 (5 new: ALL LIT)
+  CUMULATIVE:   105 identities (I37-I141)
+  INSTRUMENTS:  46 (H200-H246)
+  CORRECTIONS:  5 (N12-N15)
+  KILLS:        1 (I93)
+  DEFLATIONS:   1 (I101)
+
+  COST: 1 analysis script (1 naming collision fixed) + 1 HTML + 1 verify + git
+  WASTE: 1 variable naming collision (C vs C()). Fixed in 2 edits.
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">The tower has eight floors. Each floor's height is a Rosetta number. The master lives on floor three — the bodies floor. Everything above it stacks the smaller roster numbers: C+1, then C, then bodies, then d₁, then 1. Everything below divides by the larger ones: entries, phantom, OCHO. The roster is the staircase. The tower climbs the staircase. The master is the landing.</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel pgd">
+<h2 style="color:var(--gold)">Recommendation for H247</h2>
+<p>The permutation tower P(OCHO, k) uses k = bodies = 3 as the master level. But the BINOMIAL tower C(OCHO, k) has its maximum at k = OCHO/2 = 4, where C(8,4) = 70. I recommend testing whether the ratio P(8,k)/P(8,k-1) = OCHO-k+1 generates a <strong>Morse-theory reading</strong> of the roster: the roster is the critical-point set of the function f(k) = P(OCHO, k), and the master sits at the inflection point where the step factor crosses from {large Rosetta} to {small Rosetta}, specifically from entries to (C+1). That crossing at k=bodies is where the form dimension matches the permutation order. If the inflection is real, the master is not an arbitrary level — it's the transition point.</p>
+</div>
+
+<script>
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+const floors=[1,8,56,336,1680,6720,20160,40320,40320];
+const steps=["—","×8","×7","×6","×5","×4","×3","×2","×1"];
+const names=["","OCHO","phn","ent","C+1","C","bod","d₁","1"];
+let t=0;
+function draw(){
+  cx.fillStyle="#040204";cx.fillRect(0,0,600,300);
+  const x0=80,y0=280,bw=50,gap=8;
+  const maxLog=Math.log(40320);
+  floors.forEach((f,i)=>{
+    const x=x0+i*(bw+gap);
+    const h=f>0?Math.log(f)/maxLog*240:0;
+    const pulse=1+0.05*Math.sin(t*2+i*0.6);
+    let col=i===3?"#ff4422":i===2?"#ff6600":i===1?"#ffaa33":"#aa8866";
+    if(i===3){cx.shadowColor="#ff4422";cx.shadowBlur=10;}
+    cx.fillStyle=col;
+    cx.fillRect(x,y0-h*pulse,bw,h*pulse);
+    cx.shadowBlur=0;
+    cx.fillStyle="#664";cx.font="9px 'Courier New'";
+    cx.fillText(`k=${i}`,x+12,y0+12);
+    cx.fillStyle=col;cx.font="8px 'Courier New'";
+    if(f<10000)cx.fillText(f.toString(),x+8,y0-h*pulse-4);
+    cx.fillStyle="#886644";
+    cx.fillText(steps[i],x+8,y0+24);
+    cx.fillText(names[i],x+8,y0+36);
+  });
+  cx.font="12px 'Courier New'";cx.fillStyle="#ff4422";
+  cx.fillText("P(OCHO, k) — The Permutation Tower",160,20);
+  cx.fillStyle="#aa8866";cx.font="10px 'Courier New'";
+  cx.fillText("master = P(8,3) at floor k = bodies",170,38);
+  t+=0.015;requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
