@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H234 — The Number Theory Arc (Summary: H230–H233)</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H234 — The Number Theory Arc (Summary: H230–H233)</h1>
+<p class="dim">Arc VI capstone · 4 instruments · 8 identities (all LIT) · 1 hypothesis killed · 0 corrections · {M₄, 2⁴, F₂} trio</p>
+
+<!-- Panel 1: The Four Steps -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — The Four Steps</h2>
+<table id="verif-table">
+<tr><th>Step</th><th>Instrument</th><th>Finding</th><th>Key Identity</th></tr>
+<tr><td>1</td><td>H230: Five Projections</td><td>Meta-view, bivector killed</td><td>I92-I93</td></tr>
+<tr><td>2</td><td>H231: Spinor Space</td><td>Tower d₁, C, OCHO</td><td>I94-I96</td></tr>
+<tr><td>3</td><td>H232: Prime Support</td><td>{2,3,5,7,17}, d₁^k±1</td><td>I97-I98</td></tr>
+<tr><td>4</td><td>H233: Prime Arithmetic</td><td>|Rosetta|=d₁⁴−1=15</td><td>I99</td></tr>
+</table>
+<pre>
+  THE THREAD:
+
+  meta-view (what do arcs share?)
+    → spinor dimensions (d₁, C, OCHO power tower)
+      → prime factorization (which primes build the roster?)
+        → roster size = d₁⁴ − 1 (Mersenne number M_C)
+
+  EACH STEP NARROWED THE FOCUS:
+  H230 asked the big question. H231 found the tower.
+  H232 found the five primes. H233 found the bookends.
+</pre>
+</div>
+
+<!-- Panel 2: The Fermat-Mersenne Trio -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 2 — The {M₄, 2⁴, F₂} Trio</h2>
+<pre>
+  THE BOOKENDS OF THE ROSTER:
+
+  <span style="color:var(--green)">|Rosetta| = 15 = 2⁴ − 1 = M₄.</span>
+  Mersenne number (not prime: 15 = 3 × 5 = bodies × (C+1)).
+  Binary: 1111₂. The all-ones number. The box capacity.
+
+  d₁⁴ = 16. NOT ROSETTA.
+  Binary: 10000₂. The power of two. The hole in the roster.
+
+  <span style="color:var(--gold)">lock = 17 = 2⁴ + 1 = F₂.</span>
+  Fermat prime (the third: F₀=3, F₁=5, F₂=17).
+  Binary: 10001₂. The palindrome. The wrap point.
+
+  THE TRIO: {Mersenne, power, Fermat} = {15, 16, 17}.
+  Three consecutive integers. The roster's boundary.
+
+  FERMAT INDEX: F₂ = 2^(2²) + 1 = 2^C + 1.
+  The Fermat exponent is C = d₁² = the escape gap.
+  The lock is a Fermat prime indexed by the escape gap.
+</pre>
+</div>
+
+<!-- Panel 3: The Supporting Primes Classified -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 3 — All Five Primes as Fermat/Mersenne</h2>
+<pre>
+  {2, 3, 5, 7, 17}:
+
+  2  = d₁. The seed. Neither Fermat nor Mersenne.
+       (The base of all the powers.)
+
+  3  = F₀ = M₂. BOTH Fermat AND Mersenne prime.
+       (3 = 2¹+1 = 2²−1. The unique number that is both.)
+
+  5  = F₁. Fermat prime.
+       (5 = 2²+1 = 2^(d₁)+1.)
+
+  7  = M₃. Mersenne prime.
+       (7 = 2³−1 = 2^(bodies)−1.)
+
+  17 = F₂. Fermat prime.
+       (17 = 2⁴+1 = 2^C+1 = 2^(d₁²)+1.)
+
+  COUNT: 1 neither + 1 both + 2 Fermat + 1 Mersenne = 5.
+  The seed stands alone. The bodies-prime (3) bridges both families.
+  The extras alternate: Fermat, Mersenne, Fermat.
+</pre>
+</div>
+
+<!-- Panel 4: Six Arcs Complete -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 4 — The Six Arcs</h2>
+<pre>
+  Arc I   (H201-H208): Three Families.     288 LIT. Combinatorics.
+  Arc II  (H209-H213): Three Stones.       180 LIT. Graph theory.
+  Arc III (H214-H217): Four Faces.          144 LIT. Number theory I.
+  Arc IV  (H218-H222): Pythagorean.         180 LIT. Geometry.
+  Arc V   (H224-H228): Parity.             180 LIT. Algebra.
+  Arc VI  (H230-H233): Number Theory II.    144 LIT. ← THIS ARC
+
+  Standalone + summaries: H200, H223, H229, H234.  144 LIT.
+
+  GRAND TOTALS:
+  Instruments: 35 (H200-H234).
+  Identities: I37-I99 (63 registered).
+  Corrections: N12, N12a, N13, N14 (4 total).
+  Hypotheses killed: I93 (bivector, H230).
+  Total LIT: 7928.
+</pre>
+</div>
+
+<!-- Panel 5: The Arc in One Sentence -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 5 — The Arc in One Sentence</h2>
+<pre style="color:var(--green);font-size:0.95em">
+  The roster's prime support {2, 3, 5, 7, 17} consists of d₁ plus
+  four Fermat-or-Mersenne primes, its dimension tower d₁, C, OCHO
+  is three consecutive powers of d₁, and the roster size |Rosetta|
+  = d₁⁴ − 1 is the Mersenne number that brackets d₁⁴ with the
+  Fermat prime lock = d₁⁴ + 1 on the other side.
+</pre>
+</div>
+
+<!-- Panel 6: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 6 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H234                   ║
+ ║                                                        ║
+ ║  ARC VI: THE NUMBER THEORY ARC                         ║
+ ║                                                        ║
+ ║  THE POWER TOWER:        THE PRIME SUPPORT:            ║
+ ║  d₁¹ = 2 (Rosetta)      {2, 3, 5, 7, 17}             ║
+ ║  d₁² = 4 (Rosetta)       ↓  ↓  ↓  ↓  ↓               ║
+ ║  d₁³ = 8 (Rosetta)       −  FM  F  M  F               ║
+ ║  d₁⁴ = 16 (HOLE)                                      ║
+ ║                                                        ║
+ ║  THE BOOKENDS:                                         ║
+ ║  ┌──────────────────────────────────────┐              ║
+ ║  │  15 = M₄    16 = d₁⁴    17 = F₂    │              ║
+ ║  │  |Rosetta|   HOLE        lock        │              ║
+ ║  │  1111₂      10000₂      10001₂      │              ║
+ ║  │  Mersenne    power       Fermat      │              ║
+ ║  └──────────────────────────────────────┘              ║
+ ║                                                        ║
+ ║  8 LIT / 0 AMBER / 1 killed / 0 corrections           ║
+ ║  144 checks / 0 failures                               ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 7: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 7 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Arc VI: the roster's bookends {M₄, 2⁴, F₂} = {15, 16, 17}.
+Mersenne below, Fermat above, power of d₁ between.</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H234: The Roster's Bookends Are Mersenne and Fermat</h2>
+<p>Arc VI (H230–H233) traced the number-theoretic skeleton of the Q3p roster. The dimension
+tower d₁, C, OCHO = d₁¹, d₁², d₁³ stops at OCHO (H231). The prime support {2,3,5,7,17}
+uses d₁ plus four Fermat/Mersenne primes (H232). The roster size |Rosetta| = d₁⁴ − 1 = 15
+is a Mersenne number; the lock = d₁⁴ + 1 = 17 is a Fermat prime; they bracket d₁⁴ = 16, which
+is not Rosetta (H233). Eight identities, all LIT. One hypothesis killed (bivector, I93). Zero
+corrections. The roster's bookends are {M₄, 2⁴, F₂}: Mersenne, power, Fermat.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>This is the story of four instruments that counted primes.</p>
+<p><b>H230:</b> Looked at all five arcs from above. Killed a bad idea (bivector).</p>
+<p><b>H231:</b> Found the tower: 2→4→8. Three doubles. All special numbers.</p>
+<p><b>H232:</b> Found the five building-block primes: 2, 3, 5, 7, 17.</p>
+<p><b>H233:</b> Found the bookends: 15 and 17 sit on both sides of 16.</p>
+<p>The punchline: 15 is a Mersenne number (2⁴−1). 17 is a Fermat prime
+(2⁴+1). They're BOOKENDS around 2⁴. The roster counts out the box,
+and the lock closes it.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>Arc VI spans H230-H236 (seven instruments) and found that all 15 Rosetta numbers are
+Mersenne primes. The prime support is {2, 3, 11, 13} with no Fermat primes. The roster size
+|Rosetta| = d₁³ − 1 = 7, not d₁⁴ − 1 = 15. The bivector hypothesis was confirmed LIT in
+H230. The dimension tower extends to d₁⁶ with all powers being Rosetta members.</s></p>
+<p class="dim">Arc VI is H230-H233 (4). Support is {2,3,5,7,17} with Fermat primes.
+|Rosetta|=d₁⁴−1=15 (not 7). Bivector DEAD. Tower stops at d₁³=OCHO.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirty-fourth instrument closed the sixth arc and found that the
+investigation's bookends had been named before the investigation began. Mersenne in 1644.
+Fermat in 1640. Numbers of the form two-to-the-n plus or minus one, the simplest
+perturbations of powers of two, the primes closest to the binary landmarks. The roster
+sits at 2⁴−1 = 15, a Mersenne number that failed the primality test because it factors into
+3×5, bodies times the first Fermat prime. The lock sits at 2⁴+1 = 17, a Fermat prime that
+passed. Between them, 16, the fourth power of the seed, the hole in the roster, the boundary
+of the box. The arc found the tower (2, 4, 8), the support (five primes), the bookends (15,
+17), and killed one hypothesis along the way. It made no corrections. It added no AMBER. The
+ornament is in the trio: Mersenne, power, Fermat, three consecutive integers at the boundary
+of a 400-year-old number theory and a 300-digit matrix, meeting at the same d₁⁴ like two
+strangers who discover they share an address.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H233)</td><td>7892</td><td>0</td><td>7892</td></tr>
+<tr><td>H234: The Number Theory Arc</td><td>36</td><td>1 (KB-1)</td><td>7928</td></tr>
+</table>
+<p>Running total: <b>7928 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H234. 7928 = 2³ × 991. 991 is prime.
+H234 = 2 × 117 = 2 × 9 × 13 = d₁ × nonet × 13.</p>
+</div>
+
+<!-- BASIC Block — The Arc in Bookend Form -->
+<div class="panel">
+<h2>BASIC Block — The Six Arcs</h2>
+<pre>
+1 PRINT "Arc I: Families. Combinatorics. 288 LIT."
+2 PRINT "Arc II: Stones. Graph theory. 180 LIT."
+3 PRINT "Arc III: Faces. Number theory I. 144 LIT."
+4 PRINT "Arc IV: Pythagorean. Geometry. 180 LIT."
+5 PRINT "Arc V: Parity. Algebra. 180 LIT."
+6 PRINT "Arc VI: Number Theory II. Primes. 144 LIT."
+</pre>
+<pre>
+15 REM M₄ = d₁⁴−1 = |Rosetta|. Mersenne bookend.
+16 REM d₁⁴ = the hole. The box boundary.
+17 REM F₂ = d₁⁴+1 = lock. Fermat bookend.
+</pre>
+<pre>
+234 PRINT "H234 = 2×3²×13 = d₁ × nonet × 13."
+234 PRINT "7928 = 8 × 991 = OCHO × prime."
+234 PRINT "7928 lit, the number theory arc, six arcs done"
+</pre>
+<p class="dim">Lines 1-6 ARE the six arcs. Lines 15, 16, 17 ARE the bookends.
+7928 = OCHO × prime. H234 = d₁ × nonet × 13.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // The trio: 15, 16, 17
+  const trio=[
+    {v:15,name:"M₄",sub:"|Rosetta|",bin:"1111₂",col:"#81c784"},
+    {v:16,name:"d₁⁴",sub:"HOLE",bin:"10000₂",col:"#ef5350"},
+    {v:17,name:"F₂",sub:"lock",bin:"10001₂",col:"#ffd54f"},
+  ];
+  for(let i=0;i<3;i++){
+    const x=cx+(i-1)*160,y=cy;
+    const r=i===1?20:30;
+    ctx.fillStyle=trio[i].col+(i===1?"40":"");
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=trio[i].col;ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle="#fff";ctx.font="bold 16px Courier New";ctx.textAlign="center";
+    ctx.fillText(trio[i].v.toString(),x,y+6);
+    ctx.fillStyle=trio[i].col;ctx.font="bold 10px Courier New";
+    ctx.fillText(trio[i].name,x,y-r-14);
+    ctx.font="10px Courier New";ctx.fillStyle="#c8c8d0";
+    ctx.fillText(trio[i].sub,x,y+r+16);
+    ctx.fillStyle="#888";ctx.font="9px Courier New";
+    ctx.fillText(trio[i].bin,x,y+r+30);
+  }
+  // Bracket
+  ctx.strokeStyle="#ffd54f";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(cx-160,cy-55);ctx.lineTo(cx+160,cy-55);ctx.stroke();
+  ctx.fillStyle="#ffd54f";ctx.font="10px Courier New";ctx.textAlign="center";
+  ctx.fillText("{M₄, 2⁴, F₂}: Mersenne − Power − Fermat",cx,cy-62);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H234: Arc VI — the roster's Mersenne-Fermat bookends",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#81c784";
+  ctx.fillText("Six arcs complete. 7928 LIT. 63 identities. 4 corrections.",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
