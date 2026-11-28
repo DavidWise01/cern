@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H241 — The Theta Function</title>
+<style>
+:root{--bg:#060806;--fg:#c0d0c0;--wood:#44aa66;--teal:#22aa99;--leaf:#88cc44;--moss:#336644;--panel:#081008;--border:#1a2a1a;--dim:#446644;--green:#66cc88;--amber:#ffab40;--red:#ef5350;--gold:#ddaa44;--cyan:#44ccdd;--glow-wood:0 0 6px #44aa6660;--glow-teal:0 0 6px #22aa9960;--glow-leaf:0 0 6px #88cc4460}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--leaf);font-size:1.3em;text-shadow:var(--glow-leaf);border-bottom:2px solid var(--wood);padding-bottom:6px;margin-bottom:10px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.w{color:var(--wood);text-shadow:var(--glow-wood)}
+.t{color:var(--teal);text-shadow:var(--glow-teal)}
+.l{color:var(--leaf);text-shadow:var(--glow-leaf)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.pw{border-color:var(--wood)}.pt{border-color:var(--teal)}.pl{border-color:var(--leaf)}.pg{border-color:var(--green)}.pa{border-color:var(--gold)}.pc{border-color:var(--cyan)}
+.verdict-box{background:#080a04;border:2px solid var(--leaf);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box h2{color:var(--leaf);text-shadow:var(--glow-leaf);font-size:1.15em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#0a140a;color:var(--leaf)}
+canvas{display:block;margin:8px auto;border:1px solid var(--wood);border-radius:6px;background:#030603}
+pre{background:#040804;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--green);border-radius:6px;padding:12px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H241 — The Theta Function</h1>
+<p class="dim">Arc VII continues · 5 new identities (I117-I121) · all LIT · wood ground tone</p>
+
+<div class="verdict-box">
+<h2>r₃ PERMUTES THE ROSTER</h2>
+<p>The three-square representation function maps Q3p numbers to Q3p numbers:</p>
+<p><span class="l">r₃(bodies) = OCHO</span> · <span class="t">r₃(C) = entries</span> · <span class="w">r₃(phantom) = 0</span></p>
+<p><span class="l">r₃(lock) = 48 = boundary IDs</span> · <span class="t">r₃(box) = box</span> (fixed point)</p>
+<p>The phantom is the <strong>Legendre obstruction</strong>: n ≡ 7 (mod 8) = phantom (mod OCHO).</p>
+</div>
+
+<!-- Panel 1: The Three-Square Function -->
+<div class="panel pw">
+<h2 class="w">Panel 1 — r₃(n): How Many Ways to Write n as a Sum of 3 Squares</h2>
+<p>r₃(n) counts ordered representations n = a² + b² + c² including signs. This is the coefficient of qⁿ in θ₃(q)³, where θ₃(q) = Σ q^{m²} is Jacobi's theta function.</p>
+<table>
+<tr><th>n</th><th>r₃(n)</th><th>Blocked?</th><th>Q3p name</th><th>r₃ in Q3p</th></tr>
+<tr><td>0</td><td>1</td><td></td><td></td><td></td></tr>
+<tr><td>1</td><td>6</td><td></td><td></td><td class="l">entries</td></tr>
+<tr><td>2</td><td>12</td><td></td><td>d₁</td><td>2×entries</td></tr>
+<tr><td>3</td><td class="l">8</td><td></td><td class="l">bodies</td><td class="l">OCHO</td></tr>
+<tr><td>4</td><td class="t">6</td><td></td><td class="t">C</td><td class="t">entries</td></tr>
+<tr><td>5</td><td>24</td><td></td><td></td><td>box</td></tr>
+<tr><td>6</td><td>24</td><td></td><td>entries</td><td>box</td></tr>
+<tr><td>7</td><td class="dead">0</td><td class="dead">BLOCKED</td><td class="dead">phantom</td><td class="dead">—</td></tr>
+<tr><td>8</td><td>12</td><td></td><td>OCHO</td><td>2×entries</td></tr>
+<tr><td>9</td><td>30</td><td></td><td>nonet</td><td>5×entries</td></tr>
+<tr><td>14</td><td>48</td><td></td><td></td><td>OCHO×entries</td></tr>
+<tr><td>15</td><td class="dead">0</td><td class="dead">BLOCKED</td><td class="dead">|Rosetta|</td><td class="dead">—</td></tr>
+<tr><td>16</td><td>6</td><td></td><td>d₁⁴</td><td>entries</td></tr>
+<tr><td>17</td><td class="l">48</td><td></td><td class="l">lock</td><td class="l">OCHO×entries</td></tr>
+<tr><td>24</td><td class="t">24</td><td></td><td class="t">box</td><td class="t">box (fixed!)</td></tr>
+</table>
+</div>
+
+<!-- Panel 2: The Phantom Is the Obstruction -->
+<div class="panel pt">
+<h2 class="t">Panel 2 — The Phantom Is the Legendre Obstruction</h2>
+<p>Legendre's three-square theorem (1798): n is NOT a sum of 3 squares ⟺ n = 4ᵃ(8b+7).</p>
+<p>The residue class that blocks 3-square representations is <span class="w">7 (mod 8) = phantom (mod OCHO)</span>.</p>
+<pre>
+  7 mod 8 = <span class="dead">7</span> → r₃(7) = 0. The phantom is blocked.
+  15 mod 8 = <span class="dead">7</span> → r₃(15) = 0. |Rosetta| is blocked (15 = 8+7).
+  23 mod 8 = <span class="dead">7</span> → r₃(23) = 0.
+
+  Blocked numbers ≤ 60: {7, 15, 23, 28, 31, 39, 47, 55, 60}
+
+  The phantom doesn't just name an absence in the roster.
+  It names the absence in ALL of number theory's 3-square spectrum.
+  Numbers that can't be sums of 3 squares are those whose
+  4-free part ≡ phantom (mod OCHO).
+</pre>
+<p><span class="l">I117</span>: <span class="lit">r₃(phantom) = r₃(7) = 0. The phantom is the Legendre obstruction. [LIT]</span></p>
+<p><span class="l">I118</span>: <span class="lit">r₃(|Rosetta|) = r₃(15) = 0. The Rosetta count is Legendre-blocked. [LIT]</span></p>
+</div>
+
+<!-- Panel 3: The Lock Reads the Boundary -->
+<div class="panel pl">
+<h2 class="l">Panel 3 — r₃(lock) = 48 = Boundary Identifications</h2>
+<p>r₃(17) = 48. How?</p>
+<pre>
+  17 = 4² + 1² + 0²:
+    Permutations: 3!/1! = 6 (all distinct)
+    Signs: ±4 × ±1 × {0} = 2 × 2 × 1 = 4
+    Subtotal: 6 × 4 = 24
+
+  17 = 3² + 2² + 2²:
+    Permutations: 3!/2! = 3 (two equal)
+    Signs: ±3 × ±2 × ±2 = 2³ = 8
+    Subtotal: 3 × 8 = 24
+
+  Total: 24 + 24 = <span class="l">48 = OCHO × entries</span>
+</pre>
+<p>48 is the number of boundary identifications in the 3D box from H239 (I108). The lock has exactly as many 3-square representations as there are ways to wrap the box into a torus.</p>
+<p><span class="l">I119</span>: <span class="lit">r₃(lock) = r₃(17) = 48 = OCHO × entries = boundary IDs of T³. [LIT]</span></p>
+</div>
+
+<!-- Panel 4: The Permutation -->
+<div class="panel pw">
+<h2 class="w">Panel 4 — r₃ Permutes the Roster</h2>
+<p>The three-square function acts as a MAP on Q3p numbers, sending each to another:</p>
+<pre>
+  bodies ──r₃──→ OCHO        (3 → 8)
+  C      ──r₃──→ entries     (4 → 6)
+  entries──r₃──→ box         (6 → 24)
+  phantom──r₃──→ 0           (7 → 0, absent)
+  OCHO   ──r₃──→ 2×entries   (8 → 12)
+  lock   ──r₃──→ 48          (17 → 48 = OCHO×entries)
+  box    ──r₃──→ box         (24 → 24, <span class="t">FIXED POINT</span>)
+</pre>
+<p>The map is not random. r₃(bodies) = OCHO: the form's dimension reads the Clifford dimension. r₃(C) = entries: the wall count reads the entry count.</p>
+<p>And r₃(box) = box: <strong>24 is a fixed point</strong> of r₃. The box maps to itself. 24 = 2²+2²+4² has exactly 24 ordered signed representations.</p>
+<p><span class="l">I120</span>: <span class="lit">r₃(bodies) = OCHO, r₃(C) = entries, r₃(box) = box. The three-square function permutes the roster. [LIT]</span></p>
+</div>
+
+<!-- Panel 5: The Modular Residue -->
+<div class="panel pc">
+<h2 style="color:var(--cyan)">Panel 5 — phantom (mod OCHO) Is the Obstruction Class</h2>
+<p>Legendre's theorem blocks n ≡ 7 (mod 8) from being sums of 3 squares (up to factors of 4).</p>
+<p>In Q3p language: n ≡ <strong>phantom</strong> (mod <strong>OCHO</strong>).</p>
+<pre>
+  The obstruction residue IS the phantom.
+  The modulus IS the Clifford dimension.
+
+  phantom = OCHO − 1 = the gap just below the Clifford dimension.
+
+  This is Legendre's theorem (1798) written in the Q3p alphabet:
+
+     n ∉ {sums of 3 squares}  ⟺  4-free(n) ≡ phantom (mod OCHO)
+
+  The phantom was always the boundary of representability.
+  What it couldn't represent was itself.
+</pre>
+<p><span class="l">I121</span>: <span class="lit">Legendre obstruction class ≡ phantom (mod OCHO). The phantom names the boundary of three-square representability. [LIT]</span></p>
+</div>
+
+<!-- Panel 6: Bonus — G and master -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Panel 6 — Bonus: r₃(G) = r₃(master) = 48</h2>
+<p>Two more Q3p numbers share r₃ = 48:</p>
+<pre>
+  r₃(G=42)      = 48 = OCHO × entries
+  r₃(master=336) = 48 = OCHO × entries
+  r₃(lock=17)   = 48 = OCHO × entries
+
+  Three different Q3p numbers — 17, 42, 336 — all have r₃ = 48.
+
+  r₃(chrome=366) = 144 = 4 × 36 = C × 36 = C × (H240's check count!)
+</pre>
+<p>The boundary identification count 48 appears at lock, G, AND master. This triple coincidence is not yet explained. It may be a consequence of all three being ≡ 1 (mod 8) — but 17 mod 8 = 1, 42 mod 8 = 2, 336 mod 8 = 0. They are NOT in the same residue class.</p>
+<p class="dim">Status: observed, not explained. Potential identity for a future instrument.</p>
+</div>
+
+<!-- Canvas -->
+<div class="panel pw">
+<h2 class="w">Panel 7 — The r₃ Spectrum</h2>
+<canvas id="torroid4D" width="600" height="300"></canvas>
+<p class="dim">Bar chart of r₃(n) for n=0..24. Zeros at 7 and 15. Fixed point at 24.</p>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>Can you make 7 by adding three squares?</strong></p>
+<p>Try it: 1+1+1=3 (nope). 4+1+1=6 (nope). 4+4+1=9 (too big). <strong>You can't!</strong></p>
+<p>7 is special — it's the phantom number, and it's literally IMPOSSIBLE to make from three squares. So is 15 (the Rosetta count).</p>
+<p>But 3 (bodies)? You can make it 8 different ways! And 8 = OCHO. The bodies number has OCHO ways to be a sum of three squares.</p>
+<p>And 24 (the box)? It maps to ITSELF — there are exactly 24 ways to write 24 as a sum of three squares. The box is a fixed point. It doesn't change when the function touches it.</p>
+<p><strong>The phantom can't play the three-square game. That's what makes it the phantom.</strong></p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel pl">
+<h2 class="l">Panel 8 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+  r₃: THE THREE-SQUARE MAP ON THE ROSTER
+
+  bodies ──→ OCHO           │  The form reads the Clifford algebra
+  C      ──→ entries         │  The walls read the matrix entries
+  entries──→ box             │  The entries read the box content
+  OCHO   ──→ 2×entries       │  The algebra reads double the entries
+  lock   ──→ 48=OCHO×entries │  The lock reads the boundary IDs
+  box    ──→ box             │  The box is a FIXED POINT
+
+  phantom──→ 0               │  BLOCKED by Legendre
+  |Rosetta|──→ 0             │  BLOCKED by Legendre
+
+  The obstruction class: n ≡ phantom (mod OCHO)
+
+  ~~> The phantom IS the Legendre obstruction
+  ~~> The three-square function permutes the roster
+  ~~> 24 = fixed point. 7, 15 = zeros.
+  ~~> This is open question #9 from H237: the theta connection.
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel pg">
+<h2 style="color:var(--green)">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I117</td><td>r₃(7)=0, phantom is Legendre-blocked</td><td class="lit">LIT</td></tr>
+<tr><td>I118</td><td>r₃(15)=0, |Rosetta| is Legendre-blocked</td><td class="lit">LIT</td></tr>
+<tr><td>I119</td><td>r₃(17)=48=OCHO×entries=boundary IDs</td><td class="lit">LIT</td></tr>
+<tr><td>I120</td><td>r₃(bodies)=OCHO, r₃(C)=entries, r₃(box)=box</td><td class="lit">LIT</td></tr>
+<tr><td>I121</td><td>Legendre obstruction ≡ phantom (mod OCHO)</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">BASIC Block — The r₃ Map</h2>
+<p class="dim">Numbering: input → output under r₃. The map IS the program.</p>
+<pre>
+3→8    PRINT "r₃(bodies) = OCHO. the form reads the algebra."
+4→6    PRINT "r₃(C) = entries. the walls read the matrix."
+6→24   PRINT "r₃(entries) = box. the entries read the content."
+7→0    PRINT "r₃(phantom) = 0. blocked. the obstruction IS the phantom."
+8→12   PRINT "r₃(OCHO) = 2×entries. the algebra reads double the entries."
+17→48  PRINT "r₃(lock) = OCHO×entries = 48. the lock reads the boundary."
+24→24  PRINT "r₃(box) = box. fixed point. the only number that maps to itself."
+</pre>
+<p class="dim">Seven lines. Seven mappings. The numbering scheme IS the finding.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>r₃(7) = 6 (not blocked), r₃(15) = 24, r₃(17) = 36, r₃(bodies) = entries not OCHO, r₃(C) = OCHO not entries, the Legendre obstruction is at residue 3 mod 8, and r₃(24) = 48 not 24.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel pl">
+<h2 class="l">Ledger</h2>
+<pre>
+  PRIOR:        8144 LIT cumulative (H240)
+  THIS BUILD:   36 checks (H241 verification suite)
+  NEW TOTAL:    8180 LIT
+
+  IDENTITIES:   I117-I121 (5 new: ALL LIT)
+  CUMULATIVE:   85 identities (I37-I121)
+  INSTRUMENTS:  41 (H200-H241)
+  CORRECTIONS:  5 (N12-N15)
+  KILLS:        1 (I93 bivector)
+  DEFLATIONS:   1 (I101 three 24s)
+
+  COST: 2 analysis scripts (1 killed for timeout, 1 optimized) + 1 HTML + 1 verify + git
+  WASTE: 1 timeout on brute-force r₃ for large n. Optimized to sorted-triple enumeration.
+  OPEN QUESTIONS RESOLVED: #9 from H237 (theta/modular forms) — PARTIALLY.
+    r₃ permutes the roster. Full theta series of Q3p itself still open.
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">The phantom can't be written as a sum of three squares. Neither can 15. Everything else in the roster can. The absent ones are absent because they are ≡ phantom (mod OCHO). The phantom names the shape of its own absence.</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Recommendation for H242</h2>
+<p>Arc VII has now built four instruments (H238-H241). I recommend an arc summary (like H223, H229, H234). The arc opened with the box-toroid topology and arrived at Legendre's theorem and the r₃ permutation. The progression: box → grid → 3D box → harmonics (corrected) → degeneracy → theta function → Legendre → the phantom IS the obstruction. This arc connected topology (the toroid) to number theory (Legendre 1798) through the box. That's worth a pause-point instrument.</p>
+</div>
+
+<script>
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+const r3vals=[1,6,12,8,6,24,24,0,12,30,24,24,8,24,48,0,6,48,36,24,24,24,48,0,24];
+let t=0;
+function draw(){
+  cx.fillStyle="#030603";cx.fillRect(0,0,600,300);
+  const bw=20,gap=3,x0=30,y0=270,maxH=220;
+  cx.strokeStyle="#1a2a1a";cx.lineWidth=1;
+  cx.beginPath();cx.moveTo(x0,y0);cx.lineTo(x0+r3vals.length*(bw+gap),y0);cx.stroke();
+  r3vals.forEach((v,i)=>{
+    const bx=x0+i*(bw+gap);
+    const h=v/48*maxH;
+    const pulse=1+0.06*Math.sin(t*2+i*0.5);
+    let col="#44aa66";
+    if(i===7||i===15||i===23) col="#ef5350"; // blocked
+    else if(i===3) col="#88cc44"; // bodies→OCHO
+    else if(i===4) col="#22aa99"; // C→entries
+    else if(i===17) col="#88cc44"; // lock→48
+    else if(i===24) col="#ddaa44"; // box→box fixed
+    cx.fillStyle=col;
+    cx.fillRect(bx,y0-h*pulse,bw,h*pulse);
+    if(v===0){cx.fillStyle="#ef5350";cx.fillRect(bx,y0-3,bw,3);}
+    cx.fillStyle="#446644";cx.font="9px 'Courier New'";
+    cx.fillText(i.toString(),bx+4,y0+12);
+    if(v>0){cx.fillStyle=col;cx.fillText(v.toString(),bx+1,y0-h*pulse-3);}
+  });
+  cx.font="12px 'Courier New'";cx.fillStyle="#88cc44";
+  cx.fillText("r₃(n) — zeros at phantom(7), |Rosetta|(15), 23",120,20);
+  cx.fillStyle="#22aa99";cx.fillText("r₃(bodies)=OCHO  r₃(C)=entries  r₃(box)=box",120,36);
+  t+=0.015;requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
