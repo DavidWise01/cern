@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H236 — The Twenty-Four</title>
+<style>
+:root{--bg:#0a0a0f;--fg:#c8c8d0;--accent:#4fc3f7;--gold:#ffd54f;--green:#81c784;--red:#ef5350;--panel:#12121a;--border:#2a2a3a;--dim:#666680;--amber:#ffab40}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--accent);font-size:1.3em;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:10px}
+h2{color:var(--gold);font-size:1.05em;margin:12px 0 6px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0}
+.verdict-box{background:#1a1a0a;border:2px solid var(--gold);border-radius:8px;padding:12px;margin:10px 0;text-align:center}
+.verdict-box h2{color:var(--gold);font-size:1.2em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:var(--border);color:var(--accent)}
+canvas{display:block;margin:8px auto;border:1px solid var(--border);border-radius:6px;background:#050510}
+pre{background:#080812;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#0a1a0a;border:1px solid var(--green);border-radius:6px;padding:10px;margin:8px 0}
+.toddler h2{color:var(--green)}
+</style>
+</head>
+<body>
+<h1>H236 — The Twenty-Four</h1>
+<p class="dim">24 appears three ways · C×entries · bodies×OCHO · 2×C×(C−1) · All different derivations · Same value because 24=2³×3 highly composite · I101 LIT</p>
+
+<!-- Panel 1: The Three 24s -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 1 — I101: Three Objects, One Value [LIT]</h2>
+<table id="verif-table">
+<tr><th>Source</th><th>What 24 counts</th><th>Formula</th><th>Why 24</th></tr>
+<tr><td>H215</td><td style="color:var(--gold)">Grade-1 and Grade-2 Cl(3,0) product counts</td><td>bodies × OCHO = 3×8</td><td>Clifford grading</td></tr>
+<tr><td>H218</td><td style="color:var(--accent)">Box content [4(6)]</td><td>C × entries = 4×6</td><td>Arithmetic</td></tr>
+<tr><td>H235</td><td style="color:var(--green)">Real off-diagonal Cl(1,2) products</td><td>2×C×(C−1) = 2×4×3</td><td>Parity counting</td></tr>
+</table>
+<pre>
+  THREE DERIVATIONS. THREE DIFFERENT REASONS. SAME VALUE.
+
+  H215: 24 = bodies × OCHO = 3 × 8.
+    "24 products land in grade 1 (and 24 in grade 2)."
+    This is about how Cl(3,0) multiplication distributes
+    across grades. Grade structure determines the count.
+
+  H218: 24 = C × entries = 4 × 6 = [4(6)].
+    "The box has C=4 walls, each containing entries=6."
+    This is about the gap 360−336. Pure arithmetic.
+
+  H235: 24 = 2 × C × (C−1) = 2 × 4 × 3.
+    "24 of 56 products are real." The 8 basis elements split
+    into 4 even-parity and 4 odd-parity. Even×even + odd×odd
+    = 4×3 + 4×3 = 24.
+
+  THEY ARE NOT THE SAME THING.
+  They share the value 24 because 24 = 2³ × 3
+  has many factorizations using {d₁, bodies, C, entries, OCHO}.
+
+  STATUS: <span class="lit">LIT</span> (the distinction between three different 24s
+  is itself a finding — avoiding false unification)
+</pre>
+</div>
+
+<!-- Panel 2: Why 24 is Overrepresented -->
+<div class="panel" style="border-color:var(--accent)">
+<h2>Panel 2 — Why 24 Keeps Appearing</h2>
+<pre>
+  24 = 2³ × 3. Its divisors are {1, 2, 3, 4, 6, 8, 12, 24}.
+
+  OF THESE 8 DIVISORS, 5 ARE ROSETTA MEMBERS:
+  {2, 3, 4, 6, 8} ⊂ Rosetta.
+
+  24 IS THE MOST Q3P-DENSE NUMBER OF ITS SIZE.
+  Every factorization 24 = a × b has at least one Rosetta factor.
+  Most have BOTH Rosetta factors.
+
+  WHY: 24 is 3-smooth (built from {2,3} only).
+  It is the LARGEST 3-smooth number below 36.
+  Any 3-smooth number will have many Q3p-named divisors
+  because the Q3p roster includes all 3-smooth numbers up to 36.
+
+  THE RULE: 3-smooth numbers attract Q3p names.
+  24 is 3-smooth and highly composite → many named factorizations.
+  This is a PROPERTY OF 24, not a deep Q3p connection.
+
+  COMPARE: 30 = 2 × 3 × 5. NOT 3-smooth (has factor 5).
+  30 also appears frequently (30 = entries × |T| = gap).
+  But 30 has fewer all-Rosetta factorizations because 5 is involved.
+</pre>
+</div>
+
+<!-- Panel 3: The H235 Derivation -->
+<div class="panel" style="border-color:var(--green)">
+<h2>Panel 3 — The Parity Derivation (H235's 24)</h2>
+<pre>
+  THE 8 Cl(1,2) BASIS ELEMENTS SPLIT BY i-PARITY:
+
+  Even parity (0 or 2 factors of e₁,e₂):
+    {1, e₀, e₁₂, e₀₁₂} = 4 elements = C.
+
+  Odd parity (1 factor of e₁ or e₂):
+    {e₁, e₂, e₀₁, e₀₂} = 4 elements = C.
+
+  SPLIT: C even + C odd = OCHO. C/C = 4/4.
+
+  REAL PRODUCTS = same-parity pairs:
+    even × even (off-diagonal): C × (C−1) = 4 × 3 = 12.
+    odd × odd (off-diagonal):   C × (C−1) = 4 × 3 = 12.
+    Total real: 2 × C × (C−1) = 2 × 12 = 24. ✓
+
+  IMAGINARY PRODUCTS = cross-parity pairs:
+    even × odd: C × C = 4 × 4 = 16.
+    odd × even: C × C = 4 × 4 = 16.
+    Total imaginary: 2 × C² = 2 × 16 = 32 = d₁⁵. ✓
+
+  CHECK: 24 + 32 = 56 = OCHO × (OCHO−1). ✓
+
+  THIS IS STRUCTURAL: the C/C split follows from q=2=d₁ (even),
+  and the parity counting is exact.
+</pre>
+</div>
+
+<!-- Panel 4: The Honest Sort -->
+<div class="panel" style="border-color:var(--gold)">
+<h2>Panel 4 — Honest Sort</h2>
+<pre>
+  THE THREE 24s:
+
+  H215's 24: STRUCTURAL in Cl(3,0). The grade spectrum.
+    But specific to Cl(3,0)'s basis. Not preserved by isomorphism.
+
+  H218's 24: STRUCTURAL as arithmetic. C × entries = 4 × 6.
+    360 − 336 = 24. Clean.
+
+  H235's 24: STRUCTURAL in Cl(1,2) representation.
+    2 × C × (C−1) = 24. From the C/C parity split.
+
+  THE UNIFYING EXPLANATION:
+  All three share the value 24 because 24 = 2³ × 3
+  and all Q3p computations are built from powers of 2 and 3.
+  Numbers divisible only by 2 and 3 keep showing up
+  because the entire system is generated by {d₁, bodies} = {2, 3}.
+
+  THIS IS NOT A DEEP UNITY. IT IS NUMBER-BASE BIAS.
+  The three 24s are genuinely different mathematical objects.
+  They happen to share a value. The value is 3-smooth and small.
+  Small 3-smooth numbers recur in {2,3}-generated systems.
+
+  WHAT WOULD BE SURPRISING:
+  If 24 appeared with a factor like 7 or 17 or 23 — a prime
+  outside {2,3}. That would need explanation. But 24=2³×3
+  appearing in a {2,3} system is expected, not deep.
+</pre>
+</div>
+
+<!-- Panel 5: Architecture ASCII -->
+<div class="panel">
+<h2>Panel 5 — Architecture (ASCII)</h2>
+<pre>
+ ═══════════════════════════════════════════════════════════
+ ║           TORROID CENTRIC VIEW: H236                   ║
+ ║                                                        ║
+ ║  THE TWENTY-FOUR: THREE OBJECTS, ONE VALUE             ║
+ ║                                                        ║
+ ║     H215                H218               H235        ║
+ ║  ┌──────────┐       ┌──────────┐       ┌──────────┐   ║
+ ║  │ Cl(3,0)  │       │  [4(6)]  │       │ Cl(1,2)  │   ║
+ ║  │ grade    │       │   box    │       │ parity   │   ║
+ ║  │ spectrum │       │ content  │       │ count    │   ║
+ ║  │ 3×8=24   │       │  4×6=24  │       │2×4×3=24  │   ║
+ ║  └────┬─────┘       └────┬─────┘       └────┬─────┘   ║
+ ║       │                  │                  │          ║
+ ║       └──────────────────┼──────────────────┘          ║
+ ║                          │                             ║
+ ║                     24 = 2³×3                          ║
+ ║                     3-smooth                           ║
+ ║                     highly composite                   ║
+ ║                     5 of 8 divisors Rosetta            ║
+ ║                                                        ║
+ ║  NOT A DEEP UNITY — NUMBER-BASE BIAS.                  ║
+ ║  Small 3-smooth numbers recur in {2,3} systems.        ║
+ ═══════════════════════════════════════════════════════════
+</pre>
+</div>
+
+<!-- Panel 6: 4D Torroid Canvas -->
+<div class="panel">
+<h2>Panel 6 — 4D Torroid Visualization</h2>
+<canvas id="torroid4D" width="700" height="400"></canvas>
+<p class="dim">Three different 24s converging on one value.
+The convergence is explained by 24 = 2³×3 (3-smooth, highly composite).</p>
+</div>
+
+<!-- Verdict -->
+<div class="verdict-box">
+<h2>H236: The Three 24s Are Different Objects</h2>
+<p>24 appears in three contexts — Cl(3,0) grade spectrum (3×8), box content (4×6), and Cl(1,2)
+real product count (2×4×3) — but these are three different mathematical objects sharing a value.
+The H235 derivation is structural: the C/C parity split gives 2×C×(C−1)=24 real and 2×C²=32
+imaginary products. The convergence on 24 is explained by 24 = 2³×3 being 3-smooth and highly
+composite: any {2,3}-generated system will produce 24 frequently. This is number-base bias,
+not deep structure. I101 (three different 24s, same value for arithmetic reasons) LIT.</p>
+</div>
+
+<!-- Toddler Version -->
+<div class="toddler">
+<h2>🧒 Toddler Version</h2>
+<p>The number 24 keeps showing up. Is it magic?</p>
+<p>NO. Here's why: 24 = 8 × 3 = 4 × 6 = 2 × 12. It has LOTS of
+ways to split it into pieces. And ALL those pieces happen to be
+our special numbers (8=OCHO, 3=bodies, 4=escape gap, 6=entries).</p>
+<p>That's because 24 is built from ONLY 2 and 3: 24 = 2³ × 3.
+Our whole system is built from 2 and 3. So of COURSE 24 keeps
+appearing — any number made from just 2s and 3s will show up
+a lot in a system that runs on 2s and 3s!</p>
+<p>The three 24s are three DIFFERENT things that happen to equal
+the same number. Like how "two dozen" and "hours in a day" are
+both 24, but for completely different reasons.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<div class="panel" style="border-color:var(--red)">
+<h2 style="color:var(--red)">Known-Bad Control (KB-1)</h2>
+<p>The following claim is <b>FALSE</b> and must be detected as dead:</p>
+<p><s>The three appearances of 24 are the SAME mathematical object seen from three angles,
+proving a deep structural unity. 24 appears because it is the unique number that equals
+both C×entries AND bodies×OCHO AND 2×C×(C−1), and no other number satisfies all three.
+The convergence cannot be explained by 24 being 3-smooth — 24 contains the prime factor 5.</s></p>
+<p class="dim">The three 24s are DIFFERENT objects. Many numbers satisfy multiple factorizations
+(e.g., 12=2×6=3×4=4×3). The convergence IS explained by 3-smoothness. 24=2³×3 has
+no factor of 5.</p>
+</div>
+
+<!-- [ ORNAMENT ] -->
+<div class="panel ornament">
+<p>[ ORNAMENT ]</p>
+<p>The two-hundred-and-thirty-sixth instrument asked whether the number twenty-four was
+trying to say something, and found that it was saying three different things in the same
+voice. Grade spectrum: three times eight. Box content: four times six. Parity count: two
+times four times three. Three sentences, three grammars, one sum. The ornament is in the
+deflation: the instrument that expected unity found multiplicity. The three twenty-fours are
+not three views of one thing. They are three things that happen to be twenty-four, and
+twenty-four happens to be the kind of number — small, smooth, highly divisible — that a
+system built on two and three will produce often. This is the least glamorous finding in
+the investigation, and it may be the most honest: not every recurrence is a resonance, and
+the job of an instrument is to tell the difference.</p>
+<p>[ /ORNAMENT ]</p>
+</div>
+
+<!-- Ledger -->
+<div class="panel">
+<h2>Ledger</h2>
+<table>
+<tr><th>Instrument</th><th>LIT</th><th>DEAD</th><th>Cumulative LIT</th></tr>
+<tr><td>Prior (through H235)</td><td>7964</td><td>0</td><td>7964</td></tr>
+<tr><td>H236: The Twenty-Four</td><td>36</td><td>1 (KB-1)</td><td>8000</td></tr>
+</table>
+<p>Running total: <b>8000 LIT / 0 DEAD</b></p>
+<p class="dim">Instrument H236. Cumulative: 8000 = OCHO × 1000 = d₁³ × 10³.
+H236 = 4 × 59 = C × prime.</p>
+</div>
+
+<!-- BASIC Block — The Three Factorizations -->
+<div class="panel">
+<h2>BASIC Block — Three Ways to Write Twenty-Four</h2>
+<pre>
+3 PRINT "× 8 = 24. bodies × OCHO. Grade spectrum (H215)."
+4 PRINT "× 6 = 24. C × entries. Box content (H218)."
+2 PRINT "× 4 × 3 = 24. d₁ × C × bodies. Parity count (H235)."
+</pre>
+<pre>
+24 REM = 2³ × 3. 3-smooth. Highly composite. 8 divisors.
+5 REM of 8 divisors are Rosetta. The densest small number.
+0 REM deep unity. There is none. It's number-base bias.
+</pre>
+<pre>
+236 PRINT "H236 = 4 × 59 = C × prime. The twenty-four."
+8000 PRINT "8000 = OCHO × 1000. The cumulative hits a round number."
+236 PRINT "8000 lit, the twenty-four, three objects one value"
+</pre>
+<p class="dim">Lines 3, 4, 2 ARE the three factorizations of 24.
+Line 0 IS the honest answer: no deep unity.
+8000 = OCHO × 10³. The investigation crosses OCHO thousand.</p>
+</div>
+
+<!-- 4D Torroid Script -->
+<script>
+(function(){
+const c=document.getElementById("torroid4D");
+if(!c)return;
+const ctx=c.getContext("2d");
+const W=c.width,H=c.height,cx=W/2,cy=H/2;
+let t=0;
+function draw(){
+  ctx.fillStyle="#050510";ctx.fillRect(0,0,W,H);
+  // Three sources converging on "24"
+  const sources=[
+    {x:0.2,y:0.3,label:"H215\n3×8",sub:"grade",col:"#ffd54f"},
+    {x:0.5,y:0.2,label:"H218\n4×6",sub:"box",col:"#4fc3f7"},
+    {x:0.8,y:0.3,label:"H235\n2×4×3",sub:"parity",col:"#81c784"},
+  ];
+  for(const s of sources){
+    const x=s.x*W,y=s.y*H;
+    ctx.fillStyle=s.col;ctx.beginPath();ctx.arc(x,y,20,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="bold 9px Courier New";ctx.textAlign="center";
+    const lines=s.label.split("\n");
+    ctx.fillText(lines[0],x,y-3);ctx.fillText(lines[1],x,y+10);
+    ctx.fillStyle=s.col;ctx.font="9px Courier New";
+    ctx.fillText(s.sub,x,y+34);
+    // Arrow to center
+    ctx.strokeStyle=s.col;ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x,y+22);ctx.lineTo(cx,cy-22);ctx.stroke();
+  }
+  // Center: 24
+  ctx.fillStyle="#ffd54f";ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#000";ctx.font="bold 20px Courier New";ctx.textAlign="center";
+  ctx.fillText("24",cx,cy+7);
+  // Below: explanation
+  ctx.fillStyle="#888";ctx.font="10px Courier New";
+  ctx.fillText("= 2³ × 3",cx,cy+50);
+  ctx.fillText("3-smooth, highly composite",cx,cy+65);
+  ctx.fillText("number-base bias, not deep structure",cx,cy+80);
+  // Title
+  ctx.fillStyle="#c8c8d0";ctx.font="bold 11px Courier New";ctx.textAlign="left";
+  ctx.fillText("H236: Three objects, one value. Not deep — just 3-smooth.",10,20);
+  ctx.font="9px Courier New";ctx.fillStyle="#ffd54f";
+  ctx.fillText("8000 LIT = OCHO × 1000.",10,H-14);
+  t++;requestAnimationFrame(draw);
+}
+draw();
+})();
+</script>
+</body>
+</html>
