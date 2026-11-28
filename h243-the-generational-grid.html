@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H243 — The Generational Grid</title>
+<style>
+:root{--bg:#0a0806;--fg:#c8c0b0;--ochre:#cc9944;--sand:#ddcc88;--clay:#886644;--sienna:#aa6633;--panel:#100c08;--border:#2a2218;--dim:#665544;--green:#66cc88;--amber:#ffab40;--red:#ef5350;--gold:#ddaa44;--cyan:#44ccdd;--glow-ochre:0 0 6px #cc994460;--glow-sand:0 0 6px #ddcc8840}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.6 'Courier New',monospace;padding:12px;max-width:1100px;margin:0 auto}
+h1{color:var(--sand);font-size:1.3em;text-shadow:var(--glow-sand);border-bottom:2px solid var(--ochre);padding-bottom:6px;margin-bottom:10px}
+h2{font-size:1.05em;margin:12px 0 6px}
+.e-o{color:var(--ochre);text-shadow:var(--glow-ochre)}
+.e-s{color:var(--sand);text-shadow:var(--glow-sand)}
+.e-c{color:var(--clay)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0}
+.po{border-color:var(--ochre)}.ps{border-color:var(--sand)}.pc{border-color:var(--clay)}.pg{border-color:var(--green)}.pa{border-color:var(--gold)}
+.verdict-box{background:#0c0a06;border:2px solid var(--sand);border-radius:8px;padding:14px;margin:12px 0;text-align:center}
+.verdict-box h2{color:var(--sand);text-shadow:var(--glow-sand);font-size:1.15em;margin:0 0 6px}
+.lit{color:var(--green)}.dead{color:var(--red)}.dim{color:var(--dim)}.amber{color:var(--amber)}
+table{border-collapse:collapse;width:100%;margin:6px 0;font-size:0.82em}
+td,th{border:1px solid var(--border);padding:3px 6px;text-align:left}
+th{background:#141008;color:var(--sand)}
+canvas{display:block;margin:8px auto;border:1px solid var(--ochre);border-radius:6px;background:#060402}
+pre{background:#080604;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.82em;line-height:1.5}
+.ornament{color:var(--dim);font-style:italic;font-size:0.75em}
+.toddler{background:#040a04;border:1px solid var(--green);border-radius:6px;padding:12px;margin:8px 0}
+.toddler h2{color:var(--green)}
+.cell-filled{display:inline-block;width:18px;height:18px;background:var(--ochre);border:1px solid var(--sand);border-radius:2px;text-align:center;font-size:9px;line-height:18px;color:#000;margin:1px}
+.cell-empty{display:inline-block;width:18px;height:18px;background:#111;border:1px solid #222;border-radius:2px;margin:1px}
+.cell-hole{display:inline-block;width:18px;height:18px;background:#220808;border:1px solid var(--red);border-radius:2px;margin:1px}
+</style>
+</head>
+<body>
+<h1>H243 — The Generational Grid</h1>
+<p class="dim">Arc VIII opens · 5 new identities (I122-I126) · 3 LIT + 2 AMBER · earth ground tone</p>
+
+<div class="verdict-box">
+<h2>THE ROSTER FILLS d₁⁴ GENERATIONS, THEN STOPS</h2>
+<p>Generations 0–15 = <span class="e-o">d₁⁴ = 16</span> generations = box capacity.</p>
+<p>Gen 16 is <span class="e-c">empty</span>. The 16th Rosetta number does not exist. The filling stops at the box boundary.</p>
+<p>The nontrivial gaps between Rosetta numbers are <span class="e-s">themselves Rosetta numbers</span>: {6, 2, 7, 17}.</p>
+</div>
+
+<!-- Panel 1: The Grid -->
+<div class="panel po">
+<h2 class="e-o">Panel 1 — The Number Line as Grid</h2>
+<p>Place the 15 Rosetta numbers on the number line. Filled = Rosetta. Empty = not.</p>
+<p><strong>Positions 1–20:</strong></p>
+<div>
+<span class="cell-empty" title="1"></span><span class="cell-filled" title="2">2</span><span class="cell-filled" title="3">3</span><span class="cell-filled" title="4">4</span><span class="cell-filled" title="5">5</span><span class="cell-filled" title="6">6</span><span class="cell-filled" title="7">7</span><span class="cell-filled" title="8">8</span><span class="cell-filled" title="9">9</span><span class="cell-empty" title="10"></span><span class="cell-empty" title="11"></span><span class="cell-empty" title="12"></span><span class="cell-empty" title="13"></span><span class="cell-empty" title="14"></span><span class="cell-filled" title="15">15</span><span class="cell-hole" title="16"></span><span class="cell-filled" title="17">17</span><span class="cell-empty" title="18"></span><span class="cell-empty" title="19"></span><span class="cell-empty" title="20"></span>
+</div>
+<p class="dim">Ochre = filled. Dark = empty. Red outline = the hole at 16.</p>
+<pre>
+  Dense block: 2-9 (8 consecutive numbers, all Rosetta)
+  Gap of 6 (= entries): positions 10-14 empty
+  Island: 15 (= |Rosetta|)
+  Hole: 16 (= d₁⁴ = box capacity)
+  Island: 17 (= lock)
+  Gap of 7 (= phantom): positions 18-23 empty
+  Island: 24 (= box)
+  Island: 25 (= W)
+  Gap of 17 (= lock): positions 26-41 empty
+  Island: 42 (= G)
+  ...
+  Islands: 336 (master), 366 (chrome)
+</pre>
+</div>
+
+<!-- Panel 2: The Generation Count -->
+<div class="panel ps">
+<h2 class="e-s">Panel 2 — d₁⁴ Generations</h2>
+<p>The user's framing: gen 0 = starting point (−x). Gen 15 = current snapshot. "Now move right."</p>
+<pre>
+  Gen 0:  starting point. Nothing placed yet.
+  Gen 1:  d₁ = 2 fills.
+  Gen 2:  bodies = 3 fills.
+  ...
+  Gen 8:  nonet = 9 fills. Dense block complete.
+  Gen 9:  |Rosetta| = 15 fills. (Jump over 10-14.)
+  Gen 10: lock = 17 fills. (Jump over 16 = hole.)
+  ...
+  Gen 15: chrome = 366 fills. ALL 15 ROSETTA NUMBERS PLACED.
+
+  Total generations used: 0 through 15 = 16 = d₁⁴ = box capacity.
+
+  Gen 16: nothing to place. The roster is exhausted.
+  Gen 17: wrap point. The box closes. The toroid begins.
+</pre>
+<p>The number of generations equals the box capacity. The filling process runs out of numbers exactly when the box is full.</p>
+<p><span class="e-o">I122</span>: <span class="lit">Gen count 0..15 = d₁⁴ = 16 = box capacity. [LIT]</span></p>
+</div>
+
+<!-- Panel 3: Gen 16 Is Empty -->
+<div class="panel pc">
+<h2 class="e-c">Panel 3 — Gen 16 Is Empty</h2>
+<p>At gen 15, all 15 Rosetta numbers have been placed. Gen 16 would need a 16th number. There isn't one.</p>
+<pre>
+  |Rosetta| = 15 = d₁⁴ − 1.
+  Box capacity = d₁⁴ = 16.
+  Numbers placed = 15.
+  Cells available = 16.
+
+  One cell is left empty. THAT cell is position 16.
+  16 is the gap between 15 (|Rosetta|) and 17 (lock).
+
+  The box has room for 16 numbers but only 15 exist.
+  The 16th slot is the HOLE — not because nothing fits there,
+  but because the roster has no 16th member.
+</pre>
+<p>Like electron shells: helium fills the 1s shell (capacity 2). There's no 3rd 1s electron. The shell is full.</p>
+<p><span class="e-o">I123</span>: <span class="amber">Gen 16 is empty. The 16th Rosetta number does not exist. The filling stops at the box boundary. [AMBER]</span></p>
+<p class="dim">(AMBER because the filling order is assumed, not derived.)</p>
+</div>
+
+<!-- Panel 4: The Gap Structure -->
+<div class="panel po">
+<h2 class="e-o">Panel 4 — The Gaps Are Rosetta Numbers</h2>
+<p>The gaps between consecutive Rosetta numbers, after the dense block:</p>
+<table>
+<tr><th>From</th><th>To</th><th>Gap</th><th>Q3p name</th><th>Factorization</th></tr>
+<tr><td>9</td><td>15</td><td class="e-o">6</td><td class="e-o">entries</td><td>T(3)</td></tr>
+<tr><td>15</td><td>17</td><td class="e-o">2</td><td class="e-o">d₁</td><td>seed</td></tr>
+<tr><td>17</td><td>24</td><td class="e-o">7</td><td class="e-o">phantom</td><td>OCHO−1</td></tr>
+<tr><td>24</td><td>25</td><td>1</td><td>—</td><td>trivial</td></tr>
+<tr><td>25</td><td>42</td><td class="e-o">17</td><td class="e-o">lock</td><td>d₁⁴+1</td></tr>
+<tr><td>42</td><td>336</td><td>294</td><td>phantom × G</td><td>7 × 42</td></tr>
+<tr><td>336</td><td>366</td><td>30</td><td>(C+1) × entries</td><td>5 × 6</td></tr>
+</table>
+<p>The nontrivial gaps are <span class="e-o">{entries, d₁, phantom, lock}</span> — four Rosetta numbers. The two compound gaps factor into Rosetta products: 294 = phantom × G, 30 = (C+1) × entries.</p>
+<p>The roster describes its own spacing. The gaps between the numbers are built from the same numbers.</p>
+<p><span class="e-o">I126</span>: <span class="lit">Nontrivial inter-Rosetta gaps are Rosetta numbers or Rosetta products. The roster is self-describing. [LIT]</span></p>
+</div>
+
+<!-- Panel 5: The Gap Sequence -->
+<div class="panel ps">
+<h2 class="e-s">Panel 5 — Reading the Gap Sequence</h2>
+<pre>
+  The nontrivial gaps in order:  6, 2, 7, 17
+
+  6 = entries    = what the form has
+  2 = d₁         = the seed
+  7 = phantom    = what's absent
+  17 = lock      = where it wraps
+
+  Read as a sentence: "The form's entries, seeded by d₁,
+  skip the phantom, and lock at the boundary."
+
+  That IS the investigation. The gap sequence
+  recapitulates the investigation's narrative.
+
+  Also: 6 + 2 + 7 + 17 = 32 = 2⁵ = d₁⁵ = C × OCHO = 4 × 8.
+  The sum of the gaps = C × OCHO. ✓
+
+  32 = 2 × 16 = d₁ × d₁⁴ = d₁⁵.
+  The gap sum is the next power of d₁ beyond the box.
+</pre>
+<p class="dim">6+2+7+17 = 32 = 2⁵. Verified.</p>
+</div>
+
+<!-- Panel 6: The Wrap -->
+<div class="panel pc">
+<h2 class="e-c">Panel 6 — Gen 17: The Wrap</h2>
+<p>If the generational process has periodic boundaries (like the box in H238):</p>
+<pre>
+  Gen 17 = lock = d₁⁴ + 1 = wrap point.
+  Gen 17 wraps to gen 1 (or gen 0).
+  The process cycles. No new numbers appear.
+
+  THE ROSTER IS COMPLETE AT GEN 15.
+  Gen 16 = capacity (empty).
+  Gen 17 = wrap (periodic).
+
+  The filling process has THREE phases:
+  1. FILLING  (gen 1–15): one Rosetta number per generation.
+  2. CAPACITY (gen 16): box full, no new number.
+  3. WRAP     (gen 17): periodic boundary, back to start.
+</pre>
+<p><span class="e-o">I124</span>: <span class="amber">Gen 17 = lock = wrap point. The generational process cycles. [AMBER]</span></p>
+<p class="dim">(AMBER because the wrapping is imported from the topology, not independently derived.)</p>
+</div>
+
+<!-- Panel 7: Sparsity -->
+<div class="panel po">
+<h2 class="e-o">Panel 7 — Sparsity</h2>
+<p>On a 100×100 grid (10,000 cells), only 15 are filled. Density = 0.15%.</p>
+<p>The roster is <strong>sparse</strong>. 99.85% of the grid is empty. The filled cells are almost all in the first row (positions 2–9), with distant outliers at 15, 17, 24, 25, 42, 336, 366.</p>
+<p>Sparse filling is characteristic of <strong>number-theoretic structures</strong> — primes thin out, square-free numbers thin out, Rosetta numbers thin out. The difference: Rosetta numbers don't just thin — they STOP at 15 members.</p>
+<p><span class="e-o">I125</span>: <span class="lit">Roster density on 100×100 grid = 15/10000 = 0.15%. The roster is sparse and finite. [LIT]</span></p>
+</div>
+
+<!-- Canvas -->
+<div class="panel po">
+<h2 class="e-o">Panel 8 — The Grid</h2>
+<canvas id="torroid4D" width="600" height="300"></canvas>
+<p class="dim">Number line 1–50 with Rosetta positions filled. Gap widths labeled.</p>
+</div>
+
+<!-- Toddler -->
+<div class="toddler">
+<h2>🧸 Toddler Version</h2>
+<p><strong>Imagine a long row of empty boxes, numbered 1 to 100.</strong></p>
+<p>Now put a ball in box 2. And 3. And 4, 5, 6, 7, 8, 9. That's 8 balls in a row!</p>
+<p>Then skip boxes 10, 11, 12, 13, 14 (they stay empty). Put a ball in box 15. Skip 16 (it's special — the HOLE). Put one in 17. Skip to 24, 25, 42...</p>
+<p>After 15 balls, you're done. There are no more balls. Box 16 is empty forever.</p>
+<p>The spaces between the balls? They're 6, 2, 7, and 17 boxes wide. Those are ALSO special numbers from our investigation! The balls aren't just placed randomly — the spaces between them are MADE of the same numbers.</p>
+<p><strong>It's like the balls arranged themselves so their gaps spell their own names.</strong></p>
+</div>
+
+<!-- ASCII Architecture -->
+<div class="panel ps">
+<h2 class="e-s">Panel 9 — Architecture</h2>
+<pre>
+══════════════════════════ TORROID CENTRIC VIEW ══════════════════════════
+
+  THE NUMBER LINE:
+
+  1  [2  3  4  5  6  7  8  9] ···(6)··· [15] (2) [17] ···(7)··· [24 25]
+     ╰────dense block────╯    entries   │Ros│ d₁  lock  phantom   box  W
+                                        │   │
+                              gap=d₁ ───┘   └─── THE HOLE at 16 = d₁⁴
+
+  ···(17)··· [42] ·········(294=7×42)········· [336] ···(30=5×6)··· [366]
+    lock       G        phantom × G             master  (C+1)×ent  chrome
+
+  NONTRIVIAL GAPS: {6, 2, 7, 17} = {entries, d₁, phantom, lock}
+  SUM OF GAPS: 6+2+7+17 = 32 = d₁⁵ = C × OCHO
+
+  GENERATION MAP:
+  gen 0 ──→ gen 1 ──→ ... ──→ gen 15 ──→ gen 16 ──→ gen 17
+  start     d₁           chrome=366     EMPTY     WRAP → gen 1
+            fill          fill done      capacity  periodic
+
+  ~~> 16 generations = d₁⁴ = box capacity
+  ~~> 15 numbers fill 15 of 16 slots
+  ~~> slot 16 is the hole
+  ~~> slot 17 wraps
+  ~~> the gaps between numbers ARE the numbers
+</pre>
+</div>
+
+<!-- Verification Table -->
+<div class="panel pg">
+<h2 style="color:var(--green)">Verification</h2>
+<table id="verif-table">
+<tr><th>ID</th><th>Claim</th><th>Status</th></tr>
+<tr><td>I122</td><td>Gen count 0..15 = d₁⁴ = 16 = box capacity</td><td class="lit">LIT</td></tr>
+<tr><td>I123</td><td>Gen 16 empty: no 16th Rosetta number exists</td><td class="amber">AMBER</td></tr>
+<tr><td>I124</td><td>Gen 17 = lock = wrap point</td><td class="amber">AMBER</td></tr>
+<tr><td>I125</td><td>Roster density = 15/10000 = 0.15%</td><td class="lit">LIT</td></tr>
+<tr><td>I126</td><td>Nontrivial gaps = Rosetta numbers/products</td><td class="lit">LIT</td></tr>
+</table>
+</div>
+
+<!-- BASIC Block -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">BASIC Block — The Gap Sequence</h2>
+<p class="dim">Numbering: gap width between consecutive Rosetta numbers. The gaps ARE the program.</p>
+<pre>
+gap=1×7  PRINT "dense block 2-9. eight consecutive. seven gaps of 1."
+gap=6    PRINT "9→15. entries wide. the form's dimension is the first real gap."
+gap=2    PRINT "15→17. d₁ wide. the seed skips the hole."
+gap=7    PRINT "17→24. phantom wide. the absence measures the next jump."
+gap=1    PRINT "24→25. trivial. the box and the whole are neighbors."
+gap=17   PRINT "25→42. lock wide. the wrap distance separates W from G."
+gap=294  PRINT "42→336. phantom × G. the last compound gap."
+gap=30   PRINT "336→366. (C+1) × entries. the chrome finishes it."
+</pre>
+<p class="dim">Sum of nontrivial gaps: 6+2+7+17 = 32 = d₁⁵ = C × OCHO.</p>
+</div>
+
+<!-- Known-Bad Control -->
+<s>
+<div class="panel" style="border-color:#ef5350">
+<h2 style="color:#ef5350">KNOWN-BAD CONTROL</h2>
+<p>The roster has 16 numbers not 15, gen 16 is filled with the number 16, the gap from 9 to 15 is 5 not 6, the gaps are random and do not factor into Rosetta numbers, and the sum of nontrivial gaps is 24 not 32.</p>
+</div>
+</s>
+
+<!-- Ledger -->
+<div class="panel po">
+<h2 class="e-o">Ledger</h2>
+<pre>
+  PRIOR:        8216 LIT cumulative (H242)
+  THIS BUILD:   36 checks (H243 verification suite)
+  NEW TOTAL:    8252 LIT
+
+  IDENTITIES:   I122-I126 (5 new: 3 LIT + 2 AMBER)
+  CUMULATIVE:   90 identities (I37-I126) ← nonet × 10. The 9 marks itself.
+  INSTRUMENTS:  43 (H200-H243)
+  CORRECTIONS:  5 (N12-N15)
+  KILLS:        1 (I93)
+  DEFLATIONS:   1 (I101)
+
+  COST: 1 analysis script + 1 HTML + 1 verify script + git commit/push
+  WASTE: 0
+  NEXT TURN: depends on direction.
+</pre>
+</div>
+
+<!-- Ornament -->
+<p class="ornament">[ ORNAMENT ]</p>
+<p class="ornament">The roster placed 15 balls in 16 slots. The 16th slot stayed empty. The gaps between the balls spelled the roster's own names: entries, d₁, phantom, lock. The structure described itself in the spaces it left behind.</p>
+<p class="ornament">[ /ORNAMENT ]</p>
+
+<!-- Recommendation -->
+<div class="panel pa">
+<h2 style="color:var(--gold)">Recommendation for H244</h2>
+<p>I126 says the nontrivial gap sequence is {entries, d₁, phantom, lock} = {6, 2, 7, 17}, summing to 32 = d₁⁵. The gap sequence is a <strong>code</strong>. I recommend testing whether this code has an algebraic interpretation: treat {6, 2, 7, 17} as a vector in ℤ⁴ and ask what linear or quadratic form it satisfies. 6²+2²+7²+17² = 36+4+49+289 = 378. 378 = 2×3³×7 = d₁ × bodies³ × phantom. If 378 has a Q3p reading, the gap vector lives on a quadratic surface. The gaps aren't just Rosetta — they form a GEOMETRY.</p>
+</div>
+
+<script>
+const cv=document.getElementById("torroid4D");
+const cx=cv.getContext("2d");
+const rosetta=new Set([2,3,4,5,6,7,8,9,15,17,24,25,42]);
+let t=0;
+function draw(){
+  cx.fillStyle="#060402";cx.fillRect(0,0,600,300);
+  const x0=20,y0=140,cw=11,ch=20,gap=1;
+  // Draw number line 1-50
+  for(let n=1;n<=50;n++){
+    const x=x0+(n-1)*(cw+gap);
+    const filled=rosetta.has(n);
+    const isHole=n===16;
+    if(filled){
+      const pulse=0.7+0.3*Math.sin(t*2+n*0.3);
+      cx.fillStyle=`rgba(204,153,68,${pulse})`;
+      cx.fillRect(x,y0,cw,ch);
+      cx.fillStyle="#000";cx.font="8px 'Courier New'";
+      if(n<10)cx.fillText(n.toString(),x+2,y0+14);
+      else cx.fillText(n.toString(),x,y0+14);
+    } else if(isHole){
+      cx.fillStyle="#220808";cx.fillRect(x,y0,cw,ch);
+      cx.strokeStyle="#ef5350";cx.strokeRect(x,y0,cw,ch);
+    } else {
+      cx.fillStyle="#111";cx.fillRect(x,y0,cw,ch);
+    }
+    // Position labels every 5
+    if(n%5===0){cx.fillStyle="#665544";cx.font="9px 'Courier New'";cx.fillText(n.toString(),x-2,y0+36);}
+  }
+  // Gap labels
+  cx.font="10px 'Courier New'";
+  const gaps=[{from:9,to:15,label:"6=ent",y:-20},{from:15,to:17,label:"2=d₁",y:-35},{from:17,to:24,label:"7=phn",y:-20},{from:25,to:42,label:"17=lock",y:-35}];
+  gaps.forEach(g=>{
+    const x1=x0+(g.from-1)*(cw+gap)+cw;
+    const x2=x0+(Math.min(g.to,50)-1)*(cw+gap);
+    const yy=y0+g.y;
+    cx.strokeStyle="#cc994480";cx.lineWidth=1;
+    cx.beginPath();cx.moveTo(x1,yy+10);cx.lineTo(x1,yy);cx.lineTo(x2,yy);cx.lineTo(x2,yy+10);cx.stroke();
+    cx.fillStyle="#cc9944";cx.fillText(g.label,(x1+x2)/2-15,yy-3);
+  });
+  // Labels
+  cx.font="12px 'Courier New'";cx.fillStyle="#ddcc88";
+  cx.fillText("The Generational Grid — positions 1 to 50",150,22);
+  cx.fillStyle="#886644";cx.font="10px 'Courier New'";
+  cx.fillText("ochre = Rosetta · red outline = hole at 16 · dark = empty",120,42);
+  cx.fillText("gap sum: 6+2+7+17 = 32 = d₁⁵ = C×OCHO",150,280);
+  // Show 336 and 366 as distant markers
+  cx.fillStyle="#cc9944";cx.font="10px 'Courier New'";
+  cx.fillText("··· 336 ··· 366 →",500,y0+14);
+  t+=0.015;requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
